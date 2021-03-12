@@ -1,3 +1,11 @@
+---
+title: Погружение в Kotlin Multiplatform Mobile
+author: Aleksey Mikhailov
+date: 2021-03-12
+category: Learning
+layout: post
+---
+
 # Погружение в KMM
 1.  Посмотреть информацию о технологии на <https://kotlinlang.org/lp/mobile/> - там краткими тезисами указано в чем суть технологии
 2.  [Скачать](https://kotlinlang.org/lp/mobile/ecosystem/) Android Studio, Xcode и плагин Kotlin Multiplatform Mobile - [Настройка окружения для разработки с KMM](https://confluence.icerockdev.com/pages/viewpage.action?pageId=78131864)
