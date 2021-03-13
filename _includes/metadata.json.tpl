@@ -27,7 +27,7 @@
                 "google": false,
                 "instapaper": false,
                 "twitter": true,
-                "vk": false,
+                "vk": true,
                 "weibo": false
             },
             "theme-default": {
@@ -64,7 +64,7 @@
         },
         "variables": {},
         "title": "{{site.title}}",
-        "language": "en",
+        "language": "ru",
         "gitbook": "*"
     },
     "file": {
