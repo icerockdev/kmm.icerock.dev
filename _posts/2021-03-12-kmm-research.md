@@ -104,7 +104,7 @@ layout: post
 6.  Интеграция через cocoapods (официальный плагин) - <https://kotlinlang.org/docs/native-cocoapods.html>
 7.  Дебажные символы для крешрепортов осмысленных - <https://kotlinlang.org/docs/native-ios-symbolication.html>
 8.  Про внутрянку klib'ов и K/N lib - <https://kotlinlang.org/docs/native-libraries.html>
-9.  Про размер бинарника на iOS - https://youtu.be/hrRqX7NYg3Q?t=1895
+9.  Про размер бинарника на iOS - <https://youtu.be/hrRqX7NYg3Q?t=1895>
 10.  Некоторые хаки компиляции - <https://github.com/JetBrains/kotlin-native/blob/master/HACKING.md> (очень специфичная история)
 11. советы по ускорению компиляции от лида K/N - <https://youtrack.jetbrains.com/issue/KT-42294#focus=Comments-27-4752249.0-0>
     1.  Gradle-specific:
