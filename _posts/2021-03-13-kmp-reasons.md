@@ -6,7 +6,7 @@ category: Learning
 layout: post
 ---
 
-В сообществе [MobileNativeFoundation](https://github.com/MobileNativeFoundation) представитель Touchlab [рассказал их наблюдения о том почему компании выбирают Kotlin Multiplatform](https://github.com/MobileNativeFoundation/discussions/discussions/43#discussioncomment-476363).
+В сообществе [MobileNativeFoundation](https://github.com/MobileNativeFoundation) Представитель Touchlab [рассказал их наблюдения о том почему компании выбирают Kotlin Multiplatform](https://github.com/MobileNativeFoundation/discussions/discussions/43#discussioncomment-476363).
 
 > Here's a selection of some reasons I've heard for choosing Kotlin Multiplatform as a native code sharing solution vs a cross-platform solution
 > 
