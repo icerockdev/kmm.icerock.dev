@@ -32,7 +32,7 @@ layout: post
     2. Make the expect / actual functions yourself to generate Base64 from string and from image
 
 6. CocoaPods
-1. Change the project’s settings so that integration with the Xcode project is through cocoapods, without custom targets and modifications to the xcode project itself.
+    1. Change the project’s settings so that integration with the Xcode project is through cocoapods, without custom targets and modifications to the xcode project itself.
         1. <https://kotlinlang.org/docs/reference/native/cocoapods.html>
     2. Configure alternative integration via <https://github.com/icerockdev/mobile-multiplatform-gradle-plugin> in a separate branch (to further compare these two approaches)
         1. Example - moko-template
@@ -44,7 +44,7 @@ layout: post
 # MOKO
 
 1. As a start, read <http://moko.icerock.dev/> and the readme of all the specified libs there
-2.Watch <https://www.youtube.com/watch?v=-JjQJG-xkRE&feature=youtu.be>
+2. Watch <https://www.youtube.com/watch?v=-JjQJG-xkRE&feature=youtu.be>
 
 # Kotlin vs Swift
 
@@ -106,8 +106,8 @@ Igotti's speech on the K / N internals - <https://youtu.be/DqsYo_4QWSg>
 7. Debugging symbols for meaningful crash reports - <https://kotlinlang.org/docs/native-ios-symbolication.html>
 8. About the internal klibs and K / N libs - <https://kotlinlang.org/docs/native-libraries.html>
 9. About the size of the binary on iOS - <https://youtu.be/hrRqX7NYg3Q?t=1895>
-10.Some compilation hacks - <https://github.com/JetBrains/kotlin-native/blob/master/HACKING.md> (very specific story)
-11.Tips to speed up compilation from lead K / N - <https://youtrack.jetbrains.com/issue/KT-42294#focus=Comments-27-4752249.0-0>
+10. Some compilation hacks - <https://github.com/JetBrains/kotlin-native/blob/master/HACKING.md> (very specific story)
+11. Tips to speed up compilation from lead K / N - <https://youtrack.jetbrains.com/issue/KT-42294#focus=Comments-27-4752249.0-0>
     1. Gradle-specific:
 
         -   Note that first compilation with Gradle usually takes more time than subsequent ones, sometimes significantly (e.g. due to dependencies downloading and missing caches).
