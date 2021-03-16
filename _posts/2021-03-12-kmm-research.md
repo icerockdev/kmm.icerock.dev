@@ -87,7 +87,7 @@ layout: post
     3.  <https://dev.to/touchlab/practical-kotlin-native-concurrency-ac7> - три статьи от Галлигана с хорошим разобором темы
     4.  <https://kotlinlang.org/docs/mobile/concurrent-mutability.html> - раздел Working with concurrency в документации KMM тоже с хорошим разобром от Галлигана
     5.  Колдовская штука-хак <https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.native.concurrent/-worker-bound-reference/> которая позволяет шарить что-либо без заморозки.
-        1.  Использовали в <https://gitlab.icerockdev.com/jjo/jjo-invest-mobile/-/commit/140252b31f3696c6cdd45db94468028a372864ab>
+    6.  Touchlab гайд по многопоточности + видео - <https://touchlab.co/kotlin-native-concurrency/>
 5.  Отладка K/N - <https://kotlinlang.org/docs/native-debugging.html>
     1.  Для простоты есть <https://github.com/touchlab/xcode-kotlin>
     2.  Также позволяет дебажить <https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform-mobile>
