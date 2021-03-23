@@ -9,7 +9,6 @@ version:          1.0
 gitbook_version:  3.2.3
 
 url:              'https://kmm.icerock.dev'
-baseurl:          '/'
 rss:              RSS
 
 # markdown render engine.
@@ -26,11 +25,13 @@ kramdown:
 
 markdown_ext:     markdown,mkdown,mkdn,mkd,md
 
-# Permalinks
-permalink:        /:categories/:year-:month-:day-:title:output_ext
-
 exclude:
   - _drafts
+
+collections:
+  pages:
+    output: true
+    permalink: /:collection/:path/
 
 destination:      ./_site
 incremental:      false

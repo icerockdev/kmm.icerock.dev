@@ -16,16 +16,14 @@
 
             <li class="divider"></li>
 
-            {% assign reversed_posts = site.posts | reverse %}
-
-            {% for post in reversed_posts %}
-                {% if page.url == post.url %}
-                <li class="chapter active" data-level="1.2" data-path="{{site.baseurl}}{{post.url}}">
+            {% for sitepage in site.pages %}
+                {% if page.url == sitepage.url %}
+                <li class="chapter active" data-level="1.2" data-path="{{site.baseurl}}{{sitepage.url}}">
                 {% else %}
-                <li class="chapter" data-level="1.1" data-path="{{site.baseurl}}{{post.url}}">
+                <li class="chapter" data-level="1.1" data-path="{{site.baseurl}}{{sitepage.url}}">
                 {% endif %}
-                    <a href="{{site.baseurl}}{{post.url}}">
-                        {{ post.title | escape }}
+                    <a href="{{site.baseurl}}{{sitepage.url}}">
+                        {{ sitepage.title | escape }}
                     </a>
                 </li>
             {% endfor %}

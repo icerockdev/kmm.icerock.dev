@@ -1,8 +1,6 @@
 ---
-title: Почему выбирают Kotlin Multiplatform?
+title: 1. Почему выбирают Kotlin Multiplatform Mobile?
 author: Aleksey Mikhailov
-date: 2021-03-13
-category: Learning
 layout: post
 ---
 

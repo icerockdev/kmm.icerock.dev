@@ -1,8 +1,6 @@
 ---
-title: Погружение в Kotlin Multiplatform Mobile
+title: 3. Погружение в Kotlin Multiplatform Mobile
 author: Aleksey Mikhailov
-date: 2021-03-12
-category: Learning
 layout: post
 ---
 

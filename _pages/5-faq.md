@@ -1,8 +1,6 @@
 ---
-title: FAQ
+title: 5. FAQ
 author: Aleksey Mikhailov
-date: 2021-03-12
-category: Learning
 layout: post
 ---
 
