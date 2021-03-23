@@ -85,7 +85,7 @@ layout: post
     3.  <https://dev.to/touchlab/practical-kotlin-native-concurrency-ac7> - три статьи от Галлигана с хорошим разобором темы
     4.  <https://kotlinlang.org/docs/mobile/concurrent-mutability.html> - раздел Working with concurrency в документации KMM тоже с хорошим разобром от Галлигана
     5.  Колдовская штука-хак <https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.native.concurrent/-worker-bound-reference/> которая позволяет шарить что-либо без заморозки.
-        1.  Использовали в <https://gitlab.icerockdev.com/jjo/jjo-invest-mobile/-/commit/140252b31f3696c6cdd45db94468028a372864ab>
+    6.  Touchlab гайд по многопоточности + видео - <https://touchlab.co/kotlin-native-concurrency/>
 5.  Отладка K/N - <https://kotlinlang.org/docs/native-debugging.html>
     1.  Для простоты есть <https://github.com/touchlab/xcode-kotlin>
     2.  Также позволяет дебажить <https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform-mobile>
@@ -102,8 +102,9 @@ layout: post
 6.  Интеграция через cocoapods (официальный плагин) - <https://kotlinlang.org/docs/native-cocoapods.html>
 7.  Дебажные символы для крешрепортов осмысленных - <https://kotlinlang.org/docs/native-ios-symbolication.html>
 8.  Про внутрянку klib'ов и K/N lib - <https://kotlinlang.org/docs/native-libraries.html>
-9.  Некоторые хаки компиляции - <https://github.com/JetBrains/kotlin-native/blob/master/HACKING.md> (очень специфичная история)
-10. советы по ускорению компиляции от лида K/N - <https://youtrack.jetbrains.com/issue/KT-42294#focus=Comments-27-4752249.0-0>
+9.  Про размер бинарника на iOS - <https://youtu.be/hrRqX7NYg3Q?t=1895>
+10.  Некоторые хаки компиляции - <https://github.com/JetBrains/kotlin-native/blob/master/HACKING.md> (очень специфичная история)
+11. советы по ускорению компиляции от лида K/N - <https://youtrack.jetbrains.com/issue/KT-42294#focus=Comments-27-4752249.0-0>
     1.  Gradle-specific:
 
         -   Note that first compilation with Gradle usually takes more time than subsequent ones, sometimes significantly (e.g. due to dependencies downloading and missing caches).
