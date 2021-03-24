@@ -4,9 +4,20 @@ author: Aleksey Mikhailov
 layout: post
 ---
 
+# Материалы для изучения Kotlin Multiplatform
+
+1. [Портал Kotlin Multiplatform Mobile](https://kotlinlang.org/lp/mobile/) - общее описание технологии, кейсы использования, информация о сообществе;
+2. [Документация по Kotlin Multiplatform Mobile](https://kotlinlang.org/docs/mobile/home.html) - гайды по выполнению типовых задач, примеры, туториалы;
+3. [Видео для начинающих от JetBrains](https://www.youtube.com/playlist?list=PLlFc5cFwUnmy_oVc9YQzjasSNoAk4hk_C);
+4. [Codelabs от IceRock](https://codelabs.kmp.icerock.dev/) - пошаговые уроки работы с Kotlin Multiplatform (часть материалов могла устареть). Стоит ознакомиться с:
+    1. [MOKO contribution guide](https://codelabs.kmp.icerock.dev/codelabs/moko-contribution/index.html) - для понимания как дорабатывать [moko либы](http://moko.icerock.dev/) при необходимости;
+    2. [Append Shared library to Android, iOS projects](https://codelabs.kmp.icerock.dev/codelabs/kmp-mobile-from-zero/index.html) - гайд как добавить мультиплатформу в простые нативные android и ios приложения;
+    3. [GiphyApp #1](https://codelabs.kmp.icerock.dev/codelabs/giphy-app-1/index.html), [GiphyApp #2](https://codelabs.kmp.icerock.dev/codelabs/giphy-app-2/index.html) - разработка приложения показывающего список gif изображений на базе [moko-template](https://github.com/icerockdev/moko-template).
+
 # Погружение в KMM
+
 1.  Посмотреть информацию о технологии на <https://kotlinlang.org/lp/mobile/> - там краткими тезисами указано в чем суть технологии
-2.  [Скачать](https://kotlinlang.org/lp/mobile/ecosystem/) Android Studio, Xcode и плагин Kotlin Multiplatform Mobile - [Настройка окружения для разработки с KMM](https://confluence.icerockdev.com/pages/viewpage.action?pageId=78131864)
+2.  [Скачать](https://kotlinlang.org/lp/mobile/ecosystem/) Android Studio, Xcode и плагин Kotlin Multiplatform Mobile - [Настройка окружения для разработки с KMM](/pages/2-setup)
 3.  Hello World
     1.  Создать в Android Studio KMM проект с нуля через мастер создания проектов - <https://kotlinlang.org/docs/mobile/create-first-app.html>
     2.  Запустить это приложение на android, поставить брейкпоинты в common коде, посмотреть что выводится при срабатывании
@@ -29,7 +40,6 @@ layout: post
         1.  Реализовать примеры из статьи в своем Hello World проекте
     2.  Самостоятельно сделать expect/actual функции для генерации Base64 из строки и из изображения
 6.  CocoaPods
-
     1.  Изменить настройки проекта так, чтобы интеграция с Xcode проектом была через cocoapods, без кастомных таргетов и модификации самого xcode проекта.
         1.  <https://kotlinlang.org/docs/reference/native/cocoapods.html>
     2.  Настроить альтернативную интеграцию через <https://github.com/icerockdev/mobile-multiplatform-gradle-plugin> в отдельной ветке (чтобы дальше сравнивать эти два подхода между собой)
@@ -43,19 +53,6 @@ layout: post
 
 1.  читаем для начала <http://moko.icerock.dev/> и ридми всех указанных либ там
 2.  смотрим <https://www.youtube.com/watch?v=-JjQJG-xkRE&feature=youtu.be>
-
-# Kotlin vs Swift
-
-1.  В котлине есть анонимные классы, которые позволяют без создания отдельного именованного класса реализовать интерфейс например. <https://kotlinlang.org/docs/nested-classes.html#anonymous-inner-classes>
-    1.  анонимные классы пришли из Java и подробнее разобраны именно в контексте Java - <https://javarush.ru/groups/posts/2193-anonimnihe-klassih>
-2.  Сравнение языков на примерах
-    1.  <https://habr.com/ru/post/350746/> 
-    2.  <https://www.raywenderlich.com/6754-a-comparison-of-swift-and-kotlin-languages>
-    3.  <https://levelup.gitconnected.com/swift-vs-kotlin-which-is-better-696222a49a34>
-    4.  <https://medium.com/@anios4991/swift-vs-kotlin-the-differences-that-matter-80a46090d9c6>
-3.  разница конструкторов классов - <https://medium.com/mobile-app-development-publication/kotlin-vs-swift-the-init-construction-f82224a24664>
-4.  разница экстеншенов - <https://medium.com/mobile-app-development-publication/kotlin-vs-swift-the-extension-5462b531260b>
-5.  абстрактные классы - <https://medium.com/mobile-app-development-publication/kotlin-vs-swift-the-abstract-class-f8817e5e54f>
 
 # Kotlin Multiplatform
 
