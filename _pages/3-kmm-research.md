@@ -101,19 +101,4 @@ layout: post
 8.  Про внутрянку klib'ов и K/N lib - <https://kotlinlang.org/docs/native-libraries.html>
 9.  Про размер бинарника на iOS - <https://youtu.be/hrRqX7NYg3Q?t=1895>
 10.  Некоторые хаки компиляции - <https://github.com/JetBrains/kotlin-native/blob/master/HACKING.md> (очень специфичная история)
-11. советы по ускорению компиляции от лида K/N - <https://youtrack.jetbrains.com/issue/KT-42294#focus=Comments-27-4752249.0-0>
-    1.  Gradle-specific:
-
-        -   Note that first compilation with Gradle usually takes more time than subsequent ones, sometimes significantly (e.g. due to dependencies downloading and missing caches).
-        -   Don't use `--no-daemon` when running Gradle, at least for local development.
-        -   Try [increasing Gradle's heap](https://docs.gradle.org/current/userguide/build_environment.html#sec:configuring_jvm_memory), e.g. by adding `org.gradle.jvmargs=-Xmx3g` to `gradle.properties`. If you use parallel build, you might need to make the heap even larger or choose the right number of threads with `org.gradle.parallel.threads`.
-        -   If you have `kotlin.native.disableCompilerDaemon=true` or `kotlin.native.cacheKind=none` project properties (in `gradle.properties` or Gradle arguments), try to remove them. It is possible that one of these properties was used to workaround a bug that is already fixed.
-        -   (Starting from 1.5.0) `linuxX64` and `iosArm64` have an experimental support opt-in support for compiler caches that greatly improves compilation time for debug builds. Try it by adding `kotlin.native.cacheKind.linuxX64=static` or `kotlin.native.cacheKind.iosArm64=static` to `gradle.properties`.
-        -   When you need to run the code as soon as possible, don't run Gradle tasks that build everything, like `build` or `assemble`. By using one of those you probably build the same code many times, which increases compilation time for no reason. In some typical cases (like running tests from IDE or starting the app from Xcode) we already avoid unnecessary tasks, but if you have a non-typical case or build configuration you might need to do this yourself.
-            -   To run your code during development, you usually need only one binary, so running a single `linkDebug*` task should be enough. Note that compiling a release binary (`linkRelease*`) takes much more time than a debug one (`linkDebug*`).
-        -   (Starting from 1.4.30) enable [build cache](https://docs.gradle.org/current/userguide/build_cache.html) in Gradle.
-
-        General:
-
-        -   Use the latest Kotlin version
-        -   Try to avoid creating or generating huge classes with a great amount of methods especially if the common use case of such class is calling a small percent of its methods.
+11. советы по ускорению компиляции - <https://kotlinlang.org/docs/native-improving-compilation-time.html>
