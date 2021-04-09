@@ -33,6 +33,6 @@ xcode-select --install
 
 В настройках Xcode должны они появиться (последний пункт)
 
-![](/assets/2-setup-xcode-cli.png)
+![setup xcode cli](/assets/2-setup-xcode-cli.png)
 
 Детальное [описание настройки окружения от Touchlab](https://github.com/touchlab/KaMPKit/blob/master/docs/DETAILED_DEV_SETUP.md)
