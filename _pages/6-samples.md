@@ -4,6 +4,7 @@ author: Aleksey Mikhailov
 layout: post
 ---
 
+# Приложения
 * [JetBrains/kotlinconf-app](https://github.com/JetBrains/kotlinconf-app) - official KotlinConf application - backend, android, ios with shared code;
 * [Kotlin/mpp-example](https://github.com/Kotlin/mpp-example) - official Multiplatform (android + ios) sample from JetBrains;
 * [JetBrains/KotlinFinder](https://github.com/JetBrains/KotlinFinder) - official KotlinFinder application from JetBrains and IceRock for KotlinConf 2019 (android + ios)
@@ -24,3 +25,11 @@ layout: post
 * [joreilly/PeopleInSpace](https://github.com/joreilly/PeopleInSpace) - Minimal Kotlin Multiplatform project using Jetpack Compose and SwiftUI (now also includes WatchOS version!) ;
 * [kommentaire/kommentaire-app](https://github.com/kommentaire/kommentaire-app) - backend, android, ios, jetpack compose, swiftui, graphql;
 * [jshvarts/KmpGithubMVVM](https://github.com/jshvarts/KmpGithubMVVM) - android, ios, mvvm, sqldelight, cocoapods;
+
+# Gradle Плагины
+* [prof18/kmp-fatframework-cocoa](https://github.com/prof18/kmp-fatframework-cocoa) - A Gradle plugin to generate and publish an iOs FatFramework on Kotlin Multiplatform projects;
+
+# Библиотеки
+* <http://libs.kmp.icerock.dev>
+* <https://www.kamp.ml>
+* [AAkira/Kotlin-Multiplatform-Libraries](https://github.com/AAkira/Kotlin-Multiplatform-Libraries)
