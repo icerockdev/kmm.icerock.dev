@@ -84,3 +84,7 @@ object и для айоса синглтоном является, просто 
 а с объектом object Utils { val test: String }\
 будет в свифте Utils().test\
 но по факту работа с одним и тем же объектом будет всегда
+
+### Можно ли работать с KMM на Apple Silicon?
+Да. Для нативного исполнения Gradle нужно скачать JDK с поддержкой ARM64, например [Zulu](https://www.azul.com/downloads/zulu-community/?version=java-11-lts&os=macos&architecture=arm-64-bit&package=jdk).
+Далее ставим Android Studio Canary 15 или выше (Apple Silicon добавлен в [этой версии](https://androidstudio.googleblog.com/2021/04/android-studio-arctic-fox-canary-15.html)). Сделать это можно через [Jetbrains Toolbox](https://www.jetbrains.com/toolbox-app/) который имеет нативную версию под Apple Silicon тоже.
