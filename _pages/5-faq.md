@@ -90,7 +90,7 @@ object и для айоса синглтоном является, просто 
 
 Запуск без rosetta 2:
 Для нативного исполнения Gradle нужно скачать JDK с поддержкой ARM64, например [Zulu](https://www.azul.com/downloads/zulu-community/?version=java-11-lts&os=macos&architecture=arm-64-bit&package=jdk).
-Далее ставим Android Studio Canary 15 или выше (Apple Silicon добавлен в [этой версии](https://androidstudio.googleblog.com/2021/04/android-studio-arctic-fox-canary-15.html)). Сделать это можно через [архив загрузок Android studio](https://developer.android.com/studio/archive).
+Далее ставим Android Studio Canary 15 или выше (Apple Silicon добавлен в [этой версии](https://androidstudio.googleblog.com/2021/04/android-studio-arctic-fox-canary-15.html)). Сделать это можно через [архив загрузок Android studio](https://developer.android.com/studio/archive). Если будут проблемы, вероятно поможет статья [My Journey to Setup Android Emulator for M1 MacBook Pro](https://medium.com/mobile-app-development-publication/my-journey-to-setup-android-emulator-for-m1-macbook-pro-b8365321b3e7)
 Но Kotlin/Native на данный момент все равно не сможет скомпилировать артефакты нативно, из-за ошибки с llvm. В тоже время android таргет можно скомпилировать и запустить на android emulator'е либо устройстве.
 
 issues для мониторинга статуса разработки:
