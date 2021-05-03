@@ -96,10 +96,11 @@ layout: post
 2.  Подробный референс градл плагина - <https://kotlinlang.org/docs/mpp-dsl-reference.html>
 3.  Про сборку итоговых бинарников K/N - <https://kotlinlang.org/docs/mpp-build-native-binaries.html> для айоса важен бинарь framework и экспорт зависимостей, а также универсальные фреймворки (но мы их не юзаем)
 4.  Гибкая настройка компиляции, детали про cinterop - <https://kotlinlang.org/docs/mpp-configure-compilations.html>
-5.  <https://youtu.be/5QPPZV04-50> - запись с Kotlin 1.4 online event про мпп детали
-6.  Интеграция через cocoapods (официальный плагин) - <https://kotlinlang.org/docs/native-cocoapods.html>
-7.  Дебажные символы для крешрепортов осмысленных - <https://kotlinlang.org/docs/native-ios-symbolication.html>
-8.  Про внутрянку klib'ов и K/N lib - <https://kotlinlang.org/docs/native-libraries.html>
-9.  Про размер бинарника на iOS - <https://youtu.be/hrRqX7NYg3Q?t=1895>
-10.  Некоторые хаки компиляции - <https://github.com/JetBrains/kotlin-native/blob/master/HACKING.md> (очень специфичная история)
-11. советы по ускорению компиляции - <https://kotlinlang.org/docs/native-improving-compilation-time.html>
+5.  Статья про реализацию swift библиотеки для подключение через cinterop в kotlin (на примере криптографии) - [Create a Kotlin/Multiplatform library with Swift](https://medium.com/kodein-koders/create-a-kotlin-multiplatform-library-with-swift-1a818b2dc1b0)
+6.  <https://youtu.be/5QPPZV04-50> - запись с Kotlin 1.4 online event про мпп детали
+7.  Интеграция через cocoapods (официальный плагин) - <https://kotlinlang.org/docs/native-cocoapods.html>
+8.  Дебажные символы для крешрепортов осмысленных - <https://kotlinlang.org/docs/native-ios-symbolication.html>
+9.  Про внутрянку klib'ов и K/N lib - <https://kotlinlang.org/docs/native-libraries.html>
+10.  Про размер бинарника на iOS - <https://youtu.be/hrRqX7NYg3Q?t=1895>
+11.  Некоторые хаки компиляции - <https://github.com/JetBrains/kotlin-native/blob/master/HACKING.md> (очень специфичная история)
+12. советы по ускорению компиляции - <https://kotlinlang.org/docs/native-improving-compilation-time.html>
