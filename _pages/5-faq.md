@@ -84,3 +84,18 @@ object и для айоса синглтоном является, просто 
 а с объектом object Utils { val test: String }\
 будет в свифте Utils().test\
 но по факту работа с одним и тем же объектом будет всегда
+
+### Можно ли работать с KMM на Apple Silicon?
+Можно, но частично. На данный момент через Rosetta 2 можно делать все, кроме запуска в iOS simulator. Но без Rosetta 2 можно компилировать только Android платформу.
+
+Запуск без rosetta 2:
+Для нативного исполнения Gradle нужно скачать JDK с поддержкой ARM64, например [Zulu](https://www.azul.com/downloads/zulu-community/?version=java-11-lts&os=macos&architecture=arm-64-bit&package=jdk).
+Далее ставим Android Studio Canary 15 или выше (Apple Silicon добавлен в [этой версии](https://androidstudio.googleblog.com/2021/04/android-studio-arctic-fox-canary-15.html)). Сделать это можно через [архив загрузок Android studio](https://developer.android.com/studio/archive).
+Но Kotlin/Native на данный момент все равно не сможет скомпилировать артефакты нативно, из-за ошибки с llvm. В тоже время android таргет можно скомпилировать и запустить на android emulator'е либо устройстве.
+
+issues для мониторинга статуса разработки:
+https://youtrack.jetbrains.com/issue/KT-39834
+https://youtrack.jetbrains.com/issue/KT-43667
+https://youtrack.jetbrains.com/issue/KT-44321
+https://youtrack.jetbrains.com/issue/KT-39833
+
