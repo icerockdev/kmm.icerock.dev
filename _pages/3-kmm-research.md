@@ -13,6 +13,7 @@ layout: post
     1. [MOKO contribution guide](https://codelabs.kmp.icerock.dev/codelabs/moko-contribution/index.html) - для понимания как дорабатывать [moko либы](http://moko.icerock.dev/) при необходимости;
     2. [Append Shared library to Android, iOS projects](https://codelabs.kmp.icerock.dev/codelabs/kmp-mobile-from-zero/index.html) - гайд как добавить мультиплатформу в простые нативные android и ios приложения;
     3. [GiphyApp #1](https://codelabs.kmp.icerock.dev/codelabs/giphy-app-1/index.html), [GiphyApp #2](https://codelabs.kmp.icerock.dev/codelabs/giphy-app-2/index.html) - разработка приложения показывающего список gif изображений на базе [moko-template](https://github.com/icerockdev/moko-template).
+5. [Книга Kotlin Multiplatform Mobile with Ktor](https://michaelstromer.nyc/books/kotlin-multiplatform-mobile/introduction) - текстовый материал курса обучения по [KMM на Udemy](https://www.udemy.com/course/kotlin-multiplatform-mobile/)
 
 # Погружение в KMM
 
