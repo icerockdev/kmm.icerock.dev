@@ -4,6 +4,12 @@ author: Aleksey Mikhailov
 layout: post
 ---
 
+## Официальный FAQ по KMM
+
+На сайте Kotlin Multiplatform Mobile Docs доступен [официальный FAQ](https://kotlinlang.org/docs/mobile/faq.html), покрывающий часть вопросов.
+
+## FAQ от IceRock
+
 ### Какое влияние оказывает Kotlin Multiplatform на размер приложения?
 
 App Size: GoPro had questions about app size increase. They discovered, "Ok, a release build of the app with Kotlin makes a difference of ~1MB, so that's awesome." 
