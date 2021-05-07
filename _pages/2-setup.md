@@ -16,7 +16,7 @@ brew tap adoptopenjdk/openjdk && brew cask install adoptopenjdk8
 
 НО!  
 есть вероятность что в Android Studio будет ломаться синтаксический анализ и часть кода станет красной, хотя все будет корректно компилироваться.
-В таком случае нужно [установить Oracle JDK](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+В таком случае нужно [установить Oracle JDK](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html) (на момент написания статьи корректная работа компилятора подтверждена на версиях JDK по 11ую включительно, не старше)
 
 ## Установить Android Studio
 
