@@ -26,6 +26,7 @@ layout: post
 * [kommentaire/kommentaire-app](https://github.com/kommentaire/kommentaire-app) - backend, android, ios, jetpack compose, swiftui, graphql;
 * [jshvarts/KmpGithubMVVM](https://github.com/jshvarts/KmpGithubMVVM) - android, ios, mvvm, sqldelight, cocoapods;
 * [hotmule/Lastik](https://github.com/hotmule/Lastik) - android, desktop, jetpack compose, multimodule;
+* [Shabinder/SpotiFlyer](https://github.com/Shabinder/SpotiFlyer) - android, desktop, jetpack compose, web, react, windows, linux;
 
 # Gradle Плагины
 * [prof18/kmp-fatframework-cocoa](https://github.com/prof18/kmp-fatframework-cocoa) - A Gradle plugin to generate and publish an iOs FatFramework on Kotlin Multiplatform projects;
