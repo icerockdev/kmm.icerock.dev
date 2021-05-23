@@ -18,7 +18,7 @@ sidebar_position: 1
 ## Погружение в KMM
 
 1.  Посмотреть информацию о технологии на <https://kotlinlang.org/lp/mobile/> - там краткими тезисами указано в чем суть технологии
-2.  [Скачать](https://kotlinlang.org/lp/mobile/ecosystem/) Android Studio, Xcode и плагин Kotlin Multiplatform Mobile - [Настройка окружения для разработки с KMM](/pages/2-setup)
+2.  [Скачать](https://kotlinlang.org/lp/mobile/ecosystem/) Android Studio, Xcode и плагин Kotlin Multiplatform Mobile - [Настройка окружения для разработки с KMM](/docs/setup)
 3.  Hello World
     1.  Создать в Android Studio KMM проект с нуля через мастер создания проектов - <https://kotlinlang.org/docs/mobile/create-first-app.html>
     2.  Запустить это приложение на android, поставить брейкпоинты в common коде, посмотреть что выводится при срабатывании
