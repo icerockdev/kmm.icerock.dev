@@ -16,10 +16,6 @@ module.exports = {
   themeConfig: {
     navbar: {
       title: 'Home',
-      // logo: {
-      //   alt: 'IceRock logo',
-      //   src: 'img/icerock-logo.svg',
-      // },
       items: [
         {
           type: 'doc',
@@ -50,42 +46,82 @@ module.exports = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'IceRock Development',
           items: [
             {
-              label: 'Documentation',
-              to: '/docs/intro',
+              label: 'Site',
+              to: 'https://icerock.dev',
             },
             {
-              label: 'Onboarding',
-              to: '/onboarding/intro',
+              label: 'GitHub',
+              to: 'https://github.com/icerockdev',
+            },
+            {
+              label: 'LinkedIn',
+              to: 'https://www.linkedin.com/company/icerockdevelopment',
+            },
+            {
+              label: 'Facebook',
+              to: 'https://www.facebook.com/icerockdevelopment',
+            },
+            {
+              label: 'VK',
+              to: 'https://vk.com/icerockdev',
+            },
+            {
+              label: 'Instagram',
+              to: 'https://www.instagram.com/icerockdevelopment',
             },
           ],
         },
         {
           title: 'Community',
           items: [
-            // {
-            //   label: 'Stack Overflow',
-            //   href: 'https://stackoverflow.com/questions/tagged/docusaurus',
-            // },
-            // {
-            //   label: 'Discord',
-            //   href: 'https://discordapp.com/invite/docusaurus',
-            // },
-            // {
-            //   label: 'Twitter',
-            //   href: 'https://twitter.com/docusaurus',
-            // },
+            {
+              label: 'Telegram @kotlinmpp',
+              href: 'https://t.me/kotlinmpp'
+            },
+            {
+              label: 'Telegram @kotlinmppchats',
+              href: 'https://t.me/kotlinmppchats'
+            },
+            {
+              label: 'Twitter @kotlinmpp',
+              href: 'https://twitter.com/kotlinmpp'
+            },
+            {
+              label: 'Kotlin Community',
+              href: 'https://kotlinlang.org/community'
+            },
           ],
         },
         {
           title: 'More',
           items: [
-            // {
-            //   label: 'Blog',
-            //   to: '/blog',
-            // },
+            {
+              label: 'Kotlin Multiplatform Mobile',
+              href: 'https://kotlinlang.org/lp/mobile',
+            },
+            {
+              label: 'Kotlin Multiplatform Libs',
+              href: 'https://libs.kmp.icerock.dev',
+            },
+            {
+              label: 'Kotlin Multiplatform Codelabs',
+              href: 'https://codelabs.kmp.icerock.dev',
+            },
+            {
+              label: 'MOKO',
+              href: 'https://moko.icerock.dev',
+            },
+            {
+              label: 'Kotlin/Native Docs',
+              href: 'https://kotlinlang.org/docs/reference/native-overview.html',
+            },
+            {
+              label: 'Kotlin Multiplatform Docs',
+              href: 'https://kotlinlang.org/docs/reference/multiplatform.html',
+            },
             {
               label: 'Docusaurus',
               href: 'https://github.com/facebook/docusaurus',
@@ -105,12 +141,6 @@ module.exports = {
           sidebarPath: require.resolve('./sidebars.js'),
           editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/master/',
         },
-        // blog: {
-        //   showReadingTime: true,
-        //   // Please change this to your repo.
-        //   editUrl:
-        //     'https://github.com/facebook/docusaurus/edit/master/website/blog/',
-        // },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
         },
