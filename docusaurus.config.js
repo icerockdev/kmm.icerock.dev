@@ -134,6 +134,9 @@ module.exports = {
     gtag: {
       trackingID: 'G-91G2XYQTXS',
     },
+    prism: {
+      additionalLanguages: ['kotlin', 'swift'],
+    },
   },
   presets: [
     [
