@@ -160,7 +160,6 @@ module.exports = {
         sidebarPath: require.resolve('./sidebars.js'),
         editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/master/',
       },
-    ],
-    '@docusaurus/plugin-google-gtag'
+    ]
   ],
 };
