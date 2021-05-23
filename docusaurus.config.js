@@ -131,7 +131,7 @@ module.exports = {
       ],
       copyright: `Copyright © ${new Date().getFullYear()} IceRock Development. Built with Docusaurus.`,
     },
-    googleAnalytics: {
+    gtag: {
       trackingID: 'G-91G2XYQTXS',
     },
   },
@@ -161,6 +161,6 @@ module.exports = {
         editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/master/',
       },
     ],
-    '@docusaurus/plugin-google-analytics'
+    '@docusaurus/plugin-google-gtag'
   ],
 };
