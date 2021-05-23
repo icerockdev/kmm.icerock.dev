@@ -100,8 +100,7 @@ object и для айоса синглтоном является, просто 
 Но Kotlin/Native на данный момент все равно не сможет скомпилировать артефакты нативно, из-за ошибки с llvm. В тоже время android таргет можно скомпилировать и запустить на android emulator'е либо устройстве.
 
 issues для мониторинга статуса разработки:
-https://youtrack.jetbrains.com/issue/KT-39834
-https://youtrack.jetbrains.com/issue/KT-43667
-https://youtrack.jetbrains.com/issue/KT-44321
-https://youtrack.jetbrains.com/issue/KT-39833
-
+- https://youtrack.jetbrains.com/issue/KT-39834
+- https://youtrack.jetbrains.com/issue/KT-43667
+- https://youtrack.jetbrains.com/issue/KT-44321
+- https://youtrack.jetbrains.com/issue/KT-39833
