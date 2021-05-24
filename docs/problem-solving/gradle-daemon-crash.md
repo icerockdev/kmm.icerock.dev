@@ -257,3 +257,16 @@ error: Linking globals named 'kniprot_cocoapods_MCRCDynamicProxy0': symbol multi
 
 После чего проблема была найдена и исправлена (отключена лишняя генерация cinterop определения) - https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate/-/commit/f3957511213a2dd49aadb2c86dd7caecd5170fe3
 
+## Ошибка из-за разных версий библиотеки
+
+```
+e: Could not find "dev.icerock.moko:parcelize_iosMain" in [/Users/alekseymikhailovwork/Documents/development/icerockdev_workspace/mailru-platform/di-mobile, /Users/alekseymikhailovwork/.konan/klib, /Users/alekseymikhailovwork/.konan/kotlin-native-prebuilt-macos-1.4.31/klib/common, /Users/alekseymikhailovwork/.konan/kotlin-native-prebuilt-macos-1.4.31/klib/platform/ios_arm64].
+Daemon vm is shutting down... The daemon has exited normally or was terminated in response to a user interrupt.
+```
+
+Коротко причина проблемы оказалась в разных версиях используемой библиотеки (две зависимости подключали транзитивно одну и ту же библиотеку, но разных версий). Но в типовом случае когда используются разные версии одной и той же библиотеки gradle берет самую новую и никакого креша gradle daemon не происходит. 
+
+У нас же оказалось что одна зависимость цепляла новую версию moko-parcelize, где есть поддержка всех таргетов и промежуточный сорссет nonAndroidMain, вместо iosMain и подобных. А другая зависимость цепляла старую версию, где только мобилки и промежуточный сорссет там был iosMain. 
+Видимо в разных местах градл использует разные версии - в одном он понял что нужна новая, в другом решил что нужна старая и искал iosMain которого нету в новой....и в итоге происходил креш gradle daemon.
+
+Решилась проблема путем обновления библиотек, чтобы все библиотеки использовали одинаковую новую версию moko-parcelize, в которой есть nonAndroidMain.
