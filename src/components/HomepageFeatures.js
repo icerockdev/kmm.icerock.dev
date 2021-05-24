@@ -5,7 +5,7 @@ import styles from './HomepageFeatures.module.css';
 const FeatureList = [
   {
     title: 'Коллекция материалов',
-    Svg: require('../../static/img/undraw_docusaurus_mountain.svg').default,
+    Svg: require('../../static/img/feature-1.svg').default,
     description: (
       <>
         В разделе Documentation собрана коллекция материалов для изучения
@@ -16,7 +16,7 @@ const FeatureList = [
   },
   {
     title: 'Курс обучения',
-    Svg: require('../../static/img/undraw_docusaurus_tree.svg').default,
+    Svg: require('../../static/img/feature-2.svg').default,
     description: (
       <>
         Специально для сотрудников IceRock Development и для всех интересующихся
@@ -27,7 +27,7 @@ const FeatureList = [
   },
   {
     title: 'Сделано в IceRock',
-    Svg: require('../../static/img/undraw_docusaurus_react.svg').default,
+    Svg: require('../../static/img/feature-3.svg').default,
     description: (
       <>
         Материалы собраны сотрудниками IceRock Development, но доступны на GitHub и
