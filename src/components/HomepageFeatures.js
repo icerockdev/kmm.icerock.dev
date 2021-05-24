@@ -30,8 +30,8 @@ const FeatureList = [
     Svg: require('../../static/img/feature-3.svg').default,
     description: (
       <>
-        Материалы собраны сотрудниками IceRock Development, но доступны на GitHub и
-        любая помощь в развитии всегда приветствуется.
+        Материалы собраны сотрудниками IceRock Development и доступны на GitHub. 
+        Будем рады любой помощи в развитии.
       </>
     ),
   },

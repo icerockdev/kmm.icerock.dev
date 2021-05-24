@@ -1,7 +1,7 @@
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'Kotlin Multiplatform Mobile',
-  tagline: 'Kotlin Multiplatform Mobile в IceRock Development',
+  tagline: 'by IceRock Development',
   url: 'https://kmm.icerock.dev',
   baseUrl: '/',
   onBrokenLinks: 'throw',

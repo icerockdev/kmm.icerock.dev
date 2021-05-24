@@ -17,7 +17,7 @@ function HomepageHeader() {
           <Link
             className="button button--secondary button--lg"
             to="/onboarding/intro">
-            Пройти курс обучения Kotlin Multiplatform Mobile
+            Пройти курс обучения
           </Link>
         </div>
       </div>
