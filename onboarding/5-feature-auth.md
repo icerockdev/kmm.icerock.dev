@@ -10,4 +10,4 @@ Codelab находится в разработке.
 
 Используем moko-mvvm, moko-fields, moko-errors.
 
-[IceRock KMM onboarding #3 - реализация фичи авторизации](https://codelabs.kmp.icerock.dev/codelabs/kmm-icerock-onboarding-3-ru/index.html)
+[IceRock KMM onboarding #2 - реализация фичи авторизации](https://codelabs.kmp.icerock.dev/codelabs/kmm-icerock-onboarding-2-ru/index.html)

@@ -1,8 +1,8 @@
 # 6. Делаем список
 
-:::danger
+:::caution
 
-Страница находится в разработке.
+Codelab находится в разработке.
 
 :::
 
@@ -10,4 +10,4 @@
 
 Используем moko-mvvm, moko-units.
 
-TODO
+[IceRock KMM onboarding #3 - реализация фичи списка](https://codelabs.kmp.icerock.dev/codelabs/kmm-icerock-onboarding-3-ru/index.html)
