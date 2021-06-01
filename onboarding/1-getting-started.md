@@ -8,28 +8,20 @@
   - можно ознакомиться с ссылками на ресурсы сообщества, подключиться в kotlinlang slack
   - можно почитать кейсы компаний - там описано для каких задач каждая компания применила технологию, какие советы может дать
 - [Видео материалы от JetBrains](https://www.youtube.com/watch?v=mdN6P6RI__k&list=PLlFc5cFwUnmy_oVc9YQzjasSNoAk4hk_C)
-  - **нужно посмотреть все имеющиеся выпуски**
   - повторять на практике показанное не обязательно - практика будет в следующих шагах
 - [Документация - Multiplatform programming](https://kotlinlang.org/docs/multiplatform.html)
   - даст представление о том, что такое Kotlin Multiplatform в целом (не только мобильное направление)
-  - **нужно ознакомиться со всей информацией на данной странице**
 - [Документация - Kotlin Native](https://kotlinlang.org/docs/native-overview.html)
   - даст представление о том, что такое Kotlin/Native
-  - **нужно ознакомиться со всей информацией на данной странице**
 - [Документация - Share code on platforms](https://kotlinlang.org/docs/mpp-share-on-platforms.html)
   - даст представление о том, как устроено переиспользование кода между платформами
-  - **нужно ознакомиться со всей информацией на данной странице**
 - [Документация - Share code on platforms](https://kotlinlang.org/docs/mpp-share-on-platforms.html)
   - даст представление о том, как нужно работать с платформенным api из общего кода
-  - **нужно ознакомиться со всей информацией на данной странице**
 - [Видео - Опыт работы с Kotlin Multiplatform. Взгляд со стороны бизнеса](https://www.youtube.com/watch?v=w546bAHoh3c)
-  - **нужно посмотреть**
 - [Видео - Опыт работы с Kotlin Multiplatform. Взгляд со стороны iOS-программиста](https://www.youtube.com/watch?v=h9ioWnSlUJc)
-  - **нужно посмотреть**
 - [Видео - Мобильная разработка на Kotlin MultiPlatform](https://www.youtube.com/watch?v=kO8RDq6OoV4)
-  - **нужно посмотреть**
 - [Видео - Kotlin Multiplatform Mobile в production использовании](https://www.youtube.com/watch?v=jJWDlsETb3A)
-  - **нужно посмотреть**
+- [Видео - Состояние Kotlin Multiplatform Mobile](https://youtu.be/fjzfz9y9yko)
 
 ## Для Android разработчика
 
@@ -37,11 +29,9 @@
 
 - [Сравнение Kotlin и Swift на примерах](http://nilhcem.com/swift-is-like-kotlin/) и [дополнительные материалы](https://habr.com/ru/post/350746/)
   - даст наглядные аналогии Swift кода с Kotlin
-  - **нужно прочитать**
 - [Знакомство с iOS](http://startios.woopss.com/znakomstvo-s-xcode-1/)
   - набор уроков (ссылка дана на первый, в конце урока кнопка "перейти далее" для последующих уроков)
   - даст понимание как работать с iOS и Xcode
-  - **нужно прочитать**
 
 ## Для iOS разработчика
 
@@ -49,16 +39,12 @@
 
 - [Сравнение Kotlin и Swift на примерах](http://nilhcem.com/swift-is-like-kotlin/) и [дополнительные материалы](https://habr.com/ru/post/350746/)
   - даст наглядные аналогии Kotlin кода с Swift
-  - **нужно прочитать**
 - [Kotlin Examples](https://play.kotlinlang.org/byExample/overview)
   - даст полное представление о синтаксисе языка
-  - **нужно пройти**
 - [Краткое знакомство с Gradle](https://javarush.ru/groups/posts/2126-kratkoe-znakomstvo-s-gradle)
   - даст базовое представление о системе сборки Gradle (используется для компиляции Kotlin кода)
-  - **нужно прочитать**
 - [Видео - Gradle от А до Я](https://youtu.be/Yft6h7JkWo0)
   - даст более глубокое понимание системы сборки Gradle
-  - **нужно посмотреть**
 
 :::caution
 
