@@ -15,8 +15,6 @@
   - даст представление о том, что такое Kotlin/Native
 - [Документация - Share code on platforms](https://kotlinlang.org/docs/mpp-share-on-platforms.html)
   - даст представление о том, как устроено переиспользование кода между платформами
-- [Документация - Share code on platforms](https://kotlinlang.org/docs/mpp-share-on-platforms.html)
-  - даст представление о том, как нужно работать с платформенным api из общего кода
 - [Видео - Опыт работы с Kotlin Multiplatform. Взгляд со стороны бизнеса](https://www.youtube.com/watch?v=w546bAHoh3c)
 - [Видео - Опыт работы с Kotlin Multiplatform. Взгляд со стороны iOS-программиста](https://www.youtube.com/watch?v=h9ioWnSlUJc)
 - [Видео - Мобильная разработка на Kotlin MultiPlatform](https://www.youtube.com/watch?v=kO8RDq6OoV4)
@@ -45,6 +43,8 @@
   - даст базовое представление о системе сборки Gradle (используется для компиляции Kotlin кода)
 - [Видео - Gradle от А до Я](https://youtu.be/Yft6h7JkWo0)
   - даст более глубокое понимание системы сборки Gradle
+- [Статья Useful Kotlin idioms](https://blog.jetbrains.com/kotlin/2021/07/useful-kotlin-idioms-you-should-know/)
+  - даст наглядные примеры о специфичных функциях языка
 
 :::caution
 
