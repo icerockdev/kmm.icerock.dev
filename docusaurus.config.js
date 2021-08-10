@@ -28,6 +28,13 @@ module.exports = {
           type: 'doc',
           docId: 'intro',
           position: 'left',
+          label: 'Learning',
+          docsPluginId: 'learning',
+        },
+        {
+          type: 'doc',
+          docId: 'intro',
+          position: 'left',
           label: 'Onboarding',
           docsPluginId: 'onboarding',
         },
@@ -71,6 +78,10 @@ module.exports = {
             {
               label: 'Instagram',
               to: 'https://www.instagram.com/icerockdevelopment',
+            },
+            {
+              label: 'YouTube',
+              to: 'https://www.youtube.com/channel/UC-Vhmm09W_IWKHhSg80d68w',
             },
           ],
         },
@@ -145,7 +156,7 @@ module.exports = {
         docs: {
           id: 'docs',
           sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/master/',
+          editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/docusaurus/',
         },
         theme: {
           customCss: require.resolve('./src/css/custom.css'),
@@ -161,7 +172,17 @@ module.exports = {
         path: 'onboarding',
         routeBasePath: 'onboarding',
         sidebarPath: require.resolve('./sidebars.js'),
-        editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/master/',
+        editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/docusaurus/',
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'learning',
+        path: 'learning',
+        routeBasePath: 'learning',
+        sidebarPath: require.resolve('./sidebars.js'),
+        editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/docusaurus/',
       },
     ]
   ],
