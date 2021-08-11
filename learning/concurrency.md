@@ -7,6 +7,7 @@ sidebar_position: 3
 ## Материалы
 
 - [kotlinlang docs - Coroutines guide](https://kotlinlang.org/docs/coroutines-guide.html) - required
+  - [Shared mutable state and concurrency](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html)
 - [kotlinlang docs - Immutability in Kotlin/Native](https://kotlinlang.org/docs/native-immutability.html) - required
 - [kotlinlang docs - Concurrency in Kotlin/Native](https://kotlinlang.org/docs/native-concurrency.html) - required
 - [kotlinlang docs - Concurrent mutability](https://kotlinlang.org/docs/mobile/concurrent-mutability.html) - required
