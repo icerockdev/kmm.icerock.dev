@@ -15,6 +15,7 @@ sidebar_position: 3
 - [Touchlab - Kotlin/Native Concurrency](https://touchlab.co/kotlin-native-concurrency/)
 - [Kotlinx.coroutines - Sharing and background threads on Kotlin/Native](https://github.com/Kotlin/kotlinx.coroutines/blob/native-mt/kotlin-native-sharing.md)
 - [Роман Елизаров — Корутины в Kotlin](https://www.youtube.com/watch?v=rB5Q3y73FTo)
+- [Learning Concurrency in Kotlin](https://www.packtpub.com/product/learning-concurrency-in-kotlin/9781788627160)
 
 ## Интересные детали
 
