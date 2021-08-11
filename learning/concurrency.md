@@ -23,6 +23,7 @@ sidebar_position: 3
 
 - [kotlinx.coroutines - delay not blocking](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/delay.html)
 - [WorkerBoundReference - share without freeze](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.native.concurrent/-worker-bound-reference/)
+- [MutableSharedFlow - onBufferOverflow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-shared-flow.html) - определяет по какой логике будет работать `emit` в случае переполнения буффера.
 
 ## Тестирование
 
