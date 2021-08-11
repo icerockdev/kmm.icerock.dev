@@ -14,3 +14,7 @@ Mobile.
 - [Developing Android Apps with Kotlin](https://www.udacity.com/course/developing-android-apps-with-kotlin--ud9012) - разработка приложения под Android на Kotlin, средний уровень
 - [Advanced Android with Kotlin](https://www.udacity.com/course/advanced-android-with-kotlin--ud940) - продвинутая разработка под Android на Kotlin
 - [Intro to iOS App Development with Swift](https://www.udacity.com/course/intro-to-ios-app-development-with-swift--ud585) - база разработки под iOS на Swift
+
+## Книги
+
+- [Atomic Kotlin](https://www.atomickotlin.com/atomickotlin/)
