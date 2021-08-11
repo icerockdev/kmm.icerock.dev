@@ -1,6 +1,6 @@
 # ObjectiveC interop annotations
 
-В kotlinlang.slack.com Кевин Галлиган описал свой опыт работы с аннотациями ObjC интеропа.
+В [kotlinlang.slack.com](https://kotlinlang.slack.com/archives/C3SGXARS6/p1627430386468200) Кевин Галлиган описал свой опыт работы с аннотациями ObjC интеропа.
 
 > Curious about "encoding" in `@ObjCMethod` annotation. We've been doing some experiments with cinterop and can successfully link and call to objc methods. As a concrete example, on iOS the objc class for Crashlytics is `FIRCrashlytics`. We only care about getting the global instance and logging a string, so after seeing what cinterop does, we just made this Kotlin class. It'll successfully link to the objc, and calls the methods as we expect.
 
