@@ -21,6 +21,8 @@
 - [Видео - Kotlin Multiplatform Mobile в production использовании](https://www.youtube.com/watch?v=jJWDlsETb3A)
 - [Видео - Состояние Kotlin Multiplatform Mobile](https://youtu.be/fjzfz9y9yko)
 
+Также рекомендуем ознакомиться с [нашей документацией](https://kmm.icerock.dev/docs/intro).
+
 ## Для Android разработчика
 
 Дополнительные материалы для Android разработчика, касающиеся основам iOS разработки (в дальнейших практических уроках задачи будут на обе платформы для полного понимания ситуации).
