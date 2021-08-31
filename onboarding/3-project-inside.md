@@ -353,9 +353,9 @@ enableFeaturePreview("VERSION_CATALOGS")
 
 ### build-logic
 
-`build-logic` - подпроект Gradle. Он предназначен для реализации логики сборки, не привязанной к конкретному gradle модулю.
+`build-logic` - [композитный](https://kmm.icerock.dev/learning/gradle/composite-build) проект. Он предназначен для реализации логики сборки, не привязанной к конкретному gradle модулю.
 
-В этой директории можно увидеть собственный `build.gradle.kts` и исходный код библиотеки. `build.gradle.kts` определяет как будет собираться данная библиотека и какие зависимости ей требуются. Исходный код библиотеки в нашем подпроекте содержит convention plugins, нужные для сборки основного Gradle проекта.
+В этой директории можно увидеть собственный `build.gradle.kts` и исходный код библиотеки. `build.gradle.kts` определяет как будет собираться данная библиотека и какие зависимости ей требуются. Исходный код библиотеки в нашем композитном билде содержит convention plugins, нужные для сборки основного Gradle проекта.
 
 Внутри `build.gradle.kts` объявлены нужные зависимости:
 
@@ -366,7 +366,11 @@ dependencies {
     api("com.android.tools.build:gradle:4.2.1")
     api("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.15.0")
 }
+```
 
+Он подключается внутри файла `settings.gradle.kts` командой:
+```kotlin
+includeBuild("build-logic")
 ```
 
 ### gradle.properties
@@ -374,25 +378,25 @@ dependencies {
 Данный файл состоит из пар ключ-значение параметров настройки запуска gradle.
 Использование `gradle.properties` это альтернатива использованию флагов командной строки для конфигурации проекта.
 
-```
-// максимально доступная модулю gradle память равнв 4гб
+```properties
+# максимально доступная модулю gradle память равнв 4гб
 org.gradle.jvmargs=-Xmx4096m
-// не распространять конфигурацию на все проекты
+# не распространять конфигурацию на все проекты
 org.gradle.configureondemand=false
-// включаем режим параллельного выполнения
+# включаем режим параллельного выполнения
 org.gradle.parallel=true
-// для последующих сборок будут использоваться кеши предыдущих сборок
+# для последующих сборок будут использоваться кеши предыдущих сборок
 org.gradle.caching=true
-// использовать официальный стандарт кода
+# использовать официальный стандарт кода
 kotlin.code.style=official
 
-// плагин Android будет использовать библиотеку AndroidX вместо стандартной библиотеки
+# плагин Android будет использовать библиотеку AndroidX вместо стандартной библиотеки
 android.useAndroidX=true
 
-// отключить предупреждения о том, что технология mpp являестя эксперементальной
+# отключить предупреждения о том, что технология mpp являестя эксперементальной
 kotlin.mpp.stability.nowarn=true
 
-// отключить предупреждения об используемых таргетах ios
+# отключить предупреждения об используемых таргетах ios
 mobile.multiplatform.iosTargetWarning=false
 
 VERSION_NAME=0.1.0
@@ -405,17 +409,46 @@ xcodeproj=ios-app/ios-app.xcworkspace
 
 Этот файл необходим для сборки с несколькими проектами, в нашем случае это `android-app`, `mpp-library` и `mpp-library:feature:auth`
 
+Исходный код:
+```kotlin
+// подключение фичей (начиная с Gradle 7.0)
+enableFeaturePreview("VERSION_CATALOGS")
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
+dependencyResolutionManagement {
+    // репозитории, из которых будут загружаться зависимости проекта
+    repositories {
+        mavenCentral()
+        google()
+
+        jcenter {
+            content {
+                includeGroup("org.jetbrains.kotlinx")
+            }
+        }
+    }
+}
+
+// подключение плагинов
+plugins {
+    id("dev.icerock.gradle.talaiot") version("3.+")
+}
+
+// подключение composite-build
+includeBuild("build-logic")
+
+// подключение подпроектов
+include(":android-app")
+include(":mpp-library")
+include(":mpp-library:feature:auth")
+```
+
 ### build.gradle.kts
 
 Эти зависимости будут также автоматически подключены и к самому Gradle проекту, поэтому плагины из этих зависимостей мы можем применять без добавления артефактов в `classpath`.
 
-```
+```kotlin
 // подключение плагинов
-plugins {
-    plugin(Deps.Plugins.detekt) apply false
-    id("dev.icerock.gradle.talaiot") version ("2.+")
-}
-
 buildscript {
     // репозитории, из которых будут загружаться зависимости проекта
     repositories {
@@ -425,58 +458,32 @@ buildscript {
     }
     // зависимости, используемые системой сборки
     dependencies {
-        plugin(Deps.Plugins.mokoResources)
-        plugin(Deps.Plugins.mokoNetwork)
-        plugin(Deps.Plugins.mokoUnits)
-        plugin(Deps.Plugins.kotlinSerialization)
-        plugin(Deps.Plugins.firebaseCrashlytics)
-        plugin(Deps.Plugins.googleServices)
+        classpath("dev.icerock.moko:resources-generator:0.16.1")
+        classpath("dev.icerock.moko:network-generator:0.16.0")
+        classpath("dev.icerock.moko:units-generator:0.6.1")
+        classpath("org.jetbrains.kotlin:kotlin-serialization:1.5.20")
+        classpath("com.google.firebase:firebase-crashlytics-gradle:2.7.1")
+        classpath("com.google.gms:google-services:4.3.8")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.35")
+        classpath(":build-logic")
     }
 }
-// раздел для gradle-модулей
+
 allprojects {
-    repositories {
-        mavenCentral()
-        google()
-
-        jcenter {
-            content {
-                includeGroup("com.github.aakira")
-            }
-        }
-    }
-
-    apply(plugin = Deps.Plugins.detekt.id)
-
-    configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
-        input.setFrom("src/commonMain/kotlin", "src/androidMain/kotlin", "src/iosMain/kotlin")
-    }
-
-    dependencies {
-        "detektPlugins"(Deps.Libs.Detekt.detektFormatting)
-    }
-
-    plugins.withId(Deps.Plugins.androidLibrary.id) {
-        configure<com.android.build.gradle.LibraryExtension> {
-            compileSdkVersion(Deps.Android.compileSdk)
-
-            defaultConfig {
-                minSdkVersion(Deps.Android.minSdk)
-                targetSdkVersion(Deps.Android.targetSdk)
-            }
-        }
-    }
     // принудительно исползовать coroutines-native-mt версию ( необходима для многопоточности )
     configurations.configureEach {
         resolutionStrategy {
-            // remove after coroutines native-mt will be merged into stable release
-            force(Deps.Libs.MultiPlatform.coroutines)
-            // remove after update detekt to 1.17.0+
-            force("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
+            val coroutines: MinimalExternalModuleDependency = rootProject.libs.coroutines.get()
+            val forcedCoroutines: ModuleVersionSelector = DefaultModuleVersionSelector.newSelector(
+                coroutines.module,
+                coroutines.versionConstraint.requiredVersion
+            )
+            force(forcedCoroutines)
         }
     }
 }
 
+// таска на очистку билдов
 tasks.register("clean", Delete::class).configure {
     group = "build"
     delete(rootProject.buildDir)
