@@ -97,7 +97,7 @@
 
 `ls -lp`:
 ```bash
-buildSrc/
+build-logic/
 android-app/
 ios-app/
 mpp-library/
@@ -112,16 +112,16 @@ README.md
 
 Кратко про каждый элемент, для понимания общей картины:
 
-- `buildSrc` - директория с логикой для системы сборки gradle;
-- `android-app` - исходный код android приложения;
-- `ios-app` - исходный код iOS приложения;
-- `mpp-library` - исходный код общей библиотеки на KMM;
-- `gradle` - специальная директория системы сборки gradle, в которой лежит Gradle Wrapper;
+- `android-app/` - директория с исходным кодом Android приложения;
+- `ios-app/` - директория с исходным кодом iOS приложения;
+- `build-logic/` - директория с логикой для системы сборки Gradle;
+- `mpp-library/` - директория с исходным кодом общей библиотеки на KMM;
+- `gradle/` - специальная директория системы сборки Gradle, в которой лежит Gradle Wrapper;
 - `build.gradle.kts` - файл конфигурации сборки корневого gradle проекта;
-- `gradle.properties` - файл с опциями, которые передаются в gradle проект при запуске;
-- `gradlew` и `gradlew.bat` - скрипты для unix и windows соответственно, которые запускают Gradle используя Gradle Wrapper;
-- `settings.gradle.kts` - файл настроек gradle проекта;
-- `README.md` - краткое описание содержимого репозитория и инструкция как собирать проект.
+- `gradle.properties` - файл с опциями, которые передаются в Gradle проект при запуске;
+- `gradlew` и `gradlew.bat` - скрипты для Unix и Windows соответственно, которые запускают Gradle используя Gradle Wrapper;
+- `settings.gradle.kts` - файл настроек Gradle проекта;
+- `README.md` - краткое описание содержимого репозитория и инструкция как собирать проект;
 
 Далее разберем все блоки более детально.
 
@@ -404,25 +404,164 @@ tasks.register("clean", Delete::class).configure {
 
 ## mpp-library
 
+![mpp library folder](project-inside/project-inside-mpp-lib.png)
+
+Оба приложения зависят от mpp-library, которая предоставляет доступ к ViewModel’и каждой фичи через SharedFactory.
+
+### build.gradle.kts
+
+Тут объявляются все зависимости и конфигурации нашей общей библиотеки. Давайте посмотрим что внутри.
+
+```kotlin
+// подключение плагинов
+plugins {
+    id("multiplatform-library-convention")
+    id("detekt-convention")
+    id("dev.icerock.mobile.multiplatform-resources")
+    id("dev.icerock.mobile.multiplatform.ios-framework")
+    id("dev.icerock.mobile.multiplatform-network-generator")
+    id("kotlinx-serialization")
+    id("kotlin-parcelize")
+    id("dev.icerock.mobile.multiplatform.cocoapods")
+}
+
+// объявление зависимостей
+dependencies {
+    commonMainImplementation(libs.coroutines)
+
+    commonMainImplementation(libs.kotlinSerialization)
+    commonMainImplementation(libs.ktorClient)
+    commonMainImplementation(libs.ktorClientLogging)
+
+    androidMainImplementation(libs.lifecycleViewModel)
+
+    commonMainApi(projects.mppLibrary.feature.auth)
+
+    commonMainApi(libs.multiplatformSettings)
+    commonMainApi(libs.napier)
+    commonMainApi(libs.mokoParcelize)
+    commonMainApi(libs.mokoResources)
+    commonMainApi(libs.mokoMvvmCore)
+    commonMainApi(libs.mokoMvvmLiveData)
+    commonMainApi(libs.mokoMvvmState)
+    commonMainApi(libs.mokoUnits)
+    commonMainApi(libs.mokoFields)
+    commonMainApi(libs.mokoNetwork)
+    commonMainApi(libs.mokoErrors)
+    commonMainApi(libs.mokoNetworkErrors)
+    commonMainApi(libs.mokoCrashReportingCore)
+    commonMainApi(libs.mokoCrashReportingCrashlytics)
+    commonMainApi(libs.mokoCrashReportingNapier)
+
+    commonTestImplementation(libs.mokoTestCore)
+    commonTestImplementation(libs.mokoMvvmTest)
+    commonTestImplementation(libs.mokoUnitsTest)
+    commonTestImplementation(libs.multiplatformSettingsTest)
+    commonTestImplementation(libs.ktorClientMock)
+}
+
+// идентификатор пакета ресурсов
+multiplatformResources {
+    multiplatformResourcesPackage = "org.example.library"
+}
+
+framework {
+    // подключение фичей
+    export(projects.mppLibrary.feature.auth)
+
+    // подключение остальных фреймворков
+    export(libs.multiplatformSettings)
+    export(libs.napier)
+    export(libs.mokoParcelize)
+    export(libs.mokoResources)
+    export(libs.mokoMvvmCore)
+    export(libs.mokoMvvmLiveData)
+    export(libs.mokoMvvmState)
+    export(libs.mokoUnits)
+    export(libs.mokoFields)
+    export(libs.mokoNetwork)
+    export(libs.mokoErrors)
+    export(libs.mokoNetworkErrors)
+    export(libs.mokoCrashReportingCore)
+    export(libs.mokoCrashReportingCrashlytics)
+    export(libs.mokoCrashReportingNapier)
+}
+
+// путь для подключения общей библиотеки 
+// посредством Cocoa Pods
+cocoaPods {
+    podsProject = file("../ios-app/Pods/Pods.xcodeproj")
+    pod("MCRCDynamicProxy", onlyLink = true)
+}
+
+// mokoNetwork
+// подключение yml файла для генерации api
+mokoNetwork {
+    spec("news") {
+        inputSpec = file("src/api/openapi.yml")
+    }
+}
+```
+
+### MultiplatformLibrary.podscpec
+
+
+Более подробно об этом файле мы уже говорили в разделе [сборка iOS приложения](https://kmm.icerock.dev/onboarding/project-inside/#сборка-ios-приложения).
+
+### src
+В папке `srs/` находится исходный код общей библиотеки.
+
+![mpp-library-](project-inside/project-inside-mpp-lib-src.png)
+
+ - `androidMain` - директория, содержащая файл `AndroidManifest.xml`, в котором объявляется имя пакета `mpp-library` для Android-приложения;
+ - `api` - директория, содержащая файл для генерации методов взаимодействия с API;
+ - директория `commonMain` содержит директорию `kotlin`, в которой как раз и пишется вся бизнес-логика приложения; в директории `resources` находится MR-класс для взаимодействия со строками, изображениями и прочими ресурсами, которые используются в проекте; 
+ - `commonTest` - директория, в которой находится исходный код тестов для общей библиотеки;
+
+### feature's
+Как мы видим mpp-library содержит в себе модуль feature. 
+Каждая фича в котором является Gradle проектом, несущим в себе соответствующие модели, view-модели, фабрики и интерфейсы, которые ожидаются от родительского модуля.
+
+![mpp-library-one-feature](project-inside/project-inside-mpp-lib-feature.png)
+
+Каждая фича имеет однотипную структуру. Внутри `commonMain/kotlin/…` обычно находятся директории:
+- `di` - директория, содержащая фабрику для создания View-модели и все, что связано с инъекцией зависимостей;
+- `model` - директория, содержащая все сущности (в основном data-классы и enum’ы) нужные в рамках данной view-модели.
+- `presentation` - директория, содержащая саму view-model и, возможно, фабрику юнитов (об этом поговорим дальше).
+
+Пример фичей:
+* Auth
+* Settings
+* List
+и т.п
+
+В файле `build.gradle.kts`, который находится в директории каждой фичи указаны все зависимости, нужные для данной фичи.
+
+Посмотрим: 
+```kotlin
+// подключение плагинов
+plugins {
+    id("detekt-convention")
+    id("multiplatform-library-convention")
+}
+// объявление зависимостей
+dependencies {
+    commonMainImplementation(libs.coroutines)
+
+    androidMainImplementation(libs.lifecycleViewModel)
+
+    // moko-mvvm & moko-resources
+    commonMainImplementation(libs.mokoMvvmLiveData)
+    commonMainImplementation(libs.mokoResources)
+}
+```
+
+Т.к каждая фича является отдельным Gradle-проектом, то она обязана содержать файл `AndroidManifest.xml`, в котором объявляется уникальное имя пакета для Android-приложения.
+
+### Shared & Domain Factory
+
 > Есть где то видос или хорошая статья о SharedFactory и DomainFactory
 
-Ага , просто столкнулся с тем что ранее я их не трогал но сейчас для того что бы идти дальше мне нужно сделать  authRepository, но сделать его в SharedFactory
-
-иммет ли значение где делать factory initializers ?
-
-Где еще нужно добавить для DomainFactory import что бы заработал , generated - горит красным .
-
-Оба приложения зависят от `mpp-library`, которая предоставляет доступ к ViewModel'и к каждой фиче через SharedFactory. Библиотека отвечает за установку соединений между фичей и `domain` modules.
-`mpp-library` содержит следующие модули:
-- `domain` ( отказались от использования ) - содержит объекты домена, репозитории, классы API сервера и DomainFactory, который создает экземпляры для всех из них;
-- `feature` - каждая фича содержит соответствующие ViewModel, Factory, модели и интерфейсы, которые ожидаются от родительского модуля;
-    Пример фичей:
-    - `config` содержит функции конфигурации ViewModel, интерфейс хранилища данных и ConfigFactory, которая создают экземпляры ViewModel;
-    - `list` содержит функции элементов списка ViewModel, интерфейс источника данных, интерфейс фабрики элементов списка и ListFactory, которая создают экземпляры ViewModel.
-    - `auth`
-`SharedFactory` - входная точка для Native: как для ios, так и для android. В ней создаются Factory для всех фичей
-Фичи между собой никак не связанны,
-    ## android-app
 ## android-app
 
 `android-app` - gradle проект с android приложением.
