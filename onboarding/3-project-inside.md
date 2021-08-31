@@ -159,14 +159,14 @@ Gradle Wrapper автоматически сохраняет скачиваем�
 Следующая важная составляющая нашего проекта - корневой gradle проект. Как было сказано ранее - для сборки обеих платформ используется gradle. Для android только он, а для ios gradle является одной из билдсистем. Корневая директория нашего проекта по сути и является корневым gradle проектом. `android-app` и `mpp-library` подключаются к этому коревому проекту как подпроекты.
 
 К коревому gradle проекту относятся:
-- `buildSrc` - библиотека с логикой сборки;
+- `build-logic` - подпроект, подключе;
 - `gradle.properties` - опции запуска gradle проекта;
 - `settings.gradle.kts` - файл настроек;
 - `build.gradle.kts` - файл конфигурации сборки.
 
 Больше файлов относящихся непосредственно к коревому gradle проекту в репозитории нет.
 
-### buildSrc
+### buildSrc (устарело)
 `buildSrc` - [специальная директория Gradle](https://docs.gradle.org/current/userguide/organizing_gradle_projects.html#sec:build_sources). Она предназначена для реализации логики сборки, не привязанной к конкретному gradle модулю. По сути это исходники библиотеки, которая автоматически будет подгружена в gradle и все классы объявленные в этой библиотеке будут доступны в любом месте Gradle конфигурации (в `build.gradle.kts`).
 
 В этой директории можно увидеть собственный `build.gradle.kts` и исходный код библиотеки. `build.gradle.kts` определяет как будет собираться данная библиотека и какие зависимости ей требуются. Исходный код библиотеки в нашем проекте содержит только один объект `Deps`, содержащий константы и зависимости, необходимые нашему проекту.
@@ -287,6 +287,87 @@ object Deps {
 ```
 
 Данный класс определяет константы, которые мы будем использовать в `build.gradle.kts` всех gradle модулей, что сокращает вероятность ошибки и позволяет менять версии/пути до библиотек в одном месте.
+
+:::caution
+
+Директория упразнена! 
+
+На новых проектах вместо `buildSrc` используется `Version Catalogs`.
+
+:::
+
+### Version Catalogs
+
+На новых проектах внутри директории `gradle` есть файл `libs.versions.toml`. Это список зависимостей, представленных в виде координат зависимостей, из которых пользователь может выбрать при объявлении зависимостей в сценарии сборки.
+
+Давайте посмотрим на этот файл:
+
+```bash
+# версии 
+[versions]
+materialVersion = "1.4.0"
+recyclerViewVersion = "1.2.1"
+swipeRefreshLayoutVersion = "1.1.0"
+constraintLayoutVersion = "2.0.4"
+lifecycleVersion = "2.3.1"
+glideVersion = "4.12.0"
+hiltVersion = "2.35"
+
+# ...
+
+# библиотеки с ссылками на версии
+[libraries]
+material = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+recyclerView = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerViewVersion" }
+swipeRefreshLayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swipeRefreshLayoutVersion" }
+constraintLayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintLayoutVersion" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glideVersion" }
+lifecycleViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleVersion" }
+lifecycleLivedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleVersion" }
+lifecycleRuntime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleVersion" }
+lifecycleViewModelSavedState = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycleVersion" }
+lifecycleCommonJava8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "lifecycleVersion" }
+lifecycleServices = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycleVersion" }
+lifecycleProcess = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycleVersion" }
+lifecycleReactiveStreams = { module = "androidx.lifecycle:lifecycle-reactivestreams-ktx", version.ref = "lifecycleVersion" }
+hilt = { module = "com.google.dagger:hilt-android", version.ref = "hiltVersion" }
+hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltVersion" }
+
+# ...
+```
+
+Это фича пришла с вместе с Gradle 7.0. Активация этой фичи происходит в файле `settings.gradle.kts`:
+
+```kotlin
+enableFeaturePreview("VERSION_CATALOGS")
+```
+
+Больше информации о Version Catalogs можете найти [тут](https://kmm.icerock.dev/learning/gradle/version-catalogs/).
+
+
+:::note
+
+Для сравнения можете посмотреть файл `Deps.kt` из директории `buildSrc/`, о которой мы говорили выше.
+
+:::
+
+### build-logic
+
+`build-logic` - подпроект Gradle. Он предназначен для реализации логики сборки, не привязанной к конкретному gradle модулю.
+
+В этой директории можно увидеть собственный `build.gradle.kts` и исходный код библиотеки. `build.gradle.kts` определяет как будет собираться данная библиотека и какие зависимости ей требуются. Исходный код библиотеки в нашем подпроекте содержит convention plugins, нужные для сборки основного Gradle проекта.
+
+Внутри `build.gradle.kts` объявлены нужные зависимости:
+
+```kotlin
+dependencies {
+    api("dev.icerock:mobile-multiplatform:0.12.0")
+    api("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
+    api("com.android.tools.build:gradle:4.2.1")
+    api("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.15.0")
+}
+
+```
 
 ### gradle.properties
 
