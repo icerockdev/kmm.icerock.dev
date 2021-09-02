@@ -407,7 +407,7 @@ xcodeproj=ios-app/ios-app.xcworkspace
 
 ### settings.gradle.kts
 
-Этот файл необходим для сборки с несколькими проектами, в нашем случае это `android-app`, `mpp-library` и `mpp-library:feature:auth`
+Этот файл необходим для сборки с несколькими проектами, в нашем случае это `android-app`, `mpp-library` и `mpp-library:feature:auth`, `build-logic`.
 
 Исходный код:
 ```kotlin
@@ -442,6 +442,8 @@ include(":android-app")
 include(":mpp-library")
 include(":mpp-library:feature:auth")
 ```
+
+Именно `settings.gradle.kts` иллюстрирует многомодульность нашего основного проекта.
 
 ### build.gradle.kts
 
@@ -808,6 +810,8 @@ class AppComponent {
 
 Это разобьётся на 4 координатора:
 
+![coordinator example](project-inside/project-inside-coordinator-ex.png)
+
 - AppCoordinator
   - Стартовый координатор. Всегда является первой входной точкой, определяет, куда должен выполниться дальнейший переход при запуске приложения
   - Если юзер не авторизован - запустит координатор авторизации и в качестве completionHandler-а укажет ему переход на список новостей в случае успешной авторизации
@@ -1039,8 +1043,6 @@ window.
 
 
 ## Генерация строк локализации
-
-
 
 В файле master.sh в функции cmdLocalize:
 
