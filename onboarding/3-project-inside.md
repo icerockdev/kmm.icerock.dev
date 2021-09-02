@@ -448,7 +448,6 @@ include(":mpp-library:feature:auth")
 Эти зависимости будут также автоматически подключены и к самому Gradle проекту, поэтому плагины из этих зависимостей мы можем применять без добавления артефактов в `classpath`.
 
 ```kotlin
-// подключение плагинов
 buildscript {
     // репозитории, из которых будут загружаться зависимости проекта
     repositories {
@@ -719,19 +718,90 @@ dependencies {
 
 ## ios-app
 
-`ios-app` - директория, в которой лежит Xcode проект ios приложения.
+`ios-app` - директория, в которой лежит Xcode проект iOS приложения.
+
+### Устройство проекта
+
+![ios-app-dirs](project-inside/project-inside-ios-app.png)
+
+Как мы видим, к iOS проекту подключена директория `mpp-library` - это наша общая бизнес логика.
+В директории `src/` находится исходные код нашего приложения:
+- `Firebase` - директория с plist файлом для настройки сервисов Firebase;
+- `Extensions` - директория с расширениями классов;
+-  `Common` - директория с общими UI/Logic элементами для всего iOS приложения;
+-  `Resources` - директория с ресурсами (например, R.swift и прочее);
+-  `Feature` - директория с фичами (еще не создана);
+
+### Входная точка приложения
+
+Посмотрим на файл `AppDelegate.swift`:
+
+```swift
+// импорт UI библиотеки
+import UIKit
+// импорт нашей мультиплатформенной библиотеки
+import MultiPlatformLibrary
+// импорт сервисов
+import MCRCStaticReporter
+import FirebaseCore
+
+@UIApplicationMain
+class AppDelegate: NSObject, UIApplicationDelegate {
+    
+    // создание окна приложения
+    var window: UIWindow?
+
+    // переменная координатора
+    private (set) var coordinator: AppCoordinator!
+
+    func application(_ application: UIApplication, 
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        
+        // настройка сервисов
+        FirebaseApp.configure()
+        MokoFirebaseCrashlytics.setup()
+
+
+        // Инициализация нашей SharedFactory, через синглтон AppComponent
+        AppComponent.factory = SharedFactory(
+            settings: AppleSettings(delegate: UserDefaults.standard),
+            antilog: DebugAntilog(defaultTag: "MPP"),
+            baseUrl: "https://newsapi.org/v2/"
+        )
+
+        // работа с координатором, об этом чуть позже
+        coordinator = AppCoordinator.init(
+            window: self.window!,
+            factory: AppComponent.factory
+        )
+        coordinator.start()
+
+        return true
+    }
+}
+```
+Файл `AppComponent.swift`:
+```swift
+import Foundation
+import MultiPlatformLibrary
+
+class AppComponent {
+    static var factory: SharedFactory!
+}
+```
+
+Класс AppDelegate является стартовой точкой приложения, это можно понять по атрибуту `@UIApplicationMain` перед классом. Именно в нем происходит настройка всех сторонних сервисов и создание экземпляра нашей SharedFactory, для последующего доступа к фабрикам фичей.
 
 ### Навигация в iOS
 
-Прежде чем идти дальше немного остановимся на том, как построена навигация в iOS приложение и какие
-подходы при работе с ней мы используем.
+Мы поняли что является отправной точкой нашего приложения, а теперь нам нужно понять как построена навигация в iOS приложение и какие подходы при работе с ней мы используем.
 
 В основе навигации лежат координаторы. Каждый координатор покрывает логически связанный блок
 функционала, который чаще всего состоит из нескольких экранов. При этом между собой они независимы и
 отвечают только за цепочку переходов только внутри себя. Также имеют возможность получать настройку
 действия, которое должно быть выполнено после завершения блока ответственности координатора.
 
-Например.
+**Пример.**
 
 Предположим, что у нас есть приложение с авторизацией и списком новостей, с которого
 можно перейти к детальному просмотру каждой новости и в раздел настроек для конфигурации отображения новостей.
@@ -760,87 +830,160 @@ dependencies {
 приложений и тем, как это должно отображаться пользователю.
 
 Чтобы работать с координаторами было проще, используется базовый класс, от которого наследуются
-остальные. Добавим его к нашему проекту.
-
-Создадим в ios-проекте папку src/Coordinators и в ней файлик BaseCoordinator. Для начала докинем
-туда пару протоколов:
+остальные. В директории `Common/Coordinator` вы найдете файлы `CoordinatorProtocol.swift` и `BaseCoordinator.swift`. Первый несет в себе протокол, под который подписан `BaseCoordinator` и описывает обязательные методы и поля:
 
 ```swift
-protocol ChildCoordinable {
-    var childCoordinators: [Coordinator] { get set }
-
-    func addDependency(_ coordinator: Coordinator)
-    func removeDependency(_ coordinator: Coordinator?)
-}
-```
-
-ChildCoordinable - необходим для корректной работы с зависимостями от дочерних координаторов.
-Необходимо не забывать добавлять зависимости на новые координаторы, удалять зависимость на
-конкретный координатор и запоминать список тех координаторов, которые являются дочерними к текущему.
-
-```swift
-protocol Coordinator: class {
-    var completionHandler: (() -> Void)? { get set }
-
+protocol Coordinator: AnyObject {
+    var completionHandler: (()->())? { get }
     func start()
+    func clear()
 }
 ```
 
-Coordinator - сам протокол координатора. По сути он должен иметь ровно две вещи - completionHandler,
-который вызовется при завершении его логической зоны ответственности. И функцию start. При её вызове
-он начинает запускать свой флоу таким образом, каким считает нужным.
+По сути он должен иметь ровно три вещи - completionHandler, который вызовется при завершении его логической зоны ответственности. Функцию start, при вызове которой он начинает запускать свой флоу таким образом, каким считает нужным, и функцию clear, которая чистит сам координатор и все дочерние.
 
-И далее сам класс базового координатора, который реализует оба этих протокола:
+Ну а второй несет сам класс базового координатора, который реализует этот протокол:
 
 ```swift
-class BaseCoordinator: NSObject, Coordinator, ChildCoordinable, UINavigationControllerDelegate {
+class BaseCoordinator: NSObject, Coordinator, UINavigationControllerDelegate {
     var childCoordinators: [Coordinator] = []
-    var completionHandler: (() -> Void)?
-
+    var completionHandler: (() -> ())?
+    fileprivate var clearHandler: (() -> ())? = nil
+    
     let window: UIWindow
-
-    weak var navigationController: UINavigationController?
-
-    init(window: UIWindow) {
+    let factory: SharedFactory
+    
+    var navigationController: UINavigationController?
+    
+    init(window: UIWindow, factory: SharedFactory) {
         self.window = window
+        self.factory = factory
     }
-
-    func start() {
-    }
-
-    func addDependency(_ coordinator: Coordinator) {
-        for element in childCoordinators where element === coordinator {
-            return
+    
+    func addDependency<Child>(_ coordinator: Child, completion: (() -> Void)? = nil) -> Child where Child : BaseCoordinator {
+        for element in childCoordinators.compactMap({ $0 as? Child }) {
+            if element === coordinator { return element }
+        }
+        coordinator.completionHandler = { [weak self, weak coordinator] in
+            self?.removeDependency(coordinator)
+            completion?()
         }
         childCoordinators.append(coordinator)
+        return coordinator
     }
-
-    func removeDependency(_ coordinator: Coordinator?) {
+    
+    func clear() {
+        clearHandler?()
+        childCoordinators.forEach {
+            $0.clear()
+        }
+        childCoordinators.removeAll()
+    }
+    
+    private func removeDependency(_ coordinator: Coordinator?) {
+        clearHandler?()
         guard
             childCoordinators.isEmpty == false,
             let coordinator = coordinator
         else { return }
         
-        for (index, element) in childCoordinators.enumerated() where element === coordinator {
-            
-            childCoordinators.remove(at: index)
-            break
-            
+        for (index, element) in childCoordinators.enumerated() {
+            if element === coordinator {
+                childCoordinators.remove(at: index)
+                break
+            }
         }
     }
-
-    func currentViewController() -> UIViewController? {
-        return self.navigationController?.topViewController?.presentedViewController ?? self.navigationController?.topViewController ?? self.navigationController
+    
+    //Cases
+    //1. Initial with window - create NV, etc..
+    //2. Exists navcontroller,
+    
+    func start() {
+        //
     }
+    
+    func beginInNewNavigation(_ controller: UIViewController) -> UINavigationController {
+        let newNavigationController = UINavigationController()
+        self.navigationController = newNavigationController
 
-    func popBack() {
-        self.navigationController?.popViewController(animated: true)
+        newNavigationController.setViewControllers([controller], animated: false)
+
+        self.window.rootViewController = newNavigationController
+        
+        self.clearHandler = { [weak self] in
+            //get controllers and view models, clear them
+            self?.popToRoot()
+        }
+        
+        return newNavigationController
+    }
+    
+    func beginInExistNavigation(_ controller: UIViewController) {
+        let prevController = self.navigationController?.topViewController
+        self.clearHandler = { [weak self, weak prevController] in
+            //get controllers and view models, clear them
+            if let prev = prevController {
+                self?.popToViewController(controller: prev)
+            }
+        }
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    
+    private func popBack() {
+        let popVC = self.navigationController?.popViewController(animated: true)
+        if let nVC = popVC {
+            clearViewModels(forControllers: [nVC])
+        } else {
+            navigationController?.dismiss(animated: true, completion: nil)
+        }
+    }
+    
+    private func clearViewModels(forControllers controllers: [UIViewController]?) {
+        let holders = (controllers ?? []).compactMap({ $0 as? ViewModelHolder })
+        holders.forEach({ $0.baseViewModel?.onCleared() })
+    }
+    
+    private func dismissModal() {
+        let controllers = navigationController?.viewControllers
+        navigationController?.dismiss(animated: true, completion: nil)
+        clearViewModels(forControllers: controllers)
+    }
+    
+    private func popToViewController(controller vc: UIViewController, animated: Bool = true) {
+        let controllers = navigationController?.popToViewController(vc, animated: animated)
+        clearViewModels(forControllers: controllers)
+    }
+    
+    private func popToViewController(ofClass: AnyClass, animated: Bool = true) {
+        if let vc = navigationController?.viewControllers.last(where: { $0.isKind(of: ofClass) }) {
+            let controllers = navigationController?.popToViewController(vc, animated: animated)
+            clearViewModels(forControllers: controllers)
+        }
+    }
+    
+    private func popToRoot() {
+        let controllers = navigationController?.popToRootViewController(animated: true)
+        clearViewModels(forControllers: controllers)
+    }
+    
+    func currentViewController() -> UIViewController {
+        guard let navController = self.navigationController else { return UIViewController() }
+        return navController.topViewController ?? navController.topPresentedViewController() ?? navController
     }
 }
+
 ```
 
-Для инициализации необходим только window. Также можно указать NavigationController с предыдущего
+Для инициализации необходим window и factory. Также можно указать NavigationController с предыдущего
 координатора, для сохранения общей навигации.
+
+:::note
+
+Координаторам нужен factory для доступа к фабрикам фичей из общей библиотеки.
+
+:::
 
 Добавление и удаление зависимостей нужны для корректной очистки связей и памяти при построении
 цепочек координаторов.
@@ -850,53 +993,71 @@ currentViewController и совершить переход назад - popBack.
 
 От проекта к проекту базовый координатор может изменяться, обеспечивая дополнительные нужды проекта.
 
-Теперь, когда у нас есть базовый координатор, создадим на его основе стартовый координатор
-приложения. Создаём рядом с AppDelegate файл для него, называем AppCoordinator:
+Теперь когда мы поняли принцип работы координаторов, посмотрим на класс `AppCoordinator`:
 
 ```swift
-import Foundation
-import UIKit
-
 class AppCoordinator: BaseCoordinator {
-    // MARK:** - Overrides**
     override func start() {
         let vc = UIViewController()
-        vc.view.backgroundColor = UIColor.green
+        vc.view.backgroundColor = .green
         self.window.rootViewController = vc
     }
 }
 ```
 
-Пусть он пока будет совсем простой, создающий контроллер зелёного цвета и делает его главным экраном
+Он пока совсем простой - создает контроллер зелёного цвета и делает его главным экраном
 window.
 
-Теперь нам надо познакомить AddDelegate с его координатором. Идём в AppDelegate.swift
+Теперь посмотрим где происходит создание главного координатора. Идём в AppDelegate.swift: 
 
-Добавим ему ссылку на координатор приложения:
+```swift    
+    // ....
 
+    // переменная координатора
+    private (set) var coordinator: AppCoordinator!
+
+    func application(_ application: UIApplication, 
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+
+        //...
+
+        // его инициализация
+        coordinator = AppCoordinator.init(
+            window: self.window!,
+            factory: AppComponent.factory
+        )
+        // запуск коррдинатора
+        coordinator.start()
+
+        // ....
+    }
 ```
-private (set) var coordinator: AppCoordinator!
-```
-
-А в didFinishLaunchingWithOptions после создания SharedFactory добавим создание координатора и вызов
-старта:
-
-```swift
-self.coordinator = AppCoordinator(
-    window: self.window!
-)
-self.coordinator.start()
-```
-
-Готово. Собираем, запускаем и видим наш зелёный контроллер:
 
 Теперь дальнейшая логика переходов зависит от текущего контроллера и действий юзера на нём. Но
-зелёным прямоугольником мир не спасёшь и юзера не авторизуешь. Поэтому пора переходить к созданию
+зелёным прямоугольником мир не спасёшь и юзера не авторизуешь. Поэтому после прочтения пора переходить к созданию
 нашей первой фичи.
 
 
-### Генерация строк локализации
+## Генерация строк локализации
 
-В файле master.sh в cmdLocalize есть id googleSheet в которой находятся строки локализации для проекта
-Чтобы открыть эту таблицу, нужно открыть любую таблицу и заменить id на указанный в master.sh файле
+
+
+В файле master.sh в функции cmdLocalize:
+
+```bash
+function cmdLocalize() {
+    # ...
+
+    npm start android strings "GSHEET_ID_HERE" 'platform!A1:C' ../mpp-library/shared/src/androidMain/res/
+    npm start mpp strings "GSHEET_ID_HERE" 'mpp!A1:C' ../mpp-library/src/commonMain/resources/MR/
+    npm start mpp plurals "GSHEET_ID_HERE" 'mpp-plurals!A1:D' ../mpp-library/src/commonMain/resources/MR/
+    npm start ios strings "GSHEET_ID_HERE" 'platform!A1:C' ../ios-app/src/Resources/
+}
+```
+
+Вместо GSHEET_ID_HERE должен стоять Google Sheet Id файла локализации.
 Далее, чтобы обновить строки локализации в проекте необходимо вызвать команду ./master.sh localize
+
+Для корректной работы скрипта у вас должен быть установлен npm.
+
+Узнать больше информации мы можете [тут](https://gitlab.icerockdev.com/scl/sheets-localizations-generator).
