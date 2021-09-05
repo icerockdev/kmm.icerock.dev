@@ -7,18 +7,52 @@
 
 ![build-settigs](build-configuration/build-configurations-settings.png)
 
-Перейдя во вкладку `Build Settigs` в файле проекта, вы увидите сотни настроек сборки, распределенных по слоям проектов, целям и конфигурациям, и это не говоря об остальных вкладках.
+Перейдя во вкладку `Build Settigs`, вы увидите сотни настроек сборки, распределенных по слоям проекта, целям и конфигурациям, и это не говоря об остальных вкладках.
 
 
 ## Как это устроено
 
 В этой многоуроневой таблице вы можете увидеть столбцы - это слои проекта. 
-Они расположены в приоритетном порядке. 
-
-Будет хорошо, если все настройки
-сборки проекта будут зависеть только от файлов конфигурации. 
+Они расположены в приоритетном порядке справа налево. 
 
 ![build-settings-levels](build-configuration/build-configurations-params-level.png)
+
+Включить такое отображение таблицы вы можете нажав на кнопку `Levels`.
+
+![build-configuration-levels-button](build-configuration/build-configuration-levels-button.png)
+
+Чтобы указать для какой-то конфигурации файл, который ее настраивает, достаточно просто в `PROJECT_NAME.xcodeproj -> Project -> PROJECT_NAME -> Configurations` указать файл с расширением `xcconfig`.
+
+![build-configurations-started](build-configuration/build-configurations-empty.png)
+
+![build-configurations-select](build-configuration/build-configuration-select.png)
+
+Перейдем к заполнению config-файла:
+
+```bash
+SDKROOT = iphoneos
+```
+
+Узнать название настройки вы можете прямо в Xcode'е в разделе `Quick Help` бокового меню, ну или по этой [ссылке](https://xcodebuildsettings.com).
+
+![build-configurations-help](build-configuration/build-configurations-quick-help.png)
+
+Чтобы понять, что какую-то настройку мы получили именно из файла конфигруации, а не не из файла проекта, необходимо просто посмотреть на уровни таблицы - конечная настройка выделяется другим цветом:
+
+![build-configuration-file-or-project](build-configuration/build-configurations-file-or-project-settings.png)
+
+Теперь достаточно удалить это поле в файле конфигурации проекта нажатием Backspace ⌫.
+
+![build-seetings-deleted](build-configuration/build-configurations-deleted.png)
+
+Как мы видим конечным параметром стал именно наш параметр из файла.
+
+:::important
+
+Будет хорошо, если все настройки сборки проекта будут зависеть только от файлов конфигурации!
+
+:::
+
 
 ## Как делаем мы
 На наших проектах мы используем 6 типов конфигураций сборки, их вы можете найти в настройках проекта:
