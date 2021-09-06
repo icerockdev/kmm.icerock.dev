@@ -159,7 +159,7 @@ Gradle Wrapper автоматически сохраняет скачиваем�
 Следующая важная составляющая нашего проекта - корневой gradle проект. Как было сказано ранее - для сборки обеих платформ используется gradle. Для android только он, а для ios gradle является одной из билдсистем. Корневая директория нашего проекта по сути и является корневым gradle проектом. `android-app` и `mpp-library` подключаются к этому коревому проекту как подпроекты.
 
 К коревому gradle проекту относятся:
-- `build-logic` - подпроект, подключе;
+- `build-logic` - композитно подключенный проект, несущий в себе логику сборки остальных подпроектов;
 - `gradle.properties` - опции запуска gradle проекта;
 - `settings.gradle.kts` - файл настроек;
 - `build.gradle.kts` - файл конфигурации сборки.
@@ -407,7 +407,7 @@ xcodeproj=ios-app/ios-app.xcworkspace
 
 ### settings.gradle.kts
 
-Этот файл необходим для сборки с несколькими проектами, в нашем случае это `android-app`, `mpp-library` и `mpp-library:feature:auth`, `build-logic`.
+Этот файл необходим для сборки с несколькими проектами, в нашем случае это `build-logic`, `android-app`, `mpp-library` и `mpp-library:feature:auth`.
 
 Исходный код:
 ```kotlin
@@ -457,7 +457,7 @@ buildscript {
         google()
         gradlePluginPortal()
     }
-    // зависимости, используемые системой сборки
+    // пути до артефактов репозиториев
     dependencies {
         classpath("dev.icerock.moko:resources-generator:0.16.1")
         classpath("dev.icerock.moko:network-generator:0.16.0")
@@ -747,6 +747,8 @@ dependencies {
 -  `Common` - директория с общими UI/Logic элементами для всего iOS приложения;
 -  `Resources` - директория с ресурсами (например, R.swift и прочее);
 -  `Feature` - директория с фичами (еще не создана);
+
+В директории `BuildConfigurations/` лежат файлы конфигурации сборки проека, подробнее о них вы можете прочитать [тут].
 
 ### Входная точка приложения
 
@@ -1051,10 +1053,69 @@ window.
     }
 ```
 
-Теперь дальнейшая логика переходов зависит от текущего контроллера и действий юзера на нём. Но
-зелёным прямоугольником мир не спасёшь и юзера не авторизуешь. Поэтому после прочтения пора переходить к созданию
-нашей первой фичи.
+Теперь дальнейшая логика переходов зависит от текущего контроллера и действий юзера на нём.
 
+### Podfile
+
+Наш проект `ios-app` является многомодульным. 
+
+Посмотрим что находится внутри немаловажного `Podfile`, который находится в моделу `Pods`, и о котором мы немного говорили в разделе [Сборка iOS приложения](https://kmm.icerock.dev/onboarding/project-inside#сборка-ios-приложения).
+
+```bash
+source 'https://cdn.cocoapods.org/'
+
+# игнорировать все предупреждения во всех подключенных pod'ах
+inhibit_all_warnings!
+
+# сообщает CocoaPods, что вы хотите использовать Frameworks вместо статических библиотек
+use_frameworks!
+# объявление таргетной платформы для CocoaPods
+platform :ios, '12.0'
+
+# маппинг конфигураций 
+# указывает проект Xcode, который содержит цель, с которой должна быть связана библиотека Pods.
+# подробнее https://guides.cocoapods.org/syntax/podfile.html#project
+project 'ios-app',
+  'dev-release' => :release, 'stage-release' => :release,
+  'dev-debug' => :debug, 'stage-debug' => :debug,
+  'prod-debug' => :debug, 'prod-release' => :release
+
+# обходной путь для https://github.com/CocoaPods/CocoaPods/issues/8073
+# необходимость для корректного обнулирования кеша MultiPlatformLibrary.framework
+install! 'cocoapods', :disable_input_output_paths => true
+
+target 'ios-app' do
+  # подключение нашего библиотеки по локальному пути
+  pod 'MultiPlatformLibrary', :path => '../mpp-library'
+  # подключение unit'ов через git-репозиторий
+  pod 'MultiPlatformLibraryUnits/Core',
+    :git => 'https://github.com/icerockdev/moko-units.git', :tag => 'release/0.6.1'
+  # подключение crash-репортеров через git-репозиторий
+  # подробнее тут https://github.com/icerockdev/moko-crash-reporting
+  pod 'MCRCDynamicProxy',
+    :git => 'https://github.com/icerockdev/moko-crash-reporting.git', :tag => 'release/0.2.0'
+  pod 'MCRCStaticReporter',
+    :git => 'https://github.com/icerockdev/moko-crash-reporting.git', :tag => 'release/0.2.0'
+
+  # вспомогательные библиотеки, которые могут потребоваться во время разработки
+  # iOS приложения
+
+  # pod 'Firebase', '~> 6.33.0'
+  # pod 'R.swift', '~> 5.3.1'           # Code generation for resources  https://github.com/mac-cain13/R.swift
+  # pod 'ProgressHUD', '~> 2.70'        # Loading animation https://github.com/relatedcode/ProgressHUD
+  # pod 'Toast-Swift', '~> 5.0.1'       # Showing toasts https://github.com/scalessec/Toast-Swift
+  # pod 'XLPagerTabStrip', '~> 9.0'     # Tabs controller like an Android PagerTabStrip
+  # pod 'AlamofireImage', '~> 3.6.0'    # Image loader with cache https://github.com/Alamofire/AlamofireImage
+  # pod 'Down', '~> 0.10.0'             # Markdown rendering https://github.com/johnxnguyen/Down
+  # pod 'RxKeyboard', '~> 1.0.0'        # Reactive way of observing keyboard frame changes https://github.com/RxSwiftCommunity/RxKeyboard
+  # pod 'SwiftLint', '~> 0.40.3'        # A tool to enforce Swift style and conventions. https://github.com/realm/SwiftLint
+  # pod 'DatePickerDialog', '~> 4.0'    # Date picker dialog (based on UIDatePicker) https://github.com/squimer/DatePickerDialog-iOS-Swift
+  # pod "AlignedCollectionViewFlowLayout", '~> 1.1.2' # Collection view layout with custom align https://github.com/mischa-hildebrand/AlignedCollectionViewFlowLayout
+  # pod 'InfiniteLayout', :git => 'https://github.com/icerockdev/InfiniteLayout', :branch => 'master' # Infinite collection view layout
+  # pod 'SSZipArchive', '~> 2.4.2'      # Zip format support
+  # pod 'AssetImportKit', '~> 1.1.1'    # Import 3D model dynamically on SceneKit
+end
+```
 
 ## Генерация строк локализации
 
@@ -1072,8 +1133,9 @@ function cmdLocalize() {
 ```
 
 Вместо GSHEET_ID_HERE должен стоять Google Sheet Id файла локализации.
+
 Далее, чтобы обновить строки локализации в проекте необходимо вызвать команду ./master.sh localize
 
 Для корректной работы скрипта у вас должен быть установлен npm.
 
-Узнать больше информации мы можете [тут](https://gitlab.icerockdev.com/scl/sheets-localizations-generator).
+Узнать больше информации вы можете [тут](https://gitlab.icerockdev.com/scl/sheets-localizations-generator).
