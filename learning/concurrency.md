@@ -13,6 +13,7 @@ sidebar_position: 3
 - [kotlinlang docs - Concurrent mutability](https://kotlinlang.org/docs/mobile/concurrent-mutability.html) - required
 - [KotlinConf 2018 - Kotlin/Native Concurrency Model by Nikolay Igotti](https://www.youtube.com/watch?v=nw6YTfEyfO0)
 - [KotlinConf 2019: Kotlin Native Concurrency Explained by Kevin Galligan](https://www.youtube.com/watch?v=oxQ6e1VeH4M) - required
+- [Многопоточность и Kotlin в Яндекс.Картах: как не допустить падения новых фич на iOS](https://habr.com/ru/company/yandex/blog/575846/) - required
 - [Touchlab - Practical Kotlin Native Concurrency](https://dev.to/touchlab/practical-kotlin-native-concurrency-ac7)
 - [Touchlab - Kotlin/Native Concurrency](https://touchlab.co/kotlin-native-concurrency/)
 - [Kotlinx.coroutines - Sharing and background threads on Kotlin/Native](https://github.com/Kotlin/kotlinx.coroutines/blob/native-mt/kotlin-native-sharing.md) - required
