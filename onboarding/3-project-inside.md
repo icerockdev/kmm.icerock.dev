@@ -300,7 +300,7 @@ object Deps {
 
 ### Version Catalogs
 
-На новых проектах внутри директории `gradle` есть файл `libs.versions.toml`. Это список зависимостей, представленных в виде координат зависимостей, из которых пользователь может выбрать при объявлении зависимостей в сценарии сборки.
+На новых проектах внутри директории `gradle` есть файл `libs.versions.toml`. Это список зависимостей, на основе которого gradle сгенерирует специальные свойства для доступа к зависимостям по именам со строгими типами, данный файл позволяет централизованно управлять зависимостями всего проекта.
 
 Давайте посмотрим на этот файл:
 
@@ -383,7 +383,10 @@ includeBuild("build-logic")
 ```properties
 # максимально доступная модулю gradle память равнв 4гб
 org.gradle.jvmargs=-Xmx4096m
-# не распространять конфигурацию на все проекты
+#параметр отложенной конфигурации
+# это когда градл конфигурирует проект только в тот момент, 
+# когда от проекта что-то потребовалось. 
+# это должно ускорять работу гредла, но по факту до сих пор слабо поддерживается плагинами 
 org.gradle.configureondemand=false
 # включаем режим параллельного выполнения
 org.gradle.parallel=true
@@ -409,7 +412,9 @@ xcodeproj=ios-app/ios-app.xcworkspace
 
 ### settings.gradle.kts
 
-Этот файл необходим для сборки с несколькими проектами, в нашем случае это `build-logic`, `android-app`, `mpp-library` и `mpp-library:feature:auth`.
+Этот файл определяет настройки gradle проекта. здесь мы можем подключать под-проекты (вызовом include) и подключать другие gradle проекты, настраивая composite build (вызовом includeBuild)"
+
+В нашем случае это `build-logic` (composite build), `android-app`, `mpp-library` и `mpp-library:feature:auth` (sub-projects).
 
 Исходный код:
 ```kotlin
@@ -431,7 +436,10 @@ dependencyResolutionManagement {
     }
 }
 
-// подключение плагинов
+// В настройках тоже можно подключать плагины.
+// Данный плагин является настройкой плагина Gradle Talaiot.
+// Он отправляет статистику сборки в аналитическую базу данных Influx
+// нашей компании.
 plugins {
     id("dev.icerock.gradle.talaiot") version("3.+")
 }
@@ -449,8 +457,6 @@ include(":mpp-library:feature:auth")
 
 ### build.gradle.kts
 
-Эти зависимости будут также автоматически подключены и к самому Gradle проекту, поэтому плагины из этих зависимостей мы можем применять без добавления артефактов в `classpath`.
-
 ```kotlin
 buildscript {
     // репозитории, из которых будут загружаться зависимости проекта
@@ -459,7 +465,7 @@ buildscript {
         google()
         gradlePluginPortal()
     }
-    // пути до артефактов репозиториев
+    // добавление зависимостей в выполнение gradle скриптов
     dependencies {
         classpath("dev.icerock.moko:resources-generator:0.16.1")
         classpath("dev.icerock.moko:network-generator:0.16.0")
@@ -492,7 +498,7 @@ tasks.register("clean", Delete::class).configure {
     delete(rootProject.buildDir)
 }
 ```
-
+Подробнее о конфигурациях зависимостей вы можете прочитать в [разделе обучения](/learning/gradle/configuration).
 ## mpp-library
 
 ![mpp library folder](project-inside/project-inside-mpp-lib.png)
@@ -557,10 +563,10 @@ multiplatformResources {
 }
 
 framework {
-    // подключение фичей
+    // экспорты фичей в iOS фреймворк
     export(projects.mppLibrary.feature.auth)
 
-    // подключение остальных фреймворков
+    // экспорт либ в iOS фреймворк
     export(libs.multiplatformSettings)
     export(libs.napier)
     export(libs.mokoParcelize)
@@ -600,13 +606,13 @@ mokoNetwork {
 Более подробно об этом файле мы уже говорили в разделе [сборка iOS приложения](https://kmm.icerock.dev/onboarding/project-inside/#сборка-ios-приложения).
 
 ### src
-В папке `srs/` находится исходный код общей библиотеки.
+В папке `srs` находится исходный код общей библиотеки.
 
 ![mpp-library-](project-inside/project-inside-mpp-lib-src.png)
 
  - `androidMain` - директория, содержащая файл `AndroidManifest.xml`, в котором объявляется имя пакета `mpp-library` для Android-приложения;
  - `api` - директория, содержащая файл для генерации методов взаимодействия с API;
- - директория `commonMain` содержит директорию `kotlin`, в которой как раз и пишется вся бизнес-логика приложения; в директории `resources` находится MR-класс для взаимодействия со строками, изображениями и прочими ресурсами, которые используются в проекте; 
+ - директория `commonMain` содержит директорию `kotlin`, в которой как раз и пишется вся бизнес-логика приложения; в директории `resources` находятся ресурсы, попавшие в проект через [moko-resources](https://github.com/icerockdev/moko-resources);
  - `commonTest` - директория, в которой находится исходный код тестов для общей библиотеки;
 
 ### feature's
