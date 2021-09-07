@@ -17,6 +17,7 @@ export default function DocPaginator(props) {
     return (
         <>
             <OriginalDocPaginator {...props} />
+            <br/>
             <DiscussionEmbed
                 shortname='kdmw'
                 config={{
