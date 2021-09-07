@@ -19,7 +19,7 @@ export default function DocPaginator(props) {
             <OriginalDocPaginator {...props} />
             <br/>
             <DiscussionEmbed
-                shortname='kmm.icerock.dev'
+                shortname='kmm-icerock-dev'
                 config={{
                     url: 'https://kmm.icerock.dev/' + metadata.permalink,
                     identifier: disqusId,
