@@ -1,8 +1,3 @@
 # kotlinx.serialization
 
-- [Официальная документация](https://kotlinlang.org/docs/serialization.html)
-
-## Интересные моменты
-
-Сериализация дает способ получить список аннотаций для класса, поля, метода. В `encoder` есть доступ
-к списку аннотаций объекта, в этот список попадают только аннотации, отмеченные `@SerialInfo`
+Информация [перенесена в раздел Learning](/learning/libraries/kotlinx/serialization)
