@@ -128,7 +128,7 @@ Gradle Wrapper автоматически сохраняет скачиваем�
 
 Больше файлов относящихся непосредственно к коревому gradle проекту в репозитории нет.
 
-### buildSrc (устарело)
+### [buildSrc](/learning/gradle/buildSrc) (устарело)
 
 :::caution
 
@@ -712,14 +712,14 @@ dependencies {
 ![ios-app-dirs](project-inside/project-inside-ios-app.png)
 
 Как мы видим, к iOS проекту подключена директория `mpp-library` - это наша общая бизнес логика.
-В директории `src/` находится исходные код нашего приложения:
+В директории `src` находится исходные код нашего приложения:
 - `Firebase` - директория с plist файлом для настройки сервисов Firebase;
 - `Extensions` - директория с расширениями классов;
 -  `Common` - директория с общими UI/Logic элементами для всего iOS приложения;
 -  `Resources` - директория с ресурсами (например, R.swift и прочее);
 -  `Feature` - директория с фичами (еще не создана);
 
-В директории `BuildConfigurations/` лежат файлы конфигурации сборки проекта, подробнее о них вы можете прочитать [тут].
+В директории `BuildConfigurations` лежат файлы конфигурации сборки проекта, подробнее о них вы можете прочитать [тут].
 
 ### Входная точка приложения
 
@@ -1025,88 +1025,3 @@ window.
 ```
 
 Теперь дальнейшая логика переходов зависит от текущего контроллера и действий юзера на нём.
-
-### Podfile
-
-Наш проект `ios-app` является многомодульным. 
-
-Посмотрим что находится внутри немаловажного `Podfile`, который находится в моделу `Pods`, и о котором мы немного говорили в разделе [Сборка iOS приложения](https://kmm.icerock.dev/onboarding/project-inside#сборка-ios-приложения).
-
-```bash
-source 'https://cdn.cocoapods.org/'
-
-# игнорировать все предупреждения во всех подключенных pod'ах
-inhibit_all_warnings!
-
-# сообщает CocoaPods, что вы хотите использовать Frameworks вместо статических библиотек
-use_frameworks!
-# объявление таргетной платформы для CocoaPods
-platform :ios, '12.0'
-
-# маппинг конфигураций 
-# указывает проект Xcode, который содержит цель, с которой должна быть связана библиотека Pods.
-# подробнее https://guides.cocoapods.org/syntax/podfile.html#project
-project 'ios-app',
-  'dev-release' => :release, 'stage-release' => :release,
-  'dev-debug' => :debug, 'stage-debug' => :debug,
-  'prod-debug' => :debug, 'prod-release' => :release
-
-# обходной путь для https://github.com/CocoaPods/CocoaPods/issues/8073
-# необходимость для корректного обнулирования кеша MultiPlatformLibrary.framework
-install! 'cocoapods', :disable_input_output_paths => true
-
-target 'ios-app' do
-  # подключение нашего библиотеки по локальному пути
-  pod 'MultiPlatformLibrary', :path => '../mpp-library'
-  # подключение unit'ов через git-репозиторий
-  pod 'MultiPlatformLibraryUnits/Core',
-    :git => 'https://github.com/icerockdev/moko-units.git', :tag => 'release/0.6.1'
-  # подключение crash-репортеров через git-репозиторий
-  # подробнее тут https://github.com/icerockdev/moko-crash-reporting
-  pod 'MCRCDynamicProxy',
-    :git => 'https://github.com/icerockdev/moko-crash-reporting.git', :tag => 'release/0.2.0'
-  pod 'MCRCStaticReporter',
-    :git => 'https://github.com/icerockdev/moko-crash-reporting.git', :tag => 'release/0.2.0'
-
-  # вспомогательные библиотеки, которые могут потребоваться во время разработки
-  # iOS приложения
-
-  # pod 'Firebase', '~> 6.33.0'
-  # pod 'R.swift', '~> 5.3.1'           # Code generation for resources  https://github.com/mac-cain13/R.swift
-  # pod 'ProgressHUD', '~> 2.70'        # Loading animation https://github.com/relatedcode/ProgressHUD
-  # pod 'Toast-Swift', '~> 5.0.1'       # Showing toasts https://github.com/scalessec/Toast-Swift
-  # pod 'XLPagerTabStrip', '~> 9.0'     # Tabs controller like an Android PagerTabStrip
-  # pod 'AlamofireImage', '~> 3.6.0'    # Image loader with cache https://github.com/Alamofire/AlamofireImage
-  # pod 'Down', '~> 0.10.0'             # Markdown rendering https://github.com/johnxnguyen/Down
-  # pod 'RxKeyboard', '~> 1.0.0'        # Reactive way of observing keyboard frame changes https://github.com/RxSwiftCommunity/RxKeyboard
-  # pod 'SwiftLint', '~> 0.40.3'        # A tool to enforce Swift style and conventions. https://github.com/realm/SwiftLint
-  # pod 'DatePickerDialog', '~> 4.0'    # Date picker dialog (based on UIDatePicker) https://github.com/squimer/DatePickerDialog-iOS-Swift
-  # pod "AlignedCollectionViewFlowLayout", '~> 1.1.2' # Collection view layout with custom align https://github.com/mischa-hildebrand/AlignedCollectionViewFlowLayout
-  # pod 'InfiniteLayout', :git => 'https://github.com/icerockdev/InfiniteLayout', :branch => 'master' # Infinite collection view layout
-  # pod 'SSZipArchive', '~> 2.4.2'      # Zip format support
-  # pod 'AssetImportKit', '~> 1.1.1'    # Import 3D model dynamically on SceneKit
-end
-```
-
-## Генерация строк локализации
-
-В файле master.sh в функции cmdLocalize:
-
-```bash
-function cmdLocalize() {
-    # ...
-
-    npm start android strings "GSHEET_ID_HERE" 'platform!A1:C' ../mpp-library/shared/src/androidMain/res/
-    npm start mpp strings "GSHEET_ID_HERE" 'mpp!A1:C' ../mpp-library/src/commonMain/resources/MR/
-    npm start mpp plurals "GSHEET_ID_HERE" 'mpp-plurals!A1:D' ../mpp-library/src/commonMain/resources/MR/
-    npm start ios strings "GSHEET_ID_HERE" 'platform!A1:C' ../ios-app/src/Resources/
-}
-```
-
-Вместо GSHEET_ID_HERE должен стоять Google Sheet Id файла локализации.
-
-Далее, чтобы обновить строки локализации в проекте необходимо вызвать команду ./master.sh localize
-
-Для корректной работы скрипта у вас должен быть установлен npm.
-
-Узнать больше информации вы можете [тут](https://gitlab.icerockdev.com/scl/sheets-localizations-generator).
