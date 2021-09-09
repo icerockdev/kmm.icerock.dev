@@ -25,39 +25,6 @@ sidebar_position: 3
 - [WorkerBoundReference - share without freeze](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.native.concurrent/-worker-bound-reference/)
 - [MutableSharedFlow - onBufferOverflow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-shared-flow.html) - определяет по какой логике будет работать `emit` в случае переполнения буффера.
 
-## Кейсы
-
-### Использование delay
-
-По началу `delay` все интерпретируют как `Thread.sleep` и считают что текущий поток будет остановлен
-на N миллисекунд. Но [это не так](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/delay.html). 
-Рассмотрим следующий блок кода:
-
-```kotlin
-suspend fun startTimer() {
-    println("show message at start")
-    delay(1000)
-    println("show message after second")
-}
-```
-
-При компиляции данный код будет преобразован в нечто похожее на:
-
-```kotlin
-fun startTimer() {
-    println("show message at start")
-    delayCallback(1000) {
-        println("show message after second")
-    }
-}
-```
-
-То есть вместо вызова некоторго `sleep` на весь поток, вся работа после suspend-point (`delay` это
-suspend функция), будет "завернута в callback", закинута в очередь текущего потока (через Dispatcher
-корутин) и данный калбек будет выполнен через секунду (когда будет получен из очереди диспатчером).
-
-То есть вызовы `delay` не останавливают работу потока.
-
 ## Тестирование
 
 [Google Forms](https://forms.gle/ZCKW34TnLN1tfHQBA)
