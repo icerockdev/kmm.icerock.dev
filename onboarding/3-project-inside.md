@@ -388,13 +388,13 @@ buildscript {
     }
     // добавление зависимостей в выполнение gradle скриптов
     dependencies {
-        classpath("dev.icerock.moko:resources-generator:0.16.1")
-        classpath("dev.icerock.moko:network-generator:0.16.0")
-        classpath("dev.icerock.moko:units-generator:0.6.1")
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.5.20")
-        classpath("com.google.firebase:firebase-crashlytics-gradle:2.7.1")
-        classpath("com.google.gms:google-services:4.3.8")
-        classpath("com.google.dagger:hilt-android-gradle-plugin:2.35")
+        classpath(libs.mokoResourcesGeneratorGradle)
+        classpath(libs.mokoNetworkGeneratorGradle)
+        classpath(libs.mokoUnitsGeneratorGradle)
+        classpath(libs.kotlinSerializationGradle)
+        classpath(libs.hiltGradle)
+        classpath(libs.firebaseCrashlyticsGradle)
+        classpath(libs.googleServicesGradle)
         classpath(":build-logic")
     }
 }
@@ -451,6 +451,7 @@ dependencies {
     commonMainImplementation(libs.ktorClient)
     commonMainImplementation(libs.ktorClientLogging)
 
+    androidMainImplementation(libs.multidex)
     androidMainImplementation(libs.lifecycleViewModel)
 
     commonMainApi(projects.mppLibrary.feature.auth)
@@ -530,7 +531,7 @@ mokoNetwork {
 
 ![mpp-library-](project-inside/project-inside-mpp-lib-src.png)
 
- - `androidMain` - директория, содержащая файл `AndroidManifest.xml`, в котором объявляется имя пакета `mpp-library` для Android-приложения;
+ - `androidMain` - директория, содержащая файл `AndroidManifest.xml`, в котором объявляется идентификатор (уникальный!) для модуля `mpp-library` для Android-приложения;
  - `api` - директория, содержащая файл для генерации методов взаимодействия с API;
  - директория `commonMain` содержит директорию `kotlin`, в которой как раз и пишется вся бизнес-логика приложения; в директории `resources` находятся ресурсы, попавшие в проект через [moko-resources](https://github.com/icerockdev/moko-resources);
  - `commonTest` - директория, в которой находится исходный код тестов для общей библиотеки;
@@ -655,11 +656,138 @@ dependencies {
 
 ## android-app
 
-`android-app` - gradle проект с android приложением.
+`android-app` - Gradle проект с Android-приложением.
 
-В нем подключен gradle плагин `com.android.application` (через константу `Deps.Plugins.androidApplication`) и описана вся конфигурация для сборки android приложения.
+![android-app](project-inside/project-inside-android-app-structure.png)
+
+### build.gradle.kts
+В корне данного проекта находится свой `build.gradle.kts` файл:
+```kotlin
+plugins {
+    // подключение convention-плагина
+    // в котором как раз и поключается android plugin
+    // "com.android.application"
+    // и настраивается buildTypes и productFlavors
+    id("android-app-convention")
+    // подключение оброботчика аннотаций kapt
+    id("kotlin-kapt")
+    // подключение плагина moko-units
+    id("dev.icerock.mobile.multiplatform-units")
+    // Плагин для инъекции зависимостей в Android приложении
+    id("dagger.hilt.android.plugin")
+}
+
+// конфигурация android приложения
+android {
+    // включение фичи dataBinding
+    buildFeatures.dataBinding = true
+
+    // параметры для генерации BuildConfig файла
+    defaultConfig {
+        // идентификатор для приложения
+        applicationId = "org.example.app"
+
+        // указание версий
+        versionCode = 1
+        versionName = "0.1.0"
+
+        // API URL
+        val url = "https://newsapi.org/v2/"
+        buildConfigField("String", "BASE_URL", "\"$url\"")
+    }
+}
+
+// настройки kapt
+kapt {
+    javacOptions {
+        // These options are normally set automatically via the Hilt Gradle plugin, but we
+        // set them manually to workaround a bug in the Kotlin 1.5.20
+        option("-Adagger.fastInit=ENABLED")
+        option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
+    }
+}
+
+// объявление зависимостей android приложения
+dependencies {
+    implementation(libs.appCompat)
+    implementation(libs.material)
+    implementation(libs.recyclerView)
+    implementation(libs.swipeRefreshLayout)
+    implementation(libs.mokoMvvmDataBinding)
+
+    // Hilt
+    implementation(libs.hilt)
+    kapt(libs.hiltCompiler)
+
+    implementation(projects.mppLibrary)
+}
+
+// настройка юнитов
+multiplatformUnits {
+    classesPackage = "org.example.app"
+    dataBindingPackage = "org.example.app"
+    layoutsSourceSet = "main"
+}
+```
+
+### Устройство проекта
+
+Теперь разберем, что лежит в директории`src/main`:
+- `java/org.example.app` - содержит исходный код нашего приложения:
+  - директория `di` содержит в себе объекты, связанные с инъекцией зависимостей через Hilt;
+  - директория `view` содержит классы всех UI элементов;
+  - `MainApplication` - входная точка Android приложения;
+- `res` - директория со всеми ресурсами, необходимыми android приложению;
+- `ic_launcher-playstore.png` - иконка приложения; она автоматически размещается Android SDK, чтобы вы не забыли создать значок в высоком разрешении для публикации;
+- `AndroidManifest.xml` - файл манифеста, содержащий важную информацию о вашем приложении для инструментов сборки Android, операционной системы Android и Google Play. Более подробно о файле манифеста вы можетепрочитать [тут](https://developer.android.com/guide/topics/manifest/manifest-intro);
+
+### Hilt DI
+
+Инициализация `SharedFactory` из нашей `mpp-library` происходит в Hilt модуле `FactoriesModule.kt`.
+
+```kotlin
+/*
+    di/FactoriesModule.kt
+*/
+
+// imports ...
+
+@InstallIn(ActivityComponent::class)
+@Module
+object FactoriesModule {
+    @Provides
+    fun authNewFactory(sharedFactory: SharedFactory): AuthFactory =
+        sharedFactory.authFactory
+
+}
+```
+
+О том, что мы используем инъекцию зависимостей при помощи Hilt говорит аннотация `@HiltAndroidApp` в `MainApplication.kt`:
+
+```kotlin
+/*
+    MainApplication.kt
+*/
+
+@HiltAndroidApp
+class MainApplication : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        FirebaseApp.initializeApp(this)
+        FirebaseCrashlytics.getInstance()
+            .setCrashlyticsCollectionEnabled(BuildConfig.DEBUG.not())
+    }
+}
+```
+
+Узнать больше про инъекцию зависимостей в Android приложении при помощи Hilt вы можете [тут](https://developer.android.com/training/dependency-injection/hilt-android).
+
 
 ### Навигация в Android
+
+Для того, чтобы понять как устроена навигация в Android приложении можете ознакомиться с соответствующей статьей в [разделе обучения](/learning/android/navigation).
 
 ## ios-app
 
