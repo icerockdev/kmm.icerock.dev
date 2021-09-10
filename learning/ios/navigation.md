@@ -83,21 +83,6 @@ class BaseCoordinator: NSObject, Coordinator, UINavigationControllerDelegate {
         childCoordinators.removeAll()
     }
     
-    private func removeDependency(_ coordinator: Coordinator?) {
-        clearHandler?()
-        guard
-            childCoordinators.isEmpty == false,
-            let coordinator = coordinator
-        else { return }
-        
-        for (index, element) in childCoordinators.enumerated() {
-            if element === coordinator {
-                childCoordinators.remove(at: index)
-                break
-            }
-        }
-    }
-    
     //Cases
     //1. Initial with window - create NV, etc..
     //2. Exists navcontroller,
@@ -131,44 +116,6 @@ class BaseCoordinator: NSObject, Coordinator, UINavigationControllerDelegate {
             }
         }
         navigationController?.pushViewController(controller, animated: true)
-    }
-    
-    
-    private func popBack() {
-        let popVC = self.navigationController?.popViewController(animated: true)
-        if let nVC = popVC {
-            clearViewModels(forControllers: [nVC])
-        } else {
-            navigationController?.dismiss(animated: true, completion: nil)
-        }
-    }
-    
-    private func clearViewModels(forControllers controllers: [UIViewController]?) {
-        let holders = (controllers ?? []).compactMap({ $0 as? ViewModelHolder })
-        holders.forEach({ $0.baseViewModel?.onCleared() })
-    }
-    
-    private func dismissModal() {
-        let controllers = navigationController?.viewControllers
-        navigationController?.dismiss(animated: true, completion: nil)
-        clearViewModels(forControllers: controllers)
-    }
-    
-    private func popToViewController(controller vc: UIViewController, animated: Bool = true) {
-        let controllers = navigationController?.popToViewController(vc, animated: animated)
-        clearViewModels(forControllers: controllers)
-    }
-    
-    private func popToViewController(ofClass: AnyClass, animated: Bool = true) {
-        if let vc = navigationController?.viewControllers.last(where: { $0.isKind(of: ofClass) }) {
-            let controllers = navigationController?.popToViewController(vc, animated: animated)
-            clearViewModels(forControllers: controllers)
-        }
-    }
-    
-    private func popToRoot() {
-        let controllers = navigationController?.popToRootViewController(animated: true)
-        clearViewModels(forControllers: controllers)
     }
     
     func currentViewController() -> UIViewController {

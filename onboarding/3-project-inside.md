@@ -515,6 +515,7 @@ cocoaPods {
 
 // mokoNetwork
 // подключение yml файла для генерации api
+// https://github.com/icerockdev/moko-network
 mokoNetwork {
     spec("news") {
         inputSpec = file("src/api/openapi.yml")
