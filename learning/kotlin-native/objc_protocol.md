@@ -24,7 +24,7 @@ class NavigationDelegate: NSObject(), WKNavigationDelegateProtocol {
 - `Conflicting overloads: public open fun webView(webView: WKWebView, didStartProvisionalNavigation: WKNavigation?): Unit defined in ...`
 - `public open fun webView(webView: WKWebView, didFinishNavigation: WKNavigation?): Unit defined in ...`
 
-Но по правда, для `Kotlin/Native`, это допустимо. И для работы требуется использовать `Suppress`:
+Но по правде, для `Kotlin/Native`, это допустимо. И для работы требуется использовать `Suppress`:
 ```kotlin
 @Suppress("CONFLICTING_OVERLOADS")
 class NavigationDelegate: NSObject(), WKNavigationDelegateProtocol {
