@@ -5,19 +5,79 @@
 
 ## Материалы
 
-Для первичного знакомства с coroutines подойдут следующие материалы:
+### Beginner
 
-- [kotlinlang docs - Coroutines guide](https://kotlinlang.org/docs/coroutines-guide.html)
-- [Guide to UI programming with coroutines](https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/coroutines-guide-ui.md)
-- [Информативная статья про базовые концепции и подходы в coroutines](https://habr.com/ru/company/alfa/blog/336228/)
-- Серия видео от RedMadRobot:
-    - [Coroutines. Хаотичное изучение. Часть 1](https://youtu.be/cHERit7LNGM)
-    - [Coroutines. Хаотичное изучение. Часть 2](https://youtu.be/6Apj_v9ZkBs)
-    - [Coroutines. Хаотичное изучение. Часть 3](https://youtu.be/7JSHSqAhErw)
-- [Best practices for coroutines](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
+- 📄 [KotlinLang Docs - Coroutines guide](https://kotlinlang.org/docs/coroutines-basics.html)
+  - suspend функции
+  - scope builder'ы - runBlocking, coroutineScope
+  - Structured Concurrency
+  - Легковесность корутин
+- 🎦 [Александр Нозик. Кое-что о корутинах](https://www.youtube.com/watch?v=t0AERgx0lrY)
+  - Наглядное пояснение что такое асинхронное выполнение и чем отличается от параллельного
+  - Основные термины в области корутин
+  - Какие основные ошибки совершают новички
+  - Какие хитрости можно делать, используя корутины
+- 🎦 [Александр Нозик. Кое-что о корутинах. Flow, Scope](https://www.youtube.com/watch?v=AAFi_C40BOM)
+  - Flow, Channel
+  - CoroutineScopes
+- 📄 [kotlinlang docs - Coroutines guide](https://kotlinlang.org/docs/coroutines-guide.html)
+  - ...
+- 🎦 [RedMadRobot - Coroutines. Хаотичное изучение. Часть 1](https://www.youtube.com/watch?v=cHERit7LNGM)
+  - Inject Dispatchers,
+  - Dispatcher,
+  - withContext,
+  - NonCancellable,
+  - viewModelScope и другие,
+  - Делай suspend функции main-safe,
+  - ViewModel должна создавать корутины,
+  - StateFlow и SharedFlow,
+  - Не показывай мутабельные типы,
+  - Как подписаться во view,
+  - Data и Domain слои показывают suspend и Flow,
+  - Cоздание корутин в Data и Domain слоях
+- 🎦 [RedMadRobot - Coroutines. Хаотичное изучение. Часть 2](https://www.youtube.com/watch?v=6Apj_v9ZkBs)
+  - Как же создавать корутины в Data и Domain слоях
+  - coroutineScope и supervisorScope
+  - Job
+  - Deferred и async/await
+  - Использование внешнего скоупа
+  - Как создать внешний скоуп
+  - Избегай GlobalScope
+  - CoroutineScope
+  - CoroutineContext
+  - CoroutineScope vs CoroutineContext
+  - Делай свои корутины cancellable
+  - Помни про исключения 
+- 🎦 [RedMadRobot - Coroutines. Хаотичное изучение. Часть 3](https://www.youtube.com/watch?v=7JSHSqAhErw)
+  - Для чего был нужен SingleLiveEvent 📟
+  - Как его приготовить без LiveData 🔫
+  - Channel (кажется это спойлер 😆)
+  - О трате ресурсов в бекграунде 🔦
+  - buffer, conflate, flowOn, shareIn
+  - WhileSubscribed
+  - Как безопасно слушать Flow из UI ✅
+  - И не тратить ресурсы 🛠
+  - Lifecycle.repeatOnLifecycle
+  - Flow.flowWithLifecycle
 
-Подробнее про ограничения native-mt версии для iOS таргета можно прочитать
-[тут](https://github.com/Kotlin/kotlinx.coroutines/blob/native-mt/kotlin-native-sharing.md).
+### Intermediate
+
+- 🎦 [KotlinConf 2019: Asynchronous Data Streams with Kotlin Flow by Roman Elizarov](https://www.youtube.com/watch?v=tYcqn48SMT8)
+- 📄 [Guide to UI programming with coroutines](https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/coroutines-guide-ui.md)
+- 📄 [Корутины в Kotlin (гайд)](https://habr.com/ru/company/alfa/blog/336228/)
+- 📄 [Best practices for coroutines](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
+- 📄 [Ограничения native-mt версии для iOS таргета](https://github.com/Kotlin/kotlinx.coroutines/blob/native-mt/kotlin-native-sharing.md).
+- 📄 [Roman Elizarov - Structured Concurrency](https://elizarov.medium.com/structured-concurrency-722d765aa952)
+- 📄 [Structured Concurrency in action! (using Kotlin coroutines)](https://proandroiddev.com/structured-concurrency-in-action-97c749a8f755?gi=85a83dfe8ceb)
+- 🎦 [Roman Elizarov — Structured concurrency](https://www.youtube.com/watch?v=Mj5P47F6nJg)
+
+### Advanced
+
+- 🎦 [Андрей Бреслав — Асинхронно, но понятно. Сопрограммы в Kotlin](https://www.youtube.com/watch?v=ffIVVWHpups)
+  - Немного устаревшее, но про внутрянку наглядно показано.
+- 🎦 [Корутины в Kotlin — Роман Елизаров, JetBrains](https://www.youtube.com/watch?v=b4mBmi1QNF0)
+- 📄 [Coroutines Codegen](https://github.com/JetBrains/kotlin/blob/document-coroutines-codegen/compiler/backend/src/org/jetbrains/kotlin/codegen/coroutines/coroutines-codegen.md#state-machine)
+  - Документ подробно описывающий что делает компилятор с suspend кодом и что генерируется в результате
 
 ## Highlights
 
@@ -162,16 +222,6 @@ fun startTimer() {
 
 Вывод - вызов `delay` не останавливает работу потока.
 
-## Тестирование
+## Check Yourself
 
 TODO
-
-## Дополнительные материалы
-
-- [Выступление Андрея Бреслава про coroutines](https://www.youtube.com/watch?v=ffIVVWHpups)
-- [Выступление Романа Елизарова про coroutines](https://www.youtube.com/watch?v=b4mBmi1QNF0)
-- Structured concurrency
-    - [Structured Concurrency (Medium)](https://elizarov.medium.com/structured-concurrency-722d765aa952)
-    - [Structured Concurrency Anniversary (Medium)](https://elizarov.medium.com/structured-concurrency-anniversary-f2cc748b2401)
-    - [Structured Concurrency in action! (using Kotlin coroutines) (Medium)](https://proandroiddev.com/structured-concurrency-in-action-97c749a8f755?gi=85a83dfe8ceb)
-    - [Roman Elizarov — Structured concurrency (YouTube)](https://www.youtube.com/watch?v=Mj5P47F6nJg)
