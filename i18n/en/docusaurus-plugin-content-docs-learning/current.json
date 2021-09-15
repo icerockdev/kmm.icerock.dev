@@ -1,0 +1,42 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.tutorialSidebar.category.Gradle": {
+    "message": "Gradle",
+    "description": "The label for category Gradle in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Android": {
+    "message": "Android",
+    "description": "The label for category Android in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.iOS": {
+    "message": "iOS",
+    "description": "The label for category iOS in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Библиотеки": {
+    "message": "Библиотеки",
+    "description": "The label for category Библиотеки in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.KotlinX": {
+    "message": "KotlinX",
+    "description": "The label for category KotlinX in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Ktor": {
+    "message": "Ktor",
+    "description": "The label for category Ktor in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.MOKO": {
+    "message": "MOKO",
+    "description": "The label for category MOKO in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Kotlin/Native": {
+    "message": "Kotlin/Native",
+    "description": "The label for category Kotlin/Native in sidebar tutorialSidebar"
+  },
+  "sidebar.tutorialSidebar.category.Advanced": {
+    "message": "Advanced",
+    "description": "The label for category Advanced in sidebar tutorialSidebar"
+  }
+}

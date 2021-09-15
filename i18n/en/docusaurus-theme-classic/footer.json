@@ -1,0 +1,90 @@
+{
+  "link.title.IceRock Development": {
+    "message": "IceRock Development",
+    "description": "The title of the footer links column with title=IceRock Development in the footer"
+  },
+  "link.title.Community": {
+    "message": "Community",
+    "description": "The title of the footer links column with title=Community in the footer"
+  },
+  "link.title.More": {
+    "message": "More",
+    "description": "The title of the footer links column with title=More in the footer"
+  },
+  "link.item.label.Site": {
+    "message": "Site",
+    "description": "The label of footer link with label=Site linking to https://icerock.dev"
+  },
+  "link.item.label.GitHub": {
+    "message": "GitHub",
+    "description": "The label of footer link with label=GitHub linking to https://github.com/icerockdev"
+  },
+  "link.item.label.LinkedIn": {
+    "message": "LinkedIn",
+    "description": "The label of footer link with label=LinkedIn linking to https://www.linkedin.com/company/icerockdevelopment"
+  },
+  "link.item.label.Facebook": {
+    "message": "Facebook",
+    "description": "The label of footer link with label=Facebook linking to https://www.facebook.com/icerockdevelopment"
+  },
+  "link.item.label.VK": {
+    "message": "VK",
+    "description": "The label of footer link with label=VK linking to https://vk.com/icerockdev"
+  },
+  "link.item.label.Instagram": {
+    "message": "Instagram",
+    "description": "The label of footer link with label=Instagram linking to https://www.instagram.com/icerockdevelopment"
+  },
+  "link.item.label.YouTube": {
+    "message": "YouTube",
+    "description": "The label of footer link with label=YouTube linking to https://www.youtube.com/channel/UC-Vhmm09W_IWKHhSg80d68w"
+  },
+  "link.item.label.Telegram @kotlinmpp": {
+    "message": "Telegram @kotlinmpp",
+    "description": "The label of footer link with label=Telegram @kotlinmpp linking to https://t.me/kotlinmpp"
+  },
+  "link.item.label.Telegram @kotlinmppchats": {
+    "message": "Telegram @kotlinmppchats",
+    "description": "The label of footer link with label=Telegram @kotlinmppchats linking to https://t.me/kotlinmppchats"
+  },
+  "link.item.label.Twitter @kotlinmpp": {
+    "message": "Twitter @kotlinmpp",
+    "description": "The label of footer link with label=Twitter @kotlinmpp linking to https://twitter.com/kotlinmpp"
+  },
+  "link.item.label.Kotlin Community": {
+    "message": "Kotlin Community",
+    "description": "The label of footer link with label=Kotlin Community linking to https://kotlinlang.org/community"
+  },
+  "link.item.label.Kotlin Multiplatform Mobile": {
+    "message": "Kotlin Multiplatform Mobile",
+    "description": "The label of footer link with label=Kotlin Multiplatform Mobile linking to https://kotlinlang.org/lp/mobile"
+  },
+  "link.item.label.Kotlin Multiplatform Libs": {
+    "message": "Kotlin Multiplatform Libs",
+    "description": "The label of footer link with label=Kotlin Multiplatform Libs linking to https://libs.kmp.icerock.dev"
+  },
+  "link.item.label.Kotlin Multiplatform Codelabs": {
+    "message": "Kotlin Multiplatform Codelabs",
+    "description": "The label of footer link with label=Kotlin Multiplatform Codelabs linking to https://codelabs.kmp.icerock.dev"
+  },
+  "link.item.label.MOKO": {
+    "message": "MOKO",
+    "description": "The label of footer link with label=MOKO linking to https://moko.icerock.dev"
+  },
+  "link.item.label.Kotlin/Native Docs": {
+    "message": "Kotlin/Native Docs",
+    "description": "The label of footer link with label=Kotlin/Native Docs linking to https://kotlinlang.org/docs/reference/native-overview.html"
+  },
+  "link.item.label.Kotlin Multiplatform Docs": {
+    "message": "Kotlin Multiplatform Docs",
+    "description": "The label of footer link with label=Kotlin Multiplatform Docs linking to https://kotlinlang.org/docs/reference/multiplatform.html"
+  },
+  "link.item.label.Docusaurus": {
+    "message": "Docusaurus",
+    "description": "The label of footer link with label=Docusaurus linking to https://github.com/facebook/docusaurus"
+  },
+  "copyright": {
+    "message": "Copyright © 2021 IceRock Development. Built with Docusaurus.",
+    "description": "The footer copyright"
+  }
+}
