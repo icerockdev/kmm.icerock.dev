@@ -77,7 +77,7 @@ README.md
 - `gradle.properties` - файл с опциями, которые передаются в Gradle проект при запуске;
 - `gradlew` и `gradlew.bat` - скрипты для Unix и Windows соответственно, которые запускают Gradle используя Gradle Wrapper;
 - `settings.gradle.kts` - файл настроек Gradle проекта;
-- `README.md` - краткое описание содержимого репозитория и инструкция как собирать проект;
+- `README.md` - краткое описание содержимого репозитория и инструкция как собирать проект.
 
 Далее разберем все блоки более детально.
 
@@ -433,13 +433,40 @@ tasks.register("clean", Delete::class).configure {
 ```kotlin
 // подключение плагинов
 plugins {
+    // convention-плагин, в котором происходит подключение adnroid плагина,
+    // kotlin multiplatform плагина и устанавливаются таргеты ios и android
     id("multiplatform-library-convention")
+
+    // convention-плагин, в котором происходит подключение detekt плагина
+    // и его настройка
     id("detekt-convention")
+
+    // плагин для обеспечения доступа к ресурсам на iOS и Android
+    // подробнее тут https://github.com/icerockdev/moko-resources
     id("dev.icerock.mobile.multiplatform-resources")
+
+    // плагин настройки задач синхронизации групповых Cocoa-pod'ов 
+    // для корректной их интеграции
+    // подробнее тут https://github.com/icerockdev/mobile-multiplatform-gradle-plugin
     id("dev.icerock.mobile.multiplatform.ios-framework")
+
+    // плагином для генерации сущностей и классов API 
+    // из файла спецификаций OpenAPI (Swagger)
+    // подробнее тут https://github.com/icerockdev/moko-network
     id("dev.icerock.mobile.multiplatform-network-generator")
+
+    // плагин компилятора, который позволяет сериализовывать документ
+    // предоставляю к нему доступ с разных платформ
     id("kotlinx-serialization")
+    
+    // Kotlin Parcelize plugin
+    // Добавляет аннотоцию @Parcelize
     id("kotlin-parcelize")
+
+    // плагин для настройки взаимодействия с CocoaPods
+    // указание пути до файла проекта 
+    // а также позволяет управлять управлять cocoa-зависимостями
+    // подробнее тут https://github.com/icerockdev/mobile-multiplatform-gradle-plugin
     id("dev.icerock.mobile.multiplatform.cocoapods")
 }
 
@@ -506,16 +533,16 @@ framework {
     export(libs.mokoCrashReportingNapier)
 }
 
-// путь для подключения общей библиотеки 
-// посредством Cocoa Pods
 cocoaPods {
+    // путь до проекта
     podsProject = file("../ios-app/Pods/Pods.xcodeproj")
+    // подключение нативного pod внутри kotlin кода
     pod("MCRCDynamicProxy", onlyLink = true)
 }
 
 // mokoNetwork
 // подключение yml файла для генерации api
-// https://github.com/icerockdev/moko-network
+// подробнее тут https://github.com/icerockdev/moko-network
 mokoNetwork {
     spec("news") {
         inputSpec = file("src/api/openapi.yml")
@@ -523,12 +550,14 @@ mokoNetwork {
 }
 ```
 
+Для того, чтобы понять как происходит интеграция зависимостей в iOS-фреймворк, можете ознакомиться с [соответствующей статьей](/learning/kotlin-native/cocoapods) в разделе обучения.
+
 ### MultiplatformLibrary.podscpec
 
 Более подробно об этом файле вы можете прочитать [тут](/learning/ios/pods#podspec).
 
 ### src
-В папке `srs` находится исходный код общей библиотеки.
+В папке `srс` находится исходный код общей библиотеки.
 
 ![mpp-library-](project-inside/project-inside-mpp-lib-src.png)
 
