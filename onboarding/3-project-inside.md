@@ -556,7 +556,7 @@ mokoNetwork {
 }
 ```
 
-Для того, чтобы понять как происходит экспорты зависимостей в iOS-фреймворк, можете ознакомиться с [соответствующей статьей](/learning/kotlin-native/cocoapods) в разделе обучения.
+О том, как происходят экспорты зависимостей в iOS-фреймворк, написано в  [соответсвующей статье](https://kotlinlang.org/docs/mpp-build-native-binaries.html#export-dependencies-to-binaries).
 
 ### MultiplatformLibrary.podscpec
 
