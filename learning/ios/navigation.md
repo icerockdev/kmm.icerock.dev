@@ -12,7 +12,12 @@
 
 Это разобьётся на 4 координатора:
 
-![coordinator example](navigation/navigation-coordinator-ex.png)
+```mermaid
+graph TD
+  AppCoordinator --> AuthCoordinator
+  AppCoordinator --> NewsCoordinator
+  NewsCoordinator --> SettingsCoordinator
+```
 
 - AppCoordinator
   - Стартовый координатор. Всегда является первой входной точкой, определяет, куда должен выполниться дальнейший переход при запуске приложения
@@ -51,37 +56,17 @@ protocol Coordinator: AnyObject {
 class BaseCoordinator: NSObject, Coordinator, UINavigationControllerDelegate {
     var childCoordinators: [Coordinator] = []
     var completionHandler: (() -> ())?
-    fileprivate var clearHandler: (() -> ())? = nil
     
     let window: UIWindow
     let factory: SharedFactory
     
     var navigationController: UINavigationController?
     
-    init(window: UIWindow, factory: SharedFactory) {
-        self.window = window
-        self.factory = factory
-    }
+    init(window: UIWindow, factory: SharedFactory) { ... }
     
-    func addDependency<Child>(_ coordinator: Child, completion: (() -> Void)? = nil) -> Child where Child : BaseCoordinator {
-        for element in childCoordinators.compactMap({ $0 as? Child }) {
-            if element === coordinator { return element }
-        }
-        coordinator.completionHandler = { [weak self, weak coordinator] in
-            self?.removeDependency(coordinator)
-            completion?()
-        }
-        childCoordinators.append(coordinator)
-        return coordinator
-    }
+    func addDependency<Child>(_ coordinator: Child, completion: (() -> Void)? = nil) -> Child where Child : BaseCoordinator { ... }
     
-    func clear() {
-        clearHandler?()
-        childCoordinators.forEach {
-            $0.clear()
-        }
-        childCoordinators.removeAll()
-    }
+    func clear() { ... }
     
     //Cases
     //1. Initial with window - create NV, etc..
@@ -91,37 +76,11 @@ class BaseCoordinator: NSObject, Coordinator, UINavigationControllerDelegate {
         //
     }
     
-    func beginInNewNavigation(_ controller: UIViewController) -> UINavigationController {
-        let newNavigationController = UINavigationController()
-        self.navigationController = newNavigationController
-
-        newNavigationController.setViewControllers([controller], animated: false)
-
-        self.window.rootViewController = newNavigationController
-        
-        self.clearHandler = { [weak self] in
-            //get controllers and view models, clear them
-            self?.popToRoot()
-        }
-        
-        return newNavigationController
-    }
+    func beginInNewNavigation(_ controller: UIViewController) -> UINavigationController { ... }
     
-    func beginInExistNavigation(_ controller: UIViewController) {
-        let prevController = self.navigationController?.topViewController
-        self.clearHandler = { [weak self, weak prevController] in
-            //get controllers and view models, clear them
-            if let prev = prevController {
-                self?.popToViewController(controller: prev)
-            }
-        }
-        navigationController?.pushViewController(controller, animated: true)
-    }
+    func beginInExistNavigation(_ controller: UIViewController) { ... }
     
-    func currentViewController() -> UIViewController {
-        guard let navController = self.navigationController else { return UIViewController() }
-        return navController.topViewController ?? navController.topPresentedViewController() ?? navController
-    }
+    func currentViewController() -> UIViewController { ... }
 }
 
 ```
