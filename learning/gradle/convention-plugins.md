@@ -1,3 +1,7 @@
+---
+sidebar_position: 7
+---
+
 # Convention plugins
 
 <iframe src="//www.youtube.com/embed/4Dmyc00Jlzc?list=PL6yFiPOVXVUi90sQ66dtmuXP-1-TeHwl5" frameborder="0" allowfullscreen width="675" height="380"></iframe>
