@@ -46,47 +46,42 @@
         - Холодные - следующий элемент вычисляется не тогда, когда он готов, а когда кто-нибудь его запросил из flow.
         - Горячий - возвращает элемент сразу же, как сгенерит
 
-  - Flow, Channel
-  - CoroutineScopes
 - 📄 [kotlinlang docs - Coroutines guide](https://kotlinlang.org/docs/coroutines-guide.html)
   - ...
+  
+- 📄 [Hands-on: Intro to coroutines and channels](https://play.kotlinlang.org/hands-on/Introduction%20to%20Coroutines%20and%20Channels?_gl=1*1j033dc*_ga*Nzc2NDAwNzc2LjE2MjAyODkwMTg.*_ga_J6T75801PF*MTYzMTg1MjIzOC4xMzcuMS4xNjMxODUyMjY2LjMy&_ga=2.168555557.561329090.1631509904-776400776.1620289018)
+  - [Как работает Channel](https://play.kotlinlang.org/hands-on/Introduction%20to%20Coroutines%20and%20Channels/08_Channels)
+
 - 🎦 [RedMadRobot - Coroutines. Хаотичное изучение. Часть 1](https://www.youtube.com/watch?v=cHERit7LNGM)
-  - Inject Dispatchers,
-  - Dispatcher,
-  - withContext,
-  - NonCancellable,
-  - viewModelScope и другие,
-  - Делай suspend функции main-safe,
-  - ViewModel должна создавать корутины,
-  - StateFlow и SharedFlow,
-  - Не показывай мутабельные типы,
-  - Как подписаться во view,
-  - Data и Domain слои показывают suspend и Flow,
-  - Cоздание корутин в Data и Domain слоях
-- 🎦 [RedMadRobot - Coroutines. Хаотичное изучение. Часть 2](https://www.youtube.com/watch?v=6Apj_v9ZkBs)
-  - Как же создавать корутины в Data и Domain слоях
-  - coroutineScope и supervisorScope
-  - Job
-  - Deferred и async/await
-  - Использование внешнего скоупа
-  - Как создать внешний скоуп
-  - Избегай GlobalScope
-  - CoroutineScope
-  - CoroutineContext
-  - CoroutineScope vs CoroutineContext
-  - Делай свои корутины cancellable
-  - Помни про исключения 
+  - [Dispatcher](https://youtu.be/cHERit7LNGM?t=242) - виды Dispatcher
+  - [withContext](https://youtu.be/cHERit7LNGM?t=318) - что это и пример с NonCancellableContext
+  - [viewModelScope](https://youtu.be/cHERit7LNGM?t=490) - готовый Scope, привязанный к жизни компонента
+  - [Берегите main-thread](https://youtu.be/cHERit7LNGM?t=575) - вызовы suspend функций должны быть безопасны для main-thread
+
+- 🎦 [RedMadRobot - Coroutines. Хаотичное изучение. Часть 2](https://www.youtube.com/watch?v=6Apj_v9ZkBs) - разбор базовых понятий
+  - [CoroutineContext](https://youtu.be/6Apj_v9ZkBs?t=921) - что это, что в нем может находиться (Job, CoroutineDispatcher, CoroutineName, CoroutineExceptionHandler)
+  - [CoroutinesScope](https://youtu.be/6Apj_v9ZkBs?t=185) - создает новый Scope, копирует все из Scope-родителя и исполняет переданный ему блок
+  - [CoroutineScope vs CoroutinesContext](https://youtu.be/6Apj_v9ZkBs?t=185) - разница между CoroutineScope и CoroutineContext
+  - [supervisorScope](https://youtu.be/6Apj_v9ZkBs?t=238) - Scope не упадет, если упадет ребенок. Если упадет сам Scope, то не упадет Scope-родитель
+  - [Job](https://youtu.be/6Apj_v9ZkBs?t=311) - фоновая работа, имеет ЖЦ(active, cancelled). Job предоставляет управление корутиной, можем вызвать Job.cancel и тд, не имеет результата
+  - [Deferred](https://youtu.be/6Apj_v9ZkBs?t=426) - Job, но с результатом, создается myScope.async{...}. Получить значение - myDeferred.await() - вернет занечение или исплючение при ошибке 
+  - [Как запустить работу во внешнем Scope](https://youtu.be/6Apj_v9ZkBs?t=535) - что делать, если нам не подходит ViewModelScope, потому что работа должна жить дольше чем ViewModel
+  - [Почему Job нужно делать cancellable](https://youtu.be/6Apj_v9ZkBs?t=1172) - когда Job отменили, корутина не отменится автоматичеки, разбор кейса
+ 
 - 🎦 [RedMadRobot - Coroutines. Хаотичное изучение. Часть 3](https://www.youtube.com/watch?v=7JSHSqAhErw)
-  - Для чего был нужен SingleLiveEvent 📟
-  - Как его приготовить без LiveData 🔫
-  - Channel (кажется это спойлер 😆)
-  - О трате ресурсов в бекграунде 🔦
-  - buffer, conflate, flowOn, shareIn
-  - WhileSubscribed
-  - Как безопасно слушать Flow из UI ✅
-  - И не тратить ресурсы 🛠
-  - Lifecycle.repeatOnLifecycle
-  - Flow.flowWithLifecycle
+  - [Channel](https://youtu.be/7JSHSqAhErw?t=470) - канал для обмена, можно положить и получить, не блокирующий (оперции саспендятся), можно закрыть, разные capacity(RENDEZVOUS, UNLIMITED, CONFLATED, BUFFERED) 
+  - [SingleLiveEvent - что это и звчем](https://youtu.be/7JSHSqAhErw?t=218) - события нужно обрабатывать один раз
+  - [SingleLiveEvent используя Channel](https://youtu.be/7JSHSqAhErw?t=690) 
+  - [Flow.buffer](https://youtu.be/7JSHSqAhErw?t=952) - добавить к flow буффер на случай медленного получения
+  - [conflate](https://youtu.be/7JSHSqAhErw?t=1045) - сокращение для buffer с параметрами CONFLATED и DROP_OLDEST, т.е хранит одно значение и перезаписыват его
+  - [flowOn](https://youtu.be/7JSHSqAhErw?t=1087) - переключает контекст выполнения операторов идущих до него, если операторы без своего контекста //я плохо понял зачем это
+  - [shareIn](https://youtu.be/7JSHSqAhErw?t=1207) - превращает холодный Flow в горячий SharedFlow
+  - [WhileSubscribed](https://youtu.be/7JSHSqAhErw?t=1312) - для запуска корутины, запускает при первом подписчике, остонавливает когда пропадет последний подписчик, можно сохранить кэш при выключении или стереть после timeout
+  - [Как не тратить ресурсы](https://youtu.be/7JSHSqAhErw?t=1392) - чтобы не дергать руками Job.cancel() можно Lifecycle.repeatOnLifecycle
+  - [Lifecycle.repeatOnLifecycle](https://youtu.be/7JSHSqAhErw?t=1419) - запускает корутину, когда ЖЦ подходит до определенного состояния, когда ЖЦ ниже нужного состояния - отменяет корутину и усылпяет(suspend), когда снова в нужном состоянии - запускает повторно
+  - [Особенности repeatOnLifecycle](https://youtu.be/7JSHSqAhErw?t=1482) - рекомендуется создавать либо в Activity.onCreate() или Fragment.onViewCreated()
+  - [Поведение при DESTROYED](https://youtu.be/7JSHSqAhErw?t=1522) - держет в suspend внешнюю корутину, пока не DESTROYED, когда DESTROYED - отпустит
+  - [Flow.flowWithLifecycle](https://youtu.be/7JSHSqAhErw?t=1580) - обертка над repeatOnLifecycle, упрощает написание если только 1 продюсер 
 
 ### Intermediate
 
