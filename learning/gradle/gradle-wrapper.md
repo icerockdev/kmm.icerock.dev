@@ -1,3 +1,7 @@
+---
+sidebar_position: 1
+---
+
 # Gradle Wrapper
 
 [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) (или короче говоря, просто "Wrapper") - это специальный скрипт (а также несколько дополнительных файлов), который вызывает объявленную версию Gradle, при необходимости загружая ее заранее.
