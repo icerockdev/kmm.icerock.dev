@@ -33,25 +33,25 @@
 Разберемся что здесь к чему:
 
 ```bash
-# испортируем переменные окружения и методы для работы с Cocoa Pods DSL
+# указываем откуда будем скачивать зависимости - с официального репозитория cocoapods
 source 'https://cdn.cocoapods.org/'
 
-# Запрещает все варнинги от библиотек CocoaPods.
+# скрывает предупреждения от библиотек CocoaPods.
 inhibit_all_warnings!
 
-#использование фреймворков вместо статических библиотек для модулей
+# использование динамических фреймворков вместо статических библиотек для модулей
 use_frameworks!
-# указывает платформу, для которой должна быть построена статическая библиотека.
+# указывает платформу и ее версию, нужно для проверки всех зависимостей на поддержку этой версии этой платформы
 platform :ios, '12.0'
 
 # маппинг конфигураций
 project 'ios-app',
-  'dev-release' => :release, 'stage-release' => :release,
-  'dev-debug' => :debug, 'stage-debug' => :debug,
+  'dev-debug' => :debug, 'dev-release' => :release,
+  'stage-debug' => :debug, 'stage-release' => :release,
   'prod-debug' => :debug, 'prod-release' => :release
 
 # обходной путь для https://github.com/CocoaPods/CocoaPods/issues/8073
-# нужно для корректного отключения кеша MultiPlatformLibrary.framework
+# нужно для корректного отключения невалидного кеша MultiPlatformLibrary.framework
 install! 'cocoapods', :disable_input_output_paths => true
 
 # объявление зависимостей для конкретного таргета
@@ -78,6 +78,11 @@ target 'ios-app' do
   # ...
 end
 ```
+
+:::important
+Всегда указывайте версию используемой зависимости, чем точнее тем лучше. Иначе со временем может
+прийти такой апдейт зависимости, который не совместим с вашим кодом.
+:::
 
 **Что такое маппинг конфигураций?**
 
