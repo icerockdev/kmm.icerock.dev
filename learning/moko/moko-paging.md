@@ -17,7 +17,7 @@ val pagination = Pagination(
         repository.loadData(offset, limit)
     },
     comparator = Comparator { a, b ->
-         a.id - b.id
+         a.id.compareTo(b.id)
     },
     nextPageListener = { result: Result<List<Int>> ->
         TODO("check result")
@@ -43,11 +43,12 @@ val pagination = Pagination(
 Также там используется объект `LambdaPagedListDataSource` - ему в конструктор передается лямбда,
 в которой и происходит получение новых данных.
 
-Для проверки элементов списка на совпадение используется простое сравнение `id` этих элементов.
-Также можно использовать сравнение хешей или любой другой способ:
+Для проверки элементов списка на совпадение используется `Comparator`.
+С его помощью `Pagination` фильтрует новые данные, не добавляя в итоговый список уже имеющиеся в нем элементы.
+В примере ниже представлено простое сравнение `id` элементов (также можно реализовать другие способы сравнения):
 
 ```kotlin
-comparator = { a, b -> a.hashCode() - b.hashCode() }
+comparator = { a, b -> a.id.compareTo(b.id) }
 ```
 
 Лямбды `nextPageListener` и `refreshListener` удобно использовать для показа ошибок при дозагрузке/обновлении данных:
@@ -76,7 +77,7 @@ val isLoading: LiveData<Boolean> = pagination.state.isLoadingState()
 val isRefreshing: LiveData<Boolean> = pagination.refreshLoading
 
 val isErrorVisible: LiveData<Boolean> = pagination.state.isErrorState()
-val error: LiveData<Throwable?> = pagination.state.error()
+val error: LiveData<StringDesc?> = pagination.state.error().map { errorMapper(it) }
 
 val isDataVisible: LiveData<Boolean> = pagination.state.isSuccessState()
 val data: LiveData<List<Data>?> = pagination.state.data()
@@ -95,7 +96,7 @@ private val pagination = Pagination(
             limit = PAGINATION_LIMIT
         )
     },
-    comparator = { a, b -> (a.id - b.id).toInt() },
+    comparator = { a, b -> a.id.compareTo(b.id) },
     nextPageListener = { it.onFailure(::showError) },
     refreshListener = { it.onFailure(::showError) },
     initValue = emptyList()
@@ -106,10 +107,10 @@ val isLoading: LiveData<Boolean> = pagination.state.isLoadingState()
 val isRefreshing: LiveData<Boolean> = pagination.refreshLoading
 
 val isErrorVisible: LiveData<Boolean> = pagination.state.isErrorState()
-val error: LiveData<Throwable?> = pagination.state.error()
+val error: LiveData<StringDesc?> = pagination.state.error().map { errorMapper(it) }
 
 val isDataVisible: LiveData<Boolean> = pagination.state.isSuccessState()
-val data: LiveData<List<Data>> = pagination.state.data()
+val data: LiveData<List<Data>?> = pagination.state.data()
 
 init {
     pagination.loadFirstPage()
@@ -154,11 +155,12 @@ companion object {
 (иначе бы это состояние затиралось при неуспешной дозагрузке).
 Для обработки ошибки дозагрузки добавлен листенер - `nextPageListener`.
 
-### Можно ли обновить данные в `Pagination` вручную?
+### Можно ли добавлять/обновлять/удалять данные в `Pagination` вручную?
 
 Да, можно. В `Pagination` для этого есть методы `setData(items)` и `setDataSuspend(items)`.
-Однако при работающей пагинации использовать их не стоит, для ручного добавления/обновления данных
-лучше использовать отдельную `MutableLiveData`:
+Однако не во всех случаях стоит их использовать.
+Например, при добавлении к данным из пагинации каких-то дополнительных элементов,
+не относящихся к загружаемым данным, лучше использовать отдельную `MutableLiveData`:
 
 ```kotlin
 private val paginationData: LiveData<List<Data>?> = pagination.state.data()
