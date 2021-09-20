@@ -18,4 +18,5 @@ sidebar_position: 1
 - [Gradle convention plugins](/learning/gradle/convention-plugins);
 - [Gradle version catalog](/learning/gradle/version-catalogs);
 - [Gradle - от А до Я](https://www.youtube.com/watch?v=Yft6h7JkWo0);
+- [Understanding Gradle](https://www.youtube.com/playlist?list=PLWQK2ZdV4Yl2k2OmC_gsjDpdIBTN0qqkE);
 - [moko-template](https://github.com/icerockdev/moko-template).
