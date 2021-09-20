@@ -17,4 +17,5 @@ sidebar_position: 1
 - [Gradle composite build](/learning/gradle/composite-build);
 - [Gradle convention plugins](/learning/gradle/convention-plugins);
 - [Gradle version catalog](/learning/gradle/version-catalogs);
+- [Gradle - от А до Я](https://www.youtube.com/watch?v=Yft6h7JkWo0);
 - [moko-template](https://github.com/icerockdev/moko-template).
