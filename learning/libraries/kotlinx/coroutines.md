@@ -7,20 +7,15 @@
 
 ### Beginner
 
-- 📄 [KotlinLang Docs - Coroutines guide](https://kotlinlang.org/docs/coroutines-basics.html)
+- ## 📄 [KotlinLang Docs - Coroutines guide](https://kotlinlang.org/docs/coroutines-basics.html)
   - ## [Coroutines basics](https://kotlinlang.org/docs/coroutines-basics.html)
-    - [Your first coroutine](https://kotlinlang.org/docs/coroutines-basics.html#your-first-coroutine)
-    - [Structured concurrency](https://kotlinlang.org/docs/coroutines-basics.html#structured-concurrency)
-    - [Extract function refactoring](https://kotlinlang.org/docs/coroutines-basics.html#extract-function-refactoring)
-    - [Scope builder](https://kotlinlang.org/docs/coroutines-basics.html#scope-builder)
-    - [Scope builder and concurrency](https://kotlinlang.org/docs/coroutines-basics.html#scope-builder-and-concurrency)
-    - [An explicit job](https://kotlinlang.org/docs/coroutines-basics.html#an-explicit-job)
-    - [Coroutines ARE light-weight](https://kotlinlang.org/docs/coroutines-basics.html#coroutines-are-light-weight)
-  - кратко про `launch`, `delay`, `runBlocking`, `job`, `join`, `coroutineScope`
-  - Отличие runBlocking от CoroutineScope (runBlocking блокирует главный поток, а CoroutineContext это suspend функция)
-  - Structured Concurrency - корутины не потеряются и не будет утечек, не потеряются ошибки в корутинах 
-
-- 📄 [kotlinlang docs - Coroutines guide](https://kotlinlang.org/docs/coroutines-guide.html)
+      - [Your first coroutine](https://kotlinlang.org/docs/coroutines-basics.html#your-first-coroutine) - твоя первая корутина :)
+      - [Structured concurrency](https://kotlinlang.org/docs/coroutines-basics.html#structured-concurrency) - корутины не потеряются и не будет утечек, не потеряются ошибки в корутинах
+      - [Extract function refactoring](https://kotlinlang.org/docs/coroutines-basics.html#extract-function-refactoring) - первая suspend функция
+      - [Scope builder](https://kotlinlang.org/docs/coroutines-basics.html#scope-builder) - отличия между runBlockong и coroutineScope (runBlocking блокирует главный поток, а CoroutineContext это suspend функция)
+      - [Scope builder and concurrency](https://kotlinlang.org/docs/coroutines-basics.html#scope-builder-and-concurrency) - запуск параллельных корутин
+      - [An explicit job](https://kotlinlang.org/docs/coroutines-basics.html#an-explicit-job) - обращение к корутине через объект Job
+      - [Coroutines ARE light-weight](https://kotlinlang.org/docs/coroutines-basics.html#coroutines-are-light-weight) - пример того, насколько корутины легче потоков
   - ## [Cancellation and timeouts](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
       - [Cancellation and timeout](https://kotlinlang.org/docs/cancellation-and-timeouts.html#making-computation-code-cancellable) - в корутине нужно проверять, хотят ли её отменить
       - [withContext(NonCancellable)](https://kotlinlang.org/docs/cancellation-and-timeouts.html#run-non-cancellable-block) - корутина не будет реагировать на отмену
@@ -88,35 +83,34 @@
       - [Volatiles are of no help](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#volatiles-are-of-no-help) - volatile не помогает
       - [Thread-safe data structures](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#thread-safe-data-structures) - для стандартных структур данных (счетчики, очереди, коллекции и т.д.) решением проблемы служит использование потокобезопасных типов
       - [Thread confinement fine-grained](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#thread-confinement-fine-grained) - ограничение потоков. Подход к проблеме общего изменяемого сотояния, весь доступ к конкретному общему состоянию ограничен одним потоком
-      --- [Thread confinement coarse-grained](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#mutual-exclusion) - // не очень понял как работает
+      - [Thread confinement coarse-grained](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#mutual-exclusion) - // не очень понял как работает
       - [Mutual exclusion](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#mutual-exclusion) - mutex.withLock() - для доступа к общим данным чтобы избежать взаимной блокировки 
-      --- [Actors](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#actors) - плохо понял
+      - [Actors](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#actors) - плохо понял
   - ## [Select expression (experimental)](https://kotlinlang.org/docs/select-expression.html)    
       - [Selecting from channels](https://kotlinlang.org/docs/select-expression.html#selecting-from-channels) - с каждого канала можно обрабатывать получение данных по-своему 
       - [Selecting on close](https://kotlinlang.org/docs/select-expression.html#selecting-on-close) - при закрытии канала onReceive завершается с ошибкой, onReceiveCatching - для выполнения действия при закрытии канала
       - [Selecting to send](https://kotlinlang.org/docs/select-expression.html#selecting-to-send) - можно указать дополнительный канал, куда будут попадать элементы, которые не удается отправить в основной канал, если получают элементы очень медленно
-      --- [Selecting deferred values](https://kotlinlang.org/docs/select-expression.html#selecting-deferred-values) - onAwait, ожидает первое значение и считает сколько еще значений активно // не очень понял + зачем
-      --- [Switch over a channel of deferred values](https://kotlinlang.org/docs/select-expression.html#switch-over-a-channel-of-deferred-values) - совсем не понял
-  - ## [Debug coroutines using IntelliJ IDEA – tutorial](https://kotlinlang.org/docs/debug-coroutines-with-idea.html) - как дебажить корутины в IDEA
-  - ## [https://kotlinlang.org/docs/debug-flow-with-idea.html](https://kotlinlang.org/docs/debug-flow-with-idea.html) - как дебажить flow в IDEA
+      - [Selecting deferred values](https://kotlinlang.org/docs/select-expression.html#selecting-deferred-values) - onAwait, ожидает первое значение и считает сколько еще значений активно // не очень понял + зачем
+      - [Switch over a channel of deferred values](https://kotlinlang.org/docs/select-expression.html#switch-over-a-channel-of-deferred-values) - совсем не понял
+  - ### [Debug coroutines using IntelliJ IDEA – tutorial](https://kotlinlang.org/docs/debug-coroutines-with-idea.html) - как дебажить корутины в IDEA
+  - ### [Debug Kotlin Flow using IntelliJ IDEA – tutorial](https://kotlinlang.org/docs/debug-flow-with-idea.html) - как дебажить flow в IDEA
 
-- 🎦 [Александр Нозик. Кое-что о корутинах](https://www.youtube.com/watch?v=t0AERgx0lrY)
- - Первые 25 минут объясняют что такое корутины, но вообще не понятно, про параллельные миры какие-то, связи между ними вообще ничего не понятно
- - 0:22:55 хорошее объяснение, как ведут себя корутины при передаче Deferred
- - 0:30 проблема с тредами, почему они занимают много памяти 
- - 0:55 пример проблемы в корутинах, которую решает Structured Cuncurrency 
- - 0:57 Structured Cuncurrency 
- - Job позволяет работать с результатом корутины, вырубать корутину и еще всякое, но это не сама корутина
- - 1:06 про GlobalScope, это пустышка, нет контекста, нет родителей, не знает о других запусках из GlobalScope, поэтому нарушается Structured Cuncurrency, некуда прокинуть результат и прочее
- - Поведение при возникновении ошибки: если в корутине возникла ошибка, то она закрывает себя, сообщает родителю что случилось, закрывает всех потомков 
- - Если корутина была закрыта с помощью cancel, то закрывает только детей, родителей не трогает
- - Нельзя закрывать корутину где угодно, нужно делать в точках расщепления, где проверяется, что она не закрыта
- 
+- ## 🎦 [Александр Нозик. Кое-что о корутинах](https://www.youtube.com/watch?v=t0AERgx0lrY)
+  - Первые 25 минут объясняют что такое корутины, но вообще не понятно, про параллельные миры какие-то, связи между ними вообще ничего не понятно
+  - 0:22:55 хорошее объяснение, как ведут себя корутины при передаче Deferred
+  - 0:30 проблема с тредами, почему они занимают много памяти 
+  - 0:55 пример проблемы в корутинах, которую решает Structured Cuncurrency 
+  - 0:57 Structured Cuncurrency 
+  - Job позволяет работать с результатом корутины, вырубать корутину и еще всякое, но это не сама корутина
+  - 1:06 про GlobalScope, это пустышка, нет контекста, нет родителей, не знает о других запусках из GlobalScope, поэтому нарушается Structured Cuncurrency, некуда прокинуть результат и прочее
+  - Поведение при возникновении ошибки: если в корутине возникла ошибка, то она закрывает себя, сообщает родителю что случилось, закрывает всех потомков 
+  - Если корутина была закрыта с помощью cancel, то закрывает только детей, родителей не трогает
+  - Нельзя закрывать корутину где угодно, нужно делать в точках расщепления, где проверяется, что она не закрыта
   - Наглядное пояснение что такое асинхронное выполнение и чем отличается от параллельного
   - Основные термины в области корутин
   - Какие основные ошибки совершают новички
   - Какие хитрости можно делать, используя корутины
-- 🎦 [Александр Нозик. Кое-что о корутинах. Flow, Scope](https://www.youtube.com/watch?v=AAFi_C40BOM)
+- ## 🎦 [Александр Нозик. Кое-что о корутинах. Flow, Scope](https://www.youtube.com/watch?v=AAFi_C40BOM)
   - очень хорошее видео, целиком можно смотреть
   
   - `CoroutinesContexta`, отличия от map - строгое типизирование ( если использовать ключ <Е>, то получите объект типа Е ), сумма двух CoroutineContext не ассоциотивна ( CoroutineContext1 + CoroutineContext2 != CoroutineContext2 + CoroutineContext1 т.к если в CoroutineContext1 есть ключи из CoroutineContext2, то при сумме значения по этим ключам перезапишутся из CoroutineContext2 )
@@ -135,16 +129,16 @@
     - Холодные - следующий элемент вычисляется не тогда, когда он готов, а когда кто-нибудь его запросил из flow.
     - Горячий - возвращает элемент сразу же, как сгенерит
   
-- 📄 [Hands-on: Intro to coroutines and channels](https://play.kotlinlang.org/hands-on/Introduction%20to%20Coroutines%20and%20Channels?_gl=1*1j033dc*_ga*Nzc2NDAwNzc2LjE2MjAyODkwMTg.*_ga_J6T75801PF*MTYzMTg1MjIzOC4xMzcuMS4xNjMxODUyMjY2LjMy&_ga=2.168555557.561329090.1631509904-776400776.1620289018)
+- ## 📄 [Hands-on: Intro to coroutines and channels](https://play.kotlinlang.org/hands-on/Introduction%20to%20Coroutines%20and%20Channels?_gl=1*1j033dc*_ga*Nzc2NDAwNzc2LjE2MjAyODkwMTg.*_ga_J6T75801PF*MTYzMTg1MjIzOC4xMzcuMS4xNjMxODUyMjY2LjMy&_ga=2.168555557.561329090.1631509904-776400776.1620289018)
   - [Как работает Channel](https://play.kotlinlang.org/hands-on/Introduction%20to%20Coroutines%20and%20Channels/08_Channels)
 
-- 🎦 [RedMadRobot - Coroutines. Хаотичное изучение. Часть 1](https://www.youtube.com/watch?v=cHERit7LNGM)
+- ## 🎦 [RedMadRobot - Coroutines. Хаотичное изучение. Часть 1](https://www.youtube.com/watch?v=cHERit7LNGM)
   - [Dispatcher](https://youtu.be/cHERit7LNGM?t=242) - виды Dispatcher
   - [withContext](https://youtu.be/cHERit7LNGM?t=318) - что это и пример с NonCancellableContext
   - [viewModelScope](https://youtu.be/cHERit7LNGM?t=490) - готовый Scope, привязанный к жизни компонента
   - [Берегите main-thread](https://youtu.be/cHERit7LNGM?t=575) - вызовы suspend функций должны быть безопасны для main-thread
 
-- 🎦 [RedMadRobot - Coroutines. Хаотичное изучение. Часть 2](https://www.youtube.com/watch?v=6Apj_v9ZkBs) - разбор базовых понятий
+- ## 🎦 [RedMadRobot - Coroutines. Хаотичное изучение. Часть 2](https://www.youtube.com/watch?v=6Apj_v9ZkBs) - разбор базовых понятий
   - [CoroutineContext](https://youtu.be/6Apj_v9ZkBs?t=921) - что это, что в нем может находиться (Job, CoroutineDispatcher, CoroutineName, CoroutineExceptionHandler)
   - [CoroutinesScope](https://youtu.be/6Apj_v9ZkBs?t=185) - создает новый Scope, копирует все из Scope-родителя и исполняет переданный ему блок
   - [CoroutineScope vs CoroutinesContext](https://youtu.be/6Apj_v9ZkBs?t=185) - разница между CoroutineScope и CoroutineContext
@@ -154,13 +148,13 @@
   - [Как запустить работу во внешнем Scope](https://youtu.be/6Apj_v9ZkBs?t=535) - что делать, если нам не подходит ViewModelScope, потому что работа должна жить дольше чем ViewModel
   - [Почему Job нужно делать cancellable](https://youtu.be/6Apj_v9ZkBs?t=1172) - когда Job отменили, корутина не отменится автоматичеки, разбор кейса
  
-- 🎦 [RedMadRobot - Coroutines. Хаотичное изучение. Часть 3](https://www.youtube.com/watch?v=7JSHSqAhErw)
+- ## 🎦 [RedMadRobot - Coroutines. Хаотичное изучение. Часть 3](https://www.youtube.com/watch?v=7JSHSqAhErw)
   - [Channel](https://youtu.be/7JSHSqAhErw?t=470) - канал для обмена, можно положить и получить, не блокирующий (оперции саспендятся), можно закрыть, разные capacity(RENDEZVOUS, UNLIMITED, CONFLATED, BUFFERED) 
   - [SingleLiveEvent - что это и звчем](https://youtu.be/7JSHSqAhErw?t=218) - события нужно обрабатывать один раз
   - [SingleLiveEvent используя Channel](https://youtu.be/7JSHSqAhErw?t=690) 
   - [Flow.buffer](https://youtu.be/7JSHSqAhErw?t=952) - добавить к flow буффер на случай медленного получения
   - [conflate](https://youtu.be/7JSHSqAhErw?t=1045) - сокращение для buffer с параметрами CONFLATED и DROP_OLDEST, т.е хранит одно значение и перезаписыват его
-  --- [flowOn](https://youtu.be/7JSHSqAhErw?t=1087) - переключает контекст выполнения операторов идущих до него, если операторы без своего контекста //я плохо понял зачем это
+  - [flowOn](https://youtu.be/7JSHSqAhErw?t=1087) - переключает контекст выполнения операторов идущих до него, если операторы без своего контекста //я плохо понял зачем это
   - [shareIn](https://youtu.be/7JSHSqAhErw?t=1207) - превращает холодный Flow в горячий SharedFlow
   - [WhileSubscribed](https://youtu.be/7JSHSqAhErw?t=1312) - для запуска корутины, запускает при первом подписчике, остонавливает когда пропадет последний подписчик, можно сохранить кэш при выключении или стереть после timeout
   - [Как не тратить ресурсы](https://youtu.be/7JSHSqAhErw?t=1392) - чтобы не дергать руками Job.cancel() можно Lifecycle.repeatOnLifecycle
