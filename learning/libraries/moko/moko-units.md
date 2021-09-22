@@ -171,6 +171,35 @@ class MyViewModelUnitsFactoryImpl(private val context: Context) : MyViewModelUni
 и `bindViewHolder`) и полученный Context не должен сохраняться куда либо (его использование должно
 ограничиваться данными методами UnitItem'а).
 
+## Android Как подписаться на лайвдату в юните
+
+Для случаев когда необходимо подписаться на лайвдату внутри юнита следует использовать Closable В VBViewHolder юнита мы можем сохранить его текущую подписку в storedRef
+
+```kotlin
+class VBViewHolder<VB : ViewBinding>(
+    val binding: VB,
+    val lifecycleOwner: LifecycleOwner,
+) : RecyclerView.ViewHolder(binding.root) {
+    val context: Context get() = itemView.context
+    var storedRef: Any? = null
+}
+```
+
+При переиспользовании вьюхолдера нам нужно изменить лайв дату на которую он подписан. Для этого нужно закрыть Closable который сохранен в вьюхолдере, чтобы отписаться от старой лайвдаты. И сохранить в него новый, который мы получим при подписке на актуальную лайвдату.
+Пример:
+
+```kotlin
+override fun bindData(
+    context: Context,
+    lifecycleOwner: LifecycleOwner,
+    viewHolder: VBViewHolder<ItemBiometrySwitchBinding>
+) {
+    (viewHolder.storedRef as? Closeable)?.close()
+    viewHolder.storedRef = isSelectedLiveData.bind(lifecycleOwner) {
+        viewHolder.binding.switchView.isChecked = it ?: true
+    }
+}   
+```
 
 ## itemId - как и зачем?
 
