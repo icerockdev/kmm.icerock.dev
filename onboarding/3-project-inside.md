@@ -86,11 +86,11 @@ README.md
 Следующая важная составляющая нашего проекта - корневой gradle проект. Как было сказано ранее - для сборки обеих платформ используется gradle. Для android только он, а для ios gradle является одной из билдсистем. Корневая директория нашего проекта по сути и является корневым gradle проектом. `android-app` и `mpp-library` подключаются к этому коревому проекту как подпроекты.
 
 К коревому gradle проекту относятся:
-- `build-logic` - композитно подключенный проект, несущий в себе логику сборки остальных подпроектов;
+- `build-logic` - [композитно](/learning/gradle/composite-build) подключенный проект, несущий в себе логику сборки остальных подпроектов;
 - `gradle.properties` - опции запуска gradle проекта;
 - `settings.gradle.kts` - файл настроек;
 - `build.gradle.kts` - файл конфигурации сборки.
-- `gradle` - директория [Gradle Wrapper'а](/learning/gradle/gradle-wrapper) - специального скрипа, который автоматизирует процесс установки нужной версии gradle.
+- `gradle` - директория [Gradle Wrapper'а](/learning/gradle/gradle-wrapper) - специального скрипта, который автоматизирует процесс установки нужной версии gradle.
   
 О том как обновить версию Gradle в проекте вы можете прочитать в [специальном разделе обучения](/learning/gradle/updating-versions). 
 
@@ -102,7 +102,7 @@ README.md
 
 Директория упразднена! 
 
-На новых проектах вместо `buildSrc` используется `Version Catalogs`.
+На новых проектах вместо `buildSrc` используется `Composite build`.
 
 :::
 
@@ -230,6 +230,10 @@ object Deps {
 
 ### Version Catalogs
 
+:::caution 
+Объект `Deps` заменен на `Version Catalog`!
+:::
+
 На новых проектах внутри директории `gradle` есть файл `libs.versions.toml`. Это список зависимостей, на основе которого gradle сгенерирует специальные свойства для доступа к зависимостям по именам со строгими типами, данный файл позволяет централизованно управлять зависимостями всего проекта.
 
 Давайте посмотрим на этот файл:
@@ -274,7 +278,7 @@ hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref
 enableFeaturePreview("VERSION_CATALOGS")
 ```
 
-Больше информации о Version Catalogs можете найти [тут](https://kmm.icerock.dev/learning/gradle/version-catalogs/).
+Больше информации о Version Catalogs можете найти [тут](/learning/gradle/version-catalogs).
 
 
 :::note
@@ -285,9 +289,9 @@ enableFeaturePreview("VERSION_CATALOGS")
 
 ### build-logic
 
-`build-logic` - [композитный](https://kmm.icerock.dev/learning/gradle/composite-build) проект. Он предназначен для реализации логики сборки, не привязанной к конкретному gradle модулю.
+`build-logic` - [композитный](/learning/gradle/composite-build) проект. Он предназначен для реализации логики сборки, не привязанной к конкретному gradle модулю.
 
-В этой директории можно увидеть собственный `build.gradle.kts` и исходный код библиотеки. `build.gradle.kts` определяет как будет собираться данная библиотека и какие зависимости ей требуются. Исходный код библиотеки в нашем композитном билде содержит [convention plugins](https://kmm.icerock.dev/learning/gradle/convention-plugins), нужные для сборки основного Gradle проекта.
+В этой директории можно увидеть собственный `build.gradle.kts` и исходный код библиотеки. `build.gradle.kts` определяет как будет собираться данная библиотека и какие зависимости ей требуются. Исходный код библиотеки в нашем композитном билде содержит [convention plugins](/learning/gradle/convention-plugins), нужные для сборки основного Gradle проекта.
 
 Внутри `build.gradle.kts` объявлены нужные зависимости:
 
@@ -339,8 +343,10 @@ xcodeproj=ios-app/ios-app.xcworkspace
 
 Исходный код:
 ```kotlin
-// подключение фичей (начиная с Gradle 7.0)
+// подключение фичи каталога версий (появилась с Gradle 7.0)
 enableFeaturePreview("VERSION_CATALOGS")
+
+// включение фичи для быстрого доступа к стукруте проекта (появилась с Gradle 7.0)
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 dependencyResolutionManagement {
@@ -380,7 +386,7 @@ include(":mpp-library:feature:auth")
 
 ```kotlin
 buildscript {
-    // репозитории, из которых будут загружаться зависимости проекта
+    // репозитории, из которых будут загружаться плагины проекта
     repositories {
         mavenCentral()
         google()
@@ -550,7 +556,7 @@ mokoNetwork {
 }
 ```
 
-Для того, чтобы понять как происходит интеграция зависимостей в iOS-фреймворк, можете ознакомиться с [соответствующей статьей](/learning/kotlin-native/cocoapods) в разделе обучения.
+О том, как происходят экспорты зависимостей в iOS-фреймворк, написано в  [соответсвующей статье](https://kotlinlang.org/docs/mpp-build-native-binaries.html#export-dependencies-to-binaries).
 
 ### MultiplatformLibrary.podscpec
 
@@ -604,9 +610,13 @@ dependencies {
 }
 ```
 
-Т.к каждая фича является отдельной Gradle-библиотекой, то она обязана содержать файл `AndroidManifest.xml`, в котором объявляется уникальное имя для Android-приложения.
+Т.к каждая фича является отдельной Gradle-библиотекой, то она обязана содержать файл `AndroidManifest.xml`, в котором объявляется уникальное имя для класса Android-приложения.
 
+:::caution
+Во всем проекте каждый `AndroidManifest` должен иметь уникальный идентификатор, который использует Android приложение для генерации специальных классов. 
 
+При коллизии идентификаторов получится несколько одинаковых классов!
+:::
 
 ### Shared & Domain Factory
 
