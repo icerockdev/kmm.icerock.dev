@@ -1,3 +1,7 @@
+---
+sidebar_position: 6
+---
+
 # buildSrc
 
 <iframe src="//www.youtube.com/embed/QqqYzaOzq3A?list=PL6yFiPOVXVUi90sQ66dtmuXP-1-TeHwl5" frameborder="0" allowfullscreen width="675" height="380"></iframe>

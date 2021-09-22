@@ -183,6 +183,7 @@ module.exports = {
         routeBasePath: 'learning',
         sidebarPath: require.resolve('./sidebars.js'),
         editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/docusaurus/',
+        remarkPlugins: [require('mdx-mermaid')],
       },
     ]
   ],

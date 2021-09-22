@@ -1,3 +1,7 @@
+---
+sidebar_position: 7
+---
+
 # Composite builds
 
 <iframe src="//www.youtube.com/embed/iQt0qkS0sLQ?list=PL6yFiPOVXVUi90sQ66dtmuXP-1-TeHwl5" frameborder="0" allowfullscreen width="675" height="380"></iframe>

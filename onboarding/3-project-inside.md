@@ -1,11 +1,5 @@
 # 3. Устройство проекта
 
-:::caution
-
-Страница находится в разработке.
-
-:::
-
 ## Вводная
 
 В данной статье разобран типовой KMM проект на базе [mobile-moko-boilerplate](https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate). Внимание уделено каждому файлу и директории в проекте, дано пояснение ко всему - для чего используется, в каких случаях нужно вносить изменения, как работает.
@@ -47,49 +41,11 @@
 
 Для сборки iOS приложения используются сразу обе системы - Xcode и Gradle, что, разумеется, увеличивает время сборки. Это также осложняет и анализ ошибок сборки, ведь ошибки могут быть как в разных системах сборки по отдельности, так и на стыке двух систем.
 
-Когда мы нажимаем на кнопку Run в Xcode, начинается процесс сборки как и у любого другого iOS приложения через сам Xcode. Наш Xcode проект имеет зависимость на CocoaPod `MultiPlatformLibrary`, поэтому при компиляции приложения начнется и компиляция `MultiPlatformLibrary`. Данный CocoaPod имеет особенную реализацию - он не содержит исходного кода, а вместо фазы компиляции Source файлов он имеет фазу запуска shell команды. Именно в этой фазе происходит запуск Gradle для компиляции `MultiPlatformLibrary.framework` из Kotlin кода. Когда скрипт завершится, Xcode продолжит сборку iOS проекта уже с использованием готового скомпилированного фреймворка от Kotlin библиотеки.
+Когда мы нажимаем на кнопку Run в Xcode, начинается процесс сборки как и у любого другого iOS приложения через сам Xcode. Наш Xcode проект имеет зависимость на CocoaPod `MultiPlatformLibrary`, поэтому при компиляции приложения начнется и компиляция `MultiPlatformLibrary`.
 
-Рассмотрим процесс детальнее. Для начала посмотрим, что происходит после установки зависимостей через [CocoaPods](https://cocoapods.org/): помимо файла проекта -  `ios-app.xcodeproj` мы получаем еще один файл - `ios-app.xcworkspace`.
-Разберемся в разнице между ними:
+Узнать подробнее о том, как происходит компиляция этой зависимости и подключение сторонних подов, вы можете в [разделе обучения](/learning/ios/pods).
 
-- `ios-app.xcodeproj` - файл нашего ios проекта, содержит все настройки проекта, список файлов проекта, фазы сборки и прочее. В нем также указано, что наш iOS проект теперь зависит от `Pods_ios_app.framework` - фреймворка подключающего все CocoaPods зависимости.
-  ![xcode xcodeproj](project-inside/xcode-xcodeproj.png)
-  При попытке скомпилировать проект через `ios-app.xcodeproj` мы получим ошибку о том что фрейворки, от которых зависит проект, не найдены.
-- `ios-app.xcworkspace` - файл с объединением нескольких Xcode проектов вместе. Если открыть его в Xcode, то в левой панели мы увидим не только `ios-app` проект, но и `Pods`, в котором находятся все необходимые для проекта зависимости. При работе через `xcworkspace` мы можем успешно скомпилировать проект, так как зависимость `ios-app` проекта будет найдена в `Pods` проекте. Необходимые зависимости для `ios-app` будут автоматически скомплированы также в `Pods`.
-  ![xcode xcworkspace](project-inside/xcode-xcworkspace.png)
-
-Теперь, понимая как `ios-app` связан с зависимостями, установленными CocoaPods, посмотрим детальнее на `MultiPlatformLibrary` CocoaPod. Находится данный Pod в `Pods/Development Pods/MultiPlatformLibrary`.
-
-Только этот CocoaPod находится в `Development Pods` так как он единственный в `Podfile`, который подключен по локальному пути (`:path =>`). Все CocoaPod'ы, подключенные по локальному пути, будут находиться в `Development Pods` разделе, вместо `Pods`.
-
-![xcode podfile](project-inside/xcode-podfile.png)
-
-Из чего устроена данная зависимость:
-![xcode multiplatformlibrary podspec](project-inside/xcode-multiplatformlibrary-podspec.png)
-
-Во-первых, в директории `Frameworks` отражается сам скомпилированный фреймворк - `MultiPlatformLibrary.framework`.
-
-Во-вторых - `MultiPlatformLibrary.podspec`, который как раз и ищет CocoaPods при подключении через `:path =>` по пути `mpp-library/MultiPlatformLibrary.podspec`.
-
-`Podspec` файл является описанием зависиомости для CocoaPods. В нем мы определяем имя, версию и прочую метаинформацию о нашем пакете, исходные файлы и прочие настройки таргета, которые будет сгенерирован в проекте `Pods` при `pod install`. В нашем `podspec` мы определили несколько важных моментов:
-
-1. `spec.vendored_frameworks` - путь до заранее скомпилированного framework'а, который и будет предоставляться как зависимость `ios-app` проекту. Именно по этому пути Gradle складывает итоговый фреймворк при запуске любой из `syncMultiPlatformLibrary**` задач;
-1. `spec.pod_target_xcconfig` - настройки конфигурации, которые определяют переменные окружения, доступные нам во время выполнения сборки данного таргета. Мы определили имя библиотеки, без каких либо условий, а также указали переменную `GRADLE_TASK`, которая имеет разные значения при разных условиях. Например: `GRADLE_TASK[sdk=iphonesimulator*][config=*ebug]` означает, что указанное в правом блоке значение будет назначено в переменную окружения `GRADLE_TASK` в том случае, если мы производим сборку при использовании sdk начинающегося на `iphonesimulator`, а также при конфигурации, заканчивающейся на `ebug`: `Debug`, `dev-debug`, `prod-debug` и так далее;
-1. `spec.script_phases` - определяем специальную фазу сборки с запуском shell скрипта, в котором мы запускаем Gradle задачу, сохраненную в переменной окружения `GRADLE_TASK`. Правильный подбор варианта компиляции мы получаем основываясь на схеме ios приложения, которую мы собираем, и на условиях, обозначенных в `xcconfig`. Именно этот скрипт позволяет делать сборку общего модуля автоматически, не требуя от разработчика дополнительнх действий перед комплияцией ios проекта.
-
-При выполнении `pod install` данный podspec файл считывается и на основе этой информации создается Target в проекте `Pods`:
-
-![xcode multiplatformlibrary script](project-inside/xcode-multiplatformlibrary-script.png)
-
-Видно, что таргет `MultiPlatformLibrary` отличается от всех остальных иконкой - это потому, что он не содержит исходного кода, а вместо этого содержит кастомный скрипт.
-
-По настройкам Xcode также видно, что `ios-app` не имеет прямой зависимости от `MultiPlatformLibrary`. Зависимость есть от `Pods-ios-app`. Это оптимизация количества изменений в файле основного проекта, сделанная CocoaPods. Все легко объясняется когда посмотрим на сам таргет `Pods-ios-app`.
-
-![xcode pods dependencies](project-inside/xcode-pods-dependencies.png)
-
-Данный таргет содержит в зависимостях все CocoaPods, а значит когда `ios-app` запрашивает сборку `Pods-ios-app`, тот затребует сборку всех этих зависимостей и в результате мы получим сборку всего что нам нужно.
-
-После данного разбора у вас должно сформироваться представление о том как происходит компиляция ios приложения использующего Kotlin библиотеку с интеграцией через CocoaPods.
+После того, как локальный под будет скомпилирова, а все остальные зависимости "подцеплены" нашим приложением, произойдет запуск.  
 
 ## Структура проекта
 
@@ -97,7 +53,7 @@
 
 `ls -lp`:
 ```bash
-buildSrc/
+build-logic/
 android-app/
 ios-app/
 mpp-library/
@@ -112,61 +68,44 @@ README.md
 
 Кратко про каждый элемент, для понимания общей картины:
 
-- `buildSrc` - директория с логикой для системы сборки gradle;
-- `android-app` - исходный код android приложения;
-- `ios-app` - исходный код iOS приложения;
-- `mpp-library` - исходный код общей библиотеки на KMM;
-- `gradle` - специальная директория системы сборки gradle, в которой лежит Gradle Wrapper;
+- `android-app/` - директория с исходным кодом Android приложения;
+- `ios-app/` - директория с исходным кодом iOS приложения;
+- `build-logic/` - директория с логикой для системы сборки Gradle;
+- `mpp-library/` - директория с исходным кодом общей библиотеки на KMM;
+- `gradle/` - специальная директория системы сборки Gradle, в которой лежит Gradle Wrapper;
 - `build.gradle.kts` - файл конфигурации сборки корневого gradle проекта;
-- `gradle.properties` - файл с опциями, которые передаются в gradle проект при запуске;
-- `gradlew` и `gradlew.bat` - скрипты для unix и windows соответственно, которые запускают Gradle используя Gradle Wrapper;
-- `settings.gradle.kts` - файл настроек gradle проекта;
+- `gradle.properties` - файл с опциями, которые передаются в Gradle проект при запуске;
+- `gradlew` и `gradlew.bat` - скрипты для Unix и Windows соответственно, которые запускают Gradle используя Gradle Wrapper;
+- `settings.gradle.kts` - файл настроек Gradle проекта;
 - `README.md` - краткое описание содержимого репозитория и инструкция как собирать проект.
 
 Далее разберем все блоки более детально.
-
-## Gradle Wrapper
-
-[Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) - специальный скрипт (и несколько дополнительных файлов), который автоматизирует процесс установки нужной версии gradle.
-
-К его файлам относятся:
-
-- `gradlew` и `gradlew.bat` - сами скрипты для запуска gradle через wrapper;
-- `gradle/wrapper/gradle-wrapper.jar` - сам wrapper, небольшая java программа;
-- `gradle/wrapper/gradle-wrapper.properties` - настройки gradle wrapper'а в которых указывается версия gradle для всего проекта.
-
-Взаимодействие с Gradle Wrapper происходит при любой сборке gradle проекта. При запуске gradle задач через IDE автоматически происходит обращение к Gradle Wrapper, а когда работа идет через терминал - нужно вызывать `gradlew`/`gradlew.bat` (в зависимости от ОС).
-
-Вся логика работы Gradle Wrapper'а заключается в следующем:
-
-1. скрипт проверяет наличие JDK, если ее нет - выводит соответствующее понятное сообщение;
-1. считывается конфигурация из `gradle-wrapper.properties`, а именно - `distributionUrl`, в котором определено какую версию gradle нам нужно скачать;
-1. если данная версия gradle уже скачивалась, то она доступна в кешах в директории `~/.gradle` и будет использоваться. Иначе же Gradle Wrapper скачает gradle нужной версии и сохранит в указанную выше кеш директорию;
-1. запускает gradle нужной версии, передавая ему все опции запуска которые были переданы в Gradle Wrapper.
-
-Таким образом, несколько небольших файлов, лежащих в git репозитории, позволяют разработчику не вспоминать о необходимости скачать нужную для проекта версию gradle и использовать ее - автоматика все сделает сама.
-
-:::info
-
-Gradle Wrapper автоматически сохраняет скачиваемые версии gradle в кеш в `GRADLE_HOME` - `~/.gradle`. Поэтому данная директория со временем начинает раздуваться в размерах, так как на разных проектах может требоваться разная версия gradle, а также на проектах периодически производят обновление версии gradle. 
-
-Удалять содержимое директории `~/.gradle`, при раздувшихся размерах, можно, но нужно понимать, что следующая сборка gradle потребует значительно больше времени, так как будет скачиваться нужная версия gradle, а также все зависимости, которые нужны проекту (кеш зависимостей также лежит в `GRADLE_HOME`).
-
-:::
 
 ## Root Gradle project
 
 Следующая важная составляющая нашего проекта - корневой gradle проект. Как было сказано ранее - для сборки обеих платформ используется gradle. Для android только он, а для ios gradle является одной из билдсистем. Корневая директория нашего проекта по сути и является корневым gradle проектом. `android-app` и `mpp-library` подключаются к этому коревому проекту как подпроекты.
 
 К коревому gradle проекту относятся:
-- `buildSrc` - библиотека с логикой сборки;
+- `build-logic` - [композитно](/learning/gradle/composite-build) подключенный проект, несущий в себе логику сборки остальных подпроектов;
 - `gradle.properties` - опции запуска gradle проекта;
 - `settings.gradle.kts` - файл настроек;
 - `build.gradle.kts` - файл конфигурации сборки.
+- `gradle` - директория [Gradle Wrapper'а](/learning/gradle/gradle-wrapper) - специального скрипта, который автоматизирует процесс установки нужной версии gradle.
+  
+О том как обновить версию Gradle в проекте вы можете прочитать в [специальном разделе обучения](/learning/gradle/updating-versions). 
 
 Больше файлов относящихся непосредственно к коревому gradle проекту в репозитории нет.
 
-### buildSrc
+### [buildSrc](/learning/gradle/buildSrc) (устарело)
+
+:::caution
+
+Директория упразднена! 
+
+На новых проектах вместо `buildSrc` используется `Composite build`.
+
+:::
+
 `buildSrc` - [специальная директория Gradle](https://docs.gradle.org/current/userguide/organizing_gradle_projects.html#sec:build_sources). Она предназначена для реализации логики сборки, не привязанной к конкретному gradle модулю. По сути это исходники библиотеки, которая автоматически будет подгружена в gradle и все классы объявленные в этой библиотеке будут доступны в любом месте Gradle конфигурации (в `build.gradle.kts`).
 
 В этой директории можно увидеть собственный `build.gradle.kts` и исходный код библиотеки. `build.gradle.kts` определяет как будет собираться данная библиотека и какие зависимости ей требуются. Исходный код библиотеки в нашем проекте содержит только один объект `Deps`, содержащий константы и зависимости, необходимые нашему проекту.
@@ -288,30 +227,104 @@ object Deps {
 
 Данный класс определяет константы, которые мы будем использовать в `build.gradle.kts` всех gradle модулей, что сокращает вероятность ошибки и позволяет менять версии/пути до библиотек в одном месте.
 
+
+### Version Catalogs
+
+:::caution 
+Объект `Deps` заменен на `Version Catalog`!
+:::
+
+На новых проектах внутри директории `gradle` есть файл `libs.versions.toml`. Это список зависимостей, на основе которого gradle сгенерирует специальные свойства для доступа к зависимостям по именам со строгими типами, данный файл позволяет централизованно управлять зависимостями всего проекта.
+
+Давайте посмотрим на этот файл:
+
+```bash
+# версии 
+[versions]
+materialVersion = "1.4.0"
+recyclerViewVersion = "1.2.1"
+swipeRefreshLayoutVersion = "1.1.0"
+constraintLayoutVersion = "2.0.4"
+lifecycleVersion = "2.3.1"
+glideVersion = "4.12.0"
+hiltVersion = "2.35"
+
+# ...
+
+# библиотеки с ссылками на версии
+[libraries]
+material = { module = "com.google.android.material:material", version.ref = "materialVersion" }
+recyclerView = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerViewVersion" }
+swipeRefreshLayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swipeRefreshLayoutVersion" }
+constraintLayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintLayoutVersion" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glideVersion" }
+lifecycleViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleVersion" }
+lifecycleLivedata = { module = "androidx.lifecycle:lifecycle-livedata-ktx", version.ref = "lifecycleVersion" }
+lifecycleRuntime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycleVersion" }
+lifecycleViewModelSavedState = { module = "androidx.lifecycle:lifecycle-viewmodel-savedstate", version.ref = "lifecycleVersion" }
+lifecycleCommonJava8 = { module = "androidx.lifecycle:lifecycle-common-java8", version.ref = "lifecycleVersion" }
+lifecycleServices = { module = "androidx.lifecycle:lifecycle-service", version.ref = "lifecycleVersion" }
+lifecycleProcess = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycleVersion" }
+lifecycleReactiveStreams = { module = "androidx.lifecycle:lifecycle-reactivestreams-ktx", version.ref = "lifecycleVersion" }
+hilt = { module = "com.google.dagger:hilt-android", version.ref = "hiltVersion" }
+hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltVersion" }
+
+# ...
+```
+
+Это фича пришла с вместе с Gradle 7.0. Активация этой фичи происходит в файле `settings.gradle.kts`:
+
+```kotlin
+enableFeaturePreview("VERSION_CATALOGS")
+```
+
+Больше информации о Version Catalogs можете найти [тут](/learning/gradle/version-catalogs).
+
+
+:::note
+
+Для сравнения можете посмотреть файл `Deps.kt` из директории `buildSrc/`, о которой мы говорили выше.
+
+:::
+
+### build-logic
+
+`build-logic` - [композитный](/learning/gradle/composite-build) проект. Он предназначен для реализации логики сборки, не привязанной к конкретному gradle модулю.
+
+В этой директории можно увидеть собственный `build.gradle.kts` и исходный код библиотеки. `build.gradle.kts` определяет как будет собираться данная библиотека и какие зависимости ей требуются. Исходный код библиотеки в нашем композитном билде содержит [convention plugins](/learning/gradle/convention-plugins), нужные для сборки основного Gradle проекта.
+
+Внутри `build.gradle.kts` объявлены нужные зависимости:
+
+```kotlin
+dependencies {
+    api("dev.icerock:mobile-multiplatform:0.12.0")
+    api("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
+    api("com.android.tools.build:gradle:4.2.1")
+    api("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.15.0")
+}
+```
+
+Он подключается внутри файла `settings.gradle.kts` командой:
+```kotlin
+includeBuild("build-logic")
+```
+
 ### gradle.properties
 
-Данный файл состоит из пар ключ-значение параметров настройки запуска gradle.
-Использование `gradle.properties` это альтернатива использованию флагов командной строки для конфигурации проекта.
+Это файл с параметрами Gradle проекта:
 
-```
-// максимально доступная модулю gradle память равнв 4гб
+```bash
 org.gradle.jvmargs=-Xmx4096m
-// не распространять конфигурацию на все проекты
 org.gradle.configureondemand=false
-// включаем режим параллельного выполнения
 org.gradle.parallel=true
-// для последующих сборок будут использоваться кеши предыдущих сборок
 org.gradle.caching=true
-// использовать официальный стандарт кода
+
 kotlin.code.style=official
 
-// плагин Android будет использовать библиотеку AndroidX вместо стандартной библиотеки
 android.useAndroidX=true
 
-// отключить предупреждения о том, что технология mpp являестя эксперементальной
 kotlin.mpp.stability.nowarn=true
 
-// отключить предупреждения об используемых таргетах ios
 mobile.multiplatform.iosTargetWarning=false
 
 VERSION_NAME=0.1.0
@@ -320,297 +333,598 @@ VERSION_CODE=1
 xcodeproj=ios-app/ios-app.xcworkspace
 ```
 
+Более подробней о параметрах Gradle вы можете прочитать в [разделе обучения](/learning/gradle/build-environment).
+
 ### settings.gradle.kts
 
-Этот файл необходим для сборки с несколькими проектами, в нашем случае это `android-app`, `mpp-library` и `mpp-library:feature:auth`
+Этот файл определяет настройки gradle проекта. здесь мы можем подключать под-проекты (вызовом include) и подключать другие gradle проекты, настраивая composite build (вызовом includeBuild)"
 
-### build.gradle.kts
+В нашем случае это `build-logic` (composite build), `android-app`, `mpp-library` и `mpp-library:feature:auth` (sub-projects).
 
-Эти зависимости будут также автоматически подключены и к самому Gradle проекту, поэтому плагины из этих зависимостей мы можем применять без добавления артефактов в `classpath`.
+Исходный код:
+```kotlin
+// подключение фичи каталога версий (появилась с Gradle 7.0)
+enableFeaturePreview("VERSION_CATALOGS")
 
-```
-// подключение плагинов
-plugins {
-    plugin(Deps.Plugins.detekt) apply false
-    id("dev.icerock.gradle.talaiot") version ("2.+")
-}
+// включение фичи для быстрого доступа к стукруте проекта (появилась с Gradle 7.0)
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
-buildscript {
+dependencyResolutionManagement {
     // репозитории, из которых будут загружаться зависимости проекта
-    repositories {
-        mavenCentral()
-        google()
-        gradlePluginPortal()
-    }
-    // зависимости, используемые системой сборки
-    dependencies {
-        plugin(Deps.Plugins.mokoResources)
-        plugin(Deps.Plugins.mokoNetwork)
-        plugin(Deps.Plugins.mokoUnits)
-        plugin(Deps.Plugins.kotlinSerialization)
-        plugin(Deps.Plugins.firebaseCrashlytics)
-        plugin(Deps.Plugins.googleServices)
-    }
-}
-// раздел для gradle-модулей
-allprojects {
     repositories {
         mavenCentral()
         google()
 
         jcenter {
             content {
-                includeGroup("com.github.aakira")
+                includeGroup("org.jetbrains.kotlinx")
             }
-        }
-    }
-
-    apply(plugin = Deps.Plugins.detekt.id)
-
-    configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
-        input.setFrom("src/commonMain/kotlin", "src/androidMain/kotlin", "src/iosMain/kotlin")
-    }
-
-    dependencies {
-        "detektPlugins"(Deps.Libs.Detekt.detektFormatting)
-    }
-
-    plugins.withId(Deps.Plugins.androidLibrary.id) {
-        configure<com.android.build.gradle.LibraryExtension> {
-            compileSdkVersion(Deps.Android.compileSdk)
-
-            defaultConfig {
-                minSdkVersion(Deps.Android.minSdk)
-                targetSdkVersion(Deps.Android.targetSdk)
-            }
-        }
-    }
-    // принудительно исползовать coroutines-native-mt версию ( необходима для многопоточности )
-    configurations.configureEach {
-        resolutionStrategy {
-            // remove after coroutines native-mt will be merged into stable release
-            force(Deps.Libs.MultiPlatform.coroutines)
-            // remove after update detekt to 1.17.0+
-            force("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
         }
     }
 }
 
+// В настройках тоже можно подключать плагины.
+// Данный плагин является настройкой плагина Gradle Talaiot.
+// Он отправляет статистику сборки в аналитическую базу данных Influx
+// нашей компании.
+plugins {
+    id("dev.icerock.gradle.talaiot") version("3.+")
+}
+
+// подключение composite-build
+includeBuild("build-logic")
+
+// подключение подпроектов
+include(":android-app")
+include(":mpp-library")
+include(":mpp-library:feature:auth")
+```
+
+Именно `settings.gradle.kts` иллюстрирует многомодульность нашего основного проекта.
+
+### build.gradle.kts
+
+```kotlin
+buildscript {
+    // репозитории, из которых будут загружаться плагины проекта
+    repositories {
+        mavenCentral()
+        google()
+        gradlePluginPortal()
+    }
+    // добавление зависимостей в выполнение gradle скриптов
+    dependencies {
+        classpath(libs.mokoResourcesGeneratorGradle)
+        classpath(libs.mokoNetworkGeneratorGradle)
+        classpath(libs.mokoUnitsGeneratorGradle)
+        classpath(libs.kotlinSerializationGradle)
+        classpath(libs.hiltGradle)
+        classpath(libs.firebaseCrashlyticsGradle)
+        classpath(libs.googleServicesGradle)
+        classpath(":build-logic")
+    }
+}
+
+allprojects {
+    // принудительно использовать coroutines-native-mt версию ( необходима для многопоточности )
+    configurations.configureEach {
+        resolutionStrategy {
+            val coroutines: MinimalExternalModuleDependency = rootProject.libs.coroutines.get()
+            val forcedCoroutines: ModuleVersionSelector = DefaultModuleVersionSelector.newSelector(
+                coroutines.module,
+                coroutines.versionConstraint.requiredVersion
+            )
+            force(forcedCoroutines)
+        }
+    }
+}
+
+// таска на очистку билдов
 tasks.register("clean", Delete::class).configure {
     group = "build"
     delete(rootProject.buildDir)
 }
 ```
-
+Подробнее о конфигурациях зависимостей вы можете прочитать в [разделе обучения](/learning/gradle/configuration).
 ## mpp-library
 
-> Есть где то видос или хорошая статья о SharedFactory и DomainFactory
+![mpp library folder](project-inside/project-inside-mpp-lib.png)
 
-Ага , просто столкнулся с тем что ранее я их не трогал но сейчас для того что бы идти дальше мне нужно сделать  authRepository, но сделать его в SharedFactory
+Оба приложения зависят от mpp-library, которая предоставляет доступ к ViewModel’и каждой фичи через SharedFactory.
 
-иммет ли значение где делать factory initializers ?
+### build.gradle.kts
 
-Где еще нужно добавить для DomainFactory import что бы заработал , generated - горит красным .
+Тут объявляются все зависимости и конфигурации нашей общей библиотеки. Давайте посмотрим что внутри.
 
-Оба приложения зависят от `mpp-library`, которая предоставляет доступ к ViewModel'и к каждой фиче через SharedFactory. Библиотека отвечает за установку соединений между фичей и `domain` modules.
-`mpp-library` содержит следующие модули:
-- `domain` ( отказались от использования ) - содержит объекты домена, репозитории, классы API сервера и DomainFactory, который создает экземпляры для всех из них;
-- `feature` - каждая фича содержит соответствующие ViewModel, Factory, модели и интерфейсы, которые ожидаются от родительского модуля;
-    Пример фичей:
-    - `config` содержит функции конфигурации ViewModel, интерфейс хранилища данных и ConfigFactory, которая создают экземпляры ViewModel;
-    - `list` содержит функции элементов списка ViewModel, интерфейс источника данных, интерфейс фабрики элементов списка и ListFactory, которая создают экземпляры ViewModel.
-    - `auth`
-`SharedFactory` - входная точка для Native: как для ios, так и для android. В ней создаются Factory для всех фичей
-Фичи между собой никак не связанны,
-    ## android-app
+```kotlin
+// подключение плагинов
+plugins {
+    // convention-плагин, в котором происходит подключение adnroid плагина,
+    // kotlin multiplatform плагина и устанавливаются таргеты ios и android
+    id("multiplatform-library-convention")
+
+    // convention-плагин, в котором происходит подключение detekt плагина
+    // и его настройка
+    id("detekt-convention")
+
+    // плагин для обеспечения доступа к ресурсам на iOS и Android
+    // подробнее тут https://github.com/icerockdev/moko-resources
+    id("dev.icerock.mobile.multiplatform-resources")
+
+    // плагин настройки задач синхронизации групповых Cocoa-pod'ов 
+    // для корректной их интеграции
+    // подробнее тут https://github.com/icerockdev/mobile-multiplatform-gradle-plugin
+    id("dev.icerock.mobile.multiplatform.ios-framework")
+
+    // плагином для генерации сущностей и классов API 
+    // из файла спецификаций OpenAPI (Swagger)
+    // подробнее тут https://github.com/icerockdev/moko-network
+    id("dev.icerock.mobile.multiplatform-network-generator")
+
+    // плагин компилятора, который позволяет сериализовывать документ
+    // предоставляю к нему доступ с разных платформ
+    id("kotlinx-serialization")
+    
+    // Kotlin Parcelize plugin
+    // Добавляет аннотоцию @Parcelize
+    id("kotlin-parcelize")
+
+    // плагин для настройки взаимодействия с CocoaPods
+    // указание пути до файла проекта 
+    // а также позволяет управлять управлять cocoa-зависимостями
+    // подробнее тут https://github.com/icerockdev/mobile-multiplatform-gradle-plugin
+    id("dev.icerock.mobile.multiplatform.cocoapods")
+}
+
+// объявление зависимостей
+dependencies {
+    commonMainImplementation(libs.coroutines)
+
+    commonMainImplementation(libs.kotlinSerialization)
+    commonMainImplementation(libs.ktorClient)
+    commonMainImplementation(libs.ktorClientLogging)
+
+    androidMainImplementation(libs.multidex)
+    androidMainImplementation(libs.lifecycleViewModel)
+
+    commonMainApi(projects.mppLibrary.feature.auth)
+
+    commonMainApi(libs.multiplatformSettings)
+    commonMainApi(libs.napier)
+    commonMainApi(libs.mokoParcelize)
+    commonMainApi(libs.mokoResources)
+    commonMainApi(libs.mokoMvvmCore)
+    commonMainApi(libs.mokoMvvmLiveData)
+    commonMainApi(libs.mokoMvvmState)
+    commonMainApi(libs.mokoUnits)
+    commonMainApi(libs.mokoFields)
+    commonMainApi(libs.mokoNetwork)
+    commonMainApi(libs.mokoErrors)
+    commonMainApi(libs.mokoNetworkErrors)
+    commonMainApi(libs.mokoCrashReportingCore)
+    commonMainApi(libs.mokoCrashReportingCrashlytics)
+    commonMainApi(libs.mokoCrashReportingNapier)
+
+    commonTestImplementation(libs.mokoTestCore)
+    commonTestImplementation(libs.mokoMvvmTest)
+    commonTestImplementation(libs.mokoUnitsTest)
+    commonTestImplementation(libs.multiplatformSettingsTest)
+    commonTestImplementation(libs.ktorClientMock)
+}
+
+// идентификатор пакета ресурсов
+multiplatformResources {
+    multiplatformResourcesPackage = "org.example.library"
+}
+
+framework {
+    // экспорты фичей в iOS фреймворк
+    export(projects.mppLibrary.feature.auth)
+
+    // экспорт либ в iOS фреймворк
+    export(libs.multiplatformSettings)
+    export(libs.napier)
+    export(libs.mokoParcelize)
+    export(libs.mokoResources)
+    export(libs.mokoMvvmCore)
+    export(libs.mokoMvvmLiveData)
+    export(libs.mokoMvvmState)
+    export(libs.mokoUnits)
+    export(libs.mokoFields)
+    export(libs.mokoNetwork)
+    export(libs.mokoErrors)
+    export(libs.mokoNetworkErrors)
+    export(libs.mokoCrashReportingCore)
+    export(libs.mokoCrashReportingCrashlytics)
+    export(libs.mokoCrashReportingNapier)
+}
+
+cocoaPods {
+    // путь до проекта
+    podsProject = file("../ios-app/Pods/Pods.xcodeproj")
+    // подключение нативного pod внутри kotlin кода
+    pod("MCRCDynamicProxy", onlyLink = true)
+}
+
+// mokoNetwork
+// подключение yml файла для генерации api
+// подробнее тут https://github.com/icerockdev/moko-network
+mokoNetwork {
+    spec("news") {
+        inputSpec = file("src/api/openapi.yml")
+    }
+}
+```
+
+О том, как происходят экспорты зависимостей в iOS-фреймворк, написано в  [соответсвующей статье](https://kotlinlang.org/docs/mpp-build-native-binaries.html#export-dependencies-to-binaries).
+
+### MultiplatformLibrary.podscpec
+
+Более подробно об этом файле вы можете прочитать [тут](/learning/ios/pods#podspec).
+
+### src
+В папке `srс` находится исходный код общей библиотеки.
+
+![mpp-library-](project-inside/project-inside-mpp-lib-src.png)
+
+ - `androidMain` - директория, содержащая файл `AndroidManifest.xml`, в котором объявляется идентификатор (уникальный!) для модуля `mpp-library` для Android-приложения;
+ - `api` - директория, содержащая файл для генерации методов взаимодействия с API;
+ - директория `commonMain` содержит директорию `kotlin`, в которой как раз и пишется вся бизнес-логика приложения; в директории `resources` находятся ресурсы, попавшие в проект через [moko-resources](https://github.com/icerockdev/moko-resources);
+ - `commonTest` - директория, в которой находится исходный код тестов для общей библиотеки;
+
+### feature's
+Как мы видим mpp-library содержит в себе подпроект feature. 
+Каждая фича в котором является Gradle-библиоткой, несущей в себе набор соответствующих моделей, view-моделей, фабрик и интерфейсов, которые ожидаются от родительского модуля. 
+
+![mpp-library-one-feature](project-inside/project-inside-mpp-lib-feature.png)
+
+Каждая фича имеет однотипную структуру. Внутри `commonMain/kotlin/…` обычно находятся директории:
+- `di` - директория, содержащая фабрику для создания View-моделей и все, что связано с инъекцией зависимостей;
+- `model` - директория, содержащая все сущности (в основном data-классы и enum’ы) нужные в рамках данной view-модели, а также в которой определяются репозитории для хранения и взаимодействия с данными.
+- `presentation` - директория, содержащая сами view-model'и и, возможно, фабрики юнитов (об этом поговорим дальше).
+
+Пример фичей:
+* Auth
+* Settings
+* List
+и т.п
+
+В файле `build.gradle.kts`, который находится в директории каждой фичи указаны все зависимости, нужные для данной фичи.
+
+Посмотрим: 
+```kotlin
+// подключение плагинов
+plugins {
+    id("detekt-convention")
+    id("multiplatform-library-convention")
+}
+// объявление зависимостей
+dependencies {
+    commonMainImplementation(libs.coroutines)
+
+    androidMainImplementation(libs.lifecycleViewModel)
+
+    // moko-mvvm & moko-resources
+    commonMainImplementation(libs.mokoMvvmLiveData)
+    commonMainImplementation(libs.mokoResources)
+}
+```
+
+Т.к каждая фича является отдельной Gradle-библиотекой, то она обязана содержать файл `AndroidManifest.xml`, в котором объявляется уникальное имя для класса Android-приложения.
+
+:::caution
+Во всем проекте каждый `AndroidManifest` должен иметь уникальный идентификатор, который использует Android приложение для генерации специальных классов. 
+
+При коллизии идентификаторов получится несколько одинаковых классов!
+:::
+
+### Shared & Domain Factory
+
+> Чтобы понять, что такое *Shared* и *Domain* Factory, нужно будет немного разобраться с подходом разделения ответственности и проброса необходимых зависимостей в проектах.
+
+Мы стараемся делать фичи максимально независящими от контекста проекта. Иными словами — фича должна знать ровно тот набор информации, который ей нужен для корректной работы в рамках самой себя. При этом важно сократить до минимума её зависимости от каких либо других модулей. Делается это для ускорения сборки проекта. Наиболее критично такое сказывается на времени компиляции под iOS, когда проект уже разросся. Например, если 3 разных фичи имеют зависимость на какой-то один общий вспомогательный модуль, назовём его shared, то при любом изменении shared мы получим полную пересборку всех этих трёх модулей при сборке под iOS, в то время как на Android такого не будет.
+Поэтому мы стремимся делать фичи полностью независимыми, кроме тех, которые меняются крайне редко!
+
+> А как быть тогда с моделями, общими для всего проекта? 
+> Как устроить работу с сетью, ведь она же должна быть общей для разных фичей?
+> Как использовать вспомогательные расширения, они же могут быть общие для разных фичей?
+
+Сейчас постараемся ответить на эти вопросы.
+
+#### Как было раньше?
+У нас были такие модули как *domain* и *shared*, а также фабрики *DomainFactory* и *SharedFactory*.
+
+![project-inside-shared-domain](project-inside/project-inside-shared-domain.png)
+
+Модуль *domain* включал в себя описания доменных сущностей, описание классов для работы с сервером, логику преобразования серверных ответов в те самые доменные сущности, с которыми могло работать приложение. Также в нём содержалась и доменная фабрика *DomainFactory*, которая создавала классы для работы с сетью, репозитории, управляющие данными и производила настройку http-клиента. А также именно расширениями к *DomainFactory* реализовывались создания всех остальных фабрик для фичей.
+
+![domain-module](project-inside/project-inside-domain.png)
+
+Модуль *shared* содержал большое количество полезных расширений, вспомогательных методов, упрощений и прочих переиспользуемых между модулями вещей.
+
+А внутри модуля *mpp-library* располагалась и *SharedFactory* (либо просто *Factory*, на разных старых проектах название может быть разным). Её предназначение было получить с натива все данные, необходимые для реализации *DomainFactory* и, соответственно, *DomainFactory* на основе этих же данных могла реализовывать свои внутренние компоненты. Плюс *mpp-library* служила прослойкой для маппинга всех доменных сущностей в сущности фичей. Например, модель юзера могла быть и в модуле авторизации и в модуле профилей. Но auth:User и profile:User - это были разные модели и преобразование от доменной сущности domain:User (который мы получали после преобразования ответа сервера) требовалось для каждой из них.
+
+![shared-and-src](project-inside/project-inside-shared-src.png)
+
+И чтобы в фичах мы могли спокойно кидать запросы, использовать модели данных и применять вспомогательные методы из *shared*, приходилось добавлять практически во всех фичах зависимости на *shared*.
+
+> По началу всё шло неплохо. Производительность не сильно страдала. Проблемы начались тогда, когда мы имеем уже объёмный проект, состоящий из 10-15 модулей с фичами. И в какой-то момент нам для одной из фичей надо в *shared* добавить небольшой код или поправить реализацию уже имеющегося. Это приводило к тому, что на iOS начинают пересобираться абсолютно все зависящие на shared модули, а разработчик, поменявший одну строчку, мог ждать сборки iOS по 10 с лишним минут.
+
+>И вторая большая проблема заключалась в том, что мы вынуждены были плодить множество сущностей. На примере всё того же юзера у нас была сетевая сущность юзера, которую присылал бэк, доменная сущность юзера, в которую мы преобразовывали сетевую, а далее для фичей авторизации и профиля — ещё по одной сущности, которые относятся уже к самим фичам, а они, в свою очередь, должны преобразовываться из доменных. Самый банальный пример — если на сервере добавляют новое поле в сущности, которое нам нужно использовать, то его приходилось пробрасывать через все эти круги ада и тратить время.
+
+#### К чему мы пришли?
+
+Из-за всего вышесказанного, от данного подхода было принято отказываться в сторону более нового - с учётом независимости фичи и проброса в неё внешних зависимостей.
+
+> Если в рамках работы над проектом вам встречается модуль *domain*, *shared* или *DomainFactory*, то это проект, построенный на старом варианте архитектуры.
+>  
+> Этот подход не актуален!
+> 
+>  В рамках поддержки существующих фичей, при невозможности изменения добавления зависимости от модуля на проброс зависимостей через интерфейсы, придётся использовать старый способ. 
+> При создании же новых фичей, даже с учётом старой архитектуры в этом проекте, их нужно реализовывать актуальным способом.
+
+:::note
+
+На текущий момент наиболее актуальным архитектурным подходом является тот, что представлен в рамках boilerplate-проекта, с которого мы начали разработку.
+
+:::
+
+**Что изменилось:**
+- Модуль *domain* упразднён! 
+
+  Сущность и модели у каждой фичи свои, в рамках модуля этой фичи. И они содержат достаточный набор данных для её работы. Но в случаях, когда одни и те же сущности должны использоваться между несколькими фичами, для того, чтобы избежать дублирования, такие сущности выносятся в отдельный модуль и в зависимость добавляется именно он.
+- *DomainFactory* упразднена. 
+
+  Её роль забирает *SharedFactory*, которая доступна с натива и находится в *mpp-library*. Через неё же можно с нативной стороны достучаться до всех необходимых фабрик фичей. Фабрики фичей всё также реализовываются как расширения, но уже к *SharedFactory*, а не к *DomainFactory*. Инициализация классов работы с API также происходит в SharedFactory.
+- Модуль *shared* упразднён.
+
+  Подобные общие компоненты реализовываются внутри модуля *mpp-library*.
+- Для реализации логики работы с данными, либо с сервером используются репозитории. Каждая ViewModel описывает у себя интерфейс репозитория, покрывающий её нужды. Либо бывают случаи общего интерфейса репозитория на несколько ViewModel, но в рамках одной фичи. Реализация этого репозитория должна передаваться при создании ViewModel. Сами реализации создаются в модуле *mpp-library*, а он, как мы знаем, имеет информацию и о view-моделях (т.к. *mpp-library* знает о других модулях) и о сетевом слое. Соответственно в его рамках без проблем можно описать реализации этих интерфейсов и пробросить их в фабрику фичи, которая, в свою очередь, передаст реализацию во ViewModel. Это же помогает избежать пачки мапперов из сетевой сущности в доменную, из доменной в фичёвую.
+
+### Структура проекта
+
+![classes arch](project-inside/project-inside-clases-dependency.png)
+
+На этой схеме показана структура проекта:
+
+У нас есть два приложения, которые представляют уровень приложений:
+- android-приложение, написанное на Kotlin
+- ios-приложение, написанное на Swift,
+
+Оба приложения зависят от mpp-library, которая обеспечивает доступ к ViewModel каждой фичи через SharedFactory.
+
+
 ## android-app
 
-`android-app` - gradle проект с android приложением.
+`android-app` - Gradle проект с Android-приложением.
 
-В нем подключен gradle плагин `com.android.application` (через константу `Deps.Plugins.androidApplication`) и описана вся конфигурация для сборки android приложения.
+![android-app](project-inside/project-inside-android-app-structure.png)
+
+### build.gradle.kts
+В корне данного проекта находится свой `build.gradle.kts` файл:
+```kotlin
+plugins {
+    // подключение convention-плагина
+    // в котором как раз и поключается android plugin
+    // "com.android.application"
+    // и настраивается buildTypes и productFlavors
+    id("android-app-convention")
+    // подключение оброботчика аннотаций kapt
+    id("kotlin-kapt")
+    // подключение плагина moko-units
+    id("dev.icerock.mobile.multiplatform-units")
+    // Плагин для инъекции зависимостей в Android приложении
+    id("dagger.hilt.android.plugin")
+}
+
+// конфигурация android приложения
+android {
+    // включение фичи dataBinding
+    buildFeatures.dataBinding = true
+
+    // параметры для генерации BuildConfig файла
+    defaultConfig {
+        // идентификатор для приложения
+        applicationId = "org.example.app"
+
+        // указание версий
+        versionCode = 1
+        versionName = "0.1.0"
+
+        // API URL
+        val url = "https://newsapi.org/v2/"
+        buildConfigField("String", "BASE_URL", "\"$url\"")
+    }
+}
+
+// настройки kapt
+kapt {
+    javacOptions {
+        // These options are normally set automatically via the Hilt Gradle plugin, but we
+        // set them manually to workaround a bug in the Kotlin 1.5.20
+        option("-Adagger.fastInit=ENABLED")
+        option("-Adagger.hilt.android.internal.disableAndroidSuperclassValidation=true")
+    }
+}
+
+// объявление зависимостей android приложения
+dependencies {
+    implementation(libs.appCompat)
+    implementation(libs.material)
+    implementation(libs.recyclerView)
+    implementation(libs.swipeRefreshLayout)
+    implementation(libs.mokoMvvmDataBinding)
+
+    // Hilt
+    implementation(libs.hilt)
+    kapt(libs.hiltCompiler)
+
+    implementation(projects.mppLibrary)
+}
+
+// настройка юнитов
+multiplatformUnits {
+    classesPackage = "org.example.app"
+    dataBindingPackage = "org.example.app"
+    layoutsSourceSet = "main"
+}
+```
+
+### Устройство проекта
+
+Теперь разберем, что лежит в директории`src/main`:
+- `java/org.example.app` - содержит исходный код нашего приложения:
+  - директория `di` содержит в себе объекты, связанные с инъекцией зависимостей через Hilt;
+  - директория `view` содержит классы всех UI элементов;
+  - `MainApplication` - входная точка Android приложения;
+- `res` - директория со всеми ресурсами, необходимыми android приложению;
+- `ic_launcher-playstore.png` - иконка приложения; она автоматически размещается Android SDK, чтобы вы не забыли создать значок в высоком разрешении для публикации;
+- `AndroidManifest.xml` - файл манифеста, содержащий важную информацию о вашем приложении для инструментов сборки Android, операционной системы Android и Google Play. Более подробно о файле манифеста вы можетепрочитать [тут](https://developer.android.com/guide/topics/manifest/manifest-intro);
+
+### Hilt DI
+
+Инициализация `SharedFactory` из нашей `mpp-library` происходит в Hilt модуле `FactoriesModule.kt`.
+
+```kotlin
+/*
+    di/FactoriesModule.kt
+*/
+
+// imports ...
+
+@InstallIn(ActivityComponent::class)
+@Module
+object FactoriesModule {
+    @Provides
+    fun authNewFactory(sharedFactory: SharedFactory): AuthFactory =
+        sharedFactory.authFactory
+
+}
+```
+
+О том, что мы используем инъекцию зависимостей при помощи Hilt говорит аннотация `@HiltAndroidApp` в `MainApplication.kt`:
+
+```kotlin
+/*
+    MainApplication.kt
+*/
+
+@HiltAndroidApp
+class MainApplication : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        FirebaseApp.initializeApp(this)
+        FirebaseCrashlytics.getInstance()
+            .setCrashlyticsCollectionEnabled(BuildConfig.DEBUG.not())
+    }
+}
+```
+
+Узнать больше про инъекцию зависимостей в Android приложении при помощи Hilt вы можете [тут](https://developer.android.com/training/dependency-injection/hilt-android).
+
 
 ### Навигация в Android
 
+Для того, чтобы понять как устроена навигация в Android приложении можете ознакомиться с соответствующей статьей в [разделе обучения](/learning/android/navigation).
+
 ## ios-app
 
-`ios-app` - директория, в которой лежит Xcode проект ios приложения.
+`ios-app` - директория, в которой лежит Xcode проект iOS приложения.
+
+### Устройство проекта
+
+![ios-app-dirs](project-inside/project-inside-ios-app.png)
+
+Как мы видим, к iOS проекту подключена директория `mpp-library` - это наша общая бизнес логика.
+В директории `src` находится исходные код нашего приложения:
+- `Firebase` - директория с plist файлом для настройки сервисов Firebase;
+- `Extensions` - директория с расширениями классов;
+-  `Common` - директория с общими UI/Logic элементами для всего iOS приложения;
+-  `Resources` - директория с ресурсами (например, R.swift и прочее);
+-  `Feature` - директория с фичами (еще не создана);
+
+В директории `BuildConfigurations` лежат файлы конфигурации сборки проекта, подробнее о них вы можете прочитать [тут](/learning/ios/configuration).
+
+### Входная точка приложения
+
+Посмотрим на файл `AppDelegate.swift`:
+
+```swift
+// импорт UI библиотеки
+import UIKit
+// импорт нашей мультиплатформенной библиотеки
+import MultiPlatformLibrary
+// импорт внешних зависимостей
+import MCRCStaticReporter
+import FirebaseCore
+
+@UIApplicationMain
+class AppDelegate: NSObject, UIApplicationDelegate {
+    
+    // создание окна приложения
+    var window: UIWindow?
+
+    // переменная координатора
+    private (set) var coordinator: AppCoordinator!
+
+    func application(_ application: UIApplication, 
+        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        
+        // настройка сервисов
+        FirebaseApp.configure()
+        MokoFirebaseCrashlytics.setup()
+
+
+        // Инициализация нашей SharedFactory, через синглтон AppComponent
+        AppComponent.factory = SharedFactory(
+            settings: AppleSettings(delegate: UserDefaults.standard),
+            antilog: DebugAntilog(defaultTag: "MPP"),
+            baseUrl: "https://newsapi.org/v2/"
+        )
+
+        // работа с координатором, об этом чуть позже
+        coordinator = AppCoordinator.init(
+            window: self.window!,
+            factory: AppComponent.factory
+        )
+        coordinator.start()
+
+        return true
+    }
+}
+```
+Файл `AppComponent.swift`:
+```swift
+import Foundation
+import MultiPlatformLibrary
+
+class AppComponent {
+    static var factory: SharedFactory!
+}
+```
+
+Класс AppDelegate является стартовой точкой приложения, это можно понять по атрибуту `@UIApplicationMain` перед классом. Именно в нем происходит настройка всех сторонних сервисов и создание экземпляра нашей SharedFactory, для последующего доступа к фабрикам фичей.
 
 ### Навигация в iOS
 
-Прежде чем идти дальше немного остановимся на том, как построена навигация в iOS приложение и какие
-подходы при работе с ней мы используем.
+Мы поняли что является отправной точкой нашего приложения, а теперь нам нужно понять как построена навигация в iOS приложение и какие подходы при работе с ней мы используем.
 
-В основе навигации лежат координаторы. Каждый координатор покрывает логически связанный блок
-функционала, который чаще всего состоит из нескольких экранов. При этом между собой они независимы и
-отвечают только за цепочку переходов только внутри себя. Также имеют возможность получать настройку
-действия, которое должно быть выполнено после завершения блока ответственности координатора.
+Для этого можете ознакомиться со [статьей в разделе обучения](/learning/ios/navigation).
 
-Например.
+## master.sh
 
-Предположим, что у нас есть приложение с авторизацией и списком новостей, с которого
-можно перейти к детальному просмотру каждой новости и в раздел настроек для конфигурации отображения новостей.
+В корне проекта находится скрипт `master.sh`, содержащий в себе вспомогательный функционал.
 
-Это разобьётся на 4 координатора:
+Этот скрипт нужно запускать с конкретным параметром:
 
-- AppCoordinator
-  - Стартовый координатор. Всегда является первой входной точкой, определяет, куда должен выполниться дальнейший переход при запуске приложения
-  - Если юзер не авторизован - запустит координатор авторизации и в качестве completionHandler-а укажет ему переход на список новостей в случае успешной авторизации
-  - Если юзер уже авторизован - запустит координатор просмотра списка новостей
-- AuthCoordinator
-  - Запустит процесс авторизации
-  - Будет совершать переходы по всем требуемым шагам - например ввод логина/пароля, смс-кода, установки никнейма и т.п.
-  - По итогу успешной авторизации вызовет переданный ему на вход completionHandler.
-- NewsCoordinator
-  - Отвечает за показ списка новостей
-  - Реализовывает переход в детали конкретной новости внутри этого же координатора
-  - При переходе в настройки создаёт координатор настроек, в качестве completionHandler-а может передать ему логику обновления своего списка новостей. Если в настройках изменились параметры - обновляет список
-- SettingsCoordinator
-  - Отвечает за работу с экраном настроек
-  - При завершении работы и применении настроек вызывает completion, чтобы новости обновились
-
-Именно координаторы реализуют интерфейс EventListener-ов вьюмоделей, о которых будет чуть ниже. Так
-как вызов переходов завязан на бизнес-логику приложения, то инициатором этих переходов являются
-именно вьюмодели. Поэтому координаторы выполняют связующую роль между тем, что происходит в логике
-приложений и тем, как это должно отображаться пользователю.
-
-Чтобы работать с координаторами было проще, используется базовый класс, от которого наследуются
-остальные. Добавим его к нашему проекту.
-
-Создадим в ios-проекте папку src/Coordinators и в ней файлик BaseCoordinator. Для начала докинем
-туда пару протоколов:
-
-```swift
-protocol ChildCoordinable {
-    var childCoordinators: [Coordinator] { get set }
-
-    func addDependency(_ coordinator: Coordinator)
-    func removeDependency(_ coordinator: Coordinator?)
-}
+```bash 
+./master.sh <param>
 ```
 
-ChildCoordinable - необходим для корректной работы с зависимостями от дочерних координаторов.
-Необходимо не забывать добавлять зависимости на новые координаторы, удалять зависимость на
-конкретный координатор и запоминать список тех координаторов, которые являются дочерними к текущему.
+Параметры:
+- `help` - выводит информацию о скрипте
+- `clean_ide` - чистит файлы IDE
+- `localize` - генерация локализованных строк, о которой вы можете прочитать [тут](/learning/tools/generate-localized-strings).
 
-```swift
-protocol Coordinator: class {
-    var completionHandler: (() -> Void)? { get set }
-
-    func start()
-}
-```
-
-Coordinator - сам протокол координатора. По сути он должен иметь ровно две вещи - completionHandler,
-который вызовется при завершении его логической зоны ответственности. И функцию start. При её вызове
-он начинает запускать свой флоу таким образом, каким считает нужным.
-
-И далее сам класс базового координатора, который реализует оба этих протокола:
-
-```swift
-class BaseCoordinator: NSObject, Coordinator, ChildCoordinable, UINavigationControllerDelegate {
-    var childCoordinators: [Coordinator] = []
-    var completionHandler: (() -> Void)?
-
-    let window: UIWindow
-
-    weak var navigationController: UINavigationController?
-
-    init(window: UIWindow) {
-        self.window = window
-    }
-
-    func start() {
-    }
-
-    func addDependency(_ coordinator: Coordinator) {
-        for element in childCoordinators where element === coordinator {
-            return
-        }
-        childCoordinators.append(coordinator)
-    }
-
-    func removeDependency(_ coordinator: Coordinator?) {
-        guard
-            childCoordinators.isEmpty == false,
-            let coordinator = coordinator
-        else { return }
-        
-        for (index, element) in childCoordinators.enumerated() where element === coordinator {
-            
-            childCoordinators.remove(at: index)
-            break
-            
-        }
-    }
-
-    func currentViewController() -> UIViewController? {
-        return self.navigationController?.topViewController?.presentedViewController ?? self.navigationController?.topViewController ?? self.navigationController
-    }
-
-    func popBack() {
-        self.navigationController?.popViewController(animated: true)
-    }
-}
-```
-
-Для инициализации необходим только window. Также можно указать NavigationController с предыдущего
-координатора, для сохранения общей навигации.
-
-Добавление и удаление зависимостей нужны для корректной очистки связей и памяти при построении
-цепочек координаторов.
-
-Также есть вспомогательные методы, которые позволяют получить текущий контроллер -
-currentViewController и совершить переход назад - popBack.
-
-От проекта к проекту базовый координатор может изменяться, обеспечивая дополнительные нужды проекта.
-
-Теперь, когда у нас есть базовый координатор, создадим на его основе стартовый координатор
-приложения. Создаём рядом с AppDelegate файл для него, называем AppCoordinator:
-
-```swift
-import Foundation
-import UIKit
-
-class AppCoordinator: BaseCoordinator {
-    // MARK:** - Overrides**
-    override func start() {
-        let vc = UIViewController()
-        vc.view.backgroundColor = UIColor.green
-        self.window.rootViewController = vc
-    }
-}
-```
-
-Пусть он пока будет совсем простой, создающий контроллер зелёного цвета и делает его главным экраном
-window.
-
-Теперь нам надо познакомить AddDelegate с его координатором. Идём в AppDelegate.swift
-
-Добавим ему ссылку на координатор приложения:
-
-```
-private (set) var coordinator: AppCoordinator!
-```
-
-А в didFinishLaunchingWithOptions после создания SharedFactory добавим создание координатора и вызов
-старта:
-
-```swift
-self.coordinator = AppCoordinator(
-    window: self.window!
-)
-self.coordinator.start()
-```
-
-Готово. Собираем, запускаем и видим наш зелёный контроллер:
-
-Теперь дальнейшая логика переходов зависит от текущего контроллера и действий юзера на нём. Но
-зелёным прямоугольником мир не спасёшь и юзера не авторизуешь. Поэтому пора переходить к созданию
-нашей первой фичи.
-
-
-### Генерация строк локализации
-
-В файле master.sh в cmdLocalize есть id googleSheet в которой находятся строки локализации для проекта
-Чтобы открыть эту таблицу, нужно открыть любую таблицу и заменить id на указанный в master.sh файле
-Далее, чтобы обновить строки локализации в проекте необходимо вызвать команду ./master.sh localize
