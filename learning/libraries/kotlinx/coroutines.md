@@ -8,97 +8,83 @@
 ### Beginner
 
 - ## 📄 [KotlinLang Docs - Coroutines guide](https://kotlinlang.org/docs/coroutines-basics.html)
-  - ## [Coroutines basics](https://kotlinlang.org/docs/coroutines-basics.html)
-      - [Your first coroutine](https://kotlinlang.org/docs/coroutines-basics.html#your-first-coroutine) - твоя первая корутина :)
-      - [Structured concurrency](https://kotlinlang.org/docs/coroutines-basics.html#structured-concurrency) - корутины не потеряются и не будет утечек, не потеряются ошибки в корутинах
-      - [Extract function refactoring](https://kotlinlang.org/docs/coroutines-basics.html#extract-function-refactoring) - первая suspend функция
-      - [Scope builder](https://kotlinlang.org/docs/coroutines-basics.html#scope-builder) - отличия между runBlockong и coroutineScope (runBlocking блокирует главный поток, а CoroutineContext это suspend функция)
-      - [Scope builder and concurrency](https://kotlinlang.org/docs/coroutines-basics.html#scope-builder-and-concurrency) - запуск параллельных корутин
-      - [An explicit job](https://kotlinlang.org/docs/coroutines-basics.html#an-explicit-job) - обращение к корутине через объект Job
-      - [Coroutines ARE light-weight](https://kotlinlang.org/docs/coroutines-basics.html#coroutines-are-light-weight) - пример того, насколько корутины легче потоков
-  - ## [Cancellation and timeouts](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
-      - [Cancellation and timeout](https://kotlinlang.org/docs/cancellation-and-timeouts.html#making-computation-code-cancellable) - в корутине нужно проверять, хотят ли её отменить
-      - [withContext(NonCancellable)](https://kotlinlang.org/docs/cancellation-and-timeouts.html#run-non-cancellable-block) - корутина не будет реагировать на отмену
-      - [Timeout](https://kotlinlang.org/docs/cancellation-and-timeouts.html#timeout) - примеры withTimeout, withTimeoutOrNull
-      - [Asynchronous timeout and resources](https://kotlinlang.org/docs/cancellation-and-timeouts.html#asynchronous-timeout-and-resources) - работа с ресурсами внутри withTimeout блока, пример проблемы и решения
-  - ## [Composing suspending functions](https://kotlinlang.org/docs/composing-suspending-functions.html)
-      - [Sequential by default](https://kotlinlang.org/docs/composing-suspending-functions.html#sequential-by-default) - по дефолту корутины выполняются последовательно, пример
-      - [Concurrent using async](https://kotlinlang.org/docs/composing-suspending-functions.html#concurrent-using-async) - асинхронный запуск, пример
-      - [Lazy started async](https://kotlinlang.org/docs/composing-suspending-functions.html#lazily-started-async) - как отложить запуск корутины? Отличия при запуске отложенной корутины используя .start() или .await()
-      - [Async-style functions](https://kotlinlang.org/docs/composing-suspending-functions.html#async-style-functions) - в каком стиле лучше объявлять async-функции
-      - [Structured concurrency with async](https://kotlinlang.org/docs/composing-suspending-functions.html#structured-concurrency-with-async) - пример возникновения ошибок в coroutineScope, останавливает все дочерние корутины
-      - [Coroutine context and dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)  
-      - [Dispatchers and threads](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#dispatchers-and-threads) - Dispatcher определяет, какой поток или потоки использует корутина для выполнения, также может ограничить выполнение корутины одним потоком, отправить корутину в пулл потоков или никак ее не ограничивать (None, Dispatchers.Unconfined, Dispatchers.Default, newSingleThreadContext)
-      - [Unconfined vs confined dispatcher](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#unconfined-vs-confined-dispatcher) - описание Dispatchers.Unconfined и пример работы
-      - [Debugging with IDEA](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#debugging-with-idea) - как отлаживать программу, используя дебаггер в IDEA, можно смотреть состояние каждой корутины, значения как локальных, так и захваченных переменных для работающих и приостановленных корутин, полный стек создания корутин и стек вызова внутри корутины
-      - [Debugging using logging](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#debugging-using-logging) - отладка при помощи логирования
-      - [Jumping between threads](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#jumping-between-threads) - работа в разных потоках, пример, использования use для освобождения создонного потока, когда он больше не нужен
-      - [Job in the context](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#job-in-the-context) - coroutineContext[Job] = получить Job корутины
-      - [Children of a coroutine](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#children-of-a-coroutine) - корутина, запущенная другой, наследует весь контекст той, внутри которой она запустилась и становится для нее дочерней, если остановить родителя, остановятся все дочерние корутины. Способы переопределения дефолтного поведения наследования: явно указать DifferentScope.launch, передать другой объект Job в качестве контекста корутины. В обоих случаях корутина не привяжется к области, из которой она была запущенна. Пример с разбором
-      - [Parental responsibilities](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#parental-responsibilities) - родительская корутина всегда дожидается завершения дочерних корутин, для этого не нужно явно отслеживать всех потомков или делать Job.join, пример
-      - [Naming coroutines for debugging](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#naming-coroutines-for-debugging) - CoroutineName можно задать для отладки
-      - [Combining context elements](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#combining-context-elements) - при запуске можно указать несоклько элементов контекста используя оператор + (не ассоциативный, то что справа заменит то, что слева)
-      - [Coroutine scope](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#coroutine-scope) - область действия корутины, пример
-      - [Thread-local data](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#thread-local-data) - как передавать локальные данные потока в корутины или между ними. пример использования  asContextElement и asContextElement. Пример и разбор
-  - ## [Asynchronous Flow](https://kotlinlang.org/docs/flow.html)  
-      - [Representing multiple values](https://kotlinlang.org/docs/flow.html#representing-multiple-values) - как возвращать несколько значений
-      - [Flows](https://kotlinlang.org/docs/flow.html#flows) - поток значений, вычисляющихся асинхронно, пример использования
-      - [Flows are cold](https://kotlinlang.org/docs/flow.html#flows-are-cold) - холодный поток, т.е. вычесляется только при обращении к нему
-      - [Flow cancellation basics](https://kotlinlang.org/docs/flow.html#flow-cancellation-basics) - отменить можно как обычный поток, пример
-      - [Flow builders](https://kotlinlang.org/docs/flow.html#flow-builders) - flow{...}, flowOf(фиксированный набор значений), .asFlow()
-      - [Intermediate flow operators](https://kotlinlang.org/docs/flow.html#intermediate-flow-operators) - основыные операторы похожи на map и filter, отличие от последовательностей в том, что внутри этих операторов можно вызвать suspend функцию
-      - [Transform operator](https://kotlinlang.org/docs/flow.html#transform-operator) - применяет функцию в блоке transform для какждого значения
-      - [Size-limiting operators](https://kotlinlang.org/docs/flow.html#size-limiting-operators) - отменяют выполнение потока когда лимит достигнут. Отмена происходит с помощью испключения, так что все блоки завершатся корректно
-      - [Terminal flow operators](https://kotlinlang.org/docs/flow.html#terminal-flow-operators) - toList, toSet, first, reduce, fold (про first и reduce не очень понятно)
-      - [Flows are sequential](https://kotlinlang.org/docs/flow.html#flows-are-sequential) - каждый сбор flow по дефолту выполняется последовательно, операторы коллекции выполняются в той же корутине, в которой они были запущены, новые не создаются, каждое переданное значение выполняется всеми промежуточными операторами
-      - [Flow context](https://kotlinlang.org/docs/flow.html#flow-context) - сбор flow всегда проихсодит в контексте вызывающей корутины
-      - [Wrong emission withContext](https://kotlinlang.org/docs/flow.html#wrong-emission-withcontext) - нельзя менять контекст внутри flow
-      - [flowOn operator](https://kotlinlang.org/docs/flow.html#flowon-operator) - приавильный способ изменить контекст для собирания flow
-      - [Buffering](https://kotlinlang.org/docs/flow.html#buffering) - буферизует выбросы потока через канал указанной емкости и запускает сборщик в отдельной сопрограмме.
-      - [Conflation](https://kotlinlang.org/docs/flow.html#conflation) - emitter не приостановится из-за медленного коллектора, а удерживает свои элементы, пока коллектор их не запросит, а когда запросит, отправит самый новый элемент из тех, которые накопиились, потом заново начнет копить
-      - [Processing the latest value](https://kotlinlang.org/docs/flow.html#processing-the-latest-value) - когда flow выдает новое значениеЮ блок действий для старого значения отменяется
-      - оствновился на zip, операторы уже не понятные, не уверен что нужны в basic
+  - [Coroutines basics](https://kotlinlang.org/docs/coroutines-basics.html)
+    - Basic    
+      - создание первой корутины и suspend функции, запуск корутин параллельно, обращение к корутине через объект Job
+      - корутины не потеряются и не будет утечек, не потеряются ошибки в корутинах (Structured concurrency)
+      - отличия между runBlocking и coroutineScope (Scope builder)
+      - обращение к корутине через объект Job (explicit job)
+      - пример легковестности корутин по сравнению с потоками
+      - launch, delay, runBlocking, Structured concurrency, coroutineScope, Job, Scope builder
+  - [Cancellation and timeouts](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
+    - Basic    
+      - в корутине нужно проверять, хотят ли её отменить    
+      - проверка на отмену происходит в каждом suspension point, чтобы проверять чаще используйте: isActive, yield (Making computation code cancellable)
+      - пример правильной и неправильной отмены корутины (Cancellation is cooperative)
+      - работа корутины по time-out (Timeout)  
+      - работа с ресурсами внутри withTimeout блока, пример проблемы и решения (timeout and resources)
+      - Job, cancel, cancelAndJoin, isActive, yield, NonCancellable, withTimeout, withTimeoutOrNull, CancellationException, TimeoutCancellationException
+  - [Composing suspending functions](https://kotlinlang.org/docs/composing-suspending-functions.html)
+    - Basic
+      - примеры последовательного и асинхронного запуска
+      - отложенный запуск корутины, отличия между запуском start и await (Lazy started async)
+      - корутина, возвращающая значение - async, Deferred  
+      - хороший стиль объявления async-функции (Async-style functions)
+      - пример возникновения ошибок в coroutineScope (Structured concurrency with async)
+      -  async, Deferred, Job, await, start
+  - [Coroutine context and dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)  
+    - Basic
+      - про Dispatcher и как он связаны с потоками (Dispatchers and threads)
+      - отладка корутин, используя дебаггер в IDEA или логгирование, CoroutineName (Debugging with IDEA)
+      - работа корутин в разных потоках, освобождение создонного потока (Jumping between threads)
+      - как получить Job из контекста (Job in the context)
+      - дочерние и родительские корутины
+      - описание CoroutineScope
+      - как использовать несколько контекстов для создания, неассоциативный + (Combining context elements)
+      - переача локальных данных потока в корутины или между ними (Thread-local data)
+      - CoroutineContext, CoroutineScope, Dispatcher, Unconfined, newSingleThreadContext, Job, join, asContextElement
+  - [Asynchronous Flow](https://kotlinlang.org/docs/flow.html)
+    - Basic
+      - что такое Flow, операторы Flow, остановка Flow
+      - холодные и горячие Flow
+      - Flow builders
+    - Intermediate 
+    - Flow, emit, collect, flowOf, asFlow, operators, transform, take, numbers, toList, toSet, first, single, reduce, fold, flow, flowOn, buffer, conflate, collectLatest, zip, combine, flatMapConcat, flattenConcat, flatMapMerge, flattenMerge, flatMapLatest, try catch, finally, onCompletion, launchIn, 
     
-  - ## [Channels](https://kotlinlang.org/docs/channels.html)
-      - [Channel basics](https://kotlinlang.org/docs/channels.html#channel-basics) - Channel служит для предачи значений между корутинами, пример работы канала
-      - [Closing and iteration over channels](https://kotlinlang.org/docs/channels.html#closing-and-iteration-over-channels) - close() - посылает специальный токен зхакрытия. Итерация получения остановится, когда токен будет получен, поэтому есть гарантия, что все ранее отправленные элементы будут получены, пример
-      - [Building channel producers](https://kotlinlang.org/docs/channels.html#building-channel-producers) - паттерн производитель/потребитель, конструктор produce и consumeEach вместо for, пример
-      - [Pipelines](https://kotlinlang.org/docs/channels.html#pipelines) - паттерн конвеер, создается, возможно, бесконечный поток значений. Пример
-      - [Prime numbers with pipeline](https://kotlinlang.org/docs/channels.html#prime-numbers-with-pipeline) - пример программы для определения поиска простых чисел используя паттер конвеер
-      - [Fan-out](https://kotlinlang.org/docs/channels.html#fan-out) - получение из канала несколькими корутинами, отличие в переборе канала используя for и consumeEach
-      - [Fan-in](https://kotlinlang.org/docs/channels.html#fan-in) - отрпавление на канал из нескольких корутин, пример
-      - [Buffered channels](https://kotlinlang.org/docs/channels.html#buffered-channels) - у канала можно настроить емкость, тем самым отправитель будет засыпать только после заполнения емкости канала
-      - [Channels are fair](https://kotlinlang.org/docs/channels.html#channels-are-fair) - операции отправки и получения из разных корутин справедливы - т.е. кто раньше начал ждать получения или возможности отправить, тот первый и выполнит действие
-      - [Ticker channels](https://kotlinlang.org/docs/channels.html#ticker-channels) - канал, отрпавляющий элементы с задержкой 
-  - ## [Coroutine exceptions handling](https://kotlinlang.org/docs/exception-handling.html) 
-      - [Exception propagation](https://kotlinlang.org/docs/exception-handling.html#exception-propagation) - как обрабатываются ошибки при запуске корневой/дочерней корутины (launch/actor или async/produce), пример
-      - [CoroutineExceptionHandler](https://kotlinlang.org/docs/exception-handling.html#coroutineexceptionhandler) - как можно настроить обработку ошибок. Дочерние корутины прокидывают свои необработанные ошибки родительской, и так вплоть до корневой. Они не используют ExceptionHandler, установленный в их области действия
-      - [Cancellation and exceptions](https://kotlinlang.org/docs/exception-handling.html#cancellation-and-exceptions) - завершение корутины job.cancel() не завершает родителя. Генерирует исключение CancellationException. Это исключение игнорируется всеми обработчиками.
-      - [Exceptions aggregation](https://kotlinlang.org/docs/exception-handling.html#exceptions-aggregation) - если несколько дочерних корутин выбрасывают исклюения, то пробрасывается и обрабатывается только первое, а остальные присоединяются к первому как подавленные. Примеры
-      - [Supervision](https://kotlinlang.org/docs/exception-handling.html#supervision) - при неудачном завершении какой-нибудь дочерней корутины не всегда нужно останавливать все остальные
-      - [Supervision job](https://kotlinlang.org/docs/exception-handling.html#supervision-job) - используя SupervisionJob при неудачном завершении дочерней корутины завершение не распростанится на родительскую корутину и других детей 
-      - [Supervision scope](https://kotlinlang.org/docs/exception-handling.html#supervision-scope) - распространяет отмену только в отношении дочерних корутин, отменяет всех только если сам завершился с ошибкой. Ожидает завершения всех детей, так же как и coroutineScope. Каждый дочерний элемент обязан самостоятельно обрабатывать свои исключения. Корутины внутри SupervisionScope используют ExceptionHandler установленный в их области действия
-  - ## [Shared mutable state and concurrency](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html) 
-      - [The problem](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#the-problem) - пример проблемы изменения общего значения из параллельных корутин
-      - [Volatiles are of no help](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#volatiles-are-of-no-help) - volatile не помогает
-      - [Thread-safe data structures](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#thread-safe-data-structures) - для стандартных структур данных (счетчики, очереди, коллекции и т.д.) решением проблемы служит использование потокобезопасных типов
-      - [Thread confinement fine-grained](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#thread-confinement-fine-grained) - ограничение потоков. Подход к проблеме общего изменяемого сотояния, весь доступ к конкретному общему состоянию ограничен одним потоком
-      - [Thread confinement coarse-grained](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#mutual-exclusion) - // не очень понял как работает
-      - [Mutual exclusion](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#mutual-exclusion) - mutex.withLock() - для доступа к общим данным чтобы избежать взаимной блокировки 
-      - [Actors](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#actors) - плохо понял
-  - ## [Select expression (experimental)](https://kotlinlang.org/docs/select-expression.html)    
-      - [Selecting from channels](https://kotlinlang.org/docs/select-expression.html#selecting-from-channels) - с каждого канала можно обрабатывать получение данных по-своему 
-      - [Selecting on close](https://kotlinlang.org/docs/select-expression.html#selecting-on-close) - при закрытии канала onReceive завершается с ошибкой, onReceiveCatching - для выполнения действия при закрытии канала
-      - [Selecting to send](https://kotlinlang.org/docs/select-expression.html#selecting-to-send) - можно указать дополнительный канал, куда будут попадать элементы, которые не удается отправить в основной канал, если получают элементы очень медленно
-      - [Selecting deferred values](https://kotlinlang.org/docs/select-expression.html#selecting-deferred-values) - onAwait, ожидает первое значение и считает сколько еще значений активно // не очень понял + зачем
-      - [Switch over a channel of deferred values](https://kotlinlang.org/docs/select-expression.html#switch-over-a-channel-of-deferred-values) - совсем не понял
-  - ### [Debug coroutines using IntelliJ IDEA – tutorial](https://kotlinlang.org/docs/debug-coroutines-with-idea.html) - как дебажить корутины в IDEA
-  - ### [Debug Kotlin Flow using IntelliJ IDEA – tutorial](https://kotlinlang.org/docs/debug-flow-with-idea.html) - как дебажить flow в IDEA
+  - [Channels](https://kotlinlang.org/docs/channels.html)
+    - Basic
+      - что такое Channel, типы каналов
+      - как происходит закрытие канала (Closing and iteration over channels)
+      - паттерн производитель/потребитель (Building channel producer)
+      - паттерн конвеер (Pipeline)
+      - работа с каналом из нескольких корутин одновременно, справедливая работа канала (Fan-in, Fun-out, Channels are fair)
+      - емкость канала
+      - Channel, send, receive, produce, consumeEach, capacity, buffer, tick
+  - [Coroutine exceptions handling](https://kotlinlang.org/docs/exception-handling.html)
+      - Basic
+        - обработка ошибок в корутинах (Exception propagation)
+        - настраиваемый обработчик ошибок (CoroutineExceptionHandler)
+        - игнорируемое исключение CancellationException при завершении корутины (Cancellation and exceptions)
+        - обработка нескольких исключений от дочерних корутин (Exceptions aggregation)
+        - SupervisionJob и SupervisionScope
+        - cancel, CancellationException, CoroutineExceptionHandler, SupervisionJob, SupervisionScope 
+  - [Shared mutable state and concurrency](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html) 
+      - Basic
+        - проблема изменения общего значения из параллельных корутин
+        - решения проблемы: потокобезопасные типы данных, ограничение потоков, mutex (Thread-safe data structures, fine-grained, coarse-grained )
+        - пример потраченного времени на переключение между потоками
+      - Intermediate
+        - что такое mutex (Mutual exclusion) 
+      - Advanced
+        - Actors
+      - shared mutable state, volatile, Threadsafe, mutex, actor
+  - [Debug coroutines using IntelliJ IDEA – tutorial](https://kotlinlang.org/docs/debug-coroutines-with-idea.html) - как дебажить корутины в IDEA
+  - [Debug Kotlin Flow using IntelliJ IDEA – tutorial](https://kotlinlang.org/docs/debug-flow-with-idea.html) - как дебажить flow в IDEA
 
-- ## 🎦 [Александр Нозик. Кое-что о корутинах](https://www.youtube.com/watch?v=t0AERgx0lrY)
+- ## 🎦 [Александр Нозик. Кое-что о корутинах](https://youtu.be/t0AERgx0lrY)
   - Первые 25 минут объясняют что такое корутины, но вообще не понятно, про параллельные миры какие-то, связи между ними вообще ничего не понятно
-  - 0:22:55 хорошее объяснение, как ведут себя корутины при передаче Deferred
-  - 0:30 проблема с тредами, почему они занимают много памяти 
+  - [0:22:55](https://youtu.be/t0AERgx0lrY?t=1367) хорошее объяснение, как ведут себя корутины при передаче Deferred
+  - [0:30](https://youtu.be/t0AERgx0lrY?t=1777) проблема с тредами, почему они занимают много памяти 
   - 0:55 пример проблемы в корутинах, которую решает Structured Cuncurrency 
   - 0:57 Structured Cuncurrency 
   - Job позволяет работать с результатом корутины, вырубать корутину и еще всякое, но это не сама корутина
@@ -110,10 +96,12 @@
   - Основные термины в области корутин
   - Какие основные ошибки совершают новички
   - Какие хитрости можно делать, используя корутины
-- ## 🎦 [Александр Нозик. Кое-что о корутинах. Flow, Scope](https://www.youtube.com/watch?v=AAFi_C40BOM)
+- ## 🎦 [Александр Нозик. Кое-что о корутинах. Flow, Scope](https://youtu.be/AAFi_C40BOM)
   - очень хорошее видео, целиком можно смотреть
   
-  - `CoroutinesContexta`, отличия от map - строгое типизирование ( если использовать ключ <Е>, то получите объект типа Е ), сумма двух CoroutineContext не ассоциотивна ( CoroutineContext1 + CoroutineContext2 != CoroutineContext2 + CoroutineContext1 т.к если в CoroutineContext1 есть ключи из CoroutineContext2, то при сумме значения по этим ключам перезапишутся из CoroutineContext2 )
+как устроен контекст - intermediate
+
+   - `CoroutinesContexta`, отличия от map - строгое типизирование ( если использовать ключ <Е>, то получите объект типа Е ), сумма двух CoroutineContext не ассоциотивна ( CoroutineContext1 + CoroutineContext2 != CoroutineContext2 + CoroutineContext1 т.к если в CoroutineContext1 есть ключи из CoroutineContext2, то при сумме значения по этим ключам перезапишутся из CoroutineContext2 )
   - Используя `EmptyCoroutinesContext` вы никак не пользуетесь преимуществами StructuredConcurrency
   - Для использования StructuredConcurrency необходим объкет `Job`, который будет помнить детей и родителя этой корутины
   - GlobalScope - пустышка, хранит и использует `EmptyCoroutinesContext`
