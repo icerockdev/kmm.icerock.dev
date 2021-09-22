@@ -31,3 +31,8 @@ GIT_USER=<Your GitHub username> USE_SSH=true yarn deploy
 ```
 
 If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+
+## Add Locale
+
+to add localization, you need to change the text in `i18n/en/` in the file with the same name that you want to change in the Russian localization,
+the folder name specified in `docusaurus-plugin-content-docs-<name>` is the same as in Russian

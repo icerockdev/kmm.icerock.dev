@@ -1,0 +1,22 @@
+{
+  "title": {
+    "message": "Home",
+    "description": "The title in the navbar"
+  },
+  "item.label.Documentation": {
+    "message": "Documentation",
+    "description": "Navbar item with label Documentation"
+  },
+  "item.label.Learning": {
+    "message": "Learning",
+    "description": "Navbar item with label Learning"
+  },
+  "item.label.Onboarding": {
+    "message": "Onboarding",
+    "description": "Navbar item with label Onboarding"
+  },
+  "item.label.GitHub": {
+    "message": "GitHub",
+    "description": "Navbar item with label GitHub"
+  }
+}

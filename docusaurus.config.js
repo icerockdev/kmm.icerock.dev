@@ -9,10 +9,10 @@ module.exports = {
   favicon: 'img/favicon.ico',
   organizationName: 'icerockdev', // Usually your GitHub org/user name.
   projectName: 'kmm.icerock.dev', // Usually your repo name.
-  // i18n: {
-  //   defaultLocale: 'ru',
-  //   locales: ['ru', 'en'],
-  // },
+  i18n: {
+    defaultLocale: 'ru',
+    locales: ['ru', 'en'],
+  },
   themeConfig: {
     navbar: {
       title: 'Home',
@@ -38,10 +38,10 @@ module.exports = {
           label: 'Onboarding',
           docsPluginId: 'onboarding',
         },
-        // {
-        //   type: 'localeDropdown',
-        //   position: 'right',
-        // },
+        {
+          type: 'localeDropdown',
+          position: 'right',
+        },
         {
           href: 'https://github.com/icerockdev/kmm.icerock.dev',
           label: 'GitHub',
