@@ -15,7 +15,7 @@
       - отличия между runBlocking и coroutineScope (Scope builder)
       - обращение к корутине через объект Job (explicit job)
       - пример легковестности корутин по сравнению с потоками
-      - launch, delay, runBlocking, Structured concurrency, coroutineScope, Job, Scope builder
+      - `launch`, `delay`, `runBlocking`, `Structured` `concurrency`, `coroutineScope`, `Job`, `Scope builder`
   - [Cancellation and timeouts](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
     - Basic    
       - в корутине нужно проверять, хотят ли её отменить    
@@ -23,7 +23,7 @@
       - пример правильной и неправильной отмены корутины (Cancellation is cooperative)
       - работа корутины по time-out (Timeout)  
       - работа с ресурсами внутри withTimeout блока, пример проблемы и решения (timeout and resources)
-      - Job, cancel, cancelAndJoin, isActive, yield, NonCancellable, withTimeout, withTimeoutOrNull, CancellationException, TimeoutCancellationException
+      - `Job`, `cancel`, `cancelAndJoin`, `isActive`, `yield`, `NonCancellable`, `withTimeout`, `withTimeoutOrNull`, `CancellationException`, `TimeoutCancellationException`
   - [Composing suspending functions](https://kotlinlang.org/docs/composing-suspending-functions.html)
     - Basic
       - примеры последовательного и асинхронного запуска
