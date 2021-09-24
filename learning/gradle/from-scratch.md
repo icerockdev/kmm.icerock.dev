@@ -10,6 +10,9 @@ sidebar_position: 1
 
 - [GitHub repository with project](https://github.com/Alex009/gradle-from-scratch);
 - [Gradle - Getting started](https://docs.gradle.org/current/userguide/getting_started.html);
+- [Gradle Project API](https://docs.gradle.org/current/javadoc/org/gradle/api/package-summary.html)
+- [Gradle Kotlin DSL user guide](https://docs.gradle.org/current/userguide/kotlin_dsl.html)
+- [Gradle Kotlin DSL API](https://gradle.github.io/kotlin-dsl-docs/api/)
 - [Gradle Wrapper](/learning/gradle/gradle-wrapper);
 - [gradle.properties](/learning/gradle/build-environment);
 - [Gradle dependencies configurations](/learning/gradle/configuration);
