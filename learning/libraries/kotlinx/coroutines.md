@@ -51,7 +51,6 @@
       - Flow builders
     - Intermediate 
       - `transform`, `take`, `numbers`, `toList`, `toSet`, `first`, `single`, `reduce`, `fold`, `flow`, `flowOn`, `buffer`, `conflate`, `collectLatest`, `zip`, `combine`, `flatMapConcat`, `flattenConcat`, `flatMapMerge`, `flattenMerge`, `flatMapLatest`, `try catch`, `finally`, `onCompletion`, `launchIn`
-    
   - [Channels](https://kotlinlang.org/docs/channels.html)
     - Beginner
       - `Channel`, `send`, `receive`, `produce`, `consumeEach`, `capacity`, `buffer`, `tick`
@@ -83,6 +82,40 @@
   - [Debug coroutines using IntelliJ IDEA – tutorial](https://kotlinlang.org/docs/debug-coroutines-with-idea.html) - как дебажить корутины в IDEA
   - [Debug Kotlin Flow using IntelliJ IDEA – tutorial](https://kotlinlang.org/docs/debug-flow-with-idea.html) - как дебажить flow в IDEA
 
+- 📄 [Корутины в Kotlin (гайд)](https://habr.com/ru/company/alfa/blog/336228/)
+  - `coroutine`, `Thread`, `suspend`, `runBLocking`, `launch`, `join`, `async`, `await`, `Deferred`, `CoroutineContext`, `CoroutineDispatсher`, `Thread safe`, `Actor`, `Channel`, `send`, `receive`
+  - Beginner
+    - отличия потоков в Java с корутинами в Kotlin
+    - два простых примера с пояснениями (runBlocking, launch, suspend, join, async, await, Deferred)
+    - CoroutineContext и CoroutineDispatсher - что это и зачем
+    - Thread-safe, Actor и Channel
+
+- 📄 [Roman Elizarov - Structured Concurrency](https://elizarov.medium.com/structured-concurrency-722d765aa952)
+  - `Structured Concurrency`, `coroutineScope`
+  - Beginner
+    - как пришли к Structured Concurrency, какие проблемы решает, какие преимущества дает
+    - корутины не глобальные, как потоки, они связаны с локальной областью действия в вашем приложении, которая представляет собой объект с ограниченным временем жизни, например элемент пользовательского интерфейса
+
+- 🎦 [KotlinConf 2019: Asynchronous Data Streams with Kotlin Flow by Roman Elizarov](https://www.youtube.com/watch?v=tYcqn48SMT8)
+  - `suspend`, `Channel`, `hot`, `flow`, `operators`, `Flowable`
+  - Beginner
+    - [2:15](https://youtu.be/tYcqn48SMT8?t=136) Введение, как работают suspend функции, проблема runBlocking
+    - [4:55](https://youtu.be/tYcqn48SMT8?t=296) Channel
+    - [7:12](https://youtu.be/tYcqn48SMT8?t=433) горячие каналы, проблемы каналов
+    - [9:40](https://youtu.be/tYcqn48SMT8?t=580) Flow, принцип работы, операторы
+    - [13:42](https://youtu.be/tYcqn48SMT8?t=823) Flow vs List
+    - [18:44](https://youtu.be/tYcqn48SMT8?t=1124) Flowable
+    - [24:03](https://youtu.be/tYcqn48SMT8?t=1384) Flow
+
+- 📄 [Structured Concurrency in action! (using Kotlin coroutines)](https://proandroiddev.com/structured-concurrency-in-action-97c749a8f755?gi=85a83dfe8ceb)
+  - `Structured Concurrency`, `cancellation`, `Job`, `isActive`, `CoroutineScope`, `CoroutineContext`
+  - Beginner
+    - основные концепции Structured Concurrency
+    - описание поведения отмены, примеры
+    - Параллельная декомпозиция, какие проблемы решает CoroutineScope
+    - CoroutineScope и CoroutineContext, в чем разница? (Scope - область действия корутины, Context - элементы жизненного цикла корутины, пременные и константы, с которыми она работает)
+    - демонстрация нарушения Structured Concurrency, если корутине передать Context, отличающающийся от контекста родитлеьского CoroutineScope этой корутины
+
 - 🎦 [Александр Нозик. Кое-что о корутинах](https://youtu.be/t0AERgx0lrY)
   - Beginner
     - `Deferred`, `Structured Cuncurrency`, `Job`, `CoroutineScope`, `GlobalScope`, `cancel`, 
@@ -95,6 +128,7 @@
     - [1:25:20](https://youtu.be/t0AERgx0lrY?t=5120) Если корутина была закрыта с помощью cancel, то закрывает только детей, родителей не трогает
     - [1:26:57](https://youtu.be/t0AERgx0lrY?t=5217) Поведение при возникновении ошибки: если в корутине возникла ошибка, то она закрывает себя, сообщает родителю что случилось, закрывает всех потомков 
     - [1:34:10](https://youtu.be/t0AERgx0lrY?t=5650) Нельзя закрывать корутину где угодно, нужно делать в точках расщепления, где проверяется, что она не закрыта
+
 - 🎦 [Александр Нозик. Кое-что о корутинах. Flow, Scope](https://youtu.be/AAFi_C40BOM)
   - Видео хорошее, рекомендуется к просмотру целиком (x1.5)
   - Beginner
@@ -117,7 +151,7 @@
       - [1:29:41](https://youtu.be/AAFi_C40BOM?t=5381) горячий - возвращает элемент сразу же, как сгенерит
   - Intermediate
     - [8:43](https://youtu.be/AAFi_C40BOM?t=523) CoroutinesContext, отличия от map - строгое типизирование ( если использовать ключ <Е>, то получите объект типа Е ), сумма двух CoroutineContext не ассоциотивна ( CoroutineContext1 + CoroutineContext2 != CoroutineContext2 + CoroutineContext1 т.к если в CoroutineContext1 есть ключи из CoroutineContext2, то при сумме значения по этим ключам перезапишутся из CoroutineContext2 )
-  
+
 - 📄 [Hands-on: Intro to coroutines and channels](https://play.kotlinlang.org/hands-on/Introduction%20to%20Coroutines%20and%20Channels?_gl=1*1j033dc*_ga*Nzc2NDAwNzc2LjE2MjAyODkwMTg.*_ga_J6T75801PF*MTYzMTg1MjIzOC4xMzcuMS4xNjMxODUyMjY2LjMy&_ga=2.168555557.561329090.1631509904-776400776.1620289018)
   - `Channel`
   - Beginner
@@ -142,7 +176,7 @@
     - [15:21](https://youtu.be/6Apj_v9ZkBs?t=921) что такое CoroutineContext, что в нем может находиться (Job, CoroutineDispatcher, CoroutineName, CoroutineExceptionHandler)
     - [16:57](https://youtu.be/6Apj_v9ZkBs?t=1017) разница между CoroutineScope и CoroutineContext
     - [19:32](https://youtu.be/6Apj_v9ZkBs?t=1172) когда Job отменили, корутина не отменится автоматичеки, разбор кейса
- 
+
 - 🎦 [RedMadRobot - Coroutines. Хаотичное изучение. Часть 3](https://www.youtube.com/watch?v=7JSHSqAhErw)
   - `Channel`, `capacity`, `close`, `trySend`, `Flow`, `buffer`, `conflate`, `SharedFlow`, `hot`, `cold`, `shareIn`, `whileSubscribed`, `timeout`, `Job`, `lifecycle`, `repeatOnLifecycle`, `DESTROYED`, `flowWithLifecycle`
   - Beginner  
@@ -160,26 +194,28 @@
     - [25:22](https://youtu.be/7JSHSqAhErw?t=1522) поведение при DESTROYED, держет в suspend внешнюю корутину, пока не DESTROYED, когда DESTROYED - отпустит
     - [26:20](https://youtu.be/7JSHSqAhErw?t=1580) Flow.flowWithLifecycle это обертка над repeatOnLifecycle, упрощает написание если только 1 продюсер 
 
-### Intermediate
 
-- 🎦 [KotlinConf 2019: Asynchronous Data Streams with Kotlin Flow by Roman Elizarov](https://www.youtube.com/watch?v=tYcqn48SMT8)
-    - `suspend`, `Channel`, `hot`, `flow`, `operators`, `Flowable`
-    - Beginner  
-      - [2:15](https://youtu.be/tYcqn48SMT8?t=136) Введение, как работают suspend функции, проблема runBlocking
-      - [4:55](https://youtu.be/tYcqn48SMT8?t=296) Channel 
-      - [7:12](https://youtu.be/tYcqn48SMT8?t=433) горячие каналы, проблемы каналов
-      - [9:40](https://youtu.be/tYcqn48SMT8?t=580) Flow, принцип работы, операторы 
-      - [13:42](https://youtu.be/tYcqn48SMT8?t=823) Flow vs List
-      - [18:44](https://youtu.be/tYcqn48SMT8?t=1124) Flowable
-      - [24:03](https://youtu.be/tYcqn48SMT8?t=1384) Flow
 - 📄 [Guide to UI programming with coroutines](https://github.com/Kotlin/kotlinx.coroutines/blob/master/ui/coroutines-guide-ui.md)
     - `UI`, `dispatcher`, `context`, `Dispatchers.Main`, `Dispatchers.JavaFx`, `Dispatchers.Swing`, `UI coroutine`, `cancel UI coroutine`, `actor`, `RendezvousChannel`, `capacity`, `ConflatedChannel`, `Channel.UNLIMITED`, `UI freeze`, `Structured concurrency`, `lifecycle`, `parent-child hierarchy`
-    - Beginner
-- 📄 [Корутины в Kotlin (гайд)](https://habr.com/ru/company/alfa/blog/336228/)
+
 - 📄 [Best practices for coroutines](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
+    - `Dispatcher`, `suspend`, `ViewModel`, `mutable`, `Flow`, `test`, `TestCoroutineDispatcher`, `GlobalScope`, `cancel`, `cancellable`, `ensureActive`
+    - Intermediate
+      - почему не нужно хардкодить Dispatcher
+      - suspend функции должны быть безопасны для основного потока, т.е. классы, вызывающие suspend функции не должны беспокоиться о том, какой Dispatcher использовать, эта ответственность лежит на классе, который выполняет эту работу 
+      - ViewModel должен создавать корутины, а не suspend-функции
+      - предоставляйте неизменяемые типы другим классам
+      - для классов данных и бизнес-уровня необходимы должны предоставлять suspend функции для одноразовых вызовов и Flow для изменяемых данных
+      - используйте TestCoroutineDispatcher в тестах
+      - избегайте GlobalScope (это неконтролируемая область, очень усложняет тестирование, нет обзего CoroutineContext)
+      - suspend функции должны быть cancellable 
+  
 - 📄 [Ограничения native-mt версии для iOS таргета](https://github.com/Kotlin/kotlinx.coroutines/blob/native-mt/kotlin-native-sharing.md).
-- 📄 [Roman Elizarov - Structured Concurrency](https://elizarov.medium.com/structured-concurrency-722d765aa952)
-- 📄 [Structured Concurrency in action! (using Kotlin coroutines)](https://proandroiddev.com/structured-concurrency-in-action-97c749a8f755?gi=85a83dfe8ceb)
+    - single, thread, dispatcher, context, worker, GlobalScope, withContext, freeze, Flow, Channel, Deferred, mutable, Mutex, Semaphore,  DetachedObjectGraph
+    - Intermediate
+      - все основные объекты связи (Job, Deferred, Channel, BroadcastChannel, Mutex) могут быть замороженны
+      - любой объект, который передается через Channel или Flow автоматически замораживается
+  
 - 🎦 [Roman Elizarov — Structured concurrency](https://www.youtube.com/watch?v=Mj5P47F6nJg)
 
 ### Advanced
