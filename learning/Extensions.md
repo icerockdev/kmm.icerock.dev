@@ -20,7 +20,7 @@
 ## Различия в возможностях Extensions в Kotlin и Swift
 В таблице приведены основные различия между расширениями двух языков.
 
-|Котлин                                                          |Свифт |
+|Kotlin                                                          |Swift |
 |--------------------------------------------------|--------------------------------------------------|
 |Можно создать extension для опционального типа |Нельзя создать extnsion для опционального типа (на самом деле можно) |
 |Можно создать extension для дженерика |Нельзя (Костыль через NSObject)|
@@ -61,7 +61,7 @@
         }
     }
 ```
-То получим закономерную ошибку - *"constrained extension must be declared on the unspecialized generic type 'Optional' with constraints specified by a 'where' clause"*. Которая дает нам подсказку о том, как же все таки реализовть extension для опционального типа в Swift. Нам нужно создать extension для перечисления *Optional<Wrapped>* с указанием, нашего класса в качестве *Wrapped*. Пример:
+То получим закономерную ошибку - `constrained extension must be declared on the unspecialized generic type 'Optional' with constraints specified by a 'where' clause`. Которая дает нам подсказку о том, как же все таки реализовть extension для опционального типа в Swift. Нам нужно создать extension для перечисления `Optional<Wrapped>` с указанием, нашего класса в качестве `Wrapped`. Пример:
 ```swift  
     extension Optional where Wrapped: MyClass  {
         func extensionFunc() {
@@ -72,7 +72,7 @@
 Таким образом выходит, что в Swift, все таки можно создать extension для опционального типа, хоть и не самым простым и очевидным способом.
   
 ### Extension для дженерика
-  Kotlin позволяет создавать расширения для дженерика, что означает, что данная функция будет доступна для любого классе, выглядит это следующим образом:
+  Kotlin позволяет создавать расширения для дженерика, что означает, что данная функция будет доступна для любого класса, выглядит это следующим образом:
 ```kotlin
     fun <T> T.strLen() {
        println(toString().length)
