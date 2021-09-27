@@ -36,4 +36,5 @@ Mobile.
 
 ## Книги
 
-- [Atomic Kotlin](https://www.atomickotlin.com/atomickotlin/)
+- [Atomic Kotlin](https://www.atomickotlin.com/atomickotlin/) - подойдет для новичков в программировании. Медленные и подробные пояснения
+- [Kotlin в действии](https://www.ozon.ru/product/kotlin-v-deystvii-143582448/) - для людей с Java опытом
