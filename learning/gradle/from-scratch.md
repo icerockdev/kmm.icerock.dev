@@ -8,6 +8,10 @@ sidebar_position: 1
 <br/>
 <br/>
 
+<iframe src="//www.youtube.com/embed/nKC0qmOyiws" frameborder="0" allowfullscreen width="675" height="380"></iframe>
+<br/>
+<br/>
+
 - [GitHub repository with project](https://github.com/Alex009/gradle-from-scratch);
 - [Gradle - Getting started](https://docs.gradle.org/current/userguide/getting_started.html);
 - [Gradle Project API](https://docs.gradle.org/current/javadoc/org/gradle/api/package-summary.html)
