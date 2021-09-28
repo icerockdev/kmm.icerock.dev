@@ -5,7 +5,21 @@
 
 ## Материалы
 
-### Beginner
+- 🎦 [Kotlin: Асинхронное программирование с корутинами](https://www.youtube.com/watch?v=HYhJmK9nKS4)
+  - `coroutines`, `suspend`, `launch`, `Context`, `Job`, `async`, `await`, `Deferred`
+  - Beginner
+    - [1:01](https://youtu.be/HYhJmK9nKS4?t=61) проблема потоков
+    - [10:29](https://youtu.be/HYhJmK9nKS4?t=629) coroutines, чем хороши
+    - [11:32](https://youtu.be/HYhJmK9nKS4?t=692) подсказки в IDE
+    - [17:41](https://youtu.be/HYhJmK9nKS4?t=1061) механизмы работы с корутинами
+    - [23:12](https://youtu.be/HYhJmK9nKS4?t=1392) suspend, launch, Context
+    - [27:32](https://youtu.be/HYhJmK9nKS4?t=1652) разбор launch
+    - [28:31](https://youtu.be/HYhJmK9nKS4?t=1711) async/await
+    - [34:24](https://youtu.be/HYhJmK9nKS4?t=2064) Deferred
+    - [36:22](https://youtu.be/HYhJmK9nKS4?t=2182) как используя корутины явно показать параллельность
+    - [38:53](https://youtu.be/HYhJmK9nKS4?t=2333) пример использования корутин и потоков
+  
+- 🎦 [Kotlin: Асинхронное программирование с корутинами (часть 2)](https://www.youtube.com/watch?v=fd9EVSxINKw)
 
 - 📄 [KotlinLang Docs - Coroutines guide](https://kotlinlang.org/docs/coroutines-basics.html)
   - [Coroutines basics](https://kotlinlang.org/docs/coroutines-basics.html)
@@ -211,14 +225,19 @@
       - suspend функции должны быть cancellable 
   
 - 📄 [Ограничения native-mt версии для iOS таргета](https://github.com/Kotlin/kotlinx.coroutines/blob/native-mt/kotlin-native-sharing.md).
-    - single, thread, dispatcher, context, worker, GlobalScope, withContext, freeze, Flow, Channel, Deferred, mutable, Mutex, Semaphore,  DetachedObjectGraph
+    - `single`, `thread`, `dispatcher`, `context`, `worker`, `GlobalScope`, `withContext`, `freeze`, `Flow`, `Channel`, `Deferred`, `mutable`, `Mutex`, `Semaphore`,  `DetachedObjectGraph`
     - Intermediate
       - все основные объекты связи (Job, Deferred, Channel, BroadcastChannel, Mutex) могут быть замороженны
       - любой объект, который передается через Channel или Flow автоматически замораживается
   
 - 🎦 [Roman Elizarov — Structured concurrency](https://www.youtube.com/watch?v=Mj5P47F6nJg)
-
-### Advanced
+    - видео про то, как реализовывали корутины, перенимая опыт из Go
+    - `async`, `await`, `Go`, `launchUI`, `cancel`
+    - Intermediate
+      - [1:04](https://youtu.be/Mj5P47F6nJg?t=64) принцип asunc/await в других языках
+      - [6:02](https://youtu.be/Mj5P47F6nJg?t=362) прототип Kotlin DSL на основе Go  
+      - [16:42](https://youtu.be/Mj5P47F6nJg?t=1002) thread bound UI programming, launch(UI) вместо launchUI
+      - [22:51](https://youtu.be/Mj5P47F6nJg?t=1371)
 
 - 🎦 [Андрей Бреслав — Асинхронно, но понятно. Сопрограммы в Kotlin](https://www.youtube.com/watch?v=ffIVVWHpups)
   - Немного устаревшее, но про внутрянку наглядно показано.
