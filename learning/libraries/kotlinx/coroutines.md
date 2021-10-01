@@ -20,79 +20,84 @@
     - [38:53](https://youtu.be/HYhJmK9nKS4?t=2333) пример использования корутин и потоков
   
 - 🎦 [Kotlin: Асинхронное программирование с корутинами (часть 2)](https://www.youtube.com/watch?v=fd9EVSxINKw)
-
+  - `CPS`, `Continuations`
+  - Beginner
+    - [0:33](https://youtu.be/fd9EVSxINKw?t=33) Continuation-passing style - что это? CPS == Callbacks
+    - [2:27](https://youtu.be/fd9EVSxINKw?t=147) как suspend выглядит в JVM, под капотом идет преобразование из Direct в CPS стиль
+    - [3:52](https://youtu.be/fd9EVSxINKw?t=232) как происходит преобразование из Direct в CPS?
+    - [10:46](https://youtu.be/fd9EVSxINKw?t=646) как интегрируется в код на JVM
+    - [17:21](https://youtu.be/fd9EVSxINKw?t=1041) CoroutinesContext
 - 📄 [KotlinLang Docs - Coroutines guide](https://kotlinlang.org/docs/coroutines-basics.html)
   - [Coroutines basics](https://kotlinlang.org/docs/coroutines-basics.html)
     - Beginner    
       - `launch`, `delay`, `runBlocking`, `Structured` `concurrency`, `coroutineScope`, `Job`, `Scope builder`
-      - создание первой корутины и suspend функции, запуск корутин параллельно, обращение к корутине через объект Job
-      - корутины не потеряются и не будет утечек, не потеряются ошибки в корутинах (Structured concurrency)
-      - отличия между runBlocking и coroutineScope (Scope builder)
-      - обращение к корутине через объект Job (explicit job)
-      - пример легковестности корутин по сравнению с потоками
+      - [#](https://kotlinlang.org/docs/coroutines-basics.html#your-first-coroutine) создание первой корутины и suspend функции, запуск корутин параллельно, обращение к корутине через объект Job
+      - [#](https://kotlinlang.org/docs/coroutines-basics.html#structured-concurrency) корутины не потеряются и не будет утечек, не потеряются ошибки в корутинах
+      - [#](https://kotlinlang.org/docs/coroutines-basics.html#scope-builder) отличия между runBlocking и coroutineScope
+      - [#](https://kotlinlang.org/docs/coroutines-basics.html#an-explicit-job) обращение к корутине через объект Job
+      - [#](https://kotlinlang.org/docs/coroutines-basics.html#coroutines-are-light-weight) пример легковестности корутин по сравнению с потоками
   - [Cancellation and timeouts](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
     - Beginner   
       - `Job`, `cancel`, `cancelAndJoin`, `isActive`, `yield`, `NonCancellable`, `withTimeout`, `withTimeoutOrNull`, `CancellationException`, `TimeoutCancellationException`
-      - в корутине нужно проверять, хотят ли её отменить    
-      - проверка на отмену происходит в каждом suspension point, чтобы проверять чаще используйте: isActive, yield (Making computation code cancellable)
-      - пример правильной и неправильной отмены корутины (Cancellation is cooperative)
-      - работа корутины по time-out (Timeout)  
-      - работа с ресурсами внутри withTimeout блока, пример проблемы и решения (timeout and resources)
+      - [#](https://kotlinlang.org/docs/cancellation-and-timeouts.html#cancelling-coroutine-execution) в корутине нужно проверять, хотят ли её отменить    
+      - [#](https://kotlinlang.org/docs/cancellation-and-timeouts.html#making-computation-code-cancellable) проверка на отмену происходит в каждом suspension point, чтобы проверять чаще используйте: isActive, yield
+      - [#](https://kotlinlang.org/docs/cancellation-and-timeouts.html#cancellation-is-cooperative) пример правильной и неправильной отмены корутины
+      - [#](https://kotlinlang.org/docs/cancellation-and-timeouts.html#timeout) работа корутины по time-out
+      - [#](https://kotlinlang.org/docs/cancellation-and-timeouts.html#asynchronous-timeout-and-resources) работа с ресурсами внутри withTimeout блока, пример проблемы и решения
   - [Composing suspending functions](https://kotlinlang.org/docs/composing-suspending-functions.html)
     - Beginner
       - `async`, `Deferred`, `Job`, `await`, `start`
-      - примеры последовательного и асинхронного запуска
-      - отложенный запуск корутины, отличия между запуском start и await (Lazy started async)
-      - корутина, возвращающая значение - async, Deferred  
-      - хороший стиль объявления async-функции (Async-style functions)
-      - пример возникновения ошибок в coroutineScope (Structured concurrency with async)
+      - [#](https://kotlinlang.org/docs/composing-suspending-functions.html#sequential-by-default) примеры последовательного и асинхронного запуска
+      - [#](https://kotlinlang.org/docs/composing-suspending-functions.html#concurrent-using-async) отложенный запуск корутины, отличия между запуском start и await
+      - [#](https://kotlinlang.org/docs/composing-suspending-functions.html#async-style-functions) хороший стиль объявления async-функции
+      - [#](https://kotlinlang.org/docs/composing-suspending-functions.html#structured-concurrency-with-async) пример возникновения ошибок в coroutineScope
   - [Coroutine context and dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)  
     - Beginner
       - `CoroutineContext`, `CoroutineScope`, `Dispatcher`, `Unconfined`, `newSingleThreadContext`, `Job`, `join`, `asContextElement`
-      - про Dispatcher и как он связаны с потоками (Dispatchers and threads)
-      - отладка корутин, используя дебаггер в IDEA или логгирование, CoroutineName (Debugging with IDEA)
-      - работа корутин в разных потоках, освобождение создонного потока (Jumping between threads)
-      - как получить Job из контекста (Job in the context)
-      - дочерние и родительские корутины
-      - описание CoroutineScope
-      - как использовать несколько контекстов для создания, неассоциативный + (Combining context elements)
-      - переача локальных данных потока в корутины или между ними (Thread-local data)
+      - [#](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#dispatchers-and-threads) про Dispatcher и как он связаны с потоками
+      - [#](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#debugging-with-idea) отладка корутин, используя дебаггер в IDEA или логгирование, CoroutineName
+      - [#](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#jumping-between-threads) работа корутин в разных потоках, освобождение создонного потока
+      - [#](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#job-in-the-context) как получить Job из контекста
+      - [#](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#children-of-a-coroutine) дочерние и родительские корутины
+      - [#](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#coroutine-scope) описание CoroutineScope
+      - [#](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#combining-context-elements) как использовать несколько контекстов для создания, неассоциативный плюс
+      - [#](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html#thread-local-data) передача локальных данных потока в корутины или между ними
   - [Asynchronous Flow](https://kotlinlang.org/docs/flow.html)
     - Beginner
       - `Flow`, `emit`, `collect`, `flowOf`, `asFlow`, `operators`, `cold`, `hot`, `builders`, `cancel`
-      - что такое Flow, операторы Flow, остановка Flow
-      - холодные и горячие Flow
-      - Flow builders
+      - [#](https://kotlinlang.org/docs/flow.html#flows) что такое Flow, операторы Flow, остановка Flow
+      - [#](https://kotlinlang.org/docs/flow.html#flows-are-cold) холодные и горячие Flow
+      - [#](https://kotlinlang.org/docs/flow.html#flow-builders) Flow builders
     - Intermediate 
       - `transform`, `take`, `numbers`, `toList`, `toSet`, `first`, `single`, `reduce`, `fold`, `flow`, `flowOn`, `buffer`, `conflate`, `collectLatest`, `zip`, `combine`, `flatMapConcat`, `flattenConcat`, `flatMapMerge`, `flattenMerge`, `flatMapLatest`, `try catch`, `finally`, `onCompletion`, `launchIn`
   - [Channels](https://kotlinlang.org/docs/channels.html)
     - Beginner
       - `Channel`, `send`, `receive`, `produce`, `consumeEach`, `capacity`, `buffer`, `tick`
-      - что такое Channel, типы каналов
-      - как происходит закрытие канала (Closing and iteration over channels)
-      - паттерн производитель/потребитель (Building channel producer)
-      - паттерн конвеер (Pipeline)
-      - работа с каналом из нескольких корутин одновременно, справедливая работа канала (Fan-in, Fun-out, Channels are fair)
-      - емкость канала
+      - [#](https://kotlinlang.org/docs/channels.html#channel-basics) что такое Channel, типы каналов
+      - [#](https://kotlinlang.org/docs/channels.html#closing-and-iteration-over-channels) как происходит закрытие канала
+      - [#](https://kotlinlang.org/docs/channels.html#building-channel-producers) паттерн производитель/потребитель
+      - [#](https://kotlinlang.org/docs/channels.html#pipelines) паттерн конвеер
+      - [#](https://kotlinlang.org/docs/channels.html#fan-out) работа с каналом из нескольких корутин одновременно, справедливая работа канала
+      - [#](https://kotlinlang.org/docs/channels.html#buffered-channels) емкость канала
   - [Coroutine exceptions handling](https://kotlinlang.org/docs/exception-handling.html)
       - Beginner
         - `cancel`, `CancellationException`, `CoroutineExceptionHandler`, `SupervisionJob`, `SupervisionScope` 
-        - обработка ошибок в корутинах (Exception propagation)
-        - настраиваемый обработчик ошибок (CoroutineExceptionHandler)
-        - игнорируемое исключение CancellationException при завершении корутины (Cancellation and exceptions)
-        - обработка нескольких исключений от дочерних корутин (Exceptions aggregation)
-        - SupervisionJob и SupervisionScope
+        - [#](https://kotlinlang.org/docs/exception-handling.html#exception-propagation) обработка ошибок в корутинах
+        - [#](https://kotlinlang.org/docs/exception-handling.html#coroutineexceptionhandler) настраиваемый обработчик ошибок
+        - [#](https://kotlinlang.org/docs/exception-handling.html#cancellation-and-exceptions) игнорируемое исключение CancellationException при завершении корутины
+        - [#](https://kotlinlang.org/docs/exception-handling.html#exceptions-aggregation) обработка нескольких исключений от дочерних корутин
+        - [#](https://kotlinlang.org/docs/exception-handling.html#supervision) SupervisionJob и SupervisionScope
   - [Shared mutable state and concurrency](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html) 
       - Beginner
         - `shared mutable state`, `Thread-safe`
-        - проблема изменения общего значения из параллельных корутин
-        - решения проблемы: потокобезопасные типы данных, ограничение потоков, mutex (Thread-safe data structures, fine-grained, coarse-grained )
-        - пример потраченного времени на переключение между потоками
+        - [#](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#the-problem) проблема изменения общего значения из параллельных корутин
+        - [#](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#thread-safe-data-structures) решения проблемы: потокобезопасные типы данных, ограничение потоков, mutex
+        - [#](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#thread-confinement-fine-grained) пример потраченного времени на переключение между потоками
       - Intermediate
-        - что такое mutex (Mutual exclusion) 
+        - [#](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#mutual-exclusion) что такое mutex
       - Advanced
         - `volatile`, `Threadsafe`, `mutex`, `actor`
-        - Actors
+        - [#](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#actors) Actors
   - [Debug coroutines using IntelliJ IDEA – tutorial](https://kotlinlang.org/docs/debug-coroutines-with-idea.html) - как дебажить корутины в IDEA
   - [Debug Kotlin Flow using IntelliJ IDEA – tutorial](https://kotlinlang.org/docs/debug-flow-with-idea.html) - как дебажить flow в IDEA
 
