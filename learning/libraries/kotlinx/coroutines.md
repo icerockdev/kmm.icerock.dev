@@ -20,13 +20,19 @@
     - [38:53](https://youtu.be/HYhJmK9nKS4?t=2333) пример использования корутин и потоков
   
 - 🎦 [Kotlin: Асинхронное программирование с корутинами (часть 2)](https://www.youtube.com/watch?v=fd9EVSxINKw)
-  - `CPS`, `Continuations`
+  - `CPS`, `CSP`, `Direct`, `Continuations`, `CoroutineContext`, `Dispatcher`, `launch`, `Job`, `cancel`, `timeout`, `delay`, `Actor`
   - Beginner
     - [0:33](https://youtu.be/fd9EVSxINKw?t=33) Continuation-passing style - что это? CPS == Callbacks
     - [2:27](https://youtu.be/fd9EVSxINKw?t=147) как suspend выглядит в JVM, под капотом идет преобразование из Direct в CPS стиль
     - [3:52](https://youtu.be/fd9EVSxINKw?t=232) как происходит преобразование из Direct в CPS?
     - [10:46](https://youtu.be/fd9EVSxINKw?t=646) как интегрируется в код на JVM
-    - [17:21](https://youtu.be/fd9EVSxINKw?t=1041) CoroutinesContext
+    - [17:21](https://youtu.be/fd9EVSxINKw?t=1041) CoroutinesContext, Dispatcher
+    - [20:41](https://youtu.be/fd9EVSxINKw?t=1241) запуск корутины, интеграция в Java код
+    - [23:28](https://youtu.be/fd9EVSxINKw?t=1408) отмена корутин, зачем нужны launch и Job
+    - [27:20](https://youtu.be/fd9EVSxINKw?t=1640) timeout
+    - [33:31](https://youtu.be/fd9EVSxINKw?t=2011) Communication sequential process (CSP) 
+    - [38:30](https://youtu.be/fd9EVSxINKw?t=2310) Actor, что это, зачем нужен
+
 - 📄 [KotlinLang Docs - Coroutines guide](https://kotlinlang.org/docs/coroutines-basics.html)
   - [Coroutines basics](https://kotlinlang.org/docs/coroutines-basics.html)
     - Beginner    
@@ -100,7 +106,33 @@
         - [#](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#actors) Actors
   - [Debug coroutines using IntelliJ IDEA – tutorial](https://kotlinlang.org/docs/debug-coroutines-with-idea.html) - как дебажить корутины в IDEA
   - [Debug Kotlin Flow using IntelliJ IDEA – tutorial](https://kotlinlang.org/docs/debug-flow-with-idea.html) - как дебажить flow в IDEA
-
+  
+- 📄 [Kotlin Flow](https://developer.android.com/kotlin/flow)
+  - [Overview](https://developer.android.com/kotlin/flow)
+    - Beginner
+      - `flow`, `filter`, `collect`, `shareIn`, `flowOn`
+      - [#](https://developer.android.com/kotlin/flow#create) что такое flow, зачем он нужне
+      - [#](https://developer.android.com/kotlin/flow#modify) filter, операторы сортировки данных из потока
+      - [#](https://developer.android.com/kotlin/flow#collect) collect, получение данных из потока, холодные потоки
+      - [#](https://developer.android.com/kotlin/flow#exceptions) работа с исключениями
+      - [#](https://developer.android.com/kotlin/flow#context) использование другого CoroutineContext
+      - [#](https://developer.android.com/kotlin/flow#callback) преобразование callback во flow
+      
+    - [Testing Kotlin flows on Android](https://developer.android.com/kotlin/flow/test)
+      - Beginner
+        - `test`, `first`, `toList`, `operators`, `TestCoroutineDispatcher`, `runBlockingTest`
+        - [#](https://developer.android.com/kotlin/flow/test#producer) использование фэйкового производителя
+        - [#](https://developer.android.com/kotlin/flow/test#assert) получение элементов потока в тесте first, toList, operators
+        - [#](https://developer.android.com/kotlin/flow/test#coroutinedispatcher) зависимость от Dispatcher, использование TestCoroutineDispatcher и runBlockingTest
+  
+    - [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+      - Beginner
+        - `StateFlow`, `stateIn`, `SharedFlow`
+        - [#](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow#stateflow) StateFlow
+        - [#](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow#livedata) отличия StateFlow и LiveData
+        - [#](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow#sharein) использование stateIn, преобразование холодных потоков в горячие
+        - [#](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow#sharedflow) SharedFlow
+  
 - 📄 [Корутины в Kotlin (гайд)](https://habr.com/ru/company/alfa/blog/336228/)
   - `coroutine`, `Thread`, `suspend`, `runBLocking`, `launch`, `join`, `async`, `await`, `Deferred`, `CoroutineContext`, `CoroutineDispatсher`, `Thread safe`, `Actor`, `Channel`, `send`, `receive`
   - Beginner
@@ -242,7 +274,7 @@
       - [1:04](https://youtu.be/Mj5P47F6nJg?t=64) принцип asunc/await в других языках
       - [6:02](https://youtu.be/Mj5P47F6nJg?t=362) прототип Kotlin DSL на основе Go  
       - [16:42](https://youtu.be/Mj5P47F6nJg?t=1002) thread bound UI programming, launch(UI) вместо launchUI
-      - [22:51](https://youtu.be/Mj5P47F6nJg?t=1371)
+      - [22:51](https://youtu.be/Mj5P47F6nJg?t=1371) Cancellation
 
 - 🎦 [Андрей Бреслав — Асинхронно, но понятно. Сопрограммы в Kotlin](https://www.youtube.com/watch?v=ffIVVWHpups)
   - Немного устаревшее, но про внутрянку наглядно показано.
