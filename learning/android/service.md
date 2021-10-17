@@ -1,4 +1,4 @@
-# Сераисы
+# Сервисы
 
 ## Android Service Component (in progress)
 
@@ -22,6 +22,8 @@ Background - сервис выполняет функционал скрытый
 Хотя [IntentService](https://developer.android.com/reference/android/app/IntentService.html) и запускается на главном потоке, но для обработки onHandleIntent он запускает отдельный поток. Аналогично [JobIntentService](https://developer.android.com/reference/androidx/core/app/JobIntentService.html) обрабатывает enqueueWork на отдельном потоке
 
 Не зависимо от вида сервиса он должен быть объявлен в манифесте приложения
+
+Как и любой андроид компонент сервис является точкой входа в приложение, помимо этого при нехватке памяти в первую очередь система избавится от приложений [не имеющих сервисы](https://medium.com/androiddevelopers/who-lives-and-who-dies-process-priorities-on-android-cb151f39044f)
 
 ### Запуск сервиса
 
