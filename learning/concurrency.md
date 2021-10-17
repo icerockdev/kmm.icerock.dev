@@ -23,6 +23,7 @@ sidebar_position: 3
 - [Touchlab - Kotlin/Native Concurrency](https://touchlab.co/kotlin-native-concurrency/)
 - [Роман Елизаров — Корутины в Kotlin](https://www.youtube.com/watch?v=rB5Q3y73FTo)
 - [Learning Concurrency in Kotlin](https://www.packtpub.com/product/learning-concurrency-in-kotlin/9781788627160)
+- [Материалы с конференций](https://confluence.icerockdev.com/pages/viewpage.action?pageId=78134108)
 
 ## Интересные детали
 
