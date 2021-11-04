@@ -2,6 +2,10 @@
 
 Это библиотека для управления списками и коллекциями из общего кода приложения.
 
+<iframe src="//www.youtube.com/embed/ES6lHIwp5Jw?list=PL6yFiPOVXVUi90sQ66dtmuXP-1-TeHwl5" frameborder="0" allowfullscreen width="675" height="380"></iframe>
+<br/>
+<br/>
+
 ## Зачем нужна UnitFactory
 
 Иницилизация всех view-моделей происходит на нативной стороне через нашу SharedFactory, которая несет в себе методы для создания фабрик фичей.
