@@ -3,6 +3,7 @@
 Это библиотека для управления списками и коллекциями из общего кода приложения.
 
 <iframe src="//www.youtube.com/embed/ES6lHIwp5Jw?list=PL6yFiPOVXVUi90sQ66dtmuXP-1-TeHwl5" frameborder="0" allowfullscreen width="675" height="380"></iframe>
+<iframe src="//www.youtube.com/embed/aT1i2vN6H6U?list=PL6yFiPOVXVUi90sQ66dtmuXP-1-TeHwl5" frameborder="0" allowfullscreen width="675" height="380"></iframe>
 <br/>
 <br/>
 
