@@ -134,4 +134,4 @@ end
 
 - [Документация - Podfile Syntax Reference](https://guides.cocoapods.org/syntax/podfile.html)
 - [Документация - Podspec Syntax Reference](https://guides.cocoapods.org/syntax/podspec.html)
-- [Документация - Command-Line Reference](https://guides.cocoapods.org/terminal/commands.html#group_installation)
+- [Документация - Command-Line Reference](https://guides.cocoapods.org/terminal/commands.html)
