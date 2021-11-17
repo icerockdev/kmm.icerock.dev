@@ -26,6 +26,11 @@ kotlin.native.disableCompilerDaemon=true
 
 И в IDEA добавить `Remote JVM debug` конфигурацию с подключением по порту 5006.
 
+Для отладки Kotlin/JVM / JS плагина добавить в gradle.properties:
+```
+kotlin.daemon.jvm.options=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=5006
+```
+
 ## Ссылки
 
 - https://bnorm.medium.com/writing-your-second-kotlin-compiler-plugin-part-1-project-setup-7b05c7d93f6c (6 частей у статьи)
