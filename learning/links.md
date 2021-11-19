@@ -33,3 +33,4 @@ sidebar_position: 21
 - [Многопоточность и Kotlin в Яндекс.Картах: как не допустить падения новых фич на iOS](https://habr.com/ru/company/yandex/blog/575846/)
 - [Энциклопедия интеропа: Kotlin-Swift-Interopedia](https://habr.com/ru/company/hh/blog/575996/)
 - [Try the New Kotlin/Native Memory Manager Development Preview](https://blog.jetbrains.com/kotlin/2021/08/try-the-new-kotlin-native-memory-manager-development-preview/)
+- [Kotlin Native — Using Swift, not Objective-C](https://medium.com/yazio-engineering/kotlin-native-using-swift-not-objective-c-d7742c040539)
