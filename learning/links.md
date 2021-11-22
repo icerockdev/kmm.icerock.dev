@@ -12,6 +12,8 @@ sidebar_position: 21
 - [A KMM Story. From first feature to Mobile mono-repo at Sphere](https://youtu.be/WD7dif28wxs?t=256)
 - [Build multiplatform projects in Kotlin and learn more about server-driven UI](https://www.youtube.com/watch?v=TqgnogQG-cc)
 - [KOTLIN MULTIPLATFORM MOBILE IN PRODUCTION: Key takeaways from developing two cross-platform apps](https://www.droidcon.com/2021/11/10/kotlin-multiplatform-mobile-in-production-key-takeaways-from-developing-two-cross-platform-apps/)
+- [Introduction to Kotlin Multiplatform Mobile and D-KMP](https://youtu.be/QqR1FNM2M7k)
+- [Kotlin For Everything](https://youtu.be/WMRFMPwwUuo?t=4548)
 
 ## Posts
 
@@ -33,3 +35,10 @@ sidebar_position: 21
 - [Многопоточность и Kotlin в Яндекс.Картах: как не допустить падения новых фич на iOS](https://habr.com/ru/company/yandex/blog/575846/)
 - [Энциклопедия интеропа: Kotlin-Swift-Interopedia](https://habr.com/ru/company/hh/blog/575996/)
 - [Try the New Kotlin/Native Memory Manager Development Preview](https://blog.jetbrains.com/kotlin/2021/08/try-the-new-kotlin-native-memory-manager-development-preview/)
+- [Getting started with Kotlin Multiplatform Mobile (KMM)](https://medium.com/@bitrise/getting-started-with-kotlin-multiplatform-mobile-kmm-23d02c21d0b9)
+- [Build iOS apps using the Kotlin Multiplatform framework](https://pixelcarrot.medium.com/build-ios-apps-using-the-kotlin-multiplatform-framework-724889c7e373)
+- [Introducing Kotlin Multiplatform in an existing project](https://www.marcogomiero.com/talks/2021/kmp-existing-project-android-worldwide/)
+
+## Projects
+
+- [multiplatform-precompiled-demo](https://gitlab.icerockdev.com/multiplatform-precompiled-demo)
