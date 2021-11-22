@@ -38,6 +38,7 @@ sidebar_position: 21
 - [Getting started with Kotlin Multiplatform Mobile (KMM)](https://medium.com/@bitrise/getting-started-with-kotlin-multiplatform-mobile-kmm-23d02c21d0b9)
 - [Build iOS apps using the Kotlin Multiplatform framework](https://pixelcarrot.medium.com/build-ios-apps-using-the-kotlin-multiplatform-framework-724889c7e373)
 - [Introducing Kotlin Multiplatform in an existing project](https://www.marcogomiero.com/talks/2021/kmp-existing-project-android-worldwide/)
+- [Kotlin Native — Using Swift, not Objective-C](https://medium.com/yazio-engineering/kotlin-native-using-swift-not-objective-c-d7742c040539)
 
 ## Projects
 
