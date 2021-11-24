@@ -14,6 +14,7 @@ sidebar_position: 21
 - [KOTLIN MULTIPLATFORM MOBILE IN PRODUCTION: Key takeaways from developing two cross-platform apps](https://www.droidcon.com/2021/11/10/kotlin-multiplatform-mobile-in-production-key-takeaways-from-developing-two-cross-platform-apps/)
 - [Introduction to Kotlin Multiplatform Mobile and D-KMP](https://youtu.be/QqR1FNM2M7k)
 - [Kotlin For Everything](https://youtu.be/WMRFMPwwUuo?t=4548)
+- [Is Kotlin Multiplatform Mobile Ready for Production?](https://youtu.be/L8Xq15NTuCc)
 
 ## Posts
 
@@ -39,6 +40,8 @@ sidebar_position: 21
 - [Build iOS apps using the Kotlin Multiplatform framework](https://pixelcarrot.medium.com/build-ios-apps-using-the-kotlin-multiplatform-framework-724889c7e373)
 - [Introducing Kotlin Multiplatform in an existing project](https://www.marcogomiero.com/talks/2021/kmp-existing-project-android-worldwide/)
 - [Kotlin Native — Using Swift, not Objective-C](https://medium.com/yazio-engineering/kotlin-native-using-swift-not-objective-c-d7742c040539)
+- [Optimising CI build times of a Kotlin Multiplatform project](https://proandroiddev.com/optimising-ci-build-times-of-a-kotlin-multiplatform-project-2a430055f383)
+- [SDK чата и Kotlin Multiplatform](https://habr.com/ru/post/589875/)
 
 ## Projects
 
