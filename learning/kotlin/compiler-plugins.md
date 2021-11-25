@@ -36,3 +36,4 @@ kotlin.daemon.jvm.options=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,
 - https://bnorm.medium.com/writing-your-second-kotlin-compiler-plugin-part-1-project-setup-7b05c7d93f6c (6 частей у статьи)
 - https://medium.com/@heyitsmohit/writing-kotlin-compiler-plugin-with-arrow-meta-cf7b3689aa3e
 - https://www.youtube.com/watch?v=w-GMlaziIyo
+- https://github.com/ShikaSD/kotlin-compiler-notes
