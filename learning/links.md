@@ -15,6 +15,8 @@ sidebar_position: 21
 - [Introduction to Kotlin Multiplatform Mobile and D-KMP](https://youtu.be/QqR1FNM2M7k)
 - [Kotlin For Everything](https://youtu.be/WMRFMPwwUuo?t=4548)
 - [Is Kotlin Multiplatform Mobile Ready for Production?](https://youtu.be/L8Xq15NTuCc)
+- [KMM плагин под капотом](https://www.youtube.com/watch?v=2YZnpTLsrQ4)
+- [Язык Kotlin 2021 | Extra11 | Kotlin Multiplatform и научное программирование](https://youtu.be/u-Cy_o6QG_g)
 
 ## Posts
 
@@ -42,6 +44,9 @@ sidebar_position: 21
 - [Kotlin Native — Using Swift, not Objective-C](https://medium.com/yazio-engineering/kotlin-native-using-swift-not-objective-c-d7742c040539)
 - [Optimising CI build times of a Kotlin Multiplatform project](https://proandroiddev.com/optimising-ci-build-times-of-a-kotlin-multiplatform-project-2a430055f383)
 - [SDK чата и Kotlin Multiplatform](https://habr.com/ru/post/589875/)
+- [Guide: Creating a CocoaPod using Kotlin Multiplatform Mobile library](https://www.elements.nl/en-blog/guide-creating-a-cocoapod-using-kotlin-multiplatform-mobile-library)
+- [DI.kt: одна из первых DI библиотек для Kotlin Multiplatform](https://habr.com/ru/company/wrike/blog/591181/)
+- [How we united Android and iOS, simplified our development work, and saved the world. OK, not the last bit](https://blog.sphere.me/how-we-united-android-and-ios-simplified-our-development-work-and-saved-the-world-b17032269a0a)
 
 ## Projects
 
