@@ -47,6 +47,10 @@ sidebar_position: 21
 - [Guide: Creating a CocoaPod using Kotlin Multiplatform Mobile library](https://www.elements.nl/en-blog/guide-creating-a-cocoapod-using-kotlin-multiplatform-mobile-library)
 - [DI.kt: одна из первых DI библиотек для Kotlin Multiplatform](https://habr.com/ru/company/wrike/blog/591181/)
 - [How we united Android and iOS, simplified our development work, and saved the world. OK, not the last bit](https://blog.sphere.me/how-we-united-android-and-ios-simplified-our-development-work-and-saved-the-world-b17032269a0a)
+- [IS KMM production-ready? How we migrated our code to Kotlin Multiplatform Mobile! Part 1](https://medium.com/mounty-engineering/is-kmm-production-ready-how-we-migrated-our-code-to-kotlin-multiplatform-mobile-part-1-d7329874a402)
+- [Move android code to KMM Shared Module| How we migrated our code to Kotlin Multiplatform Mobile! Part 2](https://medium.com/mounty-engineering/move-android-code-to-kmm-shared-module-how-we-migrated-our-code-to-kotlin-multiplatform-mobile-e86d70e17a81)
+- [Networking in KMM (KTOR) Part-3](https://medium.com/mounty-engineering/networking-in-kmm-ktor-part-3-78ec68787f6a)
+- [LocalDb in KMM (SQLDelight) Part-4](https://medium.com/mounty-engineering/localdb-in-kmm-sqldelight-part-4-573ea0904156)
 
 ## Projects
 
