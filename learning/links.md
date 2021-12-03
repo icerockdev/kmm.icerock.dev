@@ -17,6 +17,7 @@ sidebar_position: 21
 - [Is Kotlin Multiplatform Mobile Ready for Production?](https://youtu.be/L8Xq15NTuCc)
 - [KMM плагин под капотом](https://www.youtube.com/watch?v=2YZnpTLsrQ4)
 - [Язык Kotlin 2021 | Extra11 | Kotlin Multiplatform и научное программирование](https://youtu.be/u-Cy_o6QG_g)
+- [Николай Иготти о Compose Multiplatform RC, связи Google и JB, Compose for iOS и JS](https://www.youtube.com/watch?v=giHTUAmyFWY)
 
 ## Posts
 
