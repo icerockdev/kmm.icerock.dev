@@ -18,6 +18,8 @@ sidebar_position: 21
 - [KMM плагин под капотом](https://www.youtube.com/watch?v=2YZnpTLsrQ4)
 - [Язык Kotlin 2021 | Extra11 | Kotlin Multiplatform и научное программирование](https://youtu.be/u-Cy_o6QG_g)
 - [Николай Иготти о Compose Multiplatform RC, связи Google и JB, Compose for iOS и JS](https://www.youtube.com/watch?v=giHTUAmyFWY)
+- [Александр Верещагин (Devexperts) — Как мы внедряли Kotlin Multiplatform](https://www.youtube.com/watch?v=D3X5TJpbiaY)
+- [Александр Нозик | Визуализация данных на Kotlin-Multiplatform](https://www.youtube.com/watch?v=8F0e_JaoUBU)
 
 ## Posts
 
@@ -52,6 +54,7 @@ sidebar_position: 21
 - [Move android code to KMM Shared Module| How we migrated our code to Kotlin Multiplatform Mobile! Part 2](https://medium.com/mounty-engineering/move-android-code-to-kmm-shared-module-how-we-migrated-our-code-to-kotlin-multiplatform-mobile-e86d70e17a81)
 - [Networking in KMM (KTOR) Part-3](https://medium.com/mounty-engineering/networking-in-kmm-ktor-part-3-78ec68787f6a)
 - [LocalDb in KMM (SQLDelight) Part-4](https://medium.com/mounty-engineering/localdb-in-kmm-sqldelight-part-4-573ea0904156)
+- [Kotlin Multiplatform under the surface](https://dev.to/iurysza/kotlin-multiplatform-under-the-surface-1na3)
 
 ## Projects
 
