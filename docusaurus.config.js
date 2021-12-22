@@ -2,12 +2,12 @@
 module.exports = {
   title: 'Kotlin Multiplatform Mobile',
   tagline: 'by IceRock Development',
-  url: 'https://kmm.icerock.dev',
-  baseUrl: '/',
+  url: 'https://alex009.github.io',
+  baseUrl: '/kmm.icerock.dev/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'icerockdev', // Usually your GitHub org/user name.
+  organizationName: 'alex009', // Usually your GitHub org/user name.
   projectName: 'kmm.icerock.dev', // Usually your repo name.
   // i18n: {
   //   defaultLocale: 'ru',
