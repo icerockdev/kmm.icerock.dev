@@ -1,3 +1,7 @@
+---
+sidebar_position: 0
+---
+
 # IceRock KMM University
 
 ## О курсе
