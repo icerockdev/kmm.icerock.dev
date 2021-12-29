@@ -14,9 +14,11 @@ sidebar_position: 4
 - [Fragment](https://developer.android.com/guide/fragments) - часть UI (может быть отдельным экраном приложения, может частью экрана)
 - [View](https://developer.android.com/reference/android/view/View) - небольшой блок пользовательского интерфейса, например текст, кнопка, поле ввода и т.д.
 
-А для ознакомления на практике пройти уроки из официального Android курса - [Android Basics - Layouts](https://developer.android.com/courses/android-basics-kotlin/unit-2).
+А для ознакомления на практике пройти уроки из официального Android курса - [Android Basics - Layouts](https://developer.android.com/courses/android-basics-kotlin/unit-2). 
 
-Также, для изучения жизненного цикла `Activity` и `Fragment`, хорошо подойдет CodeLab [Android Kotlin Fundamentals: Lifecycles and logging](https://developer.android.com/codelabs/kotlin-android-training-lifecycles-logging)
+Про `Fragment` полезно пройти CodeLab - [Advanced Android 01.1: Fragments](https://developer.android.com/codelabs/advanced-android-training-fragments).
+
+Также, для изучения жизненного цикла `Activity` и `Fragment`, хорошо подойдет CodeLab [Android Kotlin Fundamentals: Lifecycles and logging](https://developer.android.com/codelabs/kotlin-android-training-lifecycles-logging) и его продолжение - [Android Kotlin Fundamentals: Complex Lifecycle Situations](https://developer.android.com/codelabs/kotlin-android-training-complex-lifecycle)
 
 Вопросы для самопроверки:
 
@@ -91,6 +93,14 @@ Google рекомендует использовать для построени
 [AndroidX](https://developer.android.com/jetpack/androidx) - набор библиотек обеспечивающих поддержку более новых API на старых версиях устройств. Они позволяют разработчику не задумываться о том, на какой версии android будет запускаться приложение, когда требуемый функционал менялся между разными релизами android. В прошлом этот набор библиотек назывался `Android Support Libraries`. Рекомендуется использовать AndroidX API, так как оно обновляется чаще релизов Android OS и может включать множество разных багфиксов (как и новых багов, куда без них).
 
 [Jetpack](https://developer.android.com/jetpack) - набор библиотек (включающий и AndroidX), предоставляющий множество готовых решения для разных типовых задач разработки приложений - базы данных, архитектурные компоненты, работа с постраничной загрузкой, удобная работа с камерой и прочее (список библиотек большой, можно посмотреть на сайте).
+
+## Забота о User Experience (UX)
+
+Разработчики приложений должны стремиться к удобному и понятному пользовательскому опыту, важно помнить что пишем код не для себя, а чтобы пользователи могли получить приложение которое решает их задачи. Приложение может приносить боль при использовании, а может быть приятным, быстрым и удобным. Ставьте себя на место пользователя, когда делаете какой либо функционал, и спрашивайте "а пользовался бы я сам таким решением?".
+
+В CodeLab Google подготовили набор советов, как сделать приложение удобнее и понятнее - [Create a more polished user experience](https://developer.android.com/codelabs/basic-android-kotlin-training-polished-user-experience).
+
+А также многое про удобство можно прочитать на сайте [material.io](https://material.io/design) - разделы Interaction и Communication очень детально и наглядно объясняют как можно создавать комфортное использование приложения. Многие принципы применимы не только на android, но и на любой системе с UI.
 
 ## Practice time
 
