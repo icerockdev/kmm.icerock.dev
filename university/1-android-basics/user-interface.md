@@ -104,8 +104,14 @@ Google рекомендует использовать для построени
 
 ## Practice time
 
-TODO
+Сделать приложение по [дизайну](https://www.figma.com/file/07E2agIcfVsAZBMoq91ccL/android-ui-education).
 
-## Highlights
+<iframe width="800" height="450" src="//www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2F07E2agIcfVsAZBMoq91ccL%2Fandroid-ui-education%3Fpage-id%3D0%253A1%26node-id%3D2%253A3%26viewport%3D241%252C48%252C0.62%26scaling%3Dscale-down%26starting-point-node-id%3D2%253A3" allowfullscreen></iframe>
 
-TODO
+1. Создать приложение с шаблона `Empty Activity`
+1. Создать `data class Contact(val firstName: String, val lastName: String, val avatarResourceId: Int)`
+1. Объявить глобальное свойство `contacts: List<Contact>` в котором написать 5 или больше разных контактов - это будут данные нашего приложения
+1. Добавить 2 фрагмента - `ContactsFragment` и `ContactFragment`
+1. На фрагменте `ContactsFragment` расположить `RecyclerView` отрисовывающий множество элементов - разные контакты
+1. На фрагменте `ContactFragment` с помощью `ConstraintLayout` сверстать UI экрана просмотра контакта
+1. С помощью Android Navigation Component сделать переходы между списком и просмотром контакта
