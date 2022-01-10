@@ -57,7 +57,12 @@ sidebar_position: 21
 - [LocalDb in KMM (SQLDelight) Part-4](https://medium.com/mounty-engineering/localdb-in-kmm-sqldelight-part-4-573ea0904156)
 - [Kotlin Multiplatform under the surface](https://dev.to/iurysza/kotlin-multiplatform-under-the-surface-1na3)
 - [Kotlin Multiplatform. Работаем с асинхронностью на стороне iOS. Publishers, async/await](https://habr.com/en/post/596497/)
+- [Development of a Multiplatform project from iOS Engineer's perspective](https://dev.to/oleksandr_masliukivskyi_1/development-of-a-multiplatform-project-from-ios-engineers-perspective-gnh)
+- [Kermit and Crashlytics](https://touchlab.co/kermit-and-crashlytics/)
+- [How to fix the "Unable to locate a Java Runtime" error on Xcode with Kotlin Multiplatform](https://www.marcogomiero.com/posts/2021/kmp-no-java-runtime-error-xcode/)
 
 ## Projects
 
 - [multiplatform-precompiled-demo](https://gitlab.icerockdev.com/multiplatform-precompiled-demo)
+- [klutter](https://github.com/buijs-dev/klutter) - Flutter + Kotlin Multiplatform
+- [Kotlin Multiplatform Wizard](https://terrakok.github.io/kmp-web-wizard/) - generator of applications
