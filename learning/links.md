@@ -60,6 +60,7 @@ sidebar_position: 21
 - [Development of a Multiplatform project from iOS Engineer's perspective](https://dev.to/oleksandr_masliukivskyi_1/development-of-a-multiplatform-project-from-ios-engineers-perspective-gnh)
 - [Kermit and Crashlytics](https://touchlab.co/kermit-and-crashlytics/)
 - [How to fix the "Unable to locate a Java Runtime" error on Xcode with Kotlin Multiplatform](https://www.marcogomiero.com/posts/2021/kmp-no-java-runtime-error-xcode/)
+- [How to create Kotlin Native iOS project](https://www.albertgao.xyz/2018/01/14/how-to-create-kotlin-native-ios-project/)
 
 ## Projects
 
