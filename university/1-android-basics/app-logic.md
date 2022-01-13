@@ -13,38 +13,34 @@ sidebar_position: 5
 - Алгоритмы расчитывающие некие данные на основе ввода пользователя
 - ...
 
-Логику приложения принято отделять от пользовательского интерфейса, чтобы была понятная зона ответственности каждого блока кода. Для разделения логики и UI требуется решение для их взаимодействия, ведь совсем независимо они не могут быть. В android сейчас это решается подходом под названием MVVM - Model View ViewModel.
+Логику приложения принято отделять от пользовательского интерфейса, чтобы была понятная зона ответственности каждого блока кода. Для разделения логики и UI требуется решение для их взаимодействия, ведь совсем независимо они не могут быть. 
 
-https://developer.android.com/jetpack/guide
+Ознакомимся с современными подходами построения логики приложений по [материалам Google](https://developer.android.com/courses/pathways/android-architecture). Обязательно в конце проверь себя пройдя небольшой тест.
 
-https://developer.android.com/jetpack/guide/ui-layer
+## ViewModel
 
+Ознакомиться детальнее с ViewModel и LiveData помогут следующие кодлабы:
 
+- [Android Kotlin Fundamentals: 5.1 ViewModel](https://developer.android.com/codelabs/kotlin-android-training-view-model) - не пропуская Summary и тест в Homework
+- [Android Kotlin Fundamentals: LiveData and LiveData observers](https://developer.android.com/codelabs/kotlin-android-training-live-data) - не пропуская Summary и тест в Homework
+- [Incorporate Lifecycle-Aware Components](https://developer.android.com/codelabs/android-lifecycles) - для закрепления связей жизненного цикла android компонентов и ViewModel, LiveData
 
-AndroidX
-ViewModel, lifecycle
-LiveData
-Retrofit
-Kotlinx Serialization
-Hilt
-Log
-Exceptions
+## Retrofit
 
+Практически все приложения выполняют работу с сетью. Основной способ выполнения сетевых запросов в Android это библиотека [Retrofit](https://square.github.io/retrofit/).
 
-https://developer.android.com/courses/kotlin-android-fundamentals/overview
+CodeLab [Get data from the internet](https://developer.android.com/codelabs/basic-android-kotlin-training-getting-data-internet) даст более детальное представление о библиотеке и как её использовать.
 
-https://developer.android.com/courses/android-basics-kotlin/course
+## Coroutines
 
-https://developer.android.com/codelabs/basic-android-kotlin-training-getting-data-internet
+В CodeLab [Get data from the internet](https://developer.android.com/codelabs/basic-android-kotlin-training-getting-data-internet) для выполнения асинхронной задачи (обращения к серверу) использовались [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines). Это популярная библиотека для выполнения асинхронных и многопоточных задач.
 
-https://developer.android.com/training/dependency-injection
-https://developer.android.com/codelabs/android-hilt
+Ознакомимся с библиотекой детальнее используя Hands On [Introduction to Coroutines and Channels](https://play.kotlinlang.org/hands-on/Introduction%20to%20Coroutines%20and%20Channels/).
 
-https://developer.android.com/codelabs/android-lifecycles
+В дальнейшем (вне текущего курса) для изучения coroutines используй подборку материалов из [раздела Learning](../../learning/libraries/kotlinx/coroutines).
 
-https://developer.android.com/codelabs/kotlin-android-training-view-model
+## Dependency Injection
 
-https://developer.android.com/codelabs/android-app-permissions
+Разные классы приложения должны между собой связываться. Чтобы связанность классов не стала слишком жесткой, что усложнит поддержку кода, используют паттерн Dependency Injection.
 
-
-https://material.io/design/platform-guidance/cross-platform-adaptation.html#cross-platform-guidelines
+Подробнее позволит разобраться статья [Dependency Injection](https://developer.android.com/training/dependency-injection) и CodeLab [Using Hilt in your Android app](https://developer.android.com/codelabs/android-hilt).
