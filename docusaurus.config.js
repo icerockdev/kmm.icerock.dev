@@ -2,12 +2,12 @@
 module.exports = {
   title: 'Kotlin Multiplatform Mobile',
   tagline: 'by IceRock Development',
-  url: 'https://kmm.icerock.dev',
-  baseUrl: '/',
+  url: 'https://alex009.github.io',
+  baseUrl: '/kmm.icerock.dev/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'icerockdev', // Usually your GitHub org/user name.
+  organizationName: 'alex009', // Usually your GitHub org/user name.
   projectName: 'kmm.icerock.dev', // Usually your repo name.
   // i18n: {
   //   defaultLocale: 'ru',
@@ -37,6 +37,13 @@ module.exports = {
           position: 'left',
           label: 'Onboarding',
           docsPluginId: 'onboarding',
+        },
+        {
+          type: 'doc',
+          docId: 'intro',
+          position: 'left',
+          label: 'University',
+          docsPluginId: 'university',
         },
         // {
         //   type: 'localeDropdown',
@@ -181,6 +188,17 @@ module.exports = {
         id: 'learning',
         path: 'learning',
         routeBasePath: 'learning',
+        sidebarPath: require.resolve('./sidebars.js'),
+        editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/docusaurus/',
+        remarkPlugins: [require('mdx-mermaid')],
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'university',
+        path: 'university',
+        routeBasePath: 'university',
         sidebarPath: require.resolve('./sidebars.js'),
         editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/docusaurus/',
         remarkPlugins: [require('mdx-mermaid')],
