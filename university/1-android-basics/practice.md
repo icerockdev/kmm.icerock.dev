@@ -25,7 +25,7 @@ sidebar_position: 6
 1. Использовать Android Navigation Component для переходов между экранами
 1. Экраны делать с помощью Fragment (подход Single Activity)
 1. Использовать Coroutines для асинхронности и многопоточности
-1. Использовать Kotlinx.Serialization для парсинга json
+1. Использовать [Kotlinx.Serialization](https://github.com/Kotlin/kotlinx.serialization) для парсинга json
 1. Использовать ViewModel для реализации логики экранов
 1. Использовать LiveData / StateFlow для обновления данных на UI
 1. Корректно обрабатывать ситуации "загрузка данных", "ошибка загрузки", "пустой список"
@@ -35,4 +35,6 @@ sidebar_position: 6
 1. [GitHub REST API](https://docs.github.com/en/rest)
 1. [GitHub Basic Authorization](https://docs.github.com/en/rest/overview/other-authentication-methods#basic-authentication)
 1. [GitHub user repositories](https://docs.github.com/en/rest/reference/repos#list-repositories-for-a-user)
+1. [Kotlinx.Serialization guide](https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/basic-serialization.md#json-decoding)
+1. [Интеграция Kotlinx.Serialization и Retrofit](https://github.com/JakeWharton/retrofit2-kotlinx-serialization-converter)
 1. [Дизайн](http://jira.icerockdev.com/browse/MOKO-1054)
