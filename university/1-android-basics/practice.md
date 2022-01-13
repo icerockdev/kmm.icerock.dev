@@ -35,4 +35,4 @@ sidebar_position: 6
 1. [GitHub REST API](https://docs.github.com/en/rest)
 1. [GitHub Basic Authorization](https://docs.github.com/en/rest/overview/other-authentication-methods#basic-authentication)
 1. [GitHub user repositories](https://docs.github.com/en/rest/reference/repos#list-repositories-for-a-user)
-1. [Дизайн]()
+1. [Дизайн](http://jira.icerockdev.com/browse/MOKO-1054)
