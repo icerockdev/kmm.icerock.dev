@@ -38,6 +38,13 @@ module.exports = {
           label: 'Onboarding',
           docsPluginId: 'onboarding',
         },
+        {
+          type: 'doc',
+          docId: 'intro',
+          position: 'left',
+          label: 'University',
+          docsPluginId: 'university',
+        },
         // {
         //   type: 'localeDropdown',
         //   position: 'right',
@@ -181,6 +188,17 @@ module.exports = {
         id: 'learning',
         path: 'learning',
         routeBasePath: 'learning',
+        sidebarPath: require.resolve('./sidebars.js'),
+        editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/docusaurus/',
+        remarkPlugins: [require('mdx-mermaid')],
+      },
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'university',
+        path: 'university',
+        routeBasePath: 'university',
         sidebarPath: require.resolve('./sidebars.js'),
         editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/docusaurus/',
         remarkPlugins: [require('mdx-mermaid')],
