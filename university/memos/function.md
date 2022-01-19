@@ -11,8 +11,7 @@ sidebar_position: 0
 ```kotlin
   func tryStartSpaceShip(){
     if(ship.fuel < 1000) {
-      throw Exception()
-      log("что-то пошло не так...")
+      throw Exception("что-то пошло не так...")
     }
     ...
   }
@@ -21,8 +20,7 @@ sidebar_position: 0
         
   func tryStartSpaceShip(){
     if(ship.fuel < 1000){
-      throw HasntEnogthFuelException()
-      log("Корабль не может взлететь, недостаточно топлива")
+      throw HasntEnogthFuelException("Корабль не может взлететь, недостаточно топлива")
     }
     ...
   }
