@@ -4,7 +4,7 @@ sidebar_position: 5
 
 # Практическое задание
 
-Нужно разработать ios приложение для просмотра GitHub репозиториев.
+Нужно разработать IOS приложение для просмотра GitHub репозиториев.
 
 <!-- Добавить IOS дизайн -->
 <iframe width="360" height="800" src="//www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FMh3ga5XAzyJNCY87NBp01G%2FGit_test%3Fnode-id%3D4%253A600%26scaling%3Dmin-zoom%26page-id%3D0%253A1%26starting-point-node-id%3D4%253A645" allowfullscreen></iframe>
@@ -26,11 +26,8 @@ sidebar_position: 5
 1. Использовать Alomafire для работы с REST API
 1. Использовать UITableView для отображения списка
 1. Использовать Constraints для экрана детальной информации
-1. Использовать ViewController для переходов между экранами
-1. Использовать Coroutines для асинхронности и многопоточности
-1. Использовать JSONDecoder для парсинга json
-1. Использовать ViewModel для реализации логики экранов
-1. Использовать LiveData / StateFlow для обновления данных на UI
+1. Использовать переходы между ViewController'ами через push, а не через seque
+1. Использовать Codable для парсинга json
 1. Корректно обрабатывать ситуации "загрузка данных", "ошибка загрузки", "пустой список"
 1. Корректно обрабатывать смену ориентации экрана
 
