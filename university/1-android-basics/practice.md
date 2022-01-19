@@ -8,6 +8,8 @@ sidebar_position: 6
 
 <iframe width="360" height="800" src="//www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FMh3ga5XAzyJNCY87NBp01G%2FGit_test%3Fnode-id%3D4%253A600%26scaling%3Dmin-zoom%26page-id%3D0%253A1%26starting-point-node-id%3D4%253A645" allowfullscreen></iframe>
 
+Во время работы над практическим заданием настоятельно рекомендуем обращаться к разделу [Памятки для разработчика](kmm.icerock.dev/university/memos/function)
+
 Функциональные возможности:
 1. Авторизация пользователя (username + personal access token)
 1. Просмотр списка репозиториев пользователя (первые 10)

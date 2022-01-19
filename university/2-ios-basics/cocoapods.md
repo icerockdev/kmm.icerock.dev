@@ -7,4 +7,3 @@ sidebar_position: 3
 
 Для начала рекомендуем перейти на [официальный сайт](https://cocoapods.org/), там же вы найдете инструкцию по установке
 Затем пройдите [кодлабу](https://www.raywenderlich.com/7076593-cocoapods-tutorial-for-swift-getting-started), познакомитесь поближе с Cocoapods, а также поработаете с Alamofire. В конце у вас получится приложение для кастомизации мороженого <3
-кодлаба 
