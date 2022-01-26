@@ -1,6 +1,9 @@
 ---
-sidebar_position: 9
+sidebar_position: 10
 ---
 
 # Библиотека moko-mvvm
 
+- [GitHub](https://github.com/icerockdev/moko-mvvm) библиотеки 
+
+- Посмотреть и повторить самостоятельно проект из видео [moko-mvvm #1](https://www.youtube.com/watch?v=qe8FcIQEmyA)
