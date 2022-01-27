@@ -2,11 +2,11 @@
 sidebar_position: 2
 ---
 
-# Kotlinx serialization
+# Kotlin Serialization
 
-Kotlinx serialization - это библиотека, предназначенная для удобной cериализации классов
+Kotlin Serialization - это библиотека, предназначенная для удобной cериализации классов
 
-Основное ее преимущество - совместимость с Kotlin Multiplatform. Преобразование в общем коде в JSON и обратно, используя Kotlinx serialization, будет работать как на Android, так и на iOS
+Основное ее преимущество - совместимость с Kotlin Multiplatform. Преобразование в общем коде в JSON и обратно, используя Kotlin Serialization, будет работать на iOS, Android и всех остальных платформах, поддерживаемых Kotlin
 
 Познакомиться с библиотекой можно на [официальном сайте](https://kotlinlang.org/docs/serialization.html#libraries), а также на [GitHub](https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/serialization-guide.md)
 

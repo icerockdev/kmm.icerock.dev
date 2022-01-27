@@ -4,7 +4,8 @@ sidebar_position: 1
 
 # Основы Kotlin Multiplatform Mobile
 
-Для начала, чтобы получше разобраться, чем же так хорош Kotlin Multiplatform Mobile, советуем прочитать нашу небольшую [статью](https://vc.ru/services/167078-kak-kotlin-multiplatform-pomogaet-sokratit-vremya-razrabotki-prilozheniy)
+Для начала, чтобы разобраться, что из себя представляет технология Kotlin Multiplatform Mobile, советуем изучить [официальный сайт](https://kotlinlang.org/lp/mobile/)
+Также, для лушчего понимания, как Kotlin Multiplatform помогает сократить время разработки, советуем прочитать нашу небольшую [статью](https://vc.ru/services/167078-kak-kotlin-multiplatform-pomogaet-sokratit-vremya-razrabotki-prilozheniy)
 
 Далее, можете переходить к изучению технологии на [официальном сайте](https://kotlinlang.org/docs/mpp-intro.html)
 
