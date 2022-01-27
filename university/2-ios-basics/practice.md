@@ -6,8 +6,7 @@ sidebar_position: 5
 
 Нужно разработать iOS приложение для просмотра GitHub репозиториев.
 
-<!-- Добавить iOS дизайн -->
-<iframe width="360" height="800" src="//www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FMh3ga5XAzyJNCY87NBp01G%2FGit_test%3Fnode-id%3D4%253A600%26scaling%3Dmin-zoom%26page-id%3D0%253A1%26starting-point-node-id%3D4%253A645" allowfullscreen></iframe>
+<iframe width="376" height="870" src="//www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FXmpoCqkdWTGb2NGdR2bgiQ%2FGit_test-iOS%3Fnode-id%3D1%253A744%26scaling%3Dmin-zoom%26page-id%3D0%253A1%26starting-point-node-id%3D1%253A729" allowfullscreen></iframe>
 
 Во время работы над практическим заданием настоятельно рекомендуем обращаться к
 разделу [Памятки для разработчика](/university/memos/function)
@@ -40,4 +39,4 @@ sidebar_position: 5
 1. [GitHub Basic Authorization](https://docs.github.com/en/rest/overview/other-authentication-methods#basic-authentication)
 1. [GitHub user repositories](https://docs.github.com/en/rest/reference/repos#list-repositories-for-a-user)
 1. [Интеграция Alamofire](https://github.com/Alamofire/Alamofire)
-1. [Дизайн](https://www.figma.com/file/Mh3ga5XAzyJNCY87NBp01G/Git_test) <!-- Добавить iOS дизайн -->
+1. [Дизайн](https://www.figma.com/file/XmpoCqkdWTGb2NGdR2bgiQ)
