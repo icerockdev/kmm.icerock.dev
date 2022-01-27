@@ -20,6 +20,7 @@ sidebar_position: 21
 - [Николай Иготти о Compose Multiplatform RC, связи Google и JB, Compose for iOS и JS](https://www.youtube.com/watch?v=giHTUAmyFWY)
 - [Александр Верещагин (Devexperts) — Как мы внедряли Kotlin Multiplatform](https://www.youtube.com/watch?v=D3X5TJpbiaY)
 - [Александр Нозик | Визуализация данных на Kotlin-Multiplatform](https://www.youtube.com/watch?v=8F0e_JaoUBU)
+- [Kotlin Multiplatform Mobile: Real World Lessons Learned](https://youtu.be/qcwFizHMV4Y)
 
 ## Posts
 
@@ -55,7 +56,14 @@ sidebar_position: 21
 - [Networking in KMM (KTOR) Part-3](https://medium.com/mounty-engineering/networking-in-kmm-ktor-part-3-78ec68787f6a)
 - [LocalDb in KMM (SQLDelight) Part-4](https://medium.com/mounty-engineering/localdb-in-kmm-sqldelight-part-4-573ea0904156)
 - [Kotlin Multiplatform under the surface](https://dev.to/iurysza/kotlin-multiplatform-under-the-surface-1na3)
+- [Kotlin Multiplatform. Работаем с асинхронностью на стороне iOS. Publishers, async/await](https://habr.com/en/post/596497/)
+- [Development of a Multiplatform project from iOS Engineer's perspective](https://dev.to/oleksandr_masliukivskyi_1/development-of-a-multiplatform-project-from-ios-engineers-perspective-gnh)
+- [Kermit and Crashlytics](https://touchlab.co/kermit-and-crashlytics/)
+- [How to fix the "Unable to locate a Java Runtime" error on Xcode with Kotlin Multiplatform](https://www.marcogomiero.com/posts/2021/kmp-no-java-runtime-error-xcode/)
+- [How to create Kotlin Native iOS project](https://www.albertgao.xyz/2018/01/14/how-to-create-kotlin-native-ios-project/)
 
 ## Projects
 
 - [multiplatform-precompiled-demo](https://gitlab.icerockdev.com/multiplatform-precompiled-demo)
+- [klutter](https://github.com/buijs-dev/klutter) - Flutter + Kotlin Multiplatform
+- [Kotlin Multiplatform Wizard](https://terrakok.github.io/kmp-web-wizard/) - generator of applications

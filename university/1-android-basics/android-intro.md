@@ -25,7 +25,6 @@ sidebar_position: 0
 - `ViewBinding`
 - Библиотека Android Navigation Component от Google
 - Библиотека Retrofit от Square
-- Библиотека Kotlinx Serialization от JetBrains
 - Библиотека Hilt от Google
 
 :::info
