@@ -35,6 +35,22 @@ sidebar_position: 6
 1. Корректно обрабатывать ситуации "загрузка данных", "ошибка загрузки", "пустой список"
 1. Корректно обрабатывать смену конфигурации 
 
+Граф зависимостей компонентов приложения доуг от друга:
+```mermaid
+   graph TD
+   
+   MainActivuty --> AuthFragment
+   MainActivuty --> RepositoriesListFragment
+   MainActivuty --> DetailInfoFragment
+   
+   AuthFragment --> AuthViewModel
+   RepositoriesListFragment --> RepositoriesViewModel
+   DetailInfoFragment --> RepositoriesViewModel
+   
+   RepositoriesViewModel --> Repository
+   AuthViewModel --> Repository
+```
+
 Материалы:
 1. [GitHub REST API](https://docs.github.com/en/rest)
 1. [GitHub Basic Authorization](https://docs.github.com/en/rest/overview/other-authentication-methods#basic-authentication)

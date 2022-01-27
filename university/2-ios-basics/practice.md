@@ -34,8 +34,19 @@ sidebar_position: 5
 1. Корректно обрабатывать ситуации "загрузка данных", "ошибка загрузки", "пустой список"
 1. Корректно обрабатывать смену ориентации экрана
 
-Материалы:
+Граф зависимостей компонентов приложения доуг от друга:
+```mermaid
+   graph TD
+   
+   RepositoriesListViewController --> RepositoriesViewModel
+   RepositoryDetalInfoViewController --> RepositoriesViewModel
+   AithViewController --> AuthViewModel
+   
+   RepositoriesViewModel --> Repository
+   AuthViewModel --> Repository
+```
 
+Материалы:
 1. [GitHub REST API](https://docs.github.com/en/rest)
 1. [GitHub Basic Authorization](https://docs.github.com/en/rest/overview/other-authentication-methods#basic-authentication)
 1. [GitHub user repositories](https://docs.github.com/en/rest/reference/repos#list-repositories-for-a-user)
