@@ -4,7 +4,7 @@ sidebar_position: 3
 
 # Ktor Client
 
-Ktor-Client - это библиотека для работы с сетью
+Ktor Client - это библиотека для работы с сетью
 С основной документацией можно ознакомиться с материалами по ссылкам [1](https://ktor.io/docs/getting-started-ktor-client.html) и [2](https://kotlinlang.org/docs/kmm-use-ktor-for-networking.html)
 
 Рекомендуем обязательно ознакомиться со следующими разделами
