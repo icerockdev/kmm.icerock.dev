@@ -22,8 +22,9 @@ sidebar_position: 5
 Технические требования:
 1. Логика работы с сетью должна находиться в common коде
 1. Логика хранения данных должна находиться в common коде 
+1. Для работы с сетью использовать Ktor Client
 
-Граф зависимостей компонентов приложения доуг от друга:
+Граф зависимостей компонентов приложения друг от друга:
 ```mermaid
    graph TD
    
@@ -48,5 +49,7 @@ sidebar_position: 5
 1. [GitHub Basic Authorization](https://docs.github.com/en/rest/overview/other-authentication-methods#basic-authentication)
 1. [GitHub user repositories](https://docs.github.com/en/rest/reference/repos#list-repositories-for-a-user)
 1. [Kotlinx.Serialization guide](https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/basic-serialization.md#json-decoding)
-1. [Интеграция Kotlinx.Serialization и Retrofit](https://github.com/JakeWharton/retrofit2-kotlinx-serialization-converter)
-1. [Дизайн](https://www.figma.com/file/Mh3ga5XAzyJNCY87NBp01G/Git_test)
+1. [Подключение Ktor Client](https://ktor.io/docs/gradle.html)
+1. [Настройке запросов в Ktor Client](https://ktor.io/docs/request.html)
+1. [Android Дизайн](https://www.figma.com/file/Mh3ga5XAzyJNCY87NBp01G/Git_test)
+1. [iOS Дизайн](https://www.figma.com/file/XmpoCqkdWTGb2NGdR2bgiQ/Git_test-iOS)
