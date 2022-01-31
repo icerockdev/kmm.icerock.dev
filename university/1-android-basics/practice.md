@@ -44,11 +44,14 @@ sidebar_position: 6
    MainActivuty --> DetailInfoFragment
    
    AuthFragment --> AuthViewModel
-   RepositoriesListFragment --> RepositoriesViewModel
-   DetailInfoFragment --> RepositoriesViewModel
+   RepositoriesListFragment --> RepositoriesListViewModel
+   DetailInfoFragment --> RepositoryInfoViewModel
    
-   RepositoriesViewModel --> Repository
-   AuthViewModel --> Repository
+   RepositoryInfoViewModel --> GitHubRepoRepository
+   AuthViewModel --> GitHubRepoRepository
+   RepositoriesListViewModel --> GitHubRepoRepository
+
+   GitHubRepoRepository --> KeyValueStorage
 ```
 
 Материалы:

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # Практическое задание
@@ -26,22 +26,49 @@ sidebar_position: 5
 
 Граф зависимостей компонентов приложения друг от друга:
 ```mermaid
-   graph TD
+graph TD
+
+subgraph common
+   GitHubRepoRepository
+   KeyValueStorage
+end
+
+subgraph iOS
+  RepositoriesListViewController
+  RepositoryDetalInfoViewController
+  AithViewController
+end
+
+subgraph Android
+  MainActivuty
+
+  RepositoriesListFragment
+  DetailInfoFragment
+  AuthFragment
+
+  RepositoriesListViewModel
+  RepositoryInfoViewModel
+  AuthViewModel
+end
+
+MainActivuty --> AuthFragment
+MainActivuty --> RepositoriesListFragment
+MainActivuty --> DetailInfoFragment
+
+RepositoriesListFragment --> RepositoriesListViewModel
+DetailInfoFragment --> RepositoryInfoViewModel
+AuthFragment --> AuthViewModel
    
-   MainActivuty --> AuthFragment
-   MainActivuty --> RepositoriesListFragment
-   MainActivuty --> DetailInfoFragment
-   
-   RepositoriesListFragment --> RepositoriesViewModel
-   DetailInfoFragment --> RepositoriesViewModel
-   AuthFragment --> AuthViewModel
-   
-   RepositoriesViewModel --> Repository
-   AuthViewModel --> Repository
+RepositoriesListViewModel --> GitHubRepoRepository
+AuthViewModel --> GitHubRepoRepository
+RepositoryInfoViewModel --> GitHubRepoRepository
        
-   RepositoriesListViewController --> RepositoriesViewModel
-   RepositoryDetalInfoViewController --> RepositoriesViewModel
-   AithViewController --> AuthViewModel
+
+RepositoriesListViewController --> GitHubRepoRepository
+RepositoryDetalInfoViewController --> GitHubRepoRepository
+AithViewController --> GitHubRepoRepository
+
+GitHubRepoRepository --> KeyValueStorage
 ```
 
 Материалы:

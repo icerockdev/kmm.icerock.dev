@@ -38,12 +38,10 @@ sidebar_position: 5
 ```mermaid
    graph TD
    
-   RepositoriesListViewController --> RepositoriesViewModel
-   RepositoryDetalInfoViewController --> RepositoriesViewModel
-   AithViewController --> AuthViewModel
-   
-   RepositoriesViewModel --> Repository
-   AuthViewModel --> Repository
+   RepositoriesListViewController --> GitHubRepoRepository
+   RepositoryDetalInfoViewController --> GitHubRepoRepository
+   AithViewController --> GitHubRepoRepository
+   GitHubRepoRepository --> KeyValueStorage
 ```
 
 Материалы:

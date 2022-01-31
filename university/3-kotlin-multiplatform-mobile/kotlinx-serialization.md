@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # Kotlin Serialization
@@ -14,5 +14,5 @@ Kotlin Serialization - это библиотека, предназначенна
 Вы узнаете о возможностях библиотеки и потренируетесь на практике
 
 
-## Вопроосы для самопроверки:
+## Вопросы для самопроверки:
 - для чего нужны аннотации @Serializable, @Transient, @Optional, @Required, @SerialName

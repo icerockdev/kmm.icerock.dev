@@ -4,15 +4,63 @@ sidebar_position: 1
 
 # Основы Kotlin Multiplatform Mobile
 
-Для начала, чтобы разобраться, что из себя представляет технология Kotlin Multiplatform Mobile, советуем изучить [официальный сайт](https://kotlinlang.org/lp/mobile/)
+Для начала, чтобы разобраться, что из себя представляет технология Kotlin Multiplatform Mobile, советуем изучить [официальный сайт](https://kotlinlang.org/lp/mobile/).
 Также, для лучшего понимания, как Kotlin Multiplatform помогает сократить время разработки, советуем прочитать нашу небольшую [статью](https://vc.ru/services/167078-kak-kotlin-multiplatform-pomogaet-sokratit-vremya-razrabotki-prilozheniy)
 
-Далее, можете переходить к изучению технологии на [официальном сайте](https://kotlinlang.org/docs/mpp-intro.html)
+Далее, можете переходить к изучению технологии на [официальном сайте](https://kotlinlang.org/docs/mpp-intro.html) офф документации
 
 1. Знакомство с KMM начните с официальных [видео](https://www.youtube.com/playlist?list=PLlFc5cFwUnmy_oVc9YQzjasSNoAk4hk_C) для начинающих 
 1. Создайте свое первое мультиплатформенное приложение по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html)
 1. Разберитесь со структурой KMM приложения по [ссылке](https://kotlinlang.org/docs/kmm-understand-project-structure.html#root-project)
 1. [Кодлаба](https://kotlinlang.org/docs/kmm-integrate-in-existing-app.html) про изменение готового Android-приложения для работы с iOS
-1. [Инструкция](https://kotlinlang.org/docs/kmm-add-dependencies.html) по добавлению зависимостей к KMM модулю
-1. [Памятка](/university/memos/multiplatform-libraries) о том, что такое мультиплатформенные библиотеки и где их искать 
-1. Ознакомьтесь с [multiplatform-settings](https://github.com/russhwolf/multiplatform-settings) - библиотекой, позволяющей сохранять key-value данные в параметры устройства в общем коде
+1. [Инструкция](https://kotlinlang.org/docs/kmm-add-dependencies.html) по добавлению зависимостей к KMM модулю.  ДОБАВИТЬ!! практику про добавление библиотек в страый проект
+
+## Мультиплатформенные библиотеки
+
+Мультиплатформенная библиотека - это библиотека, адаптированная для использования на разных платформах. Функционал такой библиотеки можно использовать в общем коде, он будет работать для всех таргетов, которые поддерживает библиотека.
+Таргеты мультиплатформенной библиотеки - ПЕРЕПИСАТЬ (это архитектура процессора платформы, под которую можно собрать библиотеку). Со списком всех таргетов, поддерживаемых KMM можете ознакомиться по [ссылке](https://kotlinlang.org/docs/mpp-supported-platforms.html)  
+В работе нас будут интерисовать бибилиотеки поддерживающие следующие таргеты
+- androidJvm - для работы приложения на Android устройствах
+- ios_arm64 - для работы приложения на симуляторах iOS устройств
+- ios_x64 - для работы приложения на реальных iOS устройствах
+
+Чтобы понять, какие таргеты поддерживает библиотека, следует проанализировать её репозиторий на наличие следующих признаков
+1. Наличие информации в README о поддержке различных платформ, например, описание [moko-mvvm](https://github.com/icerockdev/moko-mvvm#mobile-kotlin-model-view-viewmodel-architecture-components)
+1. Наличие shared-модуля, включенный плагин мультиплатформы и установка таргетов и сурсетов
+```kotlin
+plugins {
+    kotlin("multiplatform") version "*.*.*"
+    // ..
+}
+
+kotlin {
+    android()
+    ios()
+}
+```
+
+```kotlin
+kotlin {
+    sourceSets {
+        val commonMain by getting
+        val androidMain by getting {
+            dependencies {
+                // ...
+            }
+        }
+        val iosMain by getting
+        // ...
+    }
+}
+```
+
+При выборе бибилиотеки обязательно обращайте внимание на наличие таргетов `androidJvm` `ios_arm64` `ios_x64`. Не забывайте проверить дату последнего релиза, чтобы удостовериться, поддерживает ли разработчик свою библиотеку.  
+Для поиска мультиплатформенной библиотеки, подходящей для решения вашей задачи, советуем сначала поискать на следующих ресурсах
+- [kmm-awesome](https://github.com/terrakok/kmm-awesome)
+- [libs.kmp.icerock.dev](https://libs.kmp.icerock.dev) - библиотеки, представленные на сайте, поддерживают минимум три таргета, необходимые нам для разработки
+- [kamp.petuska.dev](https://kamp.petuska.dev/)
+
+## Настройка gradle
+
+[Официальная документаця](https://kotlinlang.org/docs/mpp-dsl-reference.html) по настройке gradle для работы с KMM
+Из [видео](https://youtu.be/23BJW4w0gkY) вы узнаете, как создать и настроить gradle-проект до стостояния, с которого стартует разработка нового проекта в IceRock
