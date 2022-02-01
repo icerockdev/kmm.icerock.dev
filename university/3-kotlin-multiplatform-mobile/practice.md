@@ -24,7 +24,11 @@ sidebar_position: 6
 1. Логика хранения данных должна находиться в common коде 
 1. Для работы с сетью использовать Ktor Client
 
-## Граф зависимостей компонентов KMM приложения друг от друга:
+## Граф зависимостей KMM приложения:
+
+На графе отображена зависимость компонентов KMM приложения друг от друга, цветами выделены подграфы:  
+Фиолетовый - Common, Зеленый - Android, Синий - iOS
+
 ```mermaid
 classDiagram
 
@@ -48,7 +52,7 @@ class RepositoriesListViewModel:::android {
 class GitHubRepoRepository:::common{
   repoList: StateFlow:List:RepoEntity?
   suspend:loadReadme(ownerName: String, repositoryName: String, branchName: String)
-  suspend:loadRepositories(username: Stirng)
+  suspend:loadRepositories(username: String)
   suspend:authUser(token: String)
 }
 
@@ -62,8 +66,8 @@ class DetailInfoFragment:::android
 class AuthFragment:::android
 
 class RepositoriesListViewController:::ios
-class RepositoryDetalInfoViewController:::ios
-class AithViewController:::ios
+class RepositoryDetailInfoViewController:::ios
+class AuthViewController:::ios
 
 subgraph common
    GitHubRepoRepository
@@ -72,8 +76,8 @@ end
 
 subgraph iOS
   RepositoriesListViewController
-  RepositoryDetalInfoViewController
-  AithViewController
+  RepositoryDetailInfoViewController
+  AuthViewController
 end
 
 subgraph Android
@@ -102,8 +106,8 @@ RepositoryInfoViewModel --> GitHubRepoRepository
        
 
 RepositoriesListViewController --> GitHubRepoRepository
-RepositoryDetalInfoViewController --> GitHubRepoRepository
-AithViewController --> GitHubRepoRepository
+RepositoryDetailInfoViewController --> GitHubRepoRepository
+AuthViewController --> GitHubRepoRepository
 
 GitHubRepoRepository --> KeyValueStorage
 ```
