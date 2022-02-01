@@ -33,10 +33,25 @@ sidebar_position: 5
 1. Корректно обрабатывать ситуации "загрузка данных", "ошибка загрузки", "пустой список"
 1. Корректно обрабатывать смену ориентации экрана
 
-Граф зависимостей компонентов приложения друг от друга:
+## Граф зависимостей компонентов iOS приложения друг от друга
 ```mermaid
-   graph TD
+   classDiagram
    
+   class RepositoriesListViewController:::ios
+   class RepositoryDetalInfoViewController:::ios
+   class AuthViewController:::ios
+   
+   class GitHubRepoRepository:::ios{
+     repoList: StateFlow:List:RepoEntity?
+     suspend:loadReadme(ownerName: String, repositoryName: String, branchName: String)
+     suspend:loadRepositories(username: Stirng)
+     suspend:authUser(token: String)
+   }
+   
+   class KeyValueStorage:::ios{
+     authToken: String?
+   }
+
    RepositoriesListViewController --> GitHubRepoRepository
    RepositoryDetalInfoViewController --> GitHubRepoRepository
    AuthViewController --> GitHubRepoRepository

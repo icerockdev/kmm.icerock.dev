@@ -35,13 +35,46 @@ sidebar_position: 6
 1. Корректно обрабатывать ситуации "загрузка данных", "ошибка загрузки", "пустой список"
 1. Корректно обрабатывать смену конфигурации 
 
-Граф зависимостей компонентов приложения друг от друга:
+## Граф зависимостей компонентов Android приложения друг от друга
 ```mermaid
-   graph TD
+   classDiagram
+
+   class MainActivity:::android
+   class AuthFragment:::android
+   class RepositoriesListFragment:::android
+   class DetailInfoFragment:::android
+
+   class AuthViewModel:::android{
+     isLoading: MutableLiveData:Boolean
+     authResponseCode: MutableLiveData:Int
+     authUser(token: String)
+   }
    
-   MainActivuty --> AuthFragment
-   MainActivuty --> RepositoriesListFragment
-   MainActivuty --> DetailInfoFragment
+   class RepositoryInfoViewModel:::android{
+     loadReadme(repoId: Int)
+     isLoading: MutableLiveData:Boolean
+   }
+   
+   class RepositoriesListViewModel:::android{
+     isLoading: MutableLiveData:Boolean
+     loadRepositories()
+     clearPrefs()
+   }
+   
+   class GitHubRepoRepository:::android{
+     repoList: StateFlow:List:RepoEntity?
+     suspend:loadReadme(ownerName: String, repositoryName: String, branchName: String)
+     suspend:loadRepositories(username: Stirng)
+     suspend:authUser(token: String)
+   }
+   
+   class KeyValueStorage:::android{
+     authToken: String?
+   }
+
+   MainActivity --> AuthFragment
+   MainActivity --> RepositoriesListFragment
+   MainActivity --> DetailInfoFragment
    
    AuthFragment --> AuthViewModel
    RepositoriesListFragment --> RepositoriesListViewModel

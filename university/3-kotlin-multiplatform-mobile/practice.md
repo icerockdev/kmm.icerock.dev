@@ -24,9 +24,46 @@ sidebar_position: 6
 1. Логика хранения данных должна находиться в common коде 
 1. Для работы с сетью использовать Ktor Client
 
-Граф зависимостей компонентов приложения друг от друга:
+## Граф зависимостей компонентов KMM приложения друг от друга:
 ```mermaid
-graph TD
+classDiagram
+
+class AuthViewModel:::android{
+  isLoading: MutableLiveData:Boolean
+  authResponseCode: MutableLiveData:Int
+  authUser(token: String)
+}
+   
+class RepositoryInfoViewModel:::android{
+  loadReadme(repoId: Int)
+  isLoading: MutableLiveData:Boolean
+}
+   
+class RepositoriesListViewModel:::android {
+  isLoading: MutableLiveData:Boolean
+  loadRepositories()
+  clearPrefs()
+}
+   
+class GitHubRepoRepository:::common{
+  repoList: StateFlow:List:RepoEntity?
+  suspend:loadReadme(ownerName: String, repositoryName: String, branchName: String)
+  suspend:loadRepositories(username: Stirng)
+  suspend:authUser(token: String)
+}
+
+class KeyValueStorage:::common{
+  authToken: String?
+}
+
+class MainActivity:::android
+class RepositoriesListFragment:::android
+class DetailInfoFragment:::android
+class AuthFragment:::android
+
+class RepositoriesListViewController:::ios
+class RepositoryDetalInfoViewController:::ios
+class AithViewController:::ios
 
 subgraph common
    GitHubRepoRepository
@@ -40,7 +77,7 @@ subgraph iOS
 end
 
 subgraph Android
-  MainActivuty
+  MainActivity
 
   RepositoriesListFragment
   DetailInfoFragment
@@ -51,9 +88,9 @@ subgraph Android
   AuthViewModel
 end
 
-MainActivuty --> AuthFragment
-MainActivuty --> RepositoriesListFragment
-MainActivuty --> DetailInfoFragment
+MainActivity --> AuthFragment
+MainActivity --> RepositoriesListFragment
+MainActivity --> DetailInfoFragment
 
 RepositoriesListFragment --> RepositoriesListViewModel
 DetailInfoFragment --> RepositoryInfoViewModel
