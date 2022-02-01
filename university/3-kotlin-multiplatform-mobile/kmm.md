@@ -74,3 +74,11 @@ kotlin {
 
 [Официальная документация](https://kotlinlang.org/docs/mpp-dsl-reference.html) по настройке gradle для работы с KMM
 Из [видео](https://youtu.be/23BJW4w0gkY) вы узнаете, как создать и настроить gradle-проект до состояния, с которого стартует разработка нового проекта в IceRock
+
+## Совместимость со Swift/Objective-C
+
+Прочитайте [статью](https://kotlinlang.org/docs/native-objc-interop.html) про совместимость Kotlin со Swift и Objective-C
+
+Рекомендуем ознакомиться со следующими разделами
+- [Маппер](https://kotlinlang.org/docs/native-objc-interop.html#mappings) типов Kotlin со Swift и Objective-C 
+- [Преобразование методов throwable-методов](https://kotlinlang.org/docs/native-objc-interop.html#errors-and-exceptions)
