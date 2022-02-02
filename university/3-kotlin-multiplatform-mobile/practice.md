@@ -71,29 +71,6 @@ class RepositoriesListViewController:::ios
 class RepositoryDetailInfoViewController:::ios
 class AuthViewController:::ios
 
-subgraph common
-   GitHubRepoRepository
-   KeyValueStorage
-end
-
-subgraph iOS
-  RepositoriesListViewController
-  RepositoryDetailInfoViewController
-  AuthViewController
-end
-
-subgraph Android
-  MainActivity
-
-  RepositoriesListFragment
-  DetailInfoFragment
-  AuthFragment
-
-  RepositoriesListViewModel
-  RepositoryInfoViewModel
-  AuthViewModel
-end
-
 MainActivity --> AuthFragment
 MainActivity --> RepositoriesListFragment
 MainActivity --> DetailInfoFragment
@@ -106,7 +83,6 @@ RepositoriesListViewModel --> GitHubRepoRepository
 AuthViewModel --> GitHubRepoRepository
 RepositoryInfoViewModel --> GitHubRepoRepository
        
-
 RepositoriesListViewController --> GitHubRepoRepository
 RepositoryDetailInfoViewController --> GitHubRepoRepository
 AuthViewController --> GitHubRepoRepository
