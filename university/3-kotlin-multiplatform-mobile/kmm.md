@@ -70,6 +70,8 @@ kotlin {
 - [libs.kmp.icerock.dev](https://libs.kmp.icerock.dev) - библиотеки, представленные на сайте, поддерживают минимум три таргета, необходимые нам для разработки
 - [kamp.petuska.dev](https://kamp.petuska.dev/)
 
+В заключение, можете посмотреть [видео](https://youtu.be/jAIuy91YWfU) про создание мультиплатформенных библиотек на примере [mutliplatform-settings](https://github.com/russhwolf/multiplatform-settings)  
+
 ## Настройка gradle
 
 [Официальная документация](https://kotlinlang.org/docs/mpp-dsl-reference.html) по настройке gradle для работы с KMM

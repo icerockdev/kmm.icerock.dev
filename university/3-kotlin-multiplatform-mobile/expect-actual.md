@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# Основы работы с expect/actual
+# expect/actual
 
 expect/actual - это механизм, позволяющий использовать в общем коде платформенную реализацию класса, функции или переменной
 Изучите [раздел](https://kotlinlang.org/docs/mpp-connect-to-apis.html) на официальном сайте.  
@@ -27,9 +27,8 @@ expect/actual - это механизм, позволяющий использо
     
 ## typealias 
 
-Чтобы узнать, как можно упросить использование механизма expect/actual, [прочитайте о возможностях typealias](https://kotlinlang.org/docs/mpp-connect-to-apis.html#rules-for-expected-and-actual-declarations)
+Чтобы узнать, как можно упросить использование механизма expect/actual, [прочитайте](https://kotlinlang.org/docs/mpp-connect-to-apis.html#rules-for-expected-and-actual-declarations) о возможностях typealias и выполните следующие действия: 
 
-Для практики, повторите проделанное в разделе `Rules for expected and actual declarations`
 - Создайте expect class AtomicRef
 - Добавьте actual-реализацию используя typealias и класс java.util.concurrent.atomic.AtomicReference
 - Добавьте actual-реализацию для iOS
