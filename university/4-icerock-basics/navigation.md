@@ -3,3 +3,11 @@ sidebar_position: 5
 ---
 
 # Навигация между экранами
+
+Android - https://developer.android.com/guide/navigation
+
+iOS  - раздел навигация [тут](/onboarding/project-inside/#%D0%BD%D0%B0%D0%B2%D0%B8%D0%B3%D0%B0%D1%86%D0%B8%D1%8F-%D0%B2-ios)
+
+показать на примере проекта
+
+К этому моменту уже и тем и тем пользовались, не знаю нужна ли практика именно тут

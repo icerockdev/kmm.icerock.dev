@@ -4,4 +4,8 @@ sidebar_position: 8
 
 # Шаблонн для новых проектов
 
-https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate
+Немного вводного текста про то, что есть шаблон для проектов
+
+[Шаблон](https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate)
+
+[Почитать про устройство](https://kmm.icerock.dev/onboarding/project-inside)

@@ -6,4 +6,4 @@ sidebar_position: 10
 
 - [GitHub](https://github.com/icerockdev/moko-mvvm) библиотеки 
 
-- Посмотреть и повторить самостоятельно проект из видео [moko-mvvm #1](https://www.youtube.com/watch?v=qe8FcIQEmyA)
+- Посмотреть и повторить самостоятельно проект из видео [moko-mvvm #1](https://youtu.be/qe8FcIQEmyA)
