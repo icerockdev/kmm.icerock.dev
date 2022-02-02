@@ -11,7 +11,7 @@ sidebar_position: 6
 Во время работы над практическим заданием настоятельно рекомендуем обращаться к разделу [Памятки для разработчика](/university/memos/function)
 
 Функциональные возможности:
-1. Авторизация пользователя (username + personal access token)
+1. Авторизация пользователя (personal access token)
 1. Просмотр списка репозиториев пользователя (первые 10)
 1. Просмотр детальной информации выбранного репозитория
     1. описание
@@ -20,8 +20,10 @@ sidebar_position: 6
     1. лицензия
 
 Технические требования:
+1. Сохранять токен авторизации в хранилище устройства: SharedPreferences для Android и NSUserDefaults для iOS. Работу с хранилищем делегировать классу KeyValueStorage
+1. Использовать multiplatform-settings для работы с хранилищем устройства
+1. Логика хранения данных должна находиться в common коде
 1. Логика работы с сетью должна находиться в common коде
-1. Логика хранения данных должна находиться в common коде 
 1. Для работы с сетью использовать Ktor Client
 
 ## Граф зависимостей KMM приложения:
@@ -119,5 +121,6 @@ GitHubRepoRepository --> KeyValueStorage
 1. [Kotlinx.Serialization guide](https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/basic-serialization.md#json-decoding)
 1. [Подключение Ktor Client](https://ktor.io/docs/gradle.html)
 1. [Настройке запросов в Ktor Client](https://ktor.io/docs/request.html)
+1. [multiplatform-settings](https://github.com/russhwolf/multiplatform-settings)
 1. [Android Дизайн](https://www.figma.com/file/Mh3ga5XAzyJNCY87NBp01G/Git_test)
 1. [iOS Дизайн](https://www.figma.com/file/XmpoCqkdWTGb2NGdR2bgiQ/Git_test-iOS)
