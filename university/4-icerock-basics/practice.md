@@ -1,4 +1,8 @@
+---
+sidebar_position: 9
+---
 
+# Общий реактивный источник данных
 Нужно разработать мульитплатформенное приложение для просмотра GitHub репозиториев.
 
 <iframe width="360" height="800" src="//www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FMh3ga5XAzyJNCY87NBp01G%2FGit_test%3Fnode-id%3D4%253A600%26scaling%3Dmin-zoom%26page-id%3D0%253A1%26starting-point-node-id%3D4%253A645" allowfullscreen></iframe>
