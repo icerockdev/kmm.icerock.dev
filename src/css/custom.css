@@ -24,3 +24,15 @@
   margin: 0 calc(-1 * var(--ifm-pre-padding));
   padding: 0 var(--ifm-pre-padding);
 }
+
+.android > rect{
+    fill:rgb(181, 245, 181) !important;
+}
+
+.ios > rect{
+    fill:rgb(110, 163, 250) !important;
+}
+
+.common > rect{
+    fill:rgb(174, 146, 252) !important;
+}

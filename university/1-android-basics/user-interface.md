@@ -16,15 +16,15 @@ sidebar_position: 4
 
 Для ознакомления на практике пройти уроки из официального Android курса - [Android Basics - Layouts](https://developer.android.com/courses/android-basics-kotlin/unit-2). 
 
-Про `Fragment` полезно пройти CodeLab - [Advanced Android 01.1: Fragments](https://developer.android.com/codelabs/advanced-android-training-fragments).
+Про `Fragment` полезно пройти CodeLab - [Advanced Android 01.1: Fragments](https://developer.android.com/codelabs/advanced-android-training-fragments) (в CodeLab используется Java, но при выполнении можно использовать Kotlin).
 
 Также, для изучения жизненного цикла `Activity` и `Fragment`, хорошо подойдет CodeLab [Android Kotlin Fundamentals: Lifecycles and logging](https://developer.android.com/codelabs/kotlin-android-training-lifecycles-logging) и её продолжение - [Android Kotlin Fundamentals: Complex Lifecycle Situations](https://developer.android.com/codelabs/kotlin-android-training-complex-lifecycle)
 
 Вопросы для самопроверки:
 
 - Чем отличаются `Activity` и `Fragment`?
-- Какой жизненый цикл `Activity`?
-- Какой жизненый цикл `Fragment`?
+- Какой жизненный цикл `Activity`?
+- Какой жизненный цикл `Fragment`?
 - Что произойдет с введенным в `EditText` текстом, если произойдет изменение конфигурации (например поворот экрана)?
 - Как сохранить положение скролла в `RecyclerView` или `ScrollView` при повороте экрана?
 
