@@ -42,7 +42,9 @@ sidebar_position: 6
 ```mermaid
    classDiagram
 
-   class MainActivity:::android
+class MainActivity:::android{
+     isLoading(asdsad: String) LiveData~Boolean~ 
+     }
    class AuthFragment:::android
    class RepositoriesListFragment:::android
    class DetailInfoFragment:::android
@@ -64,8 +66,8 @@ sidebar_position: 6
    }
    
    class GitHubRepoRepository:::android{
-     repositories(username: String): Flow:List:RepoEntity?
-     repositoryInfo(ownerName: String, repositoryName: String, branchName: String) RepoInfo?
+     repositories(username: String) FlowList~RepoEntityNullable~
+     repositoryInfo(ownerName: String, repositoryName: String, branchName: String) RepoInfoNullable
      signIn(token: String)
    }
    

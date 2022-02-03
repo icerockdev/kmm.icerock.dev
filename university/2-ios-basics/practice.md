@@ -45,8 +45,8 @@ sidebar_position: 5
    class AuthViewController:::ios
    
    class GitHubRepoRepository:::ios{
-      repositories(username: String) Flow:List~RepoEntity?~
-      repositoryInfo(ownerName: String, repositoryName: String, branchName: String) RepoInfo?
+      repositories(username: String) FlowList~RepoEntityNullable~
+      repositoryInfo(ownerName: String, repositoryName: String, branchName: String) RepoInfoNullable
       signIn(token: String)
    }
    
