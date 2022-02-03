@@ -45,9 +45,9 @@ sidebar_position: 5
    class AuthViewController:::ios
    
    class GitHubRepoRepository:::ios{
-    repositories(username: Stirng): Flow:List:RepoEntity?
-     repositoryInfo(ownerName: String, repositoryName: String, branchName: String)
-     signIn(token: String)
+      repositories(username: String) Flow:List~RepoEntity?~
+      repositoryInfo(ownerName: String, repositoryName: String, branchName: String) RepoInfo?
+      signIn(token: String)
    }
    
    class KeyValueStorage:::ios{

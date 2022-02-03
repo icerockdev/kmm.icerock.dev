@@ -38,18 +38,18 @@ class AuthViewModel:::android{
 }
    
 class RepositoryInfoViewModel:::android{
-   repositoryInfo: LiveData:RepoInfo
+   repositoryInfo: LiveData:RepoInfo?
    isLoading: LiveData:Boolean
 }
    
 class RepositoriesListViewModel:::android {
    isLoading: LiveData:Boolean
-   repositories: LiveData:List:RepoEntity
+   repositories: LiveData:List:RepoEntity?
 }
    
 class GitHubRepoRepository:::common {
-   repositories(username: Stirng): Flow:List:RepoEntity?
-   repositoryInfo(ownerName: String, repositoryName: String, branchName: String)
+   repositories(username: String): Flow:List~RepoEntity?~
+   repositoryInfo(ownerName: String, repositoryName: String, branchName: String) RepoInfo?
    signIn(token: String)
 }
 

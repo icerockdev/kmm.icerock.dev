@@ -19,7 +19,7 @@ sidebar_position: 2
 
 ```kotlin
 class KeyValueStorage(settings: Settings) {
-    var platformName: Stirng? by settings.nullableString("platform_name_key")
+    var platformName: String? by settings.nullableString("platform_name_key")
     var language: String? by settings.nullableString("language_key")
 }
 ```
