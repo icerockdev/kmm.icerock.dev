@@ -49,8 +49,6 @@ sidebar_position: 2
 
 показать как сделать новый модуль и подключить ручками и шейпером
 
-Мне кажется текста и скринов хватит
-
 ## Практика
 - Запустите [mobile-moko-boilerplate](https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate)
 - Добавить модуль вручную
