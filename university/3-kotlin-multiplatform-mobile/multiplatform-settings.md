@@ -11,7 +11,7 @@ sidebar_position: 2
 1. Сохраните название платформы в хранилище устройства в общем коде
 1. Для iOS и Android выведите на экран значение, которое сохранили в общем коде используя библиотеку
 
-В работе мы делегировали работу с хранилищем устройства классу KeyValueStorage.  
+В работе мы делегируем работу с хранилищем устройства классу KeyValueStorage.  
 
 Это позволяет нам: 
 - Не создавать константу-ключ для каждой переменной в хранилище
@@ -19,7 +19,7 @@ sidebar_position: 2
 
 ```kotlin
 class KeyValueStorage(settings: Settings) {
-    var platformName: Stirng? by settings.nullableString("platform_name_key")
+    var platformName: String? by settings.nullableString("platform_name_key")
     var language: String? by settings.nullableString("language_key")
 }
 ```

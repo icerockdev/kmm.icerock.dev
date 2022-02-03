@@ -42,33 +42,33 @@ sidebar_position: 6
 ```mermaid
    classDiagram
 
-   class MainActivity:::android
+class MainActivity:::android{
+     isLoading(asdsad: String) LiveData~Boolean~ 
+     }
    class AuthFragment:::android
    class RepositoriesListFragment:::android
    class DetailInfoFragment:::android
 
    class AuthViewModel:::android{
-     isLoading: MutableLiveData:Boolean
-     authResponseCode: MutableLiveData:Int
-     authUser(token: String)
+     isLoading: LiveData~Boolean~
+     authResponseCode: LiveData~Int~
+     onSignButtonPressed(token: String)
    }
    
    class RepositoryInfoViewModel:::android{
-     loadReadme(repoId: Int)
-     isLoading: MutableLiveData:Boolean
+     repositoryInfo: LiveData~RepoInfo?~
+     isLoading: LiveData~Boolean~
    }
    
    class RepositoriesListViewModel:::android{
-     isLoading: MutableLiveData:Boolean
-     loadRepositories()
-     clearPrefs()
+     isLoading: LiveData~Boolean~
+     repositories: LiveData:List~RepoEntity?~
    }
    
    class GitHubRepoRepository:::android{
-     repoList: StateFlow:List:RepoEntity?
-     suspend:loadReadme(ownerName: String, repositoryName: String, branchName: String)
-     suspend:loadRepositories(username: Stirng)
-     suspend:authUser(token: String)
+     repositories(username: String) FlowList~RepoEntityNullable~
+     repositoryInfo(ownerName: String, repositoryName: String, branchName: String) RepoInfoNullable
+     signIn(token: String)
    }
    
    class KeyValueStorage:::android{

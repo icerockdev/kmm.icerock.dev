@@ -4,13 +4,11 @@ sidebar_position: 6
 
 # Практическое задание
 
-Нужно разработать мульитплатформенное приложение для просмотра GitHub репозиториев.
-
-<iframe width="360" height="800" src="//www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FMh3ga5XAzyJNCY87NBp01G%2FGit_test%3Fnode-id%3D4%253A600%26scaling%3Dmin-zoom%26page-id%3D0%253A1%26starting-point-node-id%3D4%253A645" allowfullscreen></iframe>
+Нужно объединить ранее сделанные Android и iOS приложения в единый репозиторий, добавить модуль общего кода и перенести из Android и iOS логику работы с сетью и хранением токена в общий код
 
 Во время работы над практическим заданием настоятельно рекомендуем обращаться к разделу [Памятки для разработчика](/university/memos/function)
 
-Функциональные возможности:
+Функциональные возможности остаются те же самые
 1. Авторизация пользователя (personal access token)
 1. Просмотр списка репозиториев пользователя (первые 10)
 1. Просмотр детальной информации выбранного репозитория
@@ -20,7 +18,6 @@ sidebar_position: 6
     1. лицензия
 
 Технические требования:
-1. Сохранять токен авторизации в хранилище устройства: SharedPreferences для Android и NSUserDefaults для iOS. Работу с хранилищем делегировать классу KeyValueStorage
 1. Использовать multiplatform-settings для работы с хранилищем устройства
 1. Логика хранения данных должна находиться в common коде
 1. Логика работы с сетью должна находиться в common коде
@@ -35,27 +32,25 @@ sidebar_position: 6
 classDiagram
 
 class AuthViewModel:::android{
-  isLoading: MutableLiveData:Boolean
-  authResponseCode: MutableLiveData:Int
-  authUser(token: String)
+   isLoading: LiveData~Boolean~
+   authResponseCode: LiveData~Int~
+   onSignButtonPressed(token: String)
 }
    
 class RepositoryInfoViewModel:::android{
-  loadReadme(repoId: Int)
-  isLoading: MutableLiveData:Boolean
+   repositoryInfo: LiveData~RepoInfo?~
+   isLoading: LiveData~Boolean~
 }
    
 class RepositoriesListViewModel:::android {
-  isLoading: MutableLiveData:Boolean
-  loadRepositories()
-  clearPrefs()
+   isLoading: LiveData~Boolean~
+   repositories: LiveData:List~RepoEntity?~  
 }
    
-class GitHubRepoRepository:::common{
-  repoList: StateFlow:List:RepoEntity?
-  suspend:loadReadme(ownerName: String, repositoryName: String, branchName: String)
-  suspend:loadRepositories(username: String)
-  suspend:authUser(token: String)
+class GitHubRepoRepository:::common {
+   repositories(username: String) FlowList~RepoEntityNullable~
+   repositoryInfo(ownerName: String, repositoryName: String, branchName: String) RepoInfoNullable
+   signIn(token: String)
 }
 
 class KeyValueStorage:::common{

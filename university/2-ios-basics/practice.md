@@ -45,10 +45,9 @@ sidebar_position: 5
    class AuthViewController:::ios
    
    class GitHubRepoRepository:::ios{
-     repoList: StateFlow:List:RepoEntity?
-     suspend:loadReadme(ownerName: String, repositoryName: String, branchName: String)
-     suspend:loadRepositories(username: String)
-     suspend:authUser(token: String)
+      repositories(username: String) FlowList~RepoEntityNullable~
+      repositoryInfo(ownerName: String, repositoryName: String, branchName: String) RepoInfoNullable
+      signIn(token: String)
    }
    
    class KeyValueStorage:::ios{
