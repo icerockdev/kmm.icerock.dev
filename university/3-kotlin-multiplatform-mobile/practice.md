@@ -32,19 +32,19 @@ sidebar_position: 6
 classDiagram
 
 class AuthViewModel:::android{
-   isLoading: LiveData:Boolean
-   authResponseCode: LiveData:Int
+   isLoading: LiveData~Boolean~
+   authResponseCode: LiveData~Int~
    onSignButtonPressed(token: String)
 }
    
 class RepositoryInfoViewModel:::android{
-   repositoryInfo: LiveData:RepoInfo?
-   isLoading: LiveData:Boolean
+   repositoryInfo: LiveData~RepoInfo?~
+   isLoading: LiveData~Boolean~
 }
    
 class RepositoriesListViewModel:::android {
-   isLoading: LiveData:Boolean
-   repositories: LiveData:List:RepoEntity?
+   isLoading: LiveData~Boolean~
+   repositories: LiveData:List~RepoEntity?~
 }
    
 class GitHubRepoRepository:::common {

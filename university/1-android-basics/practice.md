@@ -48,18 +48,18 @@ sidebar_position: 6
    class DetailInfoFragment:::android
 
    class AuthViewModel:::android{
-     isLoading: LiveData:Boolean
-     authResponseCode: LiveData:Int
+     isLoading: LiveData~Boolean~
+     authResponseCode: LiveData~Int~
      onSignButtonPressed(token: String)
    }
    
    class RepositoryInfoViewModel:::android{
-     repositoryInfo: LiveData:RepoInfo?
-     isLoading: LiveData:Boolean
+     repositoryInfo: LiveData~RepoInfo?~
+     isLoading: LiveData~Boolean~
    }
    
    class RepositoriesListViewModel:::android{
-     isLoading: LiveData~boolean~
+     isLoading: LiveData~Boolean~
      repositories: LiveData:List~RepoEntity?~
    }
    
