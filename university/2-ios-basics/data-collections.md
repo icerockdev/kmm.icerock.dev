@@ -5,7 +5,7 @@ sidebar_position: 2
 # Data Collections
 
 Этот раздел направлен на более детальное изучение языка Swift по официальной
-книжке [Develop in Swift Data Collections](https://books.apple.com/ru/book/develop-in-swift-fundamentals/id1556365994?l=en)
+книжке [Develop in Swift Data Collections](https://books.apple.com/ru/book/develop-in-swift-data-collections/id1581183203?l=en%3Fl)
 
 После каждого раздела следует блок самопроверки и небольшая типовая задача по разделу. Обязательны к прохождению,
 закреплению пройденного материала и разбору ошибок. Если вы уверены в своем знании конкретного блока можете сразу
