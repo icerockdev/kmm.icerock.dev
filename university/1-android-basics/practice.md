@@ -101,6 +101,7 @@ sidebar_position: 6
    class AppRepository:::android {
       repositories() Flow~ListOfRepoEntity~
       repositoryInfo(repoId: String) Flow~RepoDetailsEntity~
+      repositoryReadme(repoId: String) RepoReadme
       signIn(token: String)
    }
    
