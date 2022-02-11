@@ -24,11 +24,11 @@ sidebar_position: 1
 - androidJvm - для работы приложения на Android устройствах
 - ios_arm64 - для работы приложения на симуляторах iOS устройств
 - ios_x64 - для работы приложения на реальных iOS устройствах
-- simulator_x64 - для симуляторов iOS на M1
+- ios_simulator_arm64 - для симуляторов iOS на M1
 
 Чтобы понять, какие таргеты поддерживает библиотека, следует проанализировать её репозиторий на наличие следующих признаков
 1. Наличие информации в README о поддержке различных платформ, например, описание [moko-mvvm](https://github.com/icerockdev/moko-mvvm#mobile-kotlin-model-view-viewmodel-architecture-components)
-1. Наличие shared-модуля, включенный плагин мультиплатформы и установка таргетов и сурсетов
+1. Наличие shared-модуля, включенный плагин мультиплатформы и установка таргетов
 ```kotlin
 plugins {
     kotlin("multiplatform") version "*.*.*"
@@ -41,33 +41,20 @@ kotlin {
 }
 ```
 
-```kotlin
-kotlin {
-    sourceSets {
-        val commonMain by getting
-        val androidMain by getting {
-            dependencies {
-                // ...
-            }
-        }
-        val iosMain by getting
-        // ...
-    }
-}
-```
-
 Также, определить таргеты мулитиплатформенной библиотеки можно изучив ее артефакты на [Maven Central](https://search.maven.org/)
 Например, рассмотрим библиотеку [moko-fields](https://search.maven.org/search?q=g:dev.icerock.moko%20fields)
+
+![maven-library](/assets/maven-library.png)
 
 Выводы, которые можно сделать увидев артефакты библиотеки:
 - fields - это common-модуль
 - библиотека поддерживает Android устройства
 - библиотека поддерживает симуляторы и устройства iOS, но не на M1
 
-При выборе библиотеки обязательно обращайте внимание на наличие таргетов `jvm`, `androidJvm` `ios_arm64` `ios_x64`, `simulator_x64`. Не забывайте проверить дату последнего релиза, чтобы удостовериться, поддерживает ли разработчик свою библиотеку.  
+При выборе библиотеки обязательно обращайте внимание на наличие таргетов `jvm`, `androidJvm` `ios_arm64` `ios_x64`, `ios_simulator_arm64`. Не забывайте проверить дату последнего релиза, чтобы удостовериться, поддерживает ли разработчик свою библиотеку.  
 Для поиска мультиплатформенной библиотеки, подходящей для решения вашей задачи, советуем сначала поискать на следующих ресурсах:
 - [kmm-awesome](https://github.com/terrakok/kmm-awesome)
-- [libs.kmp.icerock.dev](https://libs.kmp.icerock.dev) - библиотеки, представленные на сайте, поддерживают минимум три таргета, необходимые нам для разработки
+- [libs.kmp.icerock.dev](https://libs.kmp.icerock.dev)
 - [kamp.petuska.dev](https://kamp.petuska.dev/)
 
 В заключение, можете посмотреть [видео](https://youtu.be/jAIuy91YWfU) про создание мультиплатформенных библиотек на примере [mutliplatform-settings](https://github.com/russhwolf/multiplatform-settings)  
