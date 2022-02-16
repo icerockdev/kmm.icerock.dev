@@ -1,3 +1,7 @@
+---
+sidebar_position: 4
+---
+
 # Имплементация ObjC протокола в Kotlin
 
 Objective-C может иметь протокол такого вида:
