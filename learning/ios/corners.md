@@ -31,11 +31,11 @@ submitButton.layer.maskedCorners = .layerMinXMinYCorner
 ```
 ![topLeftRound](corners/topLeftRound.png)
 
-Однако есть случаи когда этого недостаточно. Например, если добавить кнопке `backgroundImage`, то скругления пропадут.
+Однако есть случаи, когда этого недостаточно. Например, если добавить кнопке `backgroundImage`, то скругления пропадут.
 ```swift
 submitButton.setBackgroundImage(UIImage(named: "balearic-islands-31_1280")!, for: .normal)
 submitButton.layer.cornerRadius = 16
-submitButton.layer.maskedCorners = .layerMinXMinYCorner
+submitButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
 ```
 ![backImageNotRound](corners/backImageNotRound.png)
 
@@ -43,7 +43,7 @@ submitButton.layer.maskedCorners = .layerMinXMinYCorner
 ```swift
 submitButton.setBackgroundImage(UIImage(named: "balearic-islands-31_1280")!, for: .normal)
 submitButton.layer.cornerRadius = 16
-submitButton.layer.maskedCorners = .layerMinXMinYCorner
+submitButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
 submitButton.layer.masksToBounds = true
 ```
 После добавления `maskToBounds`, скругленные края появляются вновь:
@@ -53,7 +53,7 @@ submitButton.layer.masksToBounds = true
 ```swift
 submitButton.setBackgroundImage(UIImage(named: "balearic-islands-31_1280")!, for: .normal)
 submitButton.layer.cornerRadius = 16
-submitButton.layer.maskedCorners = .layerMinXMinYCorner
+submitButton.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
 submitButton.layer.masksToBounds = true
 
 submitButton.layer.shadowColor = UIColor.black.cgColor
