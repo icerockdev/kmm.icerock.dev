@@ -52,3 +52,5 @@ Sign in with Apple можно использовать не только в пр
 - Интересные моменты про Sign in with Apple от Alconost в двух частях. [Первая](https://habr.com/ru/company/alconost/news/t/494404/) и [вторая](https://habr.com/ru/company/alconost/blog/506944/)
 - [Проблемы, с которыми столкнулись в Parallels при интеграции](https://habr.com/ru/company/parallels/blog/469499/)
 - [Почему AnyList отказались от авторизации через Apple с фейковым email](https://habr.com/ru/news/t/509012/)
+
+<div style={{textAlign:"right"}}>Автор: <a href="https://github.com/Dorofeev">@Dorofeev</a></div>

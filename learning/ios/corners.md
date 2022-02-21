@@ -85,3 +85,5 @@ submitButton.layer.shadowOpacity = 0.5
 ![finaleState](corners/finaleState.png)
 
 На этом у меня все, более подробно про работу с `Layer`'ами можно прочитать в статье [UIKit ты вообще про UI?](https://habr.com/ru/company/skyeng/blog/591423/).
+
+<div style={{textAlign:"right"}}>Автор: <a href="https://github.com/Dorofeev">@Dorofeev</a></div>

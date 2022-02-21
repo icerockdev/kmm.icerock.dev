@@ -62,3 +62,5 @@ func applicationDidEnterBackground(_ application: UIApplication) {
 Использование данного метода не требует включения `Background Modes` в `Capabilities`. 
 
 Вы также можете вызвать этот метод множество раз, чтобы создать несколько фоновых задач, которые выполняются параллельно. Однако, для каждой задачи должна быть вызвана функция `endBackgroundTask`, иначе, вместо перехода в suspend, система может завершить работу приложения.
+
+<div style={{textAlign:"right"}}>Автор: <a href="https://github.com/Dorofeev">@Dorofeev</a></div>
