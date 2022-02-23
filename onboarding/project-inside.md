@@ -930,5 +930,5 @@ class AppComponent {
 Параметры:
 - `help` - выводит информацию о скрипте
 - `clean_ide` - чистит файлы IDE
-- `localize` - генерация локализованных строк, о которой вы можете прочитать [тут](/learning/tools/generate-localized-strings).
+- `localize` - генерация локализованных строк, о которой вы можете прочитать [тут](./generate-localized-strings).
 
