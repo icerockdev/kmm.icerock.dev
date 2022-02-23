@@ -4,42 +4,43 @@ import styles from './HomepageFeatures.module.css';
 
 const FeatureList = [
   {
-    title: 'Коллекция материалов',
-    Svg: require('../../static/img/feature-1.svg').default,
-    description: (
-      <>
-        В разделе Documentation собрана коллекция материалов для изучения
-        Kotlin Multiplatform Mobile. Статьи, видео записи, презентации и 
-        примеры кода.
-      </>
-    ),
-  },
-  {
-    title: 'Курс обучения',
-    Svg: require('../../static/img/feature-2.svg').default,
-    description: (
-      <>
-        Специально для сотрудников IceRock Development и для всех интересующихся
-        в разделе Onboarding можно пройти курс обучения, состоящий из статей и
-        практических занятий в виде CodeLabs.
-      </>
-    ),
-  },
-  {
-    title: 'Сделано в IceRock',
+    title: 'Onboarding',
     Svg: require('../../static/img/feature-3.svg').default,
     description: (
       <>
-        Материалы собраны сотрудниками IceRock Development и доступны на GitHub. 
-        Будем рады любой помощи в развитии.
+        Инструкция по погружению в разработку с использованием Kotlin Multiplatform Mobile 
+          специально для новых сотрудников IceRock Development.
+        Предназначен для опытных разработчиков под Android или iOS.
+      </>
+    ),
+  },
+  {
+    title: 'Knowledge Base',
+    Svg: require('../../static/img/feature-1.svg').default,
+    description: (
+      <>
+      Коллекция материалов для изучения Kotlin Multiplatform Mobile. 
+      Статьи, видео записи, презентации и примеры кода.
+      Собраны различные кейсы и полезные материалы из опыта работы с KMM начиная с 2018 года.
+      </>
+    ),
+    className: "knowledgeFeature"
+  },
+  {
+    title: 'University',
+    Svg: require('../../static/img/feature-2.svg').default,
+    description: (
+      <>
+        Курс обучения разработке под Android и iOS с использованием Kotlin Multiplatform Mobile. 
+        Данный курс преподается в корпоративном университете IceRock и предназначен для начинающих разработчиков.
       </>
     ),
   },
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({Svg, title, description, className}) {
   return (
-    <div className={clsx('col col--4')}>
+    <div className={clsx('col col--4 ', className)}>
       <div className="text--center">
         <Svg className={styles.featureSvg} alt={title} />
       </div>

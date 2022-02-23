@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # moko-mvvm
 
 Библиотека [moko-mvvm](https://github.com/icerockdev/moko-mvvm) позволяет реализовывать приложения с паттерном 
