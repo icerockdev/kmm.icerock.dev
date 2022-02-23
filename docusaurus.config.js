@@ -1,3 +1,5 @@
+const isProd = process.env.NODE_ENV === 'production';
+
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'Kotlin Multiplatform Mobile',
@@ -17,13 +19,6 @@ module.exports = {
     navbar: {
       title: 'Home',
       items: [
-        {
-          type: 'doc',
-          docId: 'intro',
-          position: 'left',
-          label: 'Documentation',
-          docsPluginId: 'docs',
-        },
         {
           type: 'doc',
           docId: 'intro',
@@ -156,21 +151,6 @@ module.exports = {
       additionalLanguages: ['kotlin', 'swift'],
     },
   },
-  presets: [
-    [
-      '@docusaurus/preset-classic',
-      {
-        docs: {
-          id: 'docs',
-          sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/docusaurus/',
-        },
-        theme: {
-          customCss: require.resolve('./src/css/custom.css'),
-        },
-      },
-    ],
-  ],
   plugins: [
     [
       '@docusaurus/plugin-content-docs',
@@ -203,6 +183,17 @@ module.exports = {
         editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/docusaurus/',
         remarkPlugins: [require('mdx-mermaid')],
       },
-    ]
+    ],
+    require.resolve('@docusaurus/plugin-content-pages'),
+    isProd && require.resolve('@docusaurus/plugin-google-gtag'),
+    isProd && require.resolve('@docusaurus/plugin-sitemap')
   ],
+  themes: [
+    [
+      require.resolve('@docusaurus/theme-classic'), 
+      {
+        customCss: require.resolve('./src/css/custom.css'),
+      },
+    ]
+  ]
 };

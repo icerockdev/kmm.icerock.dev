@@ -1,8 +1,8 @@
 ---
-sidebar_position: 8
+sidebar_position: 22
 ---
 
-# Примеры
+# Примеры кода
 
 ## Приложения
 * [JetBrains/kotlinconf-app](https://github.com/JetBrains/kotlinconf-app) - official KotlinConf application - backend, android, ios with shared code;
@@ -33,14 +33,6 @@ sidebar_position: 8
 * [prof18/kmp-fatframework-cocoa](https://github.com/prof18/kmp-fatframework-cocoa) - A Gradle plugin to generate and publish an iOs FatFramework on Kotlin Multiplatform projects;
 
 ## Библиотеки
-* <http://libs.kmp.icerock.dev>
+* <https://libs.kmp.icerock.dev>
 * <https://www.kamp.ml>
 * [AAkira/Kotlin-Multiplatform-Libraries](https://github.com/AAkira/Kotlin-Multiplatform-Libraries)
-
-## Сниппеты
-### Set own minimal iOS version for Kotlin/Native
-```groovy
-compilations.all {
-    kotlinOptions.freeCompilerArgs += "-Xoverride-konan-properties=osVersionMin.ios_x64=13.0;osVersionMin.ios_arm64=13.0"
-}
-```

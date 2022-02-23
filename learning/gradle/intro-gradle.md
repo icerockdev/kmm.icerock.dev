@@ -1,8 +1,8 @@
 ---
-sidebar_position: 2
+sidebar_position: 0
 ---
 
-# Gradle build system
+# Введение в Gradle
 
 Работая с Kotlin Multiplatform Mobile для iOS разработчика главным испытанием становится не изучение
 Kotlin, а изучение билд системы Gradle, которая собирает мультиплатформенную библиотеку. В данном
