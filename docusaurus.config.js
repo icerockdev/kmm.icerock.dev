@@ -3,7 +3,7 @@ const isProd = process.env.NODE_ENV === 'production';
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'Kotlin Multiplatform Mobile',
-  tagline: 'by IceRock Development',
+  tagline: 'Материалы для изучения от IceRock Development',
   url: 'https://kmm.icerock.dev',
   baseUrl: '/',
   onBrokenLinks: 'throw',
@@ -23,15 +23,15 @@ module.exports = {
           type: 'doc',
           docId: 'intro',
           position: 'left',
-          label: 'Learning',
-          docsPluginId: 'learning',
+          label: 'Onboarding',
+          docsPluginId: 'onboarding',
         },
         {
           type: 'doc',
           docId: 'intro',
           position: 'left',
-          label: 'Onboarding',
-          docsPluginId: 'onboarding',
+          label: 'Knowledge Base',
+          docsPluginId: 'learning',
         },
         {
           type: 'doc',
@@ -85,6 +85,10 @@ module.exports = {
               label: 'YouTube',
               to: 'https://www.youtube.com/channel/UC-Vhmm09W_IWKHhSg80d68w',
             },
+            {
+              label: 'Twitter @icerockdev',
+              href: 'https://twitter.com/icerockdev'
+            },
           ],
         },
         {
@@ -97,10 +101,6 @@ module.exports = {
             {
               label: 'Telegram @kotlinmppchats',
               href: 'https://t.me/kotlinmppchats'
-            },
-            {
-              label: 'Twitter @kotlinmpp',
-              href: 'https://twitter.com/kotlinmpp'
             },
             {
               label: 'Kotlin Community',
