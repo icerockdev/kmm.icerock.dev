@@ -1,3 +1,7 @@
+---
+sidebar_position: 5
+---
+
 # moko-paging
 
 Библиотека [moko-paging](https://github.com/icerockdev/moko-paging) позволяет загружать

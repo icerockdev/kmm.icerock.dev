@@ -8,12 +8,12 @@
 /* You can override the default Infima variables here. */
 :root {
   --ifm-color-primary: #684cdc;
-  --ifm-color-primary-dark: rgb(33, 175, 144);
-  --ifm-color-primary-darker: rgb(31, 165, 136);
-  --ifm-color-primary-darkest: rgb(26, 136, 112);
-  --ifm-color-primary-light: rgb(70, 203, 174);
-  --ifm-color-primary-lighter: rgb(102, 212, 189);
-  --ifm-color-primary-lightest: rgb(146, 224, 208);
+  --ifm-color-primary-dark: #5333d7;
+  --ifm-color-primary-darker: #4a29d2;
+  --ifm-color-primary-darkest: #3d22ad;
+  --ifm-color-primary-light: #7d65e1;
+  --ifm-color-primary-lighter: #8771e3;
+  --ifm-color-primary-lightest: #a796eb;
   --ifm-code-font-size: 95%;
   --ifm-font-color-base-inverse: #ffffff;
 }
@@ -25,14 +25,24 @@
   padding: 0 var(--ifm-pre-padding);
 }
 
-.android > rect{
-    fill:rgb(181, 245, 181) !important;
+[data-theme='dark'] .knowledgeFeature {
+  background: #333;
+  border-radius: 16px;
 }
 
-.ios > rect{
-    fill:rgb(110, 163, 250) !important;
+[data-theme='light'] .knowledgeFeature {
+  background: #EEE;
+  border-radius: 16px;
 }
 
-.common > rect{
-    fill:rgb(174, 146, 252) !important;
+.android > rect {
+  fill:rgb(181, 245, 181) !important;
+}
+
+.ios > rect {
+  fill:rgb(110, 163, 250) !important;
+}
+
+.common > rect {
+  fill:rgb(174, 146, 252) !important;
 }
