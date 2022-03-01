@@ -1,13 +1,15 @@
+const isProd = process.env.NODE_ENV === 'production';
+
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
   title: 'Kotlin Multiplatform Mobile',
-  tagline: 'by IceRock Development',
-  url: 'https://alex009.github.io',
-  baseUrl: '/kmm.icerock.dev/',
+  tagline: 'Материалы для изучения от IceRock Development',
+  url: 'https://kmm.icerock.dev',
+  baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'alex009', // Usually your GitHub org/user name.
+  organizationName: 'icerockdev', // Usually your GitHub org/user name.
   projectName: 'kmm.icerock.dev', // Usually your repo name.
   // i18n: {
   //   defaultLocale: 'ru',
@@ -21,22 +23,15 @@ module.exports = {
           type: 'doc',
           docId: 'intro',
           position: 'left',
-          label: 'Documentation',
-          docsPluginId: 'docs',
-        },
-        {
-          type: 'doc',
-          docId: 'intro',
-          position: 'left',
-          label: 'Learning',
-          docsPluginId: 'learning',
-        },
-        {
-          type: 'doc',
-          docId: 'intro',
-          position: 'left',
           label: 'Onboarding',
           docsPluginId: 'onboarding',
+        },
+        {
+          type: 'doc',
+          docId: 'intro',
+          position: 'left',
+          label: 'Knowledge Base',
+          docsPluginId: 'learning',
         },
         {
           type: 'doc',
@@ -90,6 +85,10 @@ module.exports = {
               label: 'YouTube',
               to: 'https://www.youtube.com/channel/UC-Vhmm09W_IWKHhSg80d68w',
             },
+            {
+              label: 'Twitter @icerockdev',
+              href: 'https://twitter.com/icerockdev'
+            },
           ],
         },
         {
@@ -102,10 +101,6 @@ module.exports = {
             {
               label: 'Telegram @kotlinmppchats',
               href: 'https://t.me/kotlinmppchats'
-            },
-            {
-              label: 'Twitter @kotlinmpp',
-              href: 'https://twitter.com/kotlinmpp'
             },
             {
               label: 'Kotlin Community',
@@ -156,21 +151,6 @@ module.exports = {
       additionalLanguages: ['kotlin', 'swift'],
     },
   },
-  presets: [
-    [
-      '@docusaurus/preset-classic',
-      {
-        docs: {
-          id: 'docs',
-          sidebarPath: require.resolve('./sidebars.js'),
-          editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/docusaurus/',
-        },
-        theme: {
-          customCss: require.resolve('./src/css/custom.css'),
-        },
-      },
-    ],
-  ],
   plugins: [
     [
       '@docusaurus/plugin-content-docs',
@@ -203,6 +183,17 @@ module.exports = {
         editUrl: 'https://github.com/icerockdev/kmm.icerock.dev/tree/docusaurus/',
         remarkPlugins: [require('mdx-mermaid')],
       },
-    ]
+    ],
+    require.resolve('@docusaurus/plugin-content-pages'),
+    isProd && require.resolve('@docusaurus/plugin-google-gtag'),
+    isProd && require.resolve('@docusaurus/plugin-sitemap')
   ],
+  themes: [
+    [
+      require.resolve('@docusaurus/theme-classic'), 
+      {
+        customCss: require.resolve('./src/css/custom.css'),
+      },
+    ]
+  ]
 };
