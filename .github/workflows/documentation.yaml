@@ -6,6 +6,11 @@ on:
   push:
     branches: [docusaurus]
 
+env:
+  CONFIG_URL: ${{ secrets.CONFIG_URL }}
+  CONFIG_BASE_URL: ${{ secrets.CONFIG_BASE_URL }}
+  CONFIG_ORG_NAME: ${{ secrets.CONFIG_ORG_NAME }}
+
 jobs:
   checks:
     if: github.event_name != 'push'
