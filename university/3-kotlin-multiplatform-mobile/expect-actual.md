@@ -1,10 +1,10 @@
 ---
-sidebar_position: 5
+sidebar_position: 2
 ---
 
 # expect/actual
 
-expect/actual - это механизм, позволяющий использовать в общем коде платформенную реализацию класса, функции или переменной
+expect/actual - это механизм, позволяющий использовать в общем коде платформенную реализацию класса, функции или переменной. 
 Изучите [раздел](https://kotlinlang.org/docs/mpp-connect-to-apis.html) на официальном сайте.  
 В качестве практического задания, предлагаем вам изменить проект, который вы создавали по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html) в разделе [Multiplatform Settings](multiplatform-settings):
 - Добавьте в общий код expect-функцию greeting
