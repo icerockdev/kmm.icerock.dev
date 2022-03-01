@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # moko-resources
 
 ## Почему StringDesc не Parcelable 

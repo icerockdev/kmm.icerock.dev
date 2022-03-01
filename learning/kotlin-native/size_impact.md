@@ -1,3 +1,7 @@
+---
+sidebar_position: 2
+---
+
 # Вес бинарника с Kotlin/Native
 
 - Рассказ в [видео](https://www.youtube.com/watch?v=hrRqX7NYg3Q&t=1892s) о размере фреймворка с

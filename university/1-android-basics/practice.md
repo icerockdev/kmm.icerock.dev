@@ -6,20 +6,25 @@ sidebar_position: 6
 
 Нужно разработать android приложение для просмотра GitHub репозиториев.
 
+Во время работы над практическим заданием настоятельно рекомендуем обращаться к
+разделу [Памятки для разработчика](/university/memos/function)
+
+## Кликабельный прототип
+
 <iframe width="361" height="850" src="//www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FMh3ga5XAzyJNCY87NBp01G%2FGit_test%3Fnode-id%3D4%253A600%26scaling%3Dmin-zoom%26page-id%3D0%253A1%26starting-point-node-id%3D4%253A645" allowfullscreen></iframe>
 
-Во время работы над практическим заданием настоятельно рекомендуем обращаться к разделу [Памятки для разработчика](/university/memos/function)
+## Функциональные требования
 
-Функциональные возможности:
 1. Авторизация пользователя (personal access token)
 1. Просмотр списка репозиториев пользователя (первые 10)
 1. Просмотр детальной информации выбранного репозитория
-   1. описание
-   1. статистика (forks, stars, watchers)
-   1. ссылка на web страницу репозитория
-   1. лицензия
+    1. описание
+    1. статистика (forks, stars, watchers)
+    1. ссылка на web страницу репозитория
+    1. лицензия
 
-Технические требования:
+## Технические требования
+
 1. Реализация на Kotlin
 1. Использовать XML Layouts для UI
 1. Использовать Kotlin Gradle DSL
@@ -32,49 +37,80 @@ sidebar_position: 6
 1. Использовать [Kotlinx.Serialization](https://github.com/Kotlin/kotlinx.serialization) для парсинга json
 1. Использовать ViewModel для реализации логики экранов
 1. Использовать LiveData / StateFlow для обновления данных на UI
+1. Использовать Dagger Hilt для внедрения зависимостей
 1. Сохранять токен авторизации в хранилище устройства - SharedPreferences
 1. Корректно обрабатывать ситуации "загрузка данных", "ошибка загрузки", "пустой список"
-1. Корректно обрабатывать смену конфигурации 
+1. Корректно обрабатывать смену конфигурации
 
-## Граф зависимостей Android приложения:
+## Диаграмма классов
 
-На графе отображена зависимость компонентов Android приложения друг от друга  
+При реализации нужно придерживаться следующей диаграммы:
+
 ```mermaid
    classDiagram
 
-class MainActivity:::android{
-     isLoading(asdsad: String) LiveData~Boolean~ 
-     }
+   class MainActivity:::android
    class AuthFragment:::android
    class RepositoriesListFragment:::android
    class DetailInfoFragment:::android
-
-   class AuthViewModel:::android{
-     isLoading: LiveData~Boolean~
-     authResponseCode: LiveData~Int~
-     onSignButtonPressed(token: String)
+   
+   class AuthViewModel:::android {
+      token: MutableLiveData~String~
+      state: LiveData~AuthState~
+      events: Flow<AuthEvent>
+      onSignButtonPressed()
    }
    
-   class RepositoryInfoViewModel:::android{
-     repositoryInfo: LiveData~RepoInfo?~
-     isLoading: LiveData~Boolean~
+   class AuthState:::android {
+      <<enumeration>>
+      Idle
+      Loading
+      InvalidInput
    }
    
-   class RepositoriesListViewModel:::android{
-     isLoading: LiveData~Boolean~
-     repositories: LiveData:List~RepoEntity?~
+   class AuthEvent:::android {
+      <<enumeration>>
+      ShowError
+      RouteToMain
    }
    
-   class GitHubRepoRepository:::android{
-     repositories(username: String) FlowList~RepoEntityNullable~
-     repositoryInfo(ownerName: String, repositoryName: String, branchName: String) RepoInfoNullable
-     signIn(token: String)
+   class RepositoryInfoViewModel:::android {
+      state: LiveData~RepositoryState~
+   }
+   
+   class RepositoryState:::android {
+      <<enumeration>>
+      Loading
+      RepoLoadedReadmeLoading
+      RepoLoadedReadmeError
+      RepoLoadedReadmeEmpty
+      RepoLoadedReadmeLoaded
+   }
+   
+   class RepositoriesListViewModel:::android {
+      state: LiveData~RepositoriesState~
+   }
+   
+   class RepositoriesState:::android {
+      <<enumeration>>
+      Loading
+      ListLoaded
+      Error
+      Empty
+   }
+   
+   class AppRepository:::android {
+      repositories() Flow~ListOfRepoEntity~
+      repositoryInfo(repoId: String) Flow~RepoDetailsEntity~
+      repositoryReadme(repoId: String) RepoReadme
+      signIn(token: String)
    }
    
    class KeyValueStorage:::android{
-     authToken: String?
+      authToken: String?
+      userName: String?
    }
-
+   
    MainActivity --> AuthFragment
    MainActivity --> RepositoriesListFragment
    MainActivity --> DetailInfoFragment
@@ -83,14 +119,41 @@ class MainActivity:::android{
    RepositoriesListFragment --> RepositoriesListViewModel
    DetailInfoFragment --> RepositoryInfoViewModel
    
-   RepositoryInfoViewModel --> GitHubRepoRepository
-   AuthViewModel --> GitHubRepoRepository
-   RepositoriesListViewModel --> GitHubRepoRepository
-
-   GitHubRepoRepository --> KeyValueStorage
+   RepositoryInfoViewModel --> AppRepository
+   AuthViewModel --> AppRepository
+   RepositoriesListViewModel --> AppRepository
+   
+   AppRepository --> KeyValueStorage
+   
+   AuthViewModel -- AuthEvent
+   AuthViewModel -- AuthState
+   
+   RepositoryInfoViewModel -- RepositoryState
+   
+   RepositoriesListViewModel -- RepositoriesState
 ```
 
-Материалы:
+По диаграмме важно понять что нужно использовать MVVM подход с хранением состояния в виде `sealed interface`, например:
+
+```kotlin
+sealed interface RepositoryState {
+    object Loading : RepositoryState
+    data class Loaded(val repo: RepoEntity, val readmeState: ReadmeState) : RepositoryState
+
+    sealed interface ReadmeState {
+        object Loading : ReadmeState
+        object Empty : ReadmeState
+        data class Error(val error: String) : ReadmeState
+        data class Loaded(val markdown: String) : ReadmeState
+    }
+}
+```
+
+Из-за ограничений mermaid на диаграмме не удалось отразить схему с учетом возможностей kotlin, но пример выше должен
+помочь вам сориентироваться.
+
+## Материалы
+
 1. [GitHub REST API](https://docs.github.com/en/rest)
 1. [GitHub Basic Authorization](https://docs.github.com/en/rest/overview/other-authentication-methods#basic-authentication)
 1. [GitHub user repositories](https://docs.github.com/en/rest/reference/repos#list-repositories-for-a-user)

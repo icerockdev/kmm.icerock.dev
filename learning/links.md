@@ -2,7 +2,7 @@
 sidebar_position: 21
 ---
 
-# Links
+# Ссылки
 
 ## Videos
 
@@ -61,6 +61,10 @@ sidebar_position: 21
 - [Kermit and Crashlytics](https://touchlab.co/kermit-and-crashlytics/)
 - [How to fix the "Unable to locate a Java Runtime" error on Xcode with Kotlin Multiplatform](https://www.marcogomiero.com/posts/2021/kmp-no-java-runtime-error-xcode/)
 - [How to create Kotlin Native iOS project](https://www.albertgao.xyz/2018/01/14/how-to-create-kotlin-native-ios-project/)
+- [Understanding and Configuring your Kotlin Multiplatform Mobile Test Suite](https://touchlab.co/understanding-and-configuring-your-kmm-test-suite/)
+- [Flutter vs Native: почему мы переходим с первого на второй](https://habr.com/ru/company/ozontech/blog/648671/)
+- [Kotlin Multiplatform on the Web](https://doist.dev/posts/filterist-kotlin-multiplatform-javascript-exploration)
+- [Using SwiftUI with View Model written in Kotlin Multiplatform Mobile](https://lwesterhoff.medium.com/using-swiftui-with-view-model-written-in-kotlin-multiplatform-mobile-67cf7b6da551)
 
 ## Projects
 
