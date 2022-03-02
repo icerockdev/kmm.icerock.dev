@@ -29,60 +29,98 @@ sidebar_position: 6
 Фиолетовый - Common, Зеленый - Android, Синий - iOS
 
 ```mermaid
-classDiagram
-
-class AuthViewModel:::android{
-   isLoading: LiveData~Boolean~
-   authResponseCode: LiveData~Int~
-   onSignButtonPressed(token: String)
-}
+   classDiagram
    
-class RepositoryInfoViewModel:::android{
-   repositoryInfo: LiveData~RepoInfo?~
-   isLoading: LiveData~Boolean~
-}
+   class AuthViewModel:::android {
+      token: MutableLiveData~String~
+      state: LiveData~AuthState~
+      events: Flow<AuthEvent>
+      onSignButtonPressed()
+   }
    
-class RepositoriesListViewModel:::android {
-   isLoading: LiveData~Boolean~
-   repositories: LiveData:List~RepoEntity?~  
-}
+   class AuthState:::android {
+      <<enumeration>>
+      Idle
+      Loading
+      InvalidInput
+   }
    
-class GitHubRepoRepository:::common {
-   repositories(username: String) FlowList~RepoEntityNullable~
-   repositoryInfo(ownerName: String, repositoryName: String, branchName: String) RepoInfoNullable
-   signIn(token: String)
-}
-
-class KeyValueStorage:::common{
-  authToken: String?
-}
-
-class MainActivity:::android
-class RepositoriesListFragment:::android
-class DetailInfoFragment:::android
-class AuthFragment:::android
-
-class RepositoriesListViewController:::ios
-class RepositoryDetailInfoViewController:::ios
-class AuthViewController:::ios
-
-MainActivity --> AuthFragment
-MainActivity --> RepositoriesListFragment
-MainActivity --> DetailInfoFragment
-
-RepositoriesListFragment --> RepositoriesListViewModel
-DetailInfoFragment --> RepositoryInfoViewModel
-AuthFragment --> AuthViewModel
-   
-RepositoriesListViewModel --> GitHubRepoRepository
-AuthViewModel --> GitHubRepoRepository
-RepositoryInfoViewModel --> GitHubRepoRepository
+   class AuthEvent:::android {
+      <<enumeration>>
+      ShowError
+      RouteToMain
+   }
        
-RepositoriesListViewController --> GitHubRepoRepository
-RepositoryDetailInfoViewController --> GitHubRepoRepository
-AuthViewController --> GitHubRepoRepository
-
-GitHubRepoRepository --> KeyValueStorage
+   class RepositoryInfoViewModel:::android {
+      state: LiveData~RepositoryState~
+   }
+   
+   class RepositoryState:::android {
+      <<enumeration>>
+      Loading
+      RepoLoadedReadmeLoading
+      RepoLoadedReadmeError
+      RepoLoadedReadmeEmpty
+      RepoLoadedReadmeLoaded
+   }
+   
+   class RepositoriesListViewModel:::android {
+      state: LiveData~RepositoriesState~
+   }
+   
+   class RepositoriesState:::android {
+      <<enumeration>>
+      Loading
+      ListLoaded
+      Error
+      Empty
+   }
+      
+   class GitHubRepoRepository:::common {
+      getRepositories(completion: (List~RepoEntity~?, Error?))
+      getRepository(repoId: String, completion: (RepoDetailsEntity?, Error?))
+      getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, completion: (RepoReadme?, Error?))
+      signIn(token: String, completion: (UserInfo?, Error?))
+   }
+   
+   class KeyValueStorage:::common {
+      authToken: String?
+      userName: String?
+   }
+   
+   class MainActivity:::android
+   class RepositoriesListFragment:::android
+   class DetailInfoFragment:::android
+   class AuthFragment:::android
+   
+   class RepositoriesListViewController:::ios
+   class RepositoryDetailInfoViewController:::ios
+   class AuthViewController:::ios
+   
+   MainActivity --> AuthFragment
+   MainActivity --> RepositoriesListFragment
+   MainActivity --> DetailInfoFragment
+   
+   RepositoriesListFragment --> RepositoriesListViewModel
+   DetailInfoFragment --> RepositoryInfoViewModel
+   AuthFragment --> AuthViewModel
+      
+   RepositoriesListViewModel --> GitHubRepoRepository
+   AuthViewModel --> GitHubRepoRepository
+   RepositoryInfoViewModel --> GitHubRepoRepository
+          
+   RepositoriesListViewController --> GitHubRepoRepository
+   RepositoryDetailInfoViewController --> GitHubRepoRepository
+   AuthViewController --> GitHubRepoRepository
+   
+   GitHubRepoRepository --> KeyValueStorage
+   
+   AuthViewModel -- AuthEvent
+   AuthViewModel -- AuthState
+   
+   RepositoriesListViewModel -- RepositoriesState
+   
+   RepositoryInfoViewModel -- RepositoryState
 ```
 
 Материалы:

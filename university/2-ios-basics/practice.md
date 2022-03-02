@@ -46,9 +46,9 @@ sidebar_position: 5
    class AuthViewController:::ios
    
    class AppRepository:::ios {
-      repositories(completion: (List~RepoEntity~?, Error?))
-      repositoryInfo(repoId: String, completion: (RepoDetailsEntity?, Error?))
-      repositoryReadme(repoId: String, completion: (RepoReadme?, Error?))
+      getRepositories(completion: (List~RepoEntity~?, Error?))
+      getRepository(repoId: String, completion: (RepoDetailsEntity?, Error?))
+      getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, completion: (RepoReadme?, Error?))
       signIn(token: String, completion: (UserInfo?, Error?))
    }
    

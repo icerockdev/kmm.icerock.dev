@@ -100,10 +100,10 @@ sidebar_position: 6
    }
    
    class AppRepository:::android {
-      repositories() Flow~ListOfRepoEntity~
-      repositoryInfo(repoId: String) Flow~RepoDetailsEntity~
-      repositoryReadme(repoId: String) RepoReadme
-      signIn(token: String)
+      getRepositories(completion: (List~RepoEntity~?, Error?))
+      getRepository(repoId: String, completion: (RepoDetailsEntity?, Error?))
+      getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, completion: (RepoReadme?, Error?))
+      signIn(token: String, completion: (UserInfo?, Error?))
    }
    
    class KeyValueStorage:::android{
