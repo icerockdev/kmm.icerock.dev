@@ -41,6 +41,103 @@ sidebar_position: 6
 1. Сохранять токен авторизации в хранилище устройства - SharedPreferences
 1. Корректно обрабатывать ситуации "загрузка данных", "ошибка загрузки", "пустой список"
 1. Корректно обрабатывать смену конфигурации
+1. При перезапуске приложения авторизация должна сохраняться
+
+## Классы Android-приложения
+
+```kotlin
+    
+    class MainActivity: AppCompatActivity() {
+        // TODO:
+    }
+
+    class AuthFragment: Fragment(R.id.auth_framgent) {
+        // TODO:
+    }
+
+    class RepositoriesListFragment: Fragment(R.id.repo_list_framgent) {
+       // TODO:
+    }
+
+    class DetailInfoFragment: Fragment(R.id.repo_info_framgent) {
+       // TODO:
+    }
+
+   class AuthViewModel {
+      val token: MutableLiveData<String>
+      val state: LiveData<AuthState>
+      val events: Flow<AuthEvent>
+      fun onSignButtonPressed() {
+          // TODO:
+      }
+      
+      sealed class AuthState {
+         object Idle: AuthState()
+         object Loading: AuthState()
+         object InvalidInput: AuthState()
+      }
+      
+      sealed class AuthEvent {
+         object ShowError: AuthEvent()
+         object RouteToMain: AuthEvent()
+      }
+
+      // TODO:
+   }
+
+   class RepositoryInfoViewModel {
+      val state: LiveData<RepositoryState>
+
+      sealed class RepositoryState {
+         object Loading: RepositoryState()
+         object RepoLoadedReadmeLoading: RepositoryState()
+         object RepoLoadedReadmeError: RepositoryState()
+         object RepoLoadedReadmeEmpty: RepositoryState()
+         object RepoLoadedReadmeLoaded: RepositoryState()
+      }
+
+      // TODO:
+   }
+   
+   class RepositoriesListViewModel {
+      val state: LiveData<RepositoriesState>
+      
+      sealed class RepositoriesState {
+         object Loading: PincodeCreationState()
+         object ListLoaded: PincodeCreationState()
+         object Error: PincodeCreationState()
+         object Empty: PincodeCreationState()
+      }
+
+      // TODO:
+   }
+
+   class AppRepository {
+      fun getRepositories(completion: (List<RepoEntity?>, Error?) -> Unit) {
+         // TODO:
+      }
+      
+      fun getRepository(repoId: String, completion: (RepoDetailsEntity?, Error?) -> Unit) {
+         // TODO:
+      }
+      
+      fun getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, completion: (RepoReadme?, Error?) -> Unit) {
+         // TODO:
+      }
+      
+      fun signIn(token: String, completion: (UserInfo?, Error?) -> Unit) {
+         // TODO:
+      }
+
+      // TODO:
+   }
+
+   class KeyValueStorage {
+      var authToken: String?
+      var userName: String?
+   }
+
+```
 
 ## Диаграмма классов
 

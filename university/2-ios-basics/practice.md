@@ -35,6 +35,49 @@ sidebar_position: 5
 1. Сохранять токен авторизации в хранилище устройства - NSUserDefaults
 1. Корректно обрабатывать ситуации "загрузка данных", "ошибка загрузки", "пустой список"
 1. Корректно обрабатывать смену ориентации экрана
+1. При перезапуске приложения авторизация должна сохраняться
+
+## Классы iOS приложения
+```kotlin
+
+   class RepositoriesListViewController: UIViewController {
+       // TODO:
+   }
+   
+   class RepositoryDetailInfoViewController: UIViewController {
+      // TODO:
+   }
+   
+   class AuthViewController: UIViewController {
+      // TODO:
+   }
+
+   class AppRepository {
+      func getRepositories(@escaping completion: ((List<RepoEntity?>, Error?) -> Void)) {
+          // TODO:
+      }
+      
+      func getRepository(repoId: String, @escaping completion: ((RepoDetailsEntity?, Error?) -> Void)) {
+         // TODO:
+      }
+      
+      func getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, @escaping completion: ((RepoReadme?, Error?) -> Void)) {
+         // TODO:
+      }
+      
+      func signIn(token: String, @escaping completion: ((UserInfo?, Error?) -> Void)) {
+         // TODO:
+      }
+      
+      // TODO:
+   }
+   
+   class KeyValueStorage {
+      val authToken: String?
+      val userName: String?
+   }
+
+```
 
 ## Диаграмма классов
 

@@ -22,6 +22,121 @@ sidebar_position: 6
 1. Логика хранения данных должна находиться в common коде
 1. Логика работы с сетью должна находиться в common коде
 1. Для работы с сетью использовать Ktor Client
+1. При перезапуске приложения авторизация должна сохраняться
+
+## Структуры приложения 
+
+```kotlin
+   
+   // Классы common кода 
+   
+   class GitHubRepoRepository {
+      fun getRepositories(completion: (List<RepoEntity?>, Error?) -> Unit) {
+         // TODO:
+      }
+      
+      fun getRepository(repoId: String, completion: (RepoDetailsEntity?, Error?) -> Unit) {
+         // TODO:
+      }
+      
+      fun getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, completion: (RepoReadme?, Error?) -> Unit) {
+         // TODO:
+      }
+      
+      fun signIn(token: String, completion: (UserInfo?, Error?) -> Unit) {
+         // TODO:
+      }
+   }
+   
+   class KeyValueStorage {
+      var authToken: String?
+      var userName: String?
+   }
+   
+   // Классы Android-приложения
+
+
+   class MainActivity: AppCompatActivity() {
+      // TODO:
+   }
+
+   class AuthFragment: Fragment(R.id.auth_framgent) {
+      // TODO:
+   }
+
+   class RepositoriesListFragment: Fragment(R.id.repo_list_framgent) {
+      // TODO:
+   }
+
+   class DetailInfoFragment: Fragment(R.id.repo_info_framgent) {
+      // TODO:
+   }
+
+   class AuthViewModel {
+      val token: MutableLiveData<String>
+      val state: LiveData<AuthState>
+      val events: Flow<AuthEvent>
+      fun onSignButtonPressed() {
+         // TODO:
+      }
+
+      sealed class AuthState {
+         object Idle: AuthState()
+         object Loading: AuthState()
+         object InvalidInput: AuthState()
+      }
+
+      sealed class AuthEvent {
+         object ShowError: AuthEvent()
+         object RouteToMain: AuthEvent()
+      }
+
+      // TODO:
+   }
+
+   class RepositoryInfoViewModel {
+      val state: LiveData<RepositoryState>
+
+      sealed class RepositoryState {
+         object Loading: RepositoryState()
+         object RepoLoadedReadmeLoading: RepositoryState()
+         object RepoLoadedReadmeError: RepositoryState()
+         object RepoLoadedReadmeEmpty: RepositoryState()
+         object RepoLoadedReadmeLoaded: RepositoryState()
+      }
+
+      // TODO:
+   }
+
+   class RepositoriesListViewModel {
+      val state: LiveData<RepositoriesState>
+
+      sealed class RepositoriesState {
+         object Loading: PincodeCreationState()
+         object ListLoaded: PincodeCreationState()
+         object Error: PincodeCreationState()
+         object Empty: PincodeCreationState()
+      }
+
+      // TODO:
+   }
+
+   // классы iOS-приложения 
+
+   class RepositoriesListViewController: UIViewController {
+      // TODO:
+   }
+
+   class RepositoryDetailInfoViewController: UIViewController {
+      // TODO:
+   }
+
+   class AuthViewController: UIViewController {
+      // TODO:
+   }
+
+```
+
 
 ## Граф зависимостей KMM приложения:
 
