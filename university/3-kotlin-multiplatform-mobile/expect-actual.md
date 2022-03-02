@@ -6,10 +6,11 @@ sidebar_position: 2
 
 expect/actual - это механизм, позволяющий использовать в общем коде платформенную реализацию класса, функции или переменной. 
 Изучите [раздел](https://kotlinlang.org/docs/mpp-connect-to-apis.html) на официальном сайте.  
-В качестве практического задания, предлагаем вам изменить проект, который вы создавали по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html) в разделе [Multiplatform Settings](multiplatform-settings):
-- Добавьте в общий код expect-функцию greeting
-- Добавьте actual-реализацию функции greeting для Android, пусть выводит на экран "It's Android!"
-- Добавьте actual-реализацию функции greeting для iOS, пусть выводит на экран "It's iOS!"
+В качестве практического задания, предлагаем вам изменить проект, который вы создавали по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html) в разделе [Основы Kotlin Multiplatform Mobile](kmm):
+- Добавьте в общий код expect-функцию log() 
+- Добавьте actual-реализацию функции log для Android, используя функцию log.d(String tag, String msg) из пакета android.util
+- Добавьте actual-реализацию функции log для iOS, исползуя NSLog()
+- Протестируйте на обеих платформах
 
 ## Добавление зависимостей
 
@@ -26,7 +27,7 @@ expect/actual - это механизм, позволяющий использо
     
 ## typealias 
 
-Чтобы узнать, как можно упросить использование механизма expect/actual, [прочитайте](https://kotlinlang.org/docs/mpp-connect-to-apis.html#rules-for-expected-and-actual-declarations) о возможностях typealias и выполните следующие действия: 
+Чтобы узнать, как можно упросить использование механизма expect/actual, [прочитайте](https://kotlinlang.org/docs/mpp-connect-to-apis.html#rules-for-expected-and-actual-declarations) о возможностях typealias и выполните следующие действия, используя проект, который вы изменяли ранее: 
 
 - Создайте expect class AtomicRef
 - Добавьте actual-реализацию используя typealias и класс java.util.concurrent.atomic.AtomicReference

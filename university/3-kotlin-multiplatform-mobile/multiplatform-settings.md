@@ -6,7 +6,7 @@ sidebar_position: 3
 
 Ознакомьтесь с [multiplatform-settings](https://github.com/russhwolf/multiplatform-settings) - библиотекой, позволяющей сохранять key-value данные в параметры устройства из общего кода используя SharedPreferences для Android и NSUserDefaults для iOS  
 Чтобы попрактиковаться, выполните следующее задание
-1. Откройте проект, который вы создавали по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html) в разделе [Основы Kotlin Multiplatform Mobile](kmm)
+1. Откройте проект, который вы изменяли в разделе [expect/actual](expect-actual) или создайте новый по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html)
 1. Подключите multiplatform-settings
 1. Сохраните название платформы в хранилище устройства в общем коде
 1. Для iOS и Android выведите на экран значение, которое сохранили в общем коде используя библиотеку
