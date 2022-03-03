@@ -177,13 +177,9 @@ sidebar_position: 6
    class DetailInfoFragment:::android
    
    class AuthViewModel:::android
-   class AuthState:::android
-   class AuthAction:::android
    
    class RepositoryInfoViewModel:::android
-   class InfoState:::android
    class RepositoriesListViewModel:::android
-   class ListState:::android
    class KeyValueStorage:::android
    
    MainActivity --> AuthFragment
@@ -199,12 +195,6 @@ sidebar_position: 6
    RepositoriesListViewModel --> GitHubRepoRepository
    
    GitHubRepoRepository --> KeyValueStorage
-   
-   AuthViewModel -- AuthAction
-   AuthViewModel -- AuthState
-  
-   RepositoryInfoViewModel -- InfoState
-   RepositoriesListViewModel -- ListState
    
    class RepositoriesListViewController:::ios
    class RepositoryDetailInfoViewController:::ios

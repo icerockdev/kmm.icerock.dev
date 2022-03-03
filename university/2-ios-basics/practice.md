@@ -88,14 +88,14 @@ sidebar_position: 5
    class RepositoryDetailInfoViewController:::ios
    class AuthViewController:::ios
    
-   class AppRepository:::ios
+   class GitHubRepoRepository:::ios
    
    class KeyValueStorage:::ios
    
-   RepositoriesListViewController --> AppRepository
-   RepositoryDetailInfoViewController --> AppRepository
-   AuthViewController --> AppRepository
-   AppRepository --> KeyValueStorage
+   RepositoriesListViewController --> GitHubRepoRepository
+   RepositoryDetailInfoViewController --> GitHubRepoRepository
+   AuthViewController --> GitHubRepoRepository
+   GitHubRepoRepository --> KeyValueStorage
 ```
 
 В отличии от android в iOS у нас нет сильной необходимости применять MVVM и реактивные хранилища состояния. 

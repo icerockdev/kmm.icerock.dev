@@ -161,14 +161,12 @@ sidebar_position: 6
    class DetailInfoFragment:::android
    
    class AuthViewModel:::android
-   class AuthState:::android
-   class AuthAction:::android
    
    class RepositoryInfoViewModel:::android
-   class InfoState:::android
+
    class RepositoriesListViewModel:::android
-   class ListState:::android
-   class AppRepository:::android
+
+   class GitHubRepoRepository:::android
    class KeyValueStorage:::android
    
    MainActivity --> AuthFragment
@@ -179,17 +177,11 @@ sidebar_position: 6
    RepositoriesListFragment --> RepositoriesListViewModel
    DetailInfoFragment --> RepositoryInfoViewModel
    
-   RepositoryInfoViewModel --> AppRepository
-   AuthViewModel --> AppRepository
-   RepositoriesListViewModel --> AppRepository
+   RepositoryInfoViewModel --> GitHubRepoRepository
+   AuthViewModel --> GitHubRepoRepository
+   RepositoriesListViewModel --> GitHubRepoRepository
    
-   AppRepository --> KeyValueStorage
-   
-   AuthViewModel -- AuthAction
-   AuthViewModel -- AuthState
-  
-   RepositoryInfoViewModel -- InfoState
-   RepositoriesListViewModel -- ListState
+   GitHubRepoRepository --> KeyValueStorage
 ```
 
 По диаграмме важно понять что нужно использовать MVVM подход с хранением состояния в виде `sealed interface`, например:
