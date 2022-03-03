@@ -53,19 +53,19 @@ sidebar_position: 5
    }
 
    class AppRepository {
-      func getRepositories(@escaping completion: ((List<RepoEntity>?, Error?) -> Void)) {
+      func getRepositories(@escaping completion: (Array<Repo>?, Error?) -> Void) {
           // TODO:
       }
       
-      func getRepository(repoId: String, @escaping completion: ((RepoDetailsEntity?, Error?) -> Void)) {
+      func getRepository(repoId: String, @escaping completion: (RepoDetails?, Error?) -> Void) {
          // TODO:
       }
       
-      func getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, @escaping completion: ((RepoReadme?, Error?) -> Void)) {
+      func getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, @escaping completion: (String?, Error?) -> Void) {
          // TODO:
       }
       
-      func signIn(token: String, @escaping completion: ((UserInfo?, Error?) -> Void)) {
+      func signIn(token: String, @escaping completion: (UserInfo?, Error?) -> Void) {
          // TODO:
       }
       
@@ -88,14 +88,15 @@ sidebar_position: 5
    class RepositoryDetailInfoViewController:::ios
    class AuthViewController:::ios
    
-   class GitHubRepoRepository:::ios
+   class AppRepository:::ios
    
    class KeyValueStorage:::ios
    
-   RepositoriesListViewController --> GitHubRepoRepository
-   RepositoryDetailInfoViewController --> GitHubRepoRepository
-   AuthViewController --> GitHubRepoRepository
-   GitHubRepoRepository --> KeyValueStorage
+   RepositoriesListViewController --> AppRepository
+   RepositoryDetailInfoViewController --> AppRepository
+   AuthViewController --> AppRepository
+
+   AppRepository --> KeyValueStorage
 ```
 
 В отличии от android в iOS у нас нет сильной необходимости применять MVVM и реактивные хранилища состояния. 
@@ -106,7 +107,7 @@ iOS приложение не пересоздает экраны и позво�
 авторизации (обращением к репозиторию), а с списка репозиториев на детальный вид репозитория переходить будем передавая 
 сущность репозитория.
 
-Все 3 экрана будут напрямую работать с репозиторием и обновлять свое внутренее состояние при получении ответов от 
+Все 3 экрана будут напрямую работать с репозиторием и обновлять свое внутреннее состояние при получении ответов от 
 репозитория.
 
 ## Материалы
