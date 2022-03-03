@@ -34,3 +34,15 @@
   background: #EEE;
   border-radius: 16px;
 }
+
+.android > rect {
+  fill:rgb(181, 245, 181) !important;
+}
+
+.ios > rect {
+  fill:rgb(110, 163, 250) !important;
+}
+
+.common > rect {
+  fill:rgb(174, 146, 252) !important;
+}
