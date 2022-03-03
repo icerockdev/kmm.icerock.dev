@@ -4,12 +4,12 @@ const isProd = process.env.NODE_ENV === 'production';
 module.exports = {
   title: 'Kotlin Multiplatform Mobile',
   tagline: 'Материалы для изучения от IceRock Development',
-  url: 'https://kmm.icerock.dev',
-  baseUrl: '/',
+  url: process.env.CONFIG_URL || 'https://kmm.icerock.dev',
+  baseUrl: process.env.CONFIG_BASE_URL || '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   favicon: 'img/favicon.ico',
-  organizationName: 'icerockdev', // Usually your GitHub org/user name.
+  organizationName: process.env.CONFIG_ORG_NAME || 'icerockdev', // Usually your GitHub org/user name.
   projectName: 'kmm.icerock.dev', // Usually your repo name.
   // i18n: {
   //   defaultLocale: 'ru',
