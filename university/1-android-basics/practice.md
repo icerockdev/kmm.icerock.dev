@@ -47,39 +47,40 @@ sidebar_position: 6
 
 ```kotlin
     
-    class MainActivity: AppCompatActivity() {
+    class MainActivity: AppCompatActivity {
         // TODO:
     }
 
-    class AuthFragment: Fragment(R.id.auth_framgent) {
+    class AuthFragment: Fragment {
         // TODO:
     }
 
-    class RepositoriesListFragment: Fragment(R.id.repo_list_framgent) {
+    class RepositoriesListFragment: Fragment {
        // TODO:
     }
 
-    class DetailInfoFragment: Fragment(R.id.repo_info_framgent) {
+    class DetailInfoFragment: Fragment {
        // TODO:
     }
 
    class AuthViewModel {
       val token: MutableLiveData<String>
-      val state: LiveData<AuthState>
-      val actions: Flow<AuthAction>
+      val state: LiveData<State>
+      val actions: Flow<Action>
+
       fun onSignButtonPressed() {
           // TODO:
       }
       
-      sealed interface AuthState {
-         object Idle : AuthState
-         object Loading : AuthState
-         object InvalidInput : AuthState
+      sealed interface State {
+         object Idle : State
+         object Loading : State
+         data class InvalidInput(val reason: String) : State
       }
       
-      sealed interface AuthAction {
-         object ShowError : AuthAction
-         object RouteToMain : AuthAction
+      sealed interface Action {
+         data class ShowError(val message: String) : Action
+         object RouteToMain : Action
       }
 
       // TODO:
@@ -90,19 +91,19 @@ sidebar_position: 6
 
       sealed interface State {
          object Loading : State
-         object Error : State
+         data class Error(val error: String) : State
 
-         data class DataAvailable(
-            val githubRepo: RepoEntity,
+         data class Loaded(
+            val githubRepo: Repo,
             val readmeState: ReadmeState
          ) : State
+      }
 
-         sealed interface ReadmeState {
-            object Loading : ReadmeState
-            object Empty : ReadmeState
-            data class Error(val error: String) : ReadmeState
-            data class Loaded(val markdown: String) : ReadmeState
-         }
+      sealed interface ReadmeState {
+         object Loading : ReadmeState
+         object Empty : ReadmeState
+         data class Error(val error: String) : ReadmeState
+         data class Loaded(val markdown: String) : ReadmeState
       }
 
       // TODO:
@@ -113,8 +114,8 @@ sidebar_position: 6
       
       sealed interface State {
          object Loading : State
-         object ListLoaded : State
-         object Error : State
+         data class Loaded(val repos: List<Repo>) : State
+         data class Error(val error: String) : State
          object Empty : State
       }
 
@@ -122,15 +123,15 @@ sidebar_position: 6
    }
 
    class AppRepository {
-      suspend fun getRepositories(): List<RepoEntity> {
+      suspend fun getRepositories(): List<Repo> {
          // TODO:
       }
 
-      suspend fun getRepository(repoId: String): RepoDetailsEntity {
+      suspend fun getRepository(repoId: String): RepoDetails {
          // TODO:
       }
 
-      suspend fun getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String): RepoReadme {
+      suspend fun getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String): String {
          // TODO:
       }
       
@@ -145,7 +146,6 @@ sidebar_position: 6
       var authToken: String?
       var userName: String?
    }
-
 ```
 
 ## Диаграмма классов
@@ -166,7 +166,7 @@ sidebar_position: 6
 
    class RepositoriesListViewModel:::android
 
-   class GitHubRepoRepository:::android
+   class AppRepository:::android
    class KeyValueStorage:::android
    
    MainActivity --> AuthFragment
@@ -177,31 +177,12 @@ sidebar_position: 6
    RepositoriesListFragment --> RepositoriesListViewModel
    DetailInfoFragment --> RepositoryInfoViewModel
    
-   RepositoryInfoViewModel --> GitHubRepoRepository
-   AuthViewModel --> GitHubRepoRepository
-   RepositoriesListViewModel --> GitHubRepoRepository
+   RepositoryInfoViewModel --> AppRepository
+   AuthViewModel --> AppRepository
+   RepositoriesListViewModel --> AppRepository
    
-   GitHubRepoRepository --> KeyValueStorage
+   AppRepository --> KeyValueStorage
 ```
-
-По диаграмме важно понять что нужно использовать MVVM подход с хранением состояния в виде `sealed interface`, например:
-
-```kotlin
-sealed interface State {
-    object Loading : State
-    data class Loaded(val repo: RepoEntity, val readmeState: ReadmeState) : State
-
-    sealed interface ReadmeState {
-        object Loading : ReadmeState
-        object Empty : ReadmeState
-        data class Error(val error: String) : ReadmeState
-        data class Loaded(val markdown: String) : ReadmeState
-    }
-}
-```
-
-Из-за ограничений mermaid на диаграмме не удалось отразить схему с учетом возможностей kotlin, но пример выше должен
-помочь вам сориентироваться.
 
 ## Материалы
 

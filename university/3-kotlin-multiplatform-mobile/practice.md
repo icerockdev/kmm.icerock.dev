@@ -8,7 +8,10 @@ sidebar_position: 6
 
 Во время работы над практическим заданием настоятельно рекомендуем обращаться к разделу [Памятки для разработчика](/university/memos/function)
 
-Функциональные возможности остаются те же самые
+## Функциональные возможности
+
+Остаются те же самые:
+
 1. Авторизация пользователя (personal access token)
 1. Просмотр списка репозиториев пользователя (первые 10)
 1. Просмотр детальной информации выбранного репозитория
@@ -17,30 +20,31 @@ sidebar_position: 6
     1. ссылка на web страницу репозитория
     1. лицензия
 
-Технические требования:
+## Технические требования
+
 1. Использовать multiplatform-settings для работы с хранилищем устройства
 1. Логика хранения данных должна находиться в common коде
 1. Логика работы с сетью должна находиться в common коде
 1. Для работы с сетью использовать Ktor Client
 1. При перезапуске приложения авторизация должна сохраняться
 
-## Структуры приложения 
+## Классы приложения 
 
-Чтобы использовать `suspend` функции в общем коде, необходимо добавить аннотацию `@Throws`. Благодаря этой аннотации, компилятор Kotlin Native сгенерирует функцию с completion для iOS
+Чтобы использовать `suspend` функции в общем коде, необходимо добавить аннотацию `@Throws`. Благодаря этой аннотации, компилятор Kotlin/Native сгенерирует функцию с completion для iOS
 
 ```kotlin
    
    // Классы common кода 
    
-   class GitHubRepoRepository {
+   class AppRepository {
       
       @Throws(Exception::class)
-      suspend fun getRepositories(): List<RepoEntity> {
+      suspend fun getRepositories(): List<Repo> {
          // TODO:
       }
 
       @Throws(Exception::class)
-      suspend fun getRepository(repoId: String): RepoDetailsEntity {
+      suspend fun getRepository(repoId: String): RepoDetails {
          // TODO:
       }
 
@@ -49,7 +53,7 @@ sidebar_position: 6
          ownerName: String,
          repositoryName: String,
          branchName: String
-      ): RepoReadme {
+      ): String {
          // TODO:
       }
 
@@ -68,40 +72,40 @@ sidebar_position: 6
    
    // Классы Android-приложения
 
+   class MainActivity: AppCompatActivity {
+        // TODO:
+    }
 
-   class MainActivity: AppCompatActivity() {
-      // TODO:
-   }
+    class AuthFragment: Fragment {
+        // TODO:
+    }
 
-   class AuthFragment: Fragment(R.id.auth_framgent) {
-      // TODO:
-   }
+    class RepositoriesListFragment: Fragment {
+       // TODO:
+    }
 
-   class RepositoriesListFragment: Fragment(R.id.repo_list_framgent) {
-      // TODO:
-   }
-
-   class DetailInfoFragment: Fragment(R.id.repo_info_framgent) {
-      // TODO:
-   }
+    class DetailInfoFragment: Fragment {
+       // TODO:
+    }
 
    class AuthViewModel {
       val token: MutableLiveData<String>
-      val state: LiveData<AuthState>
-      val actions: Flow<AuthAction>
+      val state: LiveData<State>
+      val actions: Flow<Action>
+
       fun onSignButtonPressed() {
-         // TODO:
+          // TODO:
       }
-
-      sealed interface AuthState {
-         object Idle : AuthState
-         object Loading : AuthState
-         object InvalidInput : AuthState
+      
+      sealed interface State {
+         object Idle : State
+         object Loading : State
+         data class InvalidInput(val reason: String) : State
       }
-
-      sealed interface AuthAction {
-         object ShowError : AuthAction
-         object RouteToMain : AuthAction
+      
+      sealed interface Action {
+         data class ShowError(val message: String) : Action
+         object RouteToMain : Action
       }
 
       // TODO:
@@ -112,31 +116,31 @@ sidebar_position: 6
 
       sealed interface State {
          object Loading : State
-         object Error : State
+         data class Error(val error: String) : State
 
-         data class DataAvailable(
-            val githubRepo: RepoEntity,
+         data class Loaded(
+            val githubRepo: Repo,
             val readmeState: ReadmeState
          ) : State
+      }
 
-         sealed interface ReadmeState {
-            object Loading : ReadmeState
-            object Empty : ReadmeState
-            data class Error(val error: String) : ReadmeState
-            data class Loaded(val markdown: String) : ReadmeState
-         }
+      sealed interface ReadmeState {
+         object Loading : ReadmeState
+         object Empty : ReadmeState
+         data class Error(val error: String) : ReadmeState
+         data class Loaded(val markdown: String) : ReadmeState
       }
 
       // TODO:
    }
-
+   
    class RepositoriesListViewModel {
       val state: LiveData<State>
-
+      
       sealed interface State {
          object Loading : State
-         object ListLoaded : State
-         object Error : State
+         data class Loaded(val repos: List<Repo>) : State
+         data class Error(val error: String) : State
          object Empty : State
       }
 
@@ -160,7 +164,7 @@ sidebar_position: 6
 ```
 
 
-## Граф зависимостей KMM приложения:
+## Граф зависимостей KMM приложения
 
 На графе отображена зависимость компонентов KMM приложения друг от друга, цветами выделены подграфы:  
 Фиолетовый - Common, Зеленый - Android, Синий - iOS
@@ -168,7 +172,7 @@ sidebar_position: 6
 ```mermaid
    classDiagram
    
-   class GitHubRepoRepository:::common
+   class AppRepository:::common
    class KeyValueStorage:::common
    
    class MainActivity:::android
@@ -190,19 +194,19 @@ sidebar_position: 6
    RepositoriesListFragment --> RepositoriesListViewModel
    DetailInfoFragment --> RepositoryInfoViewModel
    
-   RepositoryInfoViewModel --> GitHubRepoRepository
-   AuthViewModel --> GitHubRepoRepository
-   RepositoriesListViewModel --> GitHubRepoRepository
+   RepositoryInfoViewModel --> AppRepository
+   AuthViewModel --> AppRepository
+   RepositoriesListViewModel --> AppRepository
    
-   GitHubRepoRepository --> KeyValueStorage
+   AppRepository --> KeyValueStorage
    
    class RepositoriesListViewController:::ios
    class RepositoryDetailInfoViewController:::ios
    class AuthViewController:::ios
    
-   RepositoriesListViewController --> GitHubRepoRepository
-   RepositoryDetailInfoViewController --> GitHubRepoRepository
-   AuthViewController --> GitHubRepoRepository
+   RepositoriesListViewController --> AppRepository
+   RepositoryDetailInfoViewController --> AppRepository
+   AuthViewController --> AppRepository
 ```
 
 Материалы:
