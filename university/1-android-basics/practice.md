@@ -66,66 +66,75 @@ sidebar_position: 6
    class AuthViewModel {
       val token: MutableLiveData<String>
       val state: LiveData<AuthState>
-      val events: Flow<AuthEvent>
+      val actions: Flow<AuthAction>
       fun onSignButtonPressed() {
           // TODO:
       }
       
-      sealed class AuthState {
-         object Idle: AuthState()
-         object Loading: AuthState()
-         object InvalidInput: AuthState()
+      sealed interface AuthState {
+         object Idle : AuthState
+         object Loading : AuthState
+         object InvalidInput : AuthState
       }
       
-      sealed class AuthEvent {
-         object ShowError: AuthEvent()
-         object RouteToMain: AuthEvent()
+      sealed interface AuthAction {
+         object ShowError : AuthAction
+         object RouteToMain : AuthAction
       }
 
       // TODO:
    }
 
    class RepositoryInfoViewModel {
-      val state: LiveData<RepositoryState>
+      val state: LiveData<State>
 
-      sealed class RepositoryState {
-         object Loading: RepositoryState()
-         object RepoLoadedReadmeLoading: RepositoryState()
-         object RepoLoadedReadmeError: RepositoryState()
-         object RepoLoadedReadmeEmpty: RepositoryState()
-         object RepoLoadedReadmeLoaded: RepositoryState()
+      sealed interface State {
+         object Loading : State
+         object Error : State
+
+         data class DataAvailable(
+            val githubRepo: RepoEntity,
+            val readmeState: ReadmeState
+         ) : State
+
+         sealed interface ReadmeState {
+            object Loading : ReadmeState
+            object Empty : ReadmeState
+            data class Error(val error: String) : ReadmeState
+            data class Loaded(val markdown: String) : ReadmeState
+         }
       }
 
       // TODO:
    }
    
    class RepositoriesListViewModel {
-      val state: LiveData<RepositoriesState>
+      val state: LiveData<State>
       
-      sealed class RepositoriesState {
-         object Loading: PincodeCreationState()
-         object ListLoaded: PincodeCreationState()
-         object Error: PincodeCreationState()
-         object Empty: PincodeCreationState()
+      sealed interface State {
+         object Loading : State
+         object ListLoaded : State
+         object Error : State
+         object Empty : State
       }
 
       // TODO:
    }
 
    class AppRepository {
-      fun getRepositories(completion: (List<RepoEntity?>, Error?) -> Unit) {
+      suspend fun getRepositories(): List<RepoEntity> {
+         // TODO:
+      }
+
+      suspend fun getRepository(repoId: String): RepoDetailsEntity {
+         // TODO:
+      }
+
+      suspend fun getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String): RepoReadme {
          // TODO:
       }
       
-      fun getRepository(repoId: String, completion: (RepoDetailsEntity?, Error?) -> Unit) {
-         // TODO:
-      }
-      
-      fun getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, completion: (RepoReadme?, Error?) -> Unit) {
-         // TODO:
-      }
-      
-      fun signIn(token: String, completion: (UserInfo?, Error?) -> Unit) {
+      suspend fun signIn(token: String): UserInfo {
          // TODO:
       }
 
@@ -151,62 +160,16 @@ sidebar_position: 6
    class RepositoriesListFragment:::android
    class DetailInfoFragment:::android
    
-   class AuthViewModel:::android {
-      token: MutableLiveData~String~
-      state: LiveData~AuthState~
-      events: Flow<AuthEvent>
-      onSignButtonPressed()
-   }
+   class AuthViewModel:::android
+   class AuthState:::android
+   class AuthAction:::android
    
-   class AuthState:::android {
-      <<enumeration>>
-      Idle
-      Loading
-      InvalidInput
-   }
-   
-   class AuthEvent:::android {
-      <<enumeration>>
-      ShowError
-      RouteToMain
-   }
-   
-   class RepositoryInfoViewModel:::android {
-      state: LiveData~RepositoryState~
-   }
-   
-   class RepositoryState:::android {
-      <<enumeration>>
-      Loading
-      RepoLoadedReadmeLoading
-      RepoLoadedReadmeError
-      RepoLoadedReadmeEmpty
-      RepoLoadedReadmeLoaded
-   }
-   
-   class RepositoriesListViewModel:::android {
-      state: LiveData~RepositoriesState~
-   }
-   
-   class RepositoriesState:::android {
-      <<enumeration>>
-      Loading
-      ListLoaded
-      Error
-      Empty
-   }
-   
-   class AppRepository:::android {
-      getRepositories(completion: (List~RepoEntity~?, Error?))
-      getRepository(repoId: String, completion: (RepoDetailsEntity?, Error?))
-      getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, completion: (RepoReadme?, Error?))
-      signIn(token: String, completion: (UserInfo?, Error?))
-   }
-   
-   class KeyValueStorage:::android{
-      authToken: String?
-      userName: String?
-   }
+   class RepositoryInfoViewModel:::android
+   class InfoState:::android
+   class RepositoriesListViewModel:::android
+   class ListState:::android
+   class AppRepository:::android
+   class KeyValueStorage:::android
    
    MainActivity --> AuthFragment
    MainActivity --> RepositoriesListFragment
@@ -222,20 +185,19 @@ sidebar_position: 6
    
    AppRepository --> KeyValueStorage
    
-   AuthViewModel -- AuthEvent
+   AuthViewModel -- AuthAction
    AuthViewModel -- AuthState
-   
-   RepositoryInfoViewModel -- RepositoryState
-   
-   RepositoriesListViewModel -- RepositoriesState
+  
+   RepositoryInfoViewModel -- InfoState
+   RepositoriesListViewModel -- ListState
 ```
 
 По диаграмме важно понять что нужно использовать MVVM подход с хранением состояния в виде `sealed interface`, например:
 
 ```kotlin
-sealed interface RepositoryState {
-    object Loading : RepositoryState
-    data class Loaded(val repo: RepoEntity, val readmeState: ReadmeState) : RepositoryState
+sealed interface State {
+    object Loading : State
+    data class Loaded(val repo: RepoEntity, val readmeState: ReadmeState) : State
 
     sealed interface ReadmeState {
         object Loading : ReadmeState

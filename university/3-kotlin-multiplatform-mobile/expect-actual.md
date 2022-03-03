@@ -7,9 +7,9 @@ sidebar_position: 2
 expect/actual - это механизм, позволяющий использовать в общем коде платформенную реализацию класса, функции или переменной. 
 Изучите [раздел](https://kotlinlang.org/docs/mpp-connect-to-apis.html) на официальном сайте.  
 В качестве практического задания, предлагаем вам изменить проект, который вы создавали по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html) в разделе [Основы Kotlin Multiplatform Mobile](kmm):
-- Добавьте в общий код expect-функцию log() 
-- Добавьте actual-реализацию функции log для Android, используя функцию log.d(String tag, String msg) из пакета android.util
-- Добавьте actual-реализацию функции log для iOS, исползуя NSLog()
+- Добавьте в общий код `expect` функцию `log()`
+- Добавьте actual-реализацию функции `log` для Android, используя функцию `Log.d(String tag, String msg)` из пакета `android.util`
+- Добавьте actual-реализацию функции `log` для iOS, используя `NSLog()`
 - Протестируйте на обеих платформах
 
 ## Добавление зависимостей

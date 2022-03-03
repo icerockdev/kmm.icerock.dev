@@ -53,7 +53,7 @@ sidebar_position: 5
    }
 
    class AppRepository {
-      func getRepositories(@escaping completion: ((List<RepoEntity?>, Error?) -> Void)) {
+      func getRepositories(@escaping completion: ((List<RepoEntity>?, Error?) -> Void)) {
           // TODO:
       }
       
@@ -88,17 +88,9 @@ sidebar_position: 5
    class RepositoryDetailInfoViewController:::ios
    class AuthViewController:::ios
    
-   class AppRepository:::ios {
-      getRepositories(completion: (List~RepoEntity~?, Error?))
-      getRepository(repoId: String, completion: (RepoDetailsEntity?, Error?))
-      getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, completion: (RepoReadme?, Error?))
-      signIn(token: String, completion: (UserInfo?, Error?))
-   }
+   class AppRepository:::ios
    
-   class KeyValueStorage:::ios {
-      authToken: String?
-      userName: String?
-   }
+   class KeyValueStorage:::ios
    
    RepositoriesListViewController --> AppRepository
    RepositoryDetailInfoViewController --> AppRepository

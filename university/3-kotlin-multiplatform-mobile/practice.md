@@ -26,26 +26,39 @@ sidebar_position: 6
 
 ## Структуры приложения 
 
+Чтобы использовать `suspend` функции в общем коде, необходимо добавить аннотацию `@Throws`. Благодаря этой аннотации, компилятор Kotlin Native сгенерирует функцию с completion для iOS
+
 ```kotlin
    
    // Классы common кода 
    
    class GitHubRepoRepository {
-      fun getRepositories(completion: (List<RepoEntity?>, Error?) -> Unit) {
-         // TODO:
-      }
       
-      fun getRepository(repoId: String, completion: (RepoDetailsEntity?, Error?) -> Unit) {
+      @Throws(Exception::class)
+      suspend fun getRepositories(): List<RepoEntity> {
          // TODO:
       }
-      
-      fun getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, completion: (RepoReadme?, Error?) -> Unit) {
+
+      @Throws(Exception::class)
+      suspend fun getRepository(repoId: String): RepoDetailsEntity {
          // TODO:
       }
-      
-      fun signIn(token: String, completion: (UserInfo?, Error?) -> Unit) {
+
+      @Throws(Exception::class)
+      suspend fun getRepositoryReadme(
+         ownerName: String,
+         repositoryName: String,
+         branchName: String
+      ): RepoReadme {
          // TODO:
       }
+
+      @Throws(Exception::class)
+      suspend fun signIn(token: String): UserInfo {
+         // TODO:
+      }
+
+      // TODO:
    }
    
    class KeyValueStorage {
@@ -75,47 +88,56 @@ sidebar_position: 6
    class AuthViewModel {
       val token: MutableLiveData<String>
       val state: LiveData<AuthState>
-      val events: Flow<AuthEvent>
+      val actions: Flow<AuthAction>
       fun onSignButtonPressed() {
          // TODO:
       }
 
-      sealed class AuthState {
-         object Idle: AuthState()
-         object Loading: AuthState()
-         object InvalidInput: AuthState()
+      sealed interface AuthState {
+         object Idle : AuthState
+         object Loading : AuthState
+         object InvalidInput : AuthState
       }
 
-      sealed class AuthEvent {
-         object ShowError: AuthEvent()
-         object RouteToMain: AuthEvent()
+      sealed interface AuthAction {
+         object ShowError : AuthAction
+         object RouteToMain : AuthAction
       }
 
       // TODO:
    }
 
    class RepositoryInfoViewModel {
-      val state: LiveData<RepositoryState>
+      val state: LiveData<State>
 
-      sealed class RepositoryState {
-         object Loading: RepositoryState()
-         object RepoLoadedReadmeLoading: RepositoryState()
-         object RepoLoadedReadmeError: RepositoryState()
-         object RepoLoadedReadmeEmpty: RepositoryState()
-         object RepoLoadedReadmeLoaded: RepositoryState()
+      sealed interface State {
+         object Loading : State
+         object Error : State
+
+         data class DataAvailable(
+            val githubRepo: RepoEntity,
+            val readmeState: ReadmeState
+         ) : State
+
+         sealed interface ReadmeState {
+            object Loading : ReadmeState
+            object Empty : ReadmeState
+            data class Error(val error: String) : ReadmeState
+            data class Loaded(val markdown: String) : ReadmeState
+         }
       }
 
       // TODO:
    }
 
    class RepositoriesListViewModel {
-      val state: LiveData<RepositoriesState>
+      val state: LiveData<State>
 
-      sealed class RepositoriesState {
-         object Loading: PincodeCreationState()
-         object ListLoaded: PincodeCreationState()
-         object Error: PincodeCreationState()
-         object Empty: PincodeCreationState()
+      sealed interface State {
+         object Loading : State
+         object ListLoaded : State
+         object Error : State
+         object Empty : State
       }
 
       // TODO:
@@ -146,96 +168,51 @@ sidebar_position: 6
 ```mermaid
    classDiagram
    
-   class AuthViewModel:::android {
-      token: MutableLiveData~String~
-      state: LiveData~AuthState~
-      events: Flow<AuthEvent>
-      onSignButtonPressed()
-   }
-   
-   class AuthState:::android {
-      <<enumeration>>
-      Idle
-      Loading
-      InvalidInput
-   }
-   
-   class AuthEvent:::android {
-      <<enumeration>>
-      ShowError
-      RouteToMain
-   }
-       
-   class RepositoryInfoViewModel:::android {
-      state: LiveData~RepositoryState~
-   }
-   
-   class RepositoryState:::android {
-      <<enumeration>>
-      Loading
-      RepoLoadedReadmeLoading
-      RepoLoadedReadmeError
-      RepoLoadedReadmeEmpty
-      RepoLoadedReadmeLoaded
-   }
-   
-   class RepositoriesListViewModel:::android {
-      state: LiveData~RepositoriesState~
-   }
-   
-   class RepositoriesState:::android {
-      <<enumeration>>
-      Loading
-      ListLoaded
-      Error
-      Empty
-   }
-      
-   class GitHubRepoRepository:::common {
-      getRepositories(completion: (List~RepoEntity~?, Error?))
-      getRepository(repoId: String, completion: (RepoDetailsEntity?, Error?))
-      getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, completion: (RepoReadme?, Error?))
-      signIn(token: String, completion: (UserInfo?, Error?))
-   }
-   
-   class KeyValueStorage:::common {
-      authToken: String?
-      userName: String?
-   }
+   class GitHubRepoRepository:::common
+   class KeyValueStorage:::common
    
    class MainActivity:::android
+   class AuthFragment:::android
    class RepositoriesListFragment:::android
    class DetailInfoFragment:::android
-   class AuthFragment:::android
    
-   class RepositoriesListViewController:::ios
-   class RepositoryDetailInfoViewController:::ios
-   class AuthViewController:::ios
+   class AuthViewModel:::android
+   class AuthState:::android
+   class AuthAction:::android
+   
+   class RepositoryInfoViewModel:::android
+   class InfoState:::android
+   class RepositoriesListViewModel:::android
+   class ListState:::android
+   class KeyValueStorage:::android
    
    MainActivity --> AuthFragment
    MainActivity --> RepositoriesListFragment
    MainActivity --> DetailInfoFragment
    
+   AuthFragment --> AuthViewModel
    RepositoriesListFragment --> RepositoriesListViewModel
    DetailInfoFragment --> RepositoryInfoViewModel
-   AuthFragment --> AuthViewModel
-      
-   RepositoriesListViewModel --> GitHubRepoRepository
-   AuthViewModel --> GitHubRepoRepository
+   
    RepositoryInfoViewModel --> GitHubRepoRepository
-          
-   RepositoriesListViewController --> GitHubRepoRepository
-   RepositoryDetailInfoViewController --> GitHubRepoRepository
-   AuthViewController --> GitHubRepoRepository
+   AuthViewModel --> GitHubRepoRepository
+   RepositoriesListViewModel --> GitHubRepoRepository
    
    GitHubRepoRepository --> KeyValueStorage
    
-   AuthViewModel -- AuthEvent
+   AuthViewModel -- AuthAction
    AuthViewModel -- AuthState
+  
+   RepositoryInfoViewModel -- InfoState
+   RepositoriesListViewModel -- ListState
    
-   RepositoriesListViewModel -- RepositoriesState
+   class RepositoriesListViewController:::ios
+   class RepositoryDetailInfoViewController:::ios
+   class AuthViewController:::ios
    
-   RepositoryInfoViewModel -- RepositoryState
+   RepositoriesListViewController --> GitHubRepoRepository
+   RepositoryDetailInfoViewController --> GitHubRepoRepository
+   AuthViewController --> GitHubRepoRepository
 ```
 
 Материалы:
