@@ -13,7 +13,7 @@ Android - https://developer.android.com/guide/navigation
 - Другие координаторы - отвечают за свои зоны приложения (авторизация, просмотр новостей, редактирование профиля и тд)
 - `.xib` и code для верстки - экраны верстаем в `.xib`, navigation items и более сложные настройки делаем через код
 
-## Практическое задание
+## ApplicationCoordinator - практическое задание
 
 В качестве практики предлагаем вам потренироваться в использовании `ApplicationCoordinator`. Ориентируясь на [проект](https://github.com/pegurov/CoordinatorsDemo) из [видео](https://www.youtube.com/watch?v=Pt9TGFzLVzc) сделать следующее приложение:
 - всего 2 экрана: `AuthViewController` и `HomeViewController` и 3 координатора: `AppCoordinator`, `AuthCoordinator` и `HomeCoordinator`
