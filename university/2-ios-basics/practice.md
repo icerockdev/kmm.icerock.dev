@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # Практическое задание
@@ -53,19 +53,19 @@ sidebar_position: 5
    }
 
    class AppRepository {
-      func getRepositories(@escaping completion: (Array<Repo>?, Error?) -> Void) {
+      func getRepositories(completion: @escaping (Array<Repo>?, Error?) -> Void) {
           // TODO:
       }
       
-      func getRepository(repoId: String, @escaping completion: (RepoDetails?, Error?) -> Void) {
+      func getRepository(repoId: String, completion: @escaping (RepoDetails?, Error?) -> Void) {
          // TODO:
       }
       
-      func getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, @escaping completion: (String?, Error?) -> Void) {
+      func getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, completion: @escaping (String?, Error?) -> Void) {
          // TODO:
       }
       
-      func signIn(token: String, @escaping completion: (UserInfo?, Error?) -> Void) {
+      func signIn(token: String, completion: @escaping (UserInfo?, Error?) -> Void) {
          // TODO:
       }
       
