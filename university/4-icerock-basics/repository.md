@@ -12,6 +12,42 @@ sidebar_position: 5
 - она возвращает flow а не просто список
 - вы подписываетесь на этот флоу
 
+Допустим, у нас есть таблица кораблей и запрос, позволяющий получить интересующий нас корабль из таблицы
+
+```sqldelight
+CREATE TABLE ShipsTable (
+    id INTEGER AS Int PRIMARY KEY,
+    isSelected AS Boolean NOT NULL,
+    ship AS Ship NOT NULL,
+);
+
+selectedShip:
+SELECT *
+FROM ShipsTable
+WHERE isSelected = true;
+```
+Реализация метода будет следующей:
+
+```kotlin
+fun getShipById(): Flow<Ship?> {
+    return shipsQueries.selectedShip()
+        .asFlow()
+        .mapToOneOrNull()
+        .map { it?.toFeature() }
+}
+```
+Мы возвращаем от таблицы не просто список, а `flow`
+Во вьюмодели, мы подписываемся на этот `flow`.
+
+```kotlin
+val selectedShipTitle: LiveData<String> = repository.selectedShip().map {
+        it?.title ?: throw IllegalStateException("selected ship can't be null!")
+    }.asLiveData(viewModelScope, initialValue = "")
+```
+
+Если наш `selectedShip` изменился (выбрали другой корабль), то и `selectedShipTitle` автоматически обновится, потому что результат `repository.selectedShip()` - это `flow`, а мы на него подписались
+
+Таким образом, если состояние таблицы будет меняться, то все методы, которые поменяли возвращаемые значения и которые уже используются, вызовутся еще раз. Мы, в свою очередь, обновим все данные в приложении, где используются данные из этого запроса. Нигде руками ничего не придется обновлять и вызывать. Меняются данные - сразу меняются и у нас на UI
 
 то что выше переписать более понятно, добавить схему
 
