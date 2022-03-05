@@ -35,6 +35,49 @@ sidebar_position: 5
 1. Сохранять токен авторизации в хранилище устройства - NSUserDefaults
 1. Корректно обрабатывать ситуации "загрузка данных", "ошибка загрузки", "пустой список"
 1. Корректно обрабатывать смену ориентации экрана
+1. При перезапуске приложения авторизация должна сохраняться
+
+## Классы iOS приложения
+```kotlin
+
+   class RepositoriesListViewController: UIViewController {
+       // TODO:
+   }
+   
+   class RepositoryDetailInfoViewController: UIViewController {
+      // TODO:
+   }
+   
+   class AuthViewController: UIViewController {
+      // TODO:
+   }
+
+   class AppRepository {
+      func getRepositories(@escaping completion: (Array<Repo>?, Error?) -> Void) {
+          // TODO:
+      }
+      
+      func getRepository(repoId: String, @escaping completion: (RepoDetails?, Error?) -> Void) {
+         // TODO:
+      }
+      
+      func getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String, @escaping completion: (String?, Error?) -> Void) {
+         // TODO:
+      }
+      
+      func signIn(token: String, @escaping completion: (UserInfo?, Error?) -> Void) {
+         // TODO:
+      }
+      
+      // TODO:
+   }
+   
+   class KeyValueStorage {
+      val authToken: String?
+      val userName: String?
+   }
+
+```
 
 ## Диаграмма классов
 
@@ -45,21 +88,14 @@ sidebar_position: 5
    class RepositoryDetailInfoViewController:::ios
    class AuthViewController:::ios
    
-   class AppRepository:::ios {
-      repositories(completion: (List~RepoEntity~?, Error?))
-      repositoryInfo(repoId: String, completion: (RepoDetailsEntity?, Error?))
-      repositoryReadme(repoId: String, completion: (RepoReadme?, Error?))
-      signIn(token: String, completion: (UserInfo?, Error?))
-   }
+   class AppRepository:::ios
    
-   class KeyValueStorage:::ios {
-      authToken: String?
-      userName: String?
-   }
+   class KeyValueStorage:::ios
    
    RepositoriesListViewController --> AppRepository
    RepositoryDetailInfoViewController --> AppRepository
    AuthViewController --> AppRepository
+
    AppRepository --> KeyValueStorage
 ```
 
@@ -71,7 +107,7 @@ iOS приложение не пересоздает экраны и позво�
 авторизации (обращением к репозиторию), а с списка репозиториев на детальный вид репозитория переходить будем передавая 
 сущность репозитория.
 
-Все 3 экрана будут напрямую работать с репозиторием и обновлять свое внутренее состояние при получении ответов от 
+Все 3 экрана будут напрямую работать с репозиторием и обновлять свое внутреннее состояние при получении ответов от 
 репозитория.
 
 ## Материалы

@@ -7,7 +7,7 @@ sidebar_position: 1
 Для начала, чтобы разобраться, что из себя представляет технология Kotlin Multiplatform Mobile, советуем изучить [официальный сайт](https://kotlinlang.org/lp/mobile/).
 Также, для лучшего понимания, как Kotlin Multiplatform помогает сократить время разработки, советуем прочитать нашу небольшую [статью](https://vc.ru/services/167078-kak-kotlin-multiplatform-pomogaet-sokratit-vremya-razrabotki-prilozheniy)
 
-Далее, можете переходить к изучению технологии на [официальном сайте](https://kotlinlang.org/docs/mpp-intro.html)
+Далее, можете переходить к изучению технологии в [документации](https://kotlinlang.org/docs/mpp-intro.html)
 
 1. Знакомство с KMM начните с официальных [видео](https://www.youtube.com/playlist?list=PLlFc5cFwUnmy_oVc9YQzjasSNoAk4hk_C) для начинающих 
 1. Создайте свое первое мультиплатформенное приложение по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html)
@@ -20,11 +20,11 @@ sidebar_position: 1
 Мультиплатформенная библиотека - это библиотека, адаптированная для использования на разных платформах. Функционал такой библиотеки можно использовать в общем коде, он будет работать для всех таргетов, которые поддерживает библиотека.
 Таргеты мультиплатформенной библиотеки - целевая платформа, на которой будет выполняться скомпилированная библиотека. Со списком всех таргетов, поддерживаемых Kotlin Multiplatform можете ознакомиться по [ссылке](https://kotlinlang.org/docs/mpp-supported-platforms.html)  
 В работе нас будут интересовать библиотеки поддерживающие следующие таргеты:
-- jvm - для работы приложений на Java Virtual Machine (jvm библиотеки поддерживаются на android)
-- androidJvm - для работы приложения на Android устройствах
-- ios_arm64 - для работы приложения на симуляторах iOS устройств
-- ios_x64 - для работы приложения на реальных iOS устройствах
-- ios_simulator_arm64 - для симуляторов iOS на M1
+- `jvm` - для работы приложений на Java Virtual Machine (jvm библиотеки поддерживаются на android)
+- `androidJvm` - для работы приложения на Android устройствах
+- `ios_arm64` - для работы приложения на симуляторах iOS устройств
+- `ios_x64` - для работы приложения на реальных iOS устройствах
+- `ios_simulator_arm64` - для симуляторов iOS на M1
 
 Чтобы понять, какие таргеты поддерживает библиотека, следует проанализировать её репозиторий на наличие следующих признаков
 1. Наличие информации в README о поддержке различных платформ, например, описание [moko-mvvm](https://github.com/icerockdev/moko-mvvm#mobile-kotlin-model-view-viewmodel-architecture-components)
@@ -42,6 +42,7 @@ kotlin {
 ```
 
 Также, определить таргеты мулитиплатформенной библиотеки можно изучив ее артефакты на [Maven Central](https://search.maven.org/)
+
 Например, рассмотрим библиотеку [moko-fields](https://search.maven.org/search?q=g:dev.icerock.moko%20fields)
 
 ![maven-library](/assets/maven-library.png)

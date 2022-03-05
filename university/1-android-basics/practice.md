@@ -41,6 +41,112 @@ sidebar_position: 6
 1. Сохранять токен авторизации в хранилище устройства - SharedPreferences
 1. Корректно обрабатывать ситуации "загрузка данных", "ошибка загрузки", "пустой список"
 1. Корректно обрабатывать смену конфигурации
+1. При перезапуске приложения авторизация должна сохраняться
+
+## Классы Android-приложения
+
+```kotlin
+    
+    class MainActivity: AppCompatActivity {
+        // TODO:
+    }
+
+    class AuthFragment: Fragment {
+        // TODO:
+    }
+
+    class RepositoriesListFragment: Fragment {
+       // TODO:
+    }
+
+    class DetailInfoFragment: Fragment {
+       // TODO:
+    }
+
+   class AuthViewModel {
+      val token: MutableLiveData<String>
+      val state: LiveData<State>
+      val actions: Flow<Action>
+
+      fun onSignButtonPressed() {
+          // TODO:
+      }
+      
+      sealed interface State {
+         object Idle : State
+         object Loading : State
+         data class InvalidInput(val reason: String) : State
+      }
+      
+      sealed interface Action {
+         data class ShowError(val message: String) : Action
+         object RouteToMain : Action
+      }
+
+      // TODO:
+   }
+
+   class RepositoryInfoViewModel {
+      val state: LiveData<State>
+
+      sealed interface State {
+         object Loading : State
+         data class Error(val error: String) : State
+
+         data class Loaded(
+            val githubRepo: Repo,
+            val readmeState: ReadmeState
+         ) : State
+      }
+
+      sealed interface ReadmeState {
+         object Loading : ReadmeState
+         object Empty : ReadmeState
+         data class Error(val error: String) : ReadmeState
+         data class Loaded(val markdown: String) : ReadmeState
+      }
+
+      // TODO:
+   }
+   
+   class RepositoriesListViewModel {
+      val state: LiveData<State>
+      
+      sealed interface State {
+         object Loading : State
+         data class Loaded(val repos: List<Repo>) : State
+         data class Error(val error: String) : State
+         object Empty : State
+      }
+
+      // TODO:
+   }
+
+   class AppRepository {
+      suspend fun getRepositories(): List<Repo> {
+         // TODO:
+      }
+
+      suspend fun getRepository(repoId: String): RepoDetails {
+         // TODO:
+      }
+
+      suspend fun getRepositoryReadme(ownerName: String, repositoryName: String, branchName: String): String {
+         // TODO:
+      }
+      
+      suspend fun signIn(token: String): UserInfo {
+         // TODO:
+      }
+
+      // TODO:
+   }
+
+   class KeyValueStorage {
+      var authToken: String?
+      var userName: String?
+   }
+```
 
 ## Диаграмма классов
 
@@ -54,62 +160,14 @@ sidebar_position: 6
    class RepositoriesListFragment:::android
    class DetailInfoFragment:::android
    
-   class AuthViewModel:::android {
-      token: MutableLiveData~String~
-      state: LiveData~AuthState~
-      events: Flow<AuthEvent>
-      onSignButtonPressed()
-   }
+   class AuthViewModel:::android
    
-   class AuthState:::android {
-      <<enumeration>>
-      Idle
-      Loading
-      InvalidInput
-   }
-   
-   class AuthEvent:::android {
-      <<enumeration>>
-      ShowError
-      RouteToMain
-   }
-   
-   class RepositoryInfoViewModel:::android {
-      state: LiveData~RepositoryState~
-   }
-   
-   class RepositoryState:::android {
-      <<enumeration>>
-      Loading
-      RepoLoadedReadmeLoading
-      RepoLoadedReadmeError
-      RepoLoadedReadmeEmpty
-      RepoLoadedReadmeLoaded
-   }
-   
-   class RepositoriesListViewModel:::android {
-      state: LiveData~RepositoriesState~
-   }
-   
-   class RepositoriesState:::android {
-      <<enumeration>>
-      Loading
-      ListLoaded
-      Error
-      Empty
-   }
-   
-   class AppRepository:::android {
-      repositories() Flow~ListOfRepoEntity~
-      repositoryInfo(repoId: String) Flow~RepoDetailsEntity~
-      repositoryReadme(repoId: String) RepoReadme
-      signIn(token: String)
-   }
-   
-   class KeyValueStorage:::android{
-      authToken: String?
-      userName: String?
-   }
+   class RepositoryInfoViewModel:::android
+
+   class RepositoriesListViewModel:::android
+
+   class AppRepository:::android
+   class KeyValueStorage:::android
    
    MainActivity --> AuthFragment
    MainActivity --> RepositoriesListFragment
@@ -124,33 +182,7 @@ sidebar_position: 6
    RepositoriesListViewModel --> AppRepository
    
    AppRepository --> KeyValueStorage
-   
-   AuthViewModel -- AuthEvent
-   AuthViewModel -- AuthState
-   
-   RepositoryInfoViewModel -- RepositoryState
-   
-   RepositoriesListViewModel -- RepositoriesState
 ```
-
-По диаграмме важно понять что нужно использовать MVVM подход с хранением состояния в виде `sealed interface`, например:
-
-```kotlin
-sealed interface RepositoryState {
-    object Loading : RepositoryState
-    data class Loaded(val repo: RepoEntity, val readmeState: ReadmeState) : RepositoryState
-
-    sealed interface ReadmeState {
-        object Loading : ReadmeState
-        object Empty : ReadmeState
-        data class Error(val error: String) : ReadmeState
-        data class Loaded(val markdown: String) : ReadmeState
-    }
-}
-```
-
-Из-за ограничений mermaid на диаграмме не удалось отразить схему с учетом возможностей kotlin, но пример выше должен
-помочь вам сориентироваться.
 
 ## Материалы
 
