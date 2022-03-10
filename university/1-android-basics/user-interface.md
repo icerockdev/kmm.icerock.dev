@@ -45,6 +45,8 @@ sidebar_position: 4
 - [Navigate between screens](https://developer.android.com/courses/pathways/android-basics-kotlin-unit-3-pathway-1)
 - [Introduction to the Navigation component](https://developer.android.com/courses/pathways/android-basics-kotlin-unit-3-pathway-2)
 
+- [Создание SplashScreen](/learning/android/splashscreen)
+
 ## Верстка экрана
 
 Верстка UI в Android на данный момент возможна несколькими способами:
