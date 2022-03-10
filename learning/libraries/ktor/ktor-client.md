@@ -100,3 +100,120 @@ if (response.status.isSuccess()) {
 Примеры использования стандартных фич можно посмотреть в
 статье [Kotlin Multiplatform Mobile: Intercepting Network Request and Response](https://yusufabd.medium.com/kotlin-multiplatform-mobile-intercepting-network-request-and-response-6805a79b4699)
 
+## Отправка файлов
+Для отправки файлов используются составные запросы со следующими типами содержимого:
+
+1. `multipart/form-data` ([ссылка на wiki](https://ru.wikipedia.org/wiki/Multipart/form-data))
+
+Данный тип является наиболее распространенным и позволяет отправлять сразу несколько файлов в запросе. Каждый из передаваемых файлов будет описан в теле запроса с основной информацией по нему. Пример *body* такого запроса:
+```
+POST /form.html HTTP/1.1
+Host: server.com
+Referer: http://server.com/form.html
+User-Agent: Mozilla
+Content-Type: multipart/form-data; boundary=-------------573cf973d5228
+Content-Length: 288
+Connection: keep-alive
+Keep-Alive: 300
+(пустая строка)
+(отсутствующая преамбула)
+---------------573cf973d5228
+Content-Disposition: form-data; name="field"
+
+text
+---------------573cf973d5228
+Content-Disposition: form-data; name="file"; filename="sample.txt"
+Content-Type: text/plain
+
+Content file
+---------------573cf973d5228--
+```
+Как видно из *body*, у нас есть несколько параметров: `field` и `file`. Первый параметр представляет собой строковую константу, второй - файл.
+
+При использовании данного подхода в ktor предусмотрен механизм создания `formData`. Здесь можно также разделить использование на несколько подходов:
+
+*Передача файла как ByteArray:*
+
+Данный подход хорошо описан в документации ktor ([ссылка на документацию](https://ktor.io/docs/request.html#upload_file)).
+Важной деталью в данной ссылке является добавление заголовка с файлом, который представлен в виде `byteArray`:
+```kotlin
+...
+append("image", File("ktor_logo.png").readBytes(), Headers.build {
+    append(HttpHeaders.ContentType, "image/png")
+    append(HttpHeaders.ContentDisposition, "filename=ktor_logo.png")
+})
+...
+```
+
+*Передача файла как Input*
+
+Этот подход подразумевает использование *kotlinx-io* `Input` ([ссылка на класс](https://ktor.kotlincn.net/kotlinx/io/io/input-output.html)). В таком случае используется другой подход формирования `formData`:
+```kotlin
+val data: List<PartData> = formData {
+    appendInput(
+        key = "yourKey",
+        block = { input },
+        headers = Headers.build {
+            append(
+                HttpHeaders.ContentType,
+                ContentType.Application.OctetStream.toString()
+            )
+            append(
+                HttpHeaders.ContentDisposition, ContentDisposition.File
+                    .withParameter(ContentDisposition.Parameters.FileName, fileName)
+                    .toString()
+            )
+        }
+    )
+}
+```
+В примере представлен вариант добавления `headers`, по умолчанию *Empty*. Здесь можно конфигурировать хедеры под ваши нужды.
+
+Касаемо использования formData, существует несколько подходов в формировании *ktor* HTTP клиента:
+
+*submitFormWithBinaryData*
+
+Для использования этого метода необходимо заранее сформировать `formData`. Код с таким методом выглядит следующим образом:
+```kotlin
+val result = httpClient.submitFormWithBinaryData<String>(formData = data) {
+    ...
+}
+```
+Здесь `data` - сформированная *multipart formData*. В теле httpClient возможны настройки самого клиента, в том числе url, хедеры, тип метода (**важный поинт - multipart/form-data запросы должны быть только POST запросами!**)
+
+*MultiPartFormDataContent*
+
+Здесь для ktor клиента в качестве *body* присваивается `MultiPartFormDataContent()`, параметром является список `PartData`, формируемый `formData`. Пример кода:
+```kotlin
+val result = httpClient.post<Unit> {
+    ...
+    body = MultiPartFormDataContent(parts = data)
+}
+```
+
+2. `application/octet-stream`
+
+Данный подход используется довольно редко, но все же используется. Для данного типа запроса нет возможности передать несколько параметров или файлов, можно отправлять файл, притом только один. Для реализации подхода необходимо создать класс, унаследованный от `WriteChannelContent` ([ссылка на класс](https://www.mvndoc.com/c/io.ktor/ktor-http-iosarm64/io/ktor/http/content/OutgoingContent.WriteChannelContent.html)). Пример кода:
+```kotlin
+private class PhotoChannelContentStream(
+    private val photo: ByteArray
+) : OutgoingContent.WriteChannelContent() {
+    override suspend fun writeTo(channel: ByteWriteChannel) {
+        channel.writeFully(photo, 0, photo.size)
+    }
+
+    override val contentType: ContentType = ContentType.Application.OctetStream
+    override val contentLength: Long = photo.size.toLong()
+}
+```
+При реализации такого подхода возможно только использование `MultiPartFormDataContent` в качестве *body*.
+Пример использования *ktor client*:
+```kotlin
+httpClient.put<String> {
+    ...
+    body = PhotoChannelContentStream(image)
+    ...
+}
+```
+
+Про разницу типов содержимого более подробно можно прочитать по этой [ссылке](https://russianblogs.com/article/2287567080/)
