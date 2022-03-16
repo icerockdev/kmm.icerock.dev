@@ -1,20 +1,22 @@
 # Adapter and listeners
 
 ## Требования к Adapter
-При создании списка элементов, например, `RecyclerView`, необходимо создать класс `Adapter`, чтобы связать элементы со списком.
+Для создания динамического списка элементов, например [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview), необходимо создать [Adapter](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.Adapter), чтобы связать элементы со списком.
 
 ***Как должен выглядеть адаптер:*** 
-- Адаптер не должен сам обрабатывать действия по нажатию на элемент и т.д.
-- Если должно быть действие по нажатию на элемент, то адаптер должен получать лямбду при создании, которую привяжет к действию с элементом
-- Единственная задача адаптера - это привязать данные к `RecyclerView`, в адаптере не должно содержаться никакой логики 
+- адаптер не должен сам объявлять действия по взаимодействию с элементами списка
+- если нужно установить действие, например по нажатию на элемент, то адаптер должен получать лямбду при создании, которую потом привяжет к действию над элементом
+- единственная задача адаптера - это привязать данные к `RecyclerView`, в адаптере не должно содержаться никакой логики 
 
-***Зачем это, почему бы не задать логику внутри адаптера?*** 
-- В [документации](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.Adapter) сказано, что `Adapters provide a binding from an app-specific data set to views that are displayed within a RecyclerView` т.е. задача адаптера - это лишь связать данные с отображением на UI.
-- Так как мы в наших проектах придерживаемся паттерна прогроммирования MVVM, вся логика приложения сосредаточена во вьюмоделях. Если логика будет размещена не только во вьюмоделях, то, со временем, ориентироваться в проекте станет гораздо сложнее
+***Почему бы не задать логику внутри адаптера?*** 
+- из [документации](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.Adapter): `Adapters provide a binding from an app-specific data set to views that are displayed within a RecyclerView` т.е. задача адаптера - это лишь связать данные с отображением на UI
+- так как мы в наших проектах придерживаемся паттерна программирования MVVM, вся логика приложения должна быть сосредоточена во вьюмоделях. Если логика будет размещена не только во вьюмоделях, то, со временем, ориентироваться в проекте, разрабатывать новый функционал и поддерживать старый станет гораздо сложнее
 
-## Пример простого адаптера, для списка элементов
+## Пример простого адаптера
 
-`text_row_item.xml`:
+Разберем пример, у нас есть `Activity` со списком элементов, мы хотим, чтобы по нажатию на элемент что-то происходило, для демонстрации просто покажем [Toast](https://developer.android.com/reference/android/widget/Toast).
+
+Сначала создадим ячейку нашего списка `text_row_item.xml`:
 ```xml
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -31,7 +33,30 @@
 </FrameLayout>
 ```
 
-`CustomAdapter:`
+Затем, добавим список на `activity_main.xml`
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        tools:listitem="@layout/text_row_item"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent">
+    </androidx.recyclerview.widget.RecyclerView>
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+
+Создадим `CustomAdapter`, который при создании будет принимать список элементов и onClick-лямбду:
 ```kotlin
 class CustomAdapter(private val dataSet: Array<String>, private val onClick: (String) -> Unit) :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
@@ -57,5 +82,26 @@ class CustomAdapter(private val dataSet: Array<String>, private val onClick: (St
     }
 
     override fun getItemCount() = dataSet.size
+}
+```
+
+Наконец, создадим наш адаптер, проинициализируем элементами с лямбдой и привяжем к `recyclerView`:
+```kotlin
+ class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val dataSet = arrayOf("aaa", "bbb", "ccc", "ddd", "fff", "jjj","aaa", "bbb", "ccc", "ddd", "fff", "jjj")
+        val customAdapter = CustomAdapter(dataSet) { onItemClick(it) }
+
+        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = customAdapter
+    }
+
+    private fun onItemClick(title: String) {
+        Toast.makeText(this, "tap on $title", Toast.LENGTH_SHORT).show()
+    }
 }
 ```
