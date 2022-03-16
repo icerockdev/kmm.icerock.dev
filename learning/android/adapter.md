@@ -10,7 +10,6 @@
 
 ***Почему бы не задать логику внутри адаптера?*** 
 - из [документации](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.Adapter): `Adapters provide a binding from an app-specific data set to views that are displayed within a RecyclerView` т.е. задача адаптера - это лишь связать данные с отображением на UI
-- так как мы в наших проектах придерживаемся паттерна программирования MVVM, вся логика приложения должна быть сосредоточена во вьюмоделях. Если логика будет размещена не только во вьюмоделях, то, со временем, ориентироваться в проекте, разрабатывать новый функционал и поддерживать старый станет гораздо сложнее
 
 ## Пример простого адаптера
 
@@ -58,32 +57,36 @@
 
 Создадим `CustomAdapter`, который при создании будет принимать список элементов и onClick-лямбду:
 ```kotlin
-class CustomAdapter(private val dataSet: Array<String>, private val onClick: (String) -> Unit) :
+class CustomAdapter(private val onItemClick: (Int) -> Unit) :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
-
-    class ViewHolder(view: View, onClick: (String) -> Unit ) : RecyclerView.ViewHolder(view) {
-        val textView: TextView
-
-        init {
-            textView = view.findViewById(R.id.textView)
-            view.setOnClickListener { onClick(textView.text.toString()) }
+    
+    var items: List<String> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
         }
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val textView: TextView = view.findViewById(R.id.textView)
     }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int ): ViewHolder {
         val view = LayoutInflater.from(viewGroup.context)
             .inflate(R.layout.text_row_item, viewGroup, false)
 
-        return ViewHolder(view, onClick)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         viewHolder.textView.text = dataSet[position]
+        viewHolder.rootView.setOnClickListener { onItemClick(position) }
     }
 
     override fun getItemCount() = dataSet.size
 }
 ```
+
+ViewHolder - держать сслыки на вьюхи. чтобы не делать поиск нужной вьюхи
 
 Наконец, создадим наш адаптер, проинициализируем элементами с лямбдой и привяжем к `recyclerView`:
 ```kotlin
@@ -92,8 +95,9 @@ class CustomAdapter(private val dataSet: Array<String>, private val onClick: (St
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val dataSet = arrayOf("aaa", "bbb", "ccc", "ddd", "fff", "jjj","aaa", "bbb", "ccc", "ddd", "fff", "jjj")
-        val customAdapter = CustomAdapter(dataSet) { onItemClick(it) }
+        val dataSet = listOf("aaa", "bbb", "ccc", "ddd", "fff", "jjj","aaa", "bbb", "ccc", "ddd", "fff", "jjj")
+        val customAdapter = CustomAdapter { onItemClick(dataSet[it]) }
+        customAdapter.items = dataSet
 
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
