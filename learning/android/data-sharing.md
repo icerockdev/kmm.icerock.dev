@@ -2,6 +2,9 @@
 
 ## Теория
 
+сначала показать про то, как мы передаем, потом что передаем
+показать про фрагмент и активити по полочкам
+
 При переходе между фрагментами или активити регулярно требуется передавать какие-то данные. 
 
 Давайте разберемся, как сделать это правильно и удобно для использования <- ПЕРЕПИСАТЬ
@@ -21,15 +24,9 @@
 
 Отправка данных между фрагментами осуществляется во время перехода по графу навигации, например, с помощью метода `navigate`. 
 
+работаем с navComponent
+
 ```kotlin
-    /**
-     * Navigate to a destination from the current navigation graph. This supports both navigating
-     * via an {@link NavDestination#getAction(int) action} and directly navigating to a destination.
-     *
-     * @param resId an {@link NavDestination#getAction(int) action} id or a destination id to
-     *              navigate to
-     * @param args arguments to pass to the destination
-     */
     public void navigate(@IdRes int resId, @Nullable Bundle args) {
         navigate(resId, args, null);
     }
@@ -38,21 +35,6 @@
 Для перехода между активити и отправки данных используется объект [Intent](https://developer.android.com/reference/android/content/Intent) и один из его методов `putExtra`.
 
 ```kotlin
- /**
-     * Add extended data to the intent.  The name must include a package
-     * prefix, for example the app com.android.contacts would use names
-     * like "com.android.contacts.ShowAll".
-     *
-     * @param name The name of the extra data, with package prefix.
-     * @param value The Parcelable[] data value.
-     *
-     * @return Returns the same Intent object, for chaining multiple calls
-     * into a single statement.
-     *
-     * @see #putExtras
-     * @see #removeExtra
-     * @see #getParcelableArrayExtra(String)
-     */
     public @NonNull Intent putExtra(String name, @Nullable Parcelable[] value) {
         if (mExtras == null) {
             mExtras = new Bundle();
