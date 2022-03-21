@@ -1,15 +1,12 @@
 # Adapter and listeners
 
 ## Требования к Adapter
-Для создания динамического списка элементов, например [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview), необходимо создать [Adapter](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.Adapter), чтобы связать элементы со списком.
+Для создания динамического списка элементов, например [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview), необходимо создать [Adapter](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.Adapter), чтобы связать элементы со списком. Задача адаптера - `Adapters provide a binding from an app-specific data set to views that are displayed within a RecyclerView` из [документации](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.Adapter) т.е. лишь связать данные с отображением на UI
 
 ***Как должен выглядеть адаптер:***
 
 - адаптер не должен содержать никакой логики по взаимодействию с элементами списка. Если нужно установить действие, например по нажатию на элемент, то адаптер должен получать лямбду при создании, которую потом привяжет к действию над элементом
 - единственная задача адаптера - это привязать данные к `RecyclerView`
-
-***Почему бы не задать логику внутри адаптера?*** 
-- из [документации](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.Adapter): `Adapters provide a binding from an app-specific data set to views that are displayed within a RecyclerView` т.е. задача адаптера - это лишь связать данные с отображением на UI
 
 ## Пример простого адаптера
 
@@ -17,33 +14,24 @@
 
 Сначала создадим ячейку нашего списка `text_row_item.xml`:
 ```xml
-
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="30dp"
+    android:layout_width="match_parent" android:layout_height="wrap_parent"
     android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
     android:gravity="center_vertical">
 
     <TextView android:id="@+id/textView" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:text="" />
+        android:layout_height="wrap_content" android:text=""
+        tools:text="sample" />
 </FrameLayout>
 ```
 
 Затем, добавим список на `activity_main.xml`
 ```xml
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context=".MainActivity">
 
   <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerView"
-          android:layout_width="wrap_content" android:layout_height="200dp"
-          tools:listitem="@layout/text_row_item" app:layout_constraintTop_toTopOf="parent"
-          app:layout_constraintBottom_toBottomOf="parent"
-          app:layout_constraintRight_toRightOf="parent"
-          app:layout_constraintLeft_toLeftOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+          android:layout_width="match_parent" android:layout_height="match_parent"
+          tools:listitem="@layout/text_row_item" />
 ```
 
 Создадим `CustomAdapter`, который при создании будет принимать onClick-лямбду. Значения будут устанавливаться не в конструкторе, а просто в переменную, как только установятся - вызовется [notifyDataSetChanged()](https://developer.android.com/reference/android/widget/BaseAdapter#notifyDataSetChanged())  
@@ -76,10 +64,14 @@ class CustomAdapter(private val onItemClick: (Int) -> Unit) :
     override fun getItemCount() = items.size
 }
 ```
-Хоть у нас и есть доступ к `view` элемента в методе `onCreateViewHolder`, устанавливать там `onClickListener` нельзя, потому что задача `viewHolder-a` - это только держать ссылки на вьюхи элементов. Изучите [документацию](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ViewHolder)  
-Поэтому, привязываем onClick в [onBindViewHolder](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.Adapter#onBindViewHolder(VH,%20int)) - где происходит непосредсвтенно отображение нужного элемента из списка
 
- **Я помню, что там что-то про findViewById, что она дорогая и что её лишний раз лучше не трогать, но описать не могу, как она ведет себя если мы онклил делаем во вьхолдере**
+## Зачем нужен вьюхолдер?
+
+Цель RecyclerView - переиспользовать вьюхи списка, а не грузить сразу все. Для этого, проверяется, возможно ли взять уже существующую, или нужно создавать новую.
+Если получилось взять существующую - то в ней лежит объект viewHolder, через который можно достучаться до элементов переиспользуемой вьюхи, которые мы собираемся переопределять. т.е. нет необходимости вызывать метод findViewById, чтобы достучаться до элементов вью
+
+Хоть у нас и есть доступ к `view` элемента в методе `onCreateViewHolder`, устанавливать там `onClickListener` нельзя, потому что задача `viewHolder-a` - это только держать ссылки на вьюхи элементов. Изучите [документацию](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ViewHolder)  
+Еще одна причина, почему привязка onClick должна быть в [onBindViewHolder](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.Adapter#onBindViewHolder(VH,%20int)) - это то, что vieHolder-ы можно переиспользовать между несколькими recyclerView, например для составных списков (вертикальный список из горизонтальных списков). Будет создано несколько recyclerView, и, если они будут объединены в один [RecycledViewPool](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.RecycledViewPool) то они смогут обмениваться viewHolder-ами, именно поэтому viewHolder не должен привязываться к конкретному объекту адаптеру, который его создал, потому что потом его может использовать другой адаптер. И именно в методе `onBindViewHolder` есть гарантия, что переданный viewHolder относится к нашим данным.
 
 Наконец, создадим наш адаптер, проинициализируем элементами с лямбдой и привяжем к `recyclerView`:
 
