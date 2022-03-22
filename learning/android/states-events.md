@@ -50,31 +50,29 @@
 
 Разберем, как делается односторонняя привязка на примере текстового поля с таймером повторной отправки смс-кода: 
 
-  ```kotlin
-  private val _smsCodeTimer: MutableLiveData<String> = MutableLiveData("")
-  val smsCodeTimer: LiveData<String> get() = _smsCodeTimer
-  ```
-  Создадим extension-функцию к TextView
-  ```kotlin
-  fun LiveData<String>.bindToTextViewText(textView: TextView, lifecycleOwner: LifecycleOwner) {
-    this.observe(lifecycleOwner) { text ->
-      textView.text = text
-    }
-  }
+```kotlin
+private val _smsCodeTimer: MutableLiveData<String> = MutableLiveData("")
+val smsCodeTimer: LiveData<String> get() = _smsCodeTimer
+```
+Создадим extension-функцию к TextView
+```kotlin
+fun LiveData<String>.bindToTextViewText(textView: TextView, lifecycleOwner: LifecycleOwner) {
+this.observe(lifecycleOwner) { text ->
+  textView.text = text
+}
+}
+```
 
-
-  Привязка EditText к лайвдате, при изменении лайвдаты изменится значение EditText
-  ```kotlin
-  fun MutableLiveData<String>.bindToEditText(editText: EditText, lifecycleOwner: LifecycleOwner) {
-    this.observe(lifecycleOwner) { text ->
-      editText.setText(text)
-    }
-  }
-  ```
+Привязка EditText к лайвдате, при изменении лайвдаты изменится значение EditText
+```kotlin
+fun MutableLiveData<String>.bindToEditText(editText: EditText, lifecycleOwner: LifecycleOwner) {
+this.observe(lifecycleOwner) { text ->
+  editText.setText(text)
+}
+}
+```
 
   Теперь, если в проекте где-то еще потребуется связать EditText c лайвдатой можно будет использовать эти функции
-
-  ```
   
 
 ## Единый стейт экрана 
@@ -98,6 +96,7 @@ sealed interface State {
 Событие - это нечто, что срабатывает в определенный момент, выполняет свою работу и завершается. Текущего значения у события нет. Мы можем только подписаться на получение событий, чтобы обработать событие когда оно произойдет.
 События нам нужны для того, чтобы сделать что-то на UI, что нельзя сделать из общего кода, например: перейти на другой экран, показать alert или toast.
 
+```
  val events: Flow<EventState> = flow {}
 
 viewLifecycleOwner.lifecycleScope.launchWhenStarted {
@@ -123,7 +122,7 @@ private fun doEvent(event: EventState){
     }
   }
 }
-
+```
 Для событий во вьюмодели используется Flow.
 
 ## Дополнительно
