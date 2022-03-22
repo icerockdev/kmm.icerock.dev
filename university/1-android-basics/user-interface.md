@@ -69,7 +69,8 @@ sidebar_position: 4
 
 ### RecyclerView
 
-Важный элемент практически всех мобильных приложений - список элементов. На Android он реализуется с помощью [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview). Подробно ознакомиться с концептом этого элемента и попрактиковаться можно в CodeLab - [Android Kotlin Fundamentals: RecyclerView fundamentals](https://developer.android.com/codelabs/kotlin-android-training-recyclerview-fundamentals).
+Важный элемент практически всех мобильных приложений - список элементов. На Android он реализуется с помощью [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview). Подробно ознакомиться с концептом этого элемента и попрактиковаться можно в CodeLab - [Android Kotlin Fundamentals: RecyclerView fundamentals](https://developer.android.com/codelabs/kotlin-android-training-recyclerview-fundamentals).  
+Чтобы лучше разобраться с требованиями к `RecyclerView.Adapter` рекомендуем прочитать [статью](/learning/android/adapter).  
 
 Вопросы для самопроверки:
 
