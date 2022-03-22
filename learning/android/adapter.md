@@ -16,22 +16,27 @@
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_parent"
-    android:layout_marginLeft="10dp" android:layout_marginRight="10dp"
-    android:gravity="center_vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <TextView android:id="@+id/textView" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" android:text=""
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
         tools:text="sample" />
 </FrameLayout>
 ```
 
 Затем, добавим список на `activity_main.xml`
 ```xml
-
-  <androidx.recyclerview.widget.RecyclerView android:id="@+id/recyclerView"
-          android:layout_width="match_parent" android:layout_height="match_parent"
-          tools:listitem="@layout/text_row_item" />
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.recyclerview.widget.RecyclerView 
+    android:id="@+id/recyclerView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:listitem="@layout/text_row_item" />
 ```
 
 Создадим `CustomAdapter`, который при создании будет принимать onClick-лямбду. Значения будут устанавливаться не в конструкторе, а просто в переменную, как только установятся - вызовется [notifyDataSetChanged()](https://developer.android.com/reference/android/widget/BaseAdapter#notifyDataSetChanged())  
