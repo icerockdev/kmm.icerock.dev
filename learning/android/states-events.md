@@ -155,15 +155,15 @@ sealed interface State {
 Со стороны вьюмодели у нас будет одна из реализаций `Flow APIs`. Со стороны `UI` мы подпишемся к нему и будем обрабатывать события.
 
 ```kotlin
-private val _state: MutableSharedFlow<String> = MutableSharedFlow()
-val state: SharedFlow<String> get() = _state
+private val _state: MutableSharedFlow<Action> = MutableSharedFlow()
+val state: SharedFlow<Action> get() = _state
 ```
 
 Подписка из `activity` в `onCreate`
 ```kotlin
 this.lifecycleScope.launch{
     lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-        viewModel.state.map{it}.collect {
+        viewModel.state.collect {
             handleAction(it)
         }
     }
@@ -172,15 +172,15 @@ this.lifecycleScope.launch{
 
 методы `MainActivity`, 
 ```
-sealed interface Actions {
-    object ShowToastAction : Actions
-    object RouteSuccessAction : Actions
+sealed interface Action {
+    data class ShowToastAction(val message: String) : Action
+    object RouteSuccessAction : Action
 }
 
-private fun handleAction(action: Actions){
+private fun handleAction(action: Action){
     when (action){
-        Actions.RouteSuccessAction -> routeSuccess()
-        Actions.ShowToastAction -> showToast()
+        Action.RouteSuccessAction -> routeSuccess()
+        is Action.ShowToastAction -> showToast(action.message)
     }
 }
 ```
