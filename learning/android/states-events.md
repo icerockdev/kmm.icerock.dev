@@ -60,7 +60,7 @@ fun EditText.bindTextTwoWay(liveData: MutableLiveData<String>, lifecycleOwner: L
     this.addTextChangedListener(textWatcher)
     
     liveData.observe(lifecycleOwner) { text ->
-    this.setText(text)
+        this.setText(text)
     }
 }
 ```
@@ -155,32 +155,42 @@ sealed interface State {
 Со стороны вьюмодели у нас будет одна из реализаций `Flow APIs`. Со стороны `UI` мы подпишемся к нему и будем обрабатывать события.
 
 ```kotlin
-private val _state: MutableSharedFlow<String> = MutableSharedFlow()
-val state: SharedFlow<String> get() = _state
+private val _actions: MutableSharedFlow<Action> = MutableSharedFlow()
+val actions: SharedFlow<Action> get() = _actions
 ```
 
 Подписка из `activity` в `onCreate`
 ```kotlin
-this.lifecycleScope.launch{
+this.lifecycleScope.launch {
     lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-        viewModel.state.map{it}.collect {
+        viewModel.actions.collect {
             handleAction(it)
         }
     }
 }
 ```
 
-методы `MainActivity`, 
-```
-sealed interface Actions {
-    object ShowToastAction : Actions
-    object RouteSuccessAction : Actions
+Подписка из `fragment` в `onViewCreated`
+```kotlin
+lifecycleScope.launch {
+    viewModel.actions.collect { handleAction(it) }
 }
+```
 
-private fun handleAction(action: Actions){
+интерфейс `viewModel`
+```kotlin
+sealed interface Action {
+    data class ShowToastAction(val message: String) : Action
+    object RouteSuccessAction : Action
+}
+```
+
+метод `MainActivity`:
+```kotlin
+private fun handleAction(action: Action) {
     when (action){
-        Actions.RouteSuccessAction -> routeSuccess()
-        Actions.ShowToastAction -> showToast()
+        Action.RouteSuccessAction -> routeSuccess()
+        is Action.ShowToastAction -> showToast(action.message)
     }
 }
 ```
