@@ -1,14 +1,12 @@
-# Передача данных 
+# Передача данных при навигации
 
 ## Реализация передачи данных между фрагментами 
 
 Переход с одного фрагмента на другой осуществляется средствами [Navigation Component](https://developer.android.com/guide/navigation).  
 Отправка данных между фрагментами происходит во время перехода по графу навигации, например, с помощью метода `navigate`.
 
-```kotlin
-public void navigate(@IdRes int resId, @Nullable Bundle args) {
-    navigate(resId, args, null);
-}
+```java
+public void navigate(@IdRes int resId, @Nullable Bundle args)
 ```
 
 Разберем всю цепочку на примере перехода между двумя фрагментами, для активити принцип будет такой же.  
@@ -93,7 +91,7 @@ private fun routeToSecondActivity(userId: String) {
 
 ```kotlin
 private val userId: String
-    get() = requireArguments().getString(USER_ID_KEY).let { requireNotNull(it) { "argument $USER_ID_KEY should be not null" } }
+    get() = requireNotNull(intent.getStringExtra(USER_ID_KEY)) { "argument $USER_ID_KEY should be not null" }
 ```
 
 ## Какие данные можно передавать? 

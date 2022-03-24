@@ -1,5 +1,9 @@
 # Dagger
 
+## Видео
+
+<iframe src="//www.youtube.com/embed/ZE8CJN3DO5U" frameborder="0" allowfullscreen width="675" height="380"></iframe> 
+
 ## Полезные статьи
 
 [Часть первая](https://habr.com/ru/post/279125/)
