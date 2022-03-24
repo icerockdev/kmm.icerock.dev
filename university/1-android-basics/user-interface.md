@@ -44,6 +44,7 @@ sidebar_position: 4
 
 - [Navigate between screens](https://developer.android.com/courses/pathways/android-basics-kotlin-unit-3-pathway-1)
 - [Introduction to the Navigation component](https://developer.android.com/courses/pathways/android-basics-kotlin-unit-3-pathway-2)
+- [Передача данных между компонентами](/learning/android/data-sharing)
 
 - [Создание SplashScreen](/learning/android/splashscreen)
 
@@ -71,7 +72,8 @@ sidebar_position: 4
 
 ### RecyclerView
 
-Важный элемент практически всех мобильных приложений - список элементов. На Android он реализуется с помощью [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview). Подробно ознакомиться с концептом этого элемента и попрактиковаться можно в CodeLab - [Android Kotlin Fundamentals: RecyclerView fundamentals](https://developer.android.com/codelabs/kotlin-android-training-recyclerview-fundamentals).
+Важный элемент практически всех мобильных приложений - список элементов. На Android он реализуется с помощью [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview). Подробно ознакомиться с концептом этого элемента и попрактиковаться можно в CodeLab - [Android Kotlin Fundamentals: RecyclerView fundamentals](https://developer.android.com/codelabs/kotlin-android-training-recyclerview-fundamentals).  
+Чтобы лучше разобраться с требованиями к `RecyclerView.Adapter` рекомендуем прочитать [статью](/learning/android/adapter).  
 
 Вопросы для самопроверки:
 
