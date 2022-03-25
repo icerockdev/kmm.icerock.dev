@@ -55,7 +55,7 @@ fun EditText.bindTextTwoWay(liveData: MutableLiveData<String>, lifecycleOwner: L
     this.addTextChangedListener(textWatcher)
     
     liveData.observe(lifecycleOwner) { text ->
-        //  проверка делается для того, чтобы не провоцировать рекурсию при изменении значения лайвдаты на точно такое же
+        //  проверка делается для того, чтобы не провоцировать рекурсию при изменении значения editText на точно такое же
         if (this.text.toString() == text) return@observe
         
         this.setText(text)
