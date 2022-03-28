@@ -56,12 +56,17 @@ class AuthViewModel(
 Есть фича Авторизации
 
 упростим пока задачу, нам нужны будут только строчки и репозиторий для работы с сервером
+
+Пока не обращайте внимание на `eventsDispatcher` и `exceptionHandler` - о них вы узнаете после изучения `moko-mvvm`. Смысл в том, что они общие для всех фичей и вьюмоделей, поэтому мы их вынесли в фабрику
+
 `AuthViewModel.kt`
 ```kotlin
-class ManualRegistrationViewModel(
-   private val repository: MerchantRegistrationRepository,
+class AuthViewModel(
+   override val eventsDispatcher: EventsDispatcher<EventsListener>,
+   val exceptionHandler: ExceptionHandler,
+   private val repository: AuthRepository,
    private val strings: Strings
-){
+) {
    interface Strings {
       val authDescription: StringDesc
    }
@@ -80,9 +85,80 @@ interface AuthRepository {
 }
 ```
 
+Теперь создадим фабрику фичи:
+```kotlin
+class AuthFactory(
+   private val createExceptionHandler: () -> ExceptionHandler,
+   private val repository: AuthRepository,
+   private val strings: Strings,
+) {
+
+   fun createAuthRepository(
+      eventsDispatcher: EventsDispatcher<AuthViewModel.EventsListener>
+   ) = AuthViewModel(
+      eventsDispatcher = eventsDispatcher,
+      exceptionHandler = createExceptionHandler(),
+      repository = repository,
+      strings = strings,
+      id = id
+   )
+
+   interface Strings : AuthViewModel.Strings
+}
+```
+
+Для всех фич общими будут: `createExceptionHandler`, `repository`, `strings`
+Одна фабрика будет создавать все фичи для конкретного модуля
+
+Теперь конструктор самой фабрики, здесь мы прокидываем `createExceptionHandler`, `repository` и строки локализации
+```kotlin
+internal fun authFactory(
+   private val createExceptionHandler: () -> ExceptionHandler,
+   private val repository: MerchantRegistrationRepository,
+   private val strings: Strings
+): MerchantRegistrationFactory {
+   return MerchantRegistrationFactory(
+      repository = repository,
+      strings = object : AuthFactory.Strings {
+         override val authDescription: StringDesc =
+            MR.strings.auth_description.desc()
+      }
+   )
+}
+```
+
+В `SharedFactory` мы уже создаем все фабрики фичей, как видите, передавая им только `createExceptionHandler` и `repository`, потому что они также общие для всех фичей и создаются непосредственно в `SharedFactory`
+`SharedFactory.kt`:
+```kotlin
+val authFactory: AuthFactory by lazy {
+   AuthFactory(
+      createExceptionHandler = ::createExceptionHandler,
+      repository = Repository
+   )
+}
+```
+
+конструктор самой главной фабрики `SharedFactory.kt`: 
+```kotlin
+class SharedFactory internal constructor(
+    settings: Settings,
+    antilogs: List<Antilog>,
+    databaseDriverFactory: DatabaseDriverFactory,
+    repositoryCoroutineScope: CoroutineScope
+)
+```
+Передаем уже то, что устанавливается на на платформе.  
+Таким образом, чтобы на платформе начать использовать общий код, нужно всего лишь передать вот эти четыре параметра для инициализации `SharedFactory`: 
+- `settings`
+- `antilogs`
+- `databaseDriverFactory`
+- `repositoryCoroutineScope`
+
+И создать каждую фабрику фичи, для нее нужна будет реализация функции `createExceptionHandler`, о которой вы узнаете позже из `moko-errors`, а также создать объект `Repository`
+
+***
 
 Для создания конкретной вьюмодели нам нужно будет предоставить ей кучу зависимостей, но большую часть этих зависимостей можно настроить внутри модуля 
-
 
 Также, для каждого модуля есть своя `factory`. Её задача - создавать уже настроенные объекты фичи
 
