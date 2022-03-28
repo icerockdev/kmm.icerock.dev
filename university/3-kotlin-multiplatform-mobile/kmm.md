@@ -62,7 +62,7 @@ kotlin {
 
 ## Настройка gradle
 
-[Официальная документация](https://kotlinlang.org/docs/mpp-dsl-reference.html) по настройке gradle для работы с KMM
+[Официальная документация](https://kotlinlang.org/docs/mpp-dsl-reference.html) по настройке gradle для работы с KMM. 
 Из [видео](https://youtu.be/23BJW4w0gkY) вы узнаете, как создать и настроить gradle-проект до состояния, с которого стартует разработка нового проекта в IceRock
 
 ## Совместимость со Swift/Objective-C
