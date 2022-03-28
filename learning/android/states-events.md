@@ -44,22 +44,20 @@
 ```kotlin
 fun EditText.bindTextTwoWay(liveData: MutableLiveData<String>, lifecycleOwner: LifecycleOwner){
     val textWatcher = object : TextWatcher {
-      override fun afterTextChanged(s: Editable?) {
-      }
-      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-      }
+      override fun afterTextChanged(s: Editable?) = Unit
+      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+        
       override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-          val str = s.toString()
-    
-          //  проверка делается для того, чтобы не провоцировать рекурсию при изменении значения лайвдаты на точно такое же 
-          if (str == liveData.value) return
-          liveData.value = str
+          liveData.value = s.toString()
       }
     }
     
     this.addTextChangedListener(textWatcher)
     
     liveData.observe(lifecycleOwner) { text ->
+        //  проверка делается для того, чтобы не провоцировать рекурсию при изменении значения editText на точно такое же
+        if (this.text.toString() == text) return@observe
+        
         this.setText(text)
     }
 }
@@ -149,10 +147,10 @@ sealed interface State {
 
 ## Событие (действие)
 
-Чаще всего, `viewModel` не информирует `UI` обо всем подряд, а только тогда, когда необходимо выполнить какое-то действие, например: перейти на другой экран, показать alert или toast.
-Для реализации такого механизма, чтобы `UI` сразу же получил информацию о том, что пора что-то сделать, используется механизм [Flow APIs](https://developer.android.com/kotlin/flow).
+Чаще всего, `viewModel` не информирует `UI` обо всем подряд, а только тогда, когда необходимо выполнить какое-то действие, например: перейти на другой экран, показать `alert` или `toast`.
+Для реализации такого механизма, чтобы `UI` сразу же получил информацию о том, что пора что-то сделать, используется механизм [Channel](https://kotlinlang.org/docs/channels.html) или [Flow APIs](https://developer.android.com/kotlin/flow).
 
-Со стороны вьюмодели у нас будет одна из реализаций `Flow APIs`. Со стороны `UI` мы подпишемся к нему и будем обрабатывать события.
+Разберем пример на основе `Flow APIs`. Со стороны вьюмодели у нас будет одна из реализаций `Flow APIs`. Со стороны `UI` мы подпишемся к нему и будем обрабатывать события.
 
 ```kotlin
 private val _actions: MutableSharedFlow<Action> = MutableSharedFlow()
