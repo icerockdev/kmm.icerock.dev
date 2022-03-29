@@ -47,233 +47,152 @@ class AuthViewModel(
 
 ## DI на проектах
 
-### Теория
+Вся логика приложения находится в общем коде. На платформах (`iOS` и `Android`) мы просто реализуем `UI` и связываем его с логикой.
+В общем коде вся логика сосредоточена во вьюмоделях разных фич, поэтому, для каждого экрана от общего кода нужно получить нужную ему вьюмодель.
 
-Для создания конкретной вьюмодели нам нужно будет предоставить ей кучу разных зависимостей, большую часть этих зависимостей можно настроить внутри модуля
+Однако, вьюмодель - это как правило большой и сложный класс, который нуждается в настройке.  
+Например, для создания стандартной вьюмодели ей необходимы:
+- строки локализации
+- репозиторий, через который идет общение с источником данных
+- `exceptionHandler` - объект, реализующий интерфейс [ExceptionHandler](https://github.com/icerockdev/moko-errors/blob/ece79111fb5a9451e6179ba8c5367213c117421b/errors/src/commonMain/kotlin/dev/icerock/moko/errors/handler/ExceptionHandler.kt) помогающий обрабатывать ошибки из общего кода (о нем вы узнаете позднее из `moko-errors`)
+- `eventsDispatcher` - объект, служащий для отправки событий(actions) от `viewModel` на `UI`, о нем вы узнаете в следующем разделе 
 
-Для этого мы делаем фабрики вьюмоделей для каждого модуля.
-Внутри фабрики будет метод - создай мне вьюмодель такую-то (т.к. в фиче может быть несколько экранов и несколько вьюмоделей)
-И там же будет настройка и проброс всего, что нужно этим вьюмоделям. Т.е нам не придется по месту использования вьюмодели(экранчик) пробрасывать все ее аргументы, просто скажем фабрике - создай мне вьюмодель
+Наша цель - избавить платформу от сложности настройки вьюмоделей, чтобы не пришлось во фрагменте или вьюконтроллере получать все эти объекты, для создания вьюмодели.
 
-Цель в том, чтобы получить вьюмодель можно было следующим образом: `SharedFactory.authFactory.createAuthViewModel()`
+Решение - по максимуму оставить логику настройки вьюмоделей в общем коде, насколько это возможно, чтобы со стороны платформы можно было практически сразу получить готовую вьюмодель.
 
+Первый уровень абстракции над вьюмоделями - фабрика фичи. Разбирать будем на примере фичи авторизации, а вьюмодель, которую мы хотим получить - вьюмодель экрана сброса пароля.
 
-На уровне фичи, для удобства использования этой фичи должны обозначит некую фабрику объектов этой фичи
-Есть `authFactory`, ей передаем настройки самой фичи:
+Начнем с вьюмодели: 
 
-Потом от объекта этой фабрики мы уже говорим: создай мне вьюмодель такую, сякую и тд. Смысл в том, чтобы для создания вьюмодели не приходилось постоянно производить получение репозитория, строк локализации и тд, потому что мы один раз запарились с этим и все засунули в фабрику. 
-
-Далее, уровень mppLibrary - уровень, который объединяет все фичи.
-Наша цель в проектировании mppLibrary - сделать аналогию работы с фабрикой. Чтобы работать с mppLibrary было также просто, как и работать с одной фичей. Чтобы не надо было искать каждую из фич и настраивать на уровне приложения, чтобы можно было просто сказать: общая логика, дайка мне вьюмодель.  
-***Как это достигается?***  
-Мы на уровне mppLibrary создаем свою фабрику, которая производит настройку фабрик всех остальных фичей теми параметрами, которые доступны на уровне общего кода. Занимается этим - `SharedFactory`.  
-Таким образм, наружу, на платформу, предоставляется еще более простой вариант: ***Чтобы создать фабрику общей логики, из которой потом что хочешь можно получить, надо передать вон только требования `SharedFactory`, то, что она хочет узнать непосредственно от платформы***
-*** 
-***
-
-### Пример
-
-Пока не обращайте внимание на `eventsDispatcher` и `exceptionHandler` - о них вы узнаете после изучения `moko-mvvm` и `moko-errors`. Смысл в том, что они общие для всех фичей и вьюмоделей, поэтому мы их вынесли в фабрику.
-
-`AuthViewModel.kt`
+`ResetPasswordViewModel.kt`:
 ```kotlin
-class AuthViewModel(
+class ResetPasswordViewModel(
    override val eventsDispatcher: EventsDispatcher<EventsListener>,
    val exceptionHandler: ExceptionHandler,
-   private val repository: AuthRepository,
+   private val repository: ResetPasswordRepository,
    private val strings: Strings
 ) {
    interface Strings {
-      val authDescription: StringDesc
+      val resetDescription: StringDesc
    }
 }
 ```
-Во вьюмодели объявляем интерфейс строк, которые нам понадобятся. Ни один модуль на них не завязан, поэтому можно спокойно их обновлять и изменять. В каждую фичу строчки будут прокидываться непосредственно в `runtime`. 
+Вьюмодель объявляет интерфейс `Strings` - строки локализации, которые нужно использовать из общего кода. Далее мы прокинем ей эти строки. 
 
-Рядом с `viewModel` создаем интерфейс репозитория: 
+Рядом с `ResetPasswordViewModel` создаем интерфейс репозитория. Сделали мы это ради принципа `Dependency Inversion`. В конструктор `ResetPasswordViewModel` принимает объект, который реализует этот интерфейс. В данном случае - кого-то, кто реализует метод для сброса пароля.
 `AuthRepository.kt`
 ```kotlin
-interface AuthRepository {
-   suspend fun signIn(
+interface ResetPasswordRepository {
+   suspend fun resetPassword(
       phoneNumber: Int,
-      authCode: Long
+      confirmCode: Long
    ): Int
 }
 ```
+***
+Далее, рассмотрим того, кто будет реализовывать этот метод.  
+Вся логика работы приложения с источником данных (сервер, БД и т.д.) вынесена в один класс - `AppRepository`
 
-Теперь создадим фабрику фичи:
+`AppRepository.kt`:
+```kotlin
+internal class AppRepository constructor(
+    private val keyValueStorage: KeyValueStorage,
+    private val dao: AppDao,
+    private val coroutineScope: CoroutineScope
+) : ResetPasswordRepository {
+   override fun resetPassword(
+      phoneNumber: Int,
+      confirmCode: Long
+   ): Int {
+      // TODO
+   }
+}
+```
+Этот класс реализует абсолютно все интерфейсы, реализацию которых требуют вьюмодели. Для всех новых вьюмоделей мы будем объявлять новый интерфейс, и реализовывать его здесь, а затем прокидывать объект общего репозитория всем вьюмоделям.
+***
+
+Теперь сделаем `AuthFactory` - класс, в котором будем настраивать все те общие компоненты вьюомделей фичи, которые есть на этом уровне. Класс фабрики также объявляется в модуле фичи.
+
+`AuthFactory.kt`:
 ```kotlin
 class AuthFactory(
    private val createExceptionHandler: () -> ExceptionHandler,
    private val repository: AuthRepository,
    private val strings: Strings
 ) {
-
-   fun createAuthRepository(
-      eventsDispatcher: EventsDispatcher<AuthViewModel.EventsListener>
-   ) = AuthViewModel(
+   fun createResetPasswordViewModel(
+      eventsDispatcher: EventsDispatcher<ResetPasswordViewModel.EventsListener>
+   ) = ResetPasswordViewModel(
       eventsDispatcher = eventsDispatcher,
       exceptionHandler = createExceptionHandler(),
       repository = repository,
-      strings = strings,
-      id = id
+      strings = strings
    )
 
-   interface Strings : AuthViewModel.Strings
+   interface Strings : ResetPasswordViewModel.Strings
 }
 ```
+В эту фабрику мы будем добавлять методы, аналогичные `createResetPasswordViewModel` для создания других вьмоделей, для них всех `createExceptionHandler`, `repository` и `strings` будут одинаковыми.
 
-Для всех фич общими будут: `createExceptionHandler`, `repository`, `strings`
-Одна фабрика будет создавать все фичи для конкретного модуля
+Теперь у нас есть доступ ко всем вьюмоделем фичи авторизации - чтобы создать какую-либо вьюмодель нужно просто вызвать нужную функцию у фабрики и передать один единсвенный аргумент. Осталось как-то создать `AuthFactory`: 
 
-Теперь конструктор самой фабрики, здесь мы прокидываем `createExceptionHandler`, `repository` и строки локализации
+Функция для создания фабрики фичи авторизации, объявляется непосредственно на уровне выше чем фичи (mpp-library/src), чтобы был доступ к MR строчкам (***? тут не уверен, причину надо более внятную ?*): 
 ```kotlin
-internal fun authFactory(
-   private val createExceptionHandler: () -> ExceptionHandler,
-   private val repository: AuthRepository,
-   private val strings: Strings
+internal fun AuthFactory(
+    createExceptionHandler: () -> ExceptionHandler,
+    authRepository: AuthRepository
 ): AuthFactory {
-   return AuthFactory(
-      repository = repository,
-      strings = object : AuthFactory.Strings {
-         override val authDescription: StringDesc =
-            MR.strings.auth_description.desc()
-      }
-   )
+    return AuthFactory(
+        createExceptionHandler = createExceptionHandler,
+        authRepository = authRepository,
+        strings = object : AuthFactory.Strings {
+            override val resetDescription: StringDesc =
+                MR.strings.reset_description.desc()
+        }
+    )
 }
 ```
+Здесь мы устанавливаем все строки локализации, необходимые фиче.  
+Поскольку, вьюмодель у нас пока что-то одна, объект `strings` содержет только строки `ResetPasswordViewModel`. Если бы вьюмоделей было больше - все необходимые им строки задавались бы здесь. 
 
-В `SharedFactory` мы уже создаем все фабрики фичей, как видите, передавая им только `createExceptionHandler` и `repository`, потому что они также общие для всех фичей и создаются непосредственно в `SharedFactory`
-`SharedFactory.kt`:
-```kotlin
-val authFactory: AuthFactory by lazy {
-   AuthFactory(
-      createExceptionHandler = ::createExceptionHandler,
-      repository = Repository
-   )
-}
-```
+Второй уроверь абстракции: фабрика фабрик - `SharedFactory`. В ней мы также создадим все фабрики, как до этого создавали вьюмодели в фабриках, настроим их, чтобы для работы с общим кодом нужно было создать только одну общую фабрику - `SharedFactory`.
 
-конструктор самой главной фабрики `SharedFactory.kt`: 
+`SharedFactory.kt`
 ```kotlin
 class SharedFactory internal constructor(
-    settings: Settings,
-    antilogs: List<Antilog>,
-    databaseDriverFactory: DatabaseDriverFactory,
-    repositoryCoroutineScope: CoroutineScope
-)
+   settings: Settings,
+   antilogs: List<Antilog>,
+   databaseDriverFactory: DatabaseDriverFactory,
+   repositoryCoroutineScope: CoroutineScope
+) {
+   internal val appRepository: AppRepository by lazy {
+      AppRepository(
+         //TODO
+      )
+   }
+
+   val authFactory: AuthFactory by lazy {
+      AuthFactory(
+         createExceptionHandler = ::createExceptionHandler,
+         authRepository = appRepository
+      )
+   }
+
+   private fun createExceptionHandler(): ExceptionHandler = ExceptionHandler(
+      // TODO
+   )
+}
 ```
-Передаем уже то, что устанавливается на на платформе.  
-Таким образом, чтобы на платформе начать использовать общий код, нужно всего лишь передать вот эти четыре параметра для инициализации `SharedFactory`: 
-- `settings`
-- `antilogs`
-- `databaseDriverFactory`
-- `repositoryCoroutineScope`
+В `SharedFactory` мы создали необходимые фабрикам компоненты - `Repository` и `createExceptionHandler`.  
+Если бы были какие-то другие компоненты, необходимые другим фабрикам или вьюмоделям - то создали бы все необходимые остальным компоненты по следующему принципу:  
+   - все что общее для вьюмоделей одной фичи - настраивается в фабрике
+   - все, что общее для всех фабрик - настраивается в `SharedFactory`
 
-И создать каждую фабрику фичи, для нее нужна будет реализация функции `createExceptionHandler`, о которой вы узнаете позже из `moko-errors`, а также создать объект `Repository`
+Параметры `SharedFactory` - это то, что мы не можем создать из общего кода а можем получить только с платформы.
 
-***
-***
-***
-***
-
-Для создания конкретной вьюмодели нам нужно будет предоставить ей кучу зависимостей, но большую часть этих зависимостей можно настроить внутри модуля 
-
-Также, для каждого модуля есть своя `factory`. Её задача - создавать уже настроенные объекты фичи
-
-У каждого модуля есть своя фактори.  
-Задача фактори - создавать объекты фичи сразу настроенные, чтобы в них уже были все необходимые зависимости. 
-То же самое косается и фабрик, у них также есть свои требования наружу.
-
-Главная фабрика в проекте и его стартовая точка - это `SharedFactory`, она объединяет все остальные фабрики фичей и свзяывает их друг с другом. Через `SharedFactory` можно получить все, что нужно из общего кода.   Модуль `mppLibrary` единственный, который знает обо всех фичах в приложении. Именно он соединяет каждую фичу межу собой.
-
-Последние настройки, которые требуются общему коду - это настройки `SharedFactory`, которая настраивается уже на платформе 
-
-Пример параметров, которые необходимы `SharedFactory`: 
-- адрес сервера (чтобы платформы своими инструментами могли регулировать dev/stage/prod)
-- multiplatform-settings
-- оповещение, что разлогинились
-
-
-конструктор ШФ - то, что нужно общей логике от внешнего мира, чтобы работать
-
-через ШФ можно получить все из общего кода 
-
-Про SharedFactory, про фактори фичей и тд
-
-SF - обладает всеми фактори фичей, умеет их создавать предоставляя им зависимости
-фактори фичей - умеют создавать все то, что им надо - вьюмодели и тд
-ресурсы - тоже зависимость. Фича говорит- вот интерфейс, вот эти ресурсы мне нужны снаружи
-
-Shared видит что нужны такие ресурсы, делает реализацию интерфейса и передает в фичу
-
-1. Шаблоном создаем ViewModel
-1. Если нужны какие-то мультиплатформенные строчки - делаем интерфейс Strings, там объявляем переменные строк, которые нам нужны
-   ```kotlin
-        interface Strings {
-             val examplePlaceholder: StringDesc
-             val examplePlaceholder2: StringDesc
-        }
-   ```
-   И в конструкторе просим реализацию этого интерфейса, SharedFactory при создании нашей VM прокинет нам необходимые строчки
-1. Рядом с классом VM создаем интерфейс с созвучным фиче названием: RegistrationRepository. Там мы описываем все методы для работы с данными, которые нужны нашей вьюмодели 
-1. В едином классе Repository мы добавляем, что реализуем в том числе и этот интерфейс RegistrationRepository, реализуем все методы, которые хочет эта вьюмодель и передаем ей в качестве репозитория себя: таким образом, класс репозитория у нас один, в нем реализованы все методы для работы с данными, которые нужны вьюмоделям. Но каждая вьюмодель видит только те методы, которые описаны в ее интерфейсе репозитория 
-
-Например: вьюмодели RegistrationViewModel для своей работы нужны методы:
-- sendCode(phoneNumber: String) - чтобы сервер отправил код подтверждения на телефон юзеру
-- confirmCode(code: String) - чтобы сервер проверил, правильный ли введен код подтверждения
-- saveUser(password: String) - чтобы завершить регистрацию и сохранить юзера на сервере
-
-Соответственно, будет создан интерфейс:
-```kotlin
-interface RegistrationRepository {
-    suspend fun sendCode(
-       phoneNumber: String
-    ): Int
-
-    suspend fun confirmCode(
-       code: String
-    )
-
-   suspend fun saveUser(
-       password: String
-    ): User
-}
-
-```
-
-```mermaid
-
-classDiagram
-class MR
-
-class SharedFactory
-
-class RegistrationFactory {
-   interface Strings : RegistrationViewModel.Strings
-}
-
-class NewsHistoryFactory {
-   interface Strings : NewsHistoryViewModel.Strings
-}
-
-class RegistrationViewModel{
-   interface Strings
-}
-
-class NewsHistoryViewModel{
-   interface Strings
-}
-
-SharedFactory --> MR
-SharedFactory --> RegistrationFactory
-SharedFactory --> NewsHistoryFactory
-
-RegistrationFactory --> RegistrationViewModel
-NewsHistoryFactory --> NewsHistoryViewModel
-
-```
-
+Таким образом, чтобы начать работу с общим кодом - нужно только создать объект `SharedFactory`, передав ему несколько параметров, доступных только на платформе.  
+Получить нужную вьюмодель можно будет следующим образом: `SharedFactory.authFactory.createAuthViewModel()` - быстро и просто, без всяких настроек
 
 ## Библиотека moko-resources
 
