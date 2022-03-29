@@ -7,7 +7,7 @@ sidebar_position: 7
 ## Android 
 
 Для навигации в Android-приложении мы будем использовать [Navigation component](https://developer.android.com/guide/navigation).  
-Вы уже читали о ней в блоке [Экраны и навигация](/university/1-android-basics/user-interface#экраны-и-навигация), повторите при необходимости.
+Вы уже читали о ней в блоке [Экраны и навигация](/university/android-basics/user-interface#экраны-и-навигация), повторите при необходимости.
 
 ## iOS
 
