@@ -9,8 +9,8 @@ sidebar_position: 6
 Как мы уже разобрали в блоке [многомодульность](multimodularity), нам нужно разбить проект на модули и обеспечить их минимальную связанность, чтобы скорость сборки не уменьшалась с ростом проекта (особенно на `iOS`)  
 Так как модули не знают друг про друга, но приложение целостное и оно должно использовать: 
 - один общий источник данных
-- одинаковые строчки локализации
-- одинаковые картинки 
+- общие строки локализации
+- общие картинки 
 - и т.д.
 
 Поэтому, нам нужно обеспечить передачу некоторых общих компонентов и классов во все модули. Использовать один общий модуль для таких компонентов мы не можем, это также описывалось в блоке [многомодульность](multimodularity).  
@@ -28,10 +28,10 @@ sidebar_position: 6
 
 ```kotlin
 interface AuthRepository {
-   suspend fun signIn(
-      phoneNumber: Int,
-      authCode: Long
-   ): Int
+    suspend fun signIn(
+        phoneNumber: String,
+        authCode: String
+    )
 }
 ```
 А в конструкторе `AuthViewModel` объявляем поле, типа этого интерфейса:
@@ -42,7 +42,7 @@ class AuthViewModel(
    //...
 ) 
 ```
-Таким образом вьюмодель как бы объявляет: мне для работы нужен кто-то, кто реализует интерфейс `AuthRepository`, потому что у него есть нужный мне метод `signIn`. Мне абсолютно не важно, кто и как будет его реализовывать.  
+Таким образом вьюмодель как бы объявляет: мне для работы нужен кто-то, кто реализует интерфейс `AuthRepository`, потому что у него есть нужный мне метод `signIn`. Мне вообще не важно, кто и как будет его реализовывать.  
 В классе общего репозитория реализуем интерфейс `AuthRepository` и, при создании фичи будем передавать объект общего репозитория.
 
 ## DI на проектах
@@ -86,32 +86,14 @@ class ResetPasswordViewModel(
 ```kotlin
 interface ResetPasswordRepository {
    suspend fun resetPassword(
-      phoneNumber: Int,
-      confirmCode: Long
-   ): Int
+      phoneNumber: String,
+      confirmCode: String
+   )
 }
 ```
-Далее, рассмотрим того, кто будет реализовывать этот метод.  
-Вся логика работы приложения с источником данных (сервер, БД и т.д.) вынесена в один класс - `AppRepository`
+Общий репозиторий, который будет реализовывать этот интерфейс разберем позднее.
 
-`AppRepository.kt`:
-```kotlin
-internal class AppRepository constructor(
-    private val keyValueStorage: KeyValueStorage,
-    private val dao: AppDao,
-    private val coroutineScope: CoroutineScope
-) : ResetPasswordRepository {
-   override fun resetPassword(
-      phoneNumber: Int,
-      confirmCode: Long
-   ): Int {
-      // TODO
-   }
-}
-```
-Этот класс реализует абсолютно все интерфейсы, реализацию которых требуют вьюмодели всех фич. Для всех новых вьюмоделей мы будем объявлять новый интерфейс, и реализовывать его здесь, а затем прокидывать объект общего репозитория всем вьюмоделям.
-
-Теперь сделаем `AuthFactory` - класс, с помощью которого будем настраивать общие компоненты вьюмоделей фичи и создавать их. Класс фабрики также объявляется в модуле фичи.
+Теперь сделаем `AuthFactory` - класс, с помощью которого будем настраивать общие компоненты вьюмоделей фичи авторизации и создавать их. Класс фабрики также объявляется в модуле фичи.
 
 `AuthFactory.kt`:
 ```kotlin
@@ -136,9 +118,69 @@ class AuthFactory(
 
 В эту фабрику мы будем добавлять методы, аналогичные `createResetPasswordViewModel` для создания других вьмоделей, для них всех `createExceptionHandler`, `repository` и `strings` будут одинаковыми.
 
-Теперь у нас есть доступ ко всем вьюмоделям фичи авторизации - чтобы создать какую-либо вьюмодель нужно просто вызвать нужную функцию у фабрики и передать один единственный аргумент. Осталось как-то создать `AuthFactory`: 
+Теперь у нас есть доступ ко всем вьюмоделям фичи авторизации - чтобы создать какую-либо вьюмодель нужно просто вызвать нужную функцию у фабрики и передать один единственный аргумент. 
 
-Функция для создания фабрики фичи авторизации, объявляется непосредственно на уровне выше чем фичи (mpp-library/src), чтобы был доступ к MR строчкам (***? тут не уверен, причину надо более внятную ?*): 
+## SharedFactory и AppRepository
+
+Вся логика работы приложения с источником данных (сервер, БД и т.д.) вынесена в один класс - `AppRepository`
+
+`AppRepository.kt`:
+```kotlin
+internal class AppRepository constructor(
+    private val keyValueStorage: KeyValueStorage,
+    private val dao: AppDao,
+    private val coroutineScope: CoroutineScope
+) : ResetPasswordRepository {
+   override fun resetPassword(
+      phoneNumber: String,
+      confirmCode: String
+   ) {
+      // TODO
+   }
+}
+```
+Этот класс реализует абсолютно все интерфейсы, реализацию которых требуют вьюмодели всех фич. Для всех новых вьюмоделей мы будем объявлять новый интерфейс, и реализовывать его здесь, а затем прокидывать объект общего репозитория всем вьюмоделям.
+
+Второй уровень абстракции: фабрика фабрик - `SharedFactory`. В ней мы также создадим все фабрики, как до этого создавали вьюмодели в фабриках, настроим их, чтобы для работы с общим кодом нужно было создать только одну общую фабрику - `SharedFactory`.
+
+`SharedFactory.kt`:
+```kotlin
+class SharedFactory internal constructor(
+    settings: Settings,
+    antilogs: List<Antilog>,
+    databaseDriverFactory: DatabaseDriverFactory,
+    repositoryCoroutineScope: CoroutineScope
+) {
+    internal val appRepository: AppRepository by lazy {
+        AppRepository(
+            //TODO
+        )
+    }
+
+    val authFactory: AuthFactory by lazy {
+        AuthFactory(
+            createExceptionHandler = ::createExceptionHandler,
+            authRepository = appRepository,
+            strings = object : AuthFactory.Strings {
+                override val resetDescription: StringDesc =
+                    MR.strings.reset_description.desc()
+            }
+        )
+    }
+
+    private fun createExceptionHandler(): ExceptionHandler = ExceptionHandler(
+        // TODO
+    )
+}
+```
+В `SharedFactory` мы создали оставшиеся необходимые фабрикам компоненты - `Repository` и `createExceptionHandler`, а также установили все строки локализации, необходимые фиче.  
+Поскольку, вьюмодель у нас пока что-то одна, объект `strings` для `AuthFactory` содержит только строки `ResetPasswordViewModel`. Если бы вьюмоделей было больше - все необходимые им строки задавались бы здесь.
+
+***
+Фиче может понадобиться гораздо больше строк локализации, чем одна, и самих фич в проекте может быть очень много. Если инициализировать строки локализации каждой в фабрики фичей именно в `SharedFactory`, то класс со всеменем сильно разрастется и ориентироваться в нем будет сложно.  
+Предлагаем вам использовать вспомогательные функции, расположенные на уровне `SharedFactory`, чтобы инициализировать фабрики строками именно там, а в `SharedFactory` вызывать эти функции.
+
+`AuthFactoryInit.kt`:
 ```kotlin
 internal fun AuthFactory(
     createExceptionHandler: () -> ExceptionHandler,
@@ -154,39 +196,19 @@ internal fun AuthFactory(
     )
 }
 ```
-Здесь мы устанавливаем все строки локализации, необходимые фиче.  
-Поскольку, вьюмодель у нас пока что-то одна, объект `strings` содержит только строки `ResetPasswordViewModel`. Если бы вьюмоделей было больше - все необходимые им строки задавались бы здесь. 
+Вызов в `SharedFactory`:
 
-Второй уровень абстракции: фабрика фабрик - `SharedFactory`. В ней мы также создадим все фабрики, как до этого создавали вьюмодели в фабриках, настроим их, чтобы для работы с общим кодом нужно было создать только одну общую фабрику - `SharedFactory`.
-
-`SharedFactory.kt`
 ```kotlin
-class SharedFactory internal constructor(
-   settings: Settings,
-   antilogs: List<Antilog>,
-   databaseDriverFactory: DatabaseDriverFactory,
-   repositoryCoroutineScope: CoroutineScope
-) {
-   internal val appRepository: AppRepository by lazy {
-      AppRepository(
-         //TODO
-      )
-   }
-
-   val authFactory: AuthFactory by lazy {
-      AuthFactory(
-         createExceptionHandler = ::createExceptionHandler,
-         authRepository = appRepository
-      )
-   }
-
-   private fun createExceptionHandler(): ExceptionHandler = ExceptionHandler(
-      // TODO
-   )
+val authFactory: AuthFactory by lazy {
+    AuthFactory(
+        createExceptionHandler = ::createExceptionHandler,
+        authRepository = appRepository
+    )
 }
 ```
-В `SharedFactory` мы создали оставшиеся необходимые фабрикам компоненты - `Repository` и `createExceptionHandler`.  
-Если бы были какие-то другие компоненты, необходимые другим фабрикам или вьюмоделям - то добавляли бы по следующему принципу:  
+***
+
+Наконец, как добавлять новые компоненты в фичи и вьюмодели, если вдруг что-то понадобилось: 
    - все что общее для вьюмоделей одной фичи - настраивается в фабрике
    - все, что общее для всех фабрик - настраивается в `SharedFactory`
 
