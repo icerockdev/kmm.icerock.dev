@@ -23,12 +23,111 @@ sidebar_position: 4
 
 ## Пример реализации
 ### Реализация источника данных
-***
-ПЕРЕПИСАТЬ
 
-Используем `multiplatform-settings`, читает из kVS с подпиской 
+Мы будем реализовывать источник данных на основе библиотеки [multiplatform-settings](https://github.com/russhwolf/multiplatform-settings)
+Она позволяет возвращать flow, [гайд](https://github.com/russhwolf/multiplatform-settings#coroutine-apis) 
 
-***
+Как будет выглядеть наш репозиторий в общем коде:
+
+`Repository.kt`
+```kotlin
+@ExperimentalSettingsApi
+class Repository(observableSettings: ObservableSettings, coroutineScope: CoroutineScope) {
+  private val keyValueStorage = KeyValueStorage(observableSettings, coroutineScope)
+
+  fun getMessage(): Flow<String?> {
+    return keyValueStorage.messageFlow
+  }
+
+  fun setMessage(message: String?){
+    keyValueStorage.changeMessageValue(message)
+  }
+}
+```
+
+`KeyValueStorage.kt`
+```kotlin
+@ExperimentalSettingsApi
+class KeyValueStorage(private val settings: ObservableSettings, coroutineScope: CoroutineScope) {
+  
+  val messageFlow: Flow<String?> = settings.getStringOrNullFlow("message")
+  private var messageValue by settings.nullableString("message")
+
+  fun changeMessageValue(message: String?){
+    this.messageValue = message
+  }
+
+  fun resetData() {
+    settings.clear()
+  }
+}
+```
+
+Нам понадобятся две переменные `messageFlow` и `messageValue`, чтобы направить все общение UI на flow - messageValue сделаем приватной и установим функцию-сеттер
+
+flow мы преобразуем в stateFlow и подпишемся, а value нам нужно для сохранения данных в этот flow, из-за того, что преобразовать flow в MutableStateFlow довольно проблематично, оставим пока так.  
+
+Для простоты, создадим репозиторий в `MainActivity` (т.к. mainActivity будет жить, пока пересоздаются фрагменты, -> репозиторий тоже останется )
+```kotlin
+val repository: Repository by lazy {
+  val sharedPrefs = this.getSharedPreferences("app", Context.MODE_PRIVATE)
+  val settings = AndroidSettings(sharedPrefs)
+  Repository(settings, MainScope())
+}
+```
+
+Получать репозиторий во фрагментах будем следующийм образом:
+```kotlin
+val mainActivity: MainActivity = parentFragment?.activity as MainActivity
+val repository = mainActivity.repository
+```
+
+Далее, создадим два фрагмента, добавим в каждый следующие элементы: 
+  - editText - для обновления значения во флоу 
+  - textView - для отображения занчения из flow,  чтобы увидеть реактивность
+  - кнопка для перехода на другой фрагмент, перед переходом будет происходить обновление значения во flow
+  - кнопка, по которой покажется текущее значение из флоу
+
+объект flow во фрагменте
+```kotlin
+val messageStateFlow: StateFlow<String?> = repository.getMessage().stateIn(lifecycleScope, SharingStarted.Eagerly, null)
+```
+
+Подписка на флоу во фрагменте, теперь текствью отобразит флоу, когда он изменится без каких-либо действий
+```kotlin
+lifecycleScope.launch {
+  messageStateFlow.collect {
+    titleVew.text = it
+  }
+}
+```
+
+Действие по кнопке перехода: 
+- берем текст из эдиттекста
+- изменяем текущее значение flow
+- переходим на другой фрагмент
+
+```kotlin
+routeButton.setOnClickListener {
+  val text = editText.editableText.toString()
+  repository.setMessage(text)
+
+  findNavController().navigate(R.id.action_firstFragment_to_secondFragment)
+}
+```
+
+Кнопка вывода текущего значения, чтобы точно удостовериться, что там лежит
+```kotlin
+toastButton.setOnClickListener {
+  Toast.makeText(
+    requireContext(),
+    messageStateFlow.value,
+    Toast.LENGTH_SHORT
+  ).show()
+}
+```
+
+Таким образом textview на обоих фрагментах будут реактивно обновляться при изменении значения flow, можете добавить еще по кнопке - для перехода между фрагментами без изменения flow, посмотрим на  
 
 ### Как подписаться на Flow
 
