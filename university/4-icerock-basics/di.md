@@ -61,6 +61,8 @@ class AuthViewModel(
 
 Решение - по максимуму оставить логику настройки вьюмоделей в общем коде, чтобы со стороны платформы можно было практически сразу получить готовую вьюмодель.
 
+### Уровень фичи
+
 Первый уровень абстракции над вьюмоделями это фабрика фичи. Она позволяет получить все вьюмодели одной фичи. Разбирать будем на примере фичи авторизации, а вьюмодель, которую мы хотим получить - вьюмодель экрана сброса пароля.
 
 Начнем с вьюмодели: 
@@ -80,7 +82,7 @@ class ResetPasswordViewModel(
 ```
 Вьюмодель объявляет интерфейс `Strings` - необходимые ей строки локализации. Далее мы разберем это подробнее. 
 
-Рядом с `ResetPasswordViewModel` создаем интерфейс репозитория. Сделали мы это ради принципа `Dependency Inversion`. В конструктор `ResetPasswordViewModel` принимает объект, который реализует этот интерфейс. В данном случае - кого-то, кто реализует метод для сброса пароля.  
+Рядом с `ResetPasswordViewModel` создаем интерфейс репозитория. Сделали мы это для того, чтобы не устанавливать связть фича-модуля на модуль со строками локализации. В конструктор `ResetPasswordViewModel` принимает объект, который реализует этот интерфейс. В данном случае - кого-то, кто реализует метод для сброса пароля.  
 
 `ResetPasswordRepository.kt`
 ```kotlin
@@ -91,7 +93,7 @@ interface ResetPasswordRepository {
    )
 }
 ```
-Общий репозиторий, который будет реализовывать этот интерфейс разберем позднее.
+Класс репозитория фичи - `AuthRepository`, который будет реализовывать этот интерфейс разберем позднее.
 
 Теперь сделаем `AuthFactory` - класс, с помощью которого будем настраивать общие компоненты вьюмоделей фичи авторизации и создавать их. Класс фабрики также объявляется в модуле фичи.
 
@@ -99,7 +101,7 @@ interface ResetPasswordRepository {
 ```kotlin
 class AuthFactory(
    private val createExceptionHandler: () -> ExceptionHandler,
-   private val repository: AuthRepository,
+   private val authRepository: AuthRepository,
    private val strings: Strings
 ) {
    fun createResetPasswordViewModel(
@@ -107,7 +109,7 @@ class AuthFactory(
    ) = ResetPasswordViewModel(
       eventsDispatcher = eventsDispatcher,
       exceptionHandler = createExceptionHandler(),
-      repository = repository,
+      repository = authRepository,
       strings = strings
    )
 
@@ -120,13 +122,13 @@ class AuthFactory(
 
 Теперь у нас есть доступ ко всем вьюмоделям фичи авторизации - чтобы создать какую-либо вьюмодель нужно просто вызвать нужную функцию у фабрики и передать один единственный аргумент. 
 
-## SharedFactory и AppRepository
+### Уроверь mpp-library
 
-Вся логика работы приложения с источником данных (сервер, БД и т.д.) вынесена в один класс - `AppRepository`
+Логика работы приложения с источником данных (сервер, БД и т.д.) выносятся в классы - репозитории, в данном случае сделаем репозиторий для фичи авторизации - `AuthRepository`
 
-`AppRepository.kt`:
+`AuthRepository.kt`:
 ```kotlin
-internal class AppRepository constructor(
+internal class AuthRepository constructor(
     private val keyValueStorage: KeyValueStorage,
     private val dao: AppDao,
     private val coroutineScope: CoroutineScope
@@ -139,7 +141,7 @@ internal class AppRepository constructor(
    }
 }
 ```
-Этот класс реализует абсолютно все интерфейсы, реализацию которых требуют вьюмодели всех фич. Для всех новых вьюмоделей мы будем объявлять новый интерфейс, и реализовывать его здесь, а затем прокидывать объект общего репозитория всем вьюмоделям.
+Этот класс реализует все интерфейсы вьюмоделей фичи авторизации для работы с источником данных. Для всех новых вьюмоделей других фичей мы будем объявлять свои интерфейсы, и реализовывать их в классе репозитория конкретной фичи, а затем прокидывать объект репозитория всем вьюмоделям.
 
 Второй уровень абстракции: фабрика фабрик - `SharedFactory`. В ней мы также создадим все фабрики, как до этого создавали вьюмодели в фабриках, настроим их, чтобы для работы с общим кодом нужно было создать только одну общую фабрику - `SharedFactory`.
 
@@ -151,8 +153,25 @@ class SharedFactory internal constructor(
     databaseDriverFactory: DatabaseDriverFactory,
     repositoryCoroutineScope: CoroutineScope
 ) {
-    internal val appRepository: AppRepository by lazy {
-        AppRepository(
+    // public constructor for platform side usage
+    constructor(
+        settings: Settings,
+        antilog: Antilog?,
+        databaseDriverFactory: DatabaseDriverFactory?,
+        mpiServiceConnector: MpiServiceConnector?
+    ) : this(
+        settings = settings,
+        antilogs = listOfNotNull(
+            antilog,
+            CrashReportingAntilog(CrashlyticsLogger())
+        ),
+        databaseDriverFactory = databaseDriverFactory,
+        mpiServiceConnector = mpiServiceConnector,
+        repositoryCoroutineScope = CoroutineScope(Dispatchers.Main)
+    )
+    
+    internal val authRepository: AuthRepository by lazy {
+        AuthRepository(
             //TODO
         )
     }
@@ -160,7 +179,7 @@ class SharedFactory internal constructor(
     val authFactory: AuthFactory by lazy {
         AuthFactory(
             createExceptionHandler = ::createExceptionHandler,
-            authRepository = appRepository,
+            authRepository = authRepository,
             strings = object : AuthFactory.Strings {
                 override val resetDescription: StringDesc =
                     MR.strings.reset_description.desc()
@@ -173,18 +192,18 @@ class SharedFactory internal constructor(
     )
 }
 ```
-В `SharedFactory` мы создали оставшиеся необходимые фабрикам компоненты - `Repository` и `createExceptionHandler`, а также установили все строки локализации, необходимые фиче.  
+В `SharedFactory` мы создали оставшиеся необходимые фабрикам компоненты - `authRepository` и `createExceptionHandler`, а также установили все строки локализации, необходимые фиче.  
 Поскольку, вьюмодель у нас пока что-то одна, объект `strings` для `AuthFactory` содержит только строки `ResetPasswordViewModel`. Если бы вьюмоделей было больше - все необходимые им строки задавались бы здесь.
 
 ***
 Фиче может понадобиться гораздо больше строк локализации, чем одна, и самих фич в проекте может быть очень много. Если инициализировать строки локализации каждой в фабрики фичей именно в `SharedFactory`, то класс со всеменем сильно разрастется и ориентироваться в нем будет сложно.  
-Предлагаем вам использовать вспомогательные функции, расположенные на уровне `SharedFactory`, чтобы инициализировать фабрики строками именно там, а в `SharedFactory` вызывать эти функции.
+Предлагаем вам использовать вспомогательные функции, расположенные рядом с `SharedFactory`, чтобы инициализировать фабрики строками именно там, а в `SharedFactory` вызывать эти функции.
 
 `AuthFactoryInit.kt`:
 ```kotlin
 internal fun AuthFactory(
     createExceptionHandler: () -> ExceptionHandler,
-    authRepository: AuthRepository
+    authRepository: AuthRepositoryInterface
 ): AuthFactory {
     return AuthFactory(
         createExceptionHandler = createExceptionHandler,
@@ -202,20 +221,93 @@ internal fun AuthFactory(
 val authFactory: AuthFactory by lazy {
     AuthFactory(
         createExceptionHandler = ::createExceptionHandler,
-        authRepository = appRepository
+        authRepository = authRepository
     )
 }
 ```
 ***
 
+### Уроверь платформы
+
+Параметры `SharedFactory` - это то, что мы не можем создать из общего кода а можем получить только с платформы.
+
+
+iOS
+
+класс со статической переменной - фабрикой
+```
+class AppComponent {
+    static var factory: SharedFactory!
+}
+```
+
+в методе `application` инициализируем фабрику и прокидываем дальше в `AppCoordinator`. О нем вы узнаете уже в следующем разделе `Навигация между экранами`.
+
+
+```
+func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+    FirebaseApp.configure()
+    MokoFirebaseCrashlytics.setup()
+
+    let antilog: Antilog?
+    #if DEBUG
+        antilog = DebugAntilog(defaultTag: "debug")
+    #else
+        antilog = nil
+    #endif
+
+    AppComponent.factory = SharedFactory(
+        settings: AppleSettings(delegate: UserDefaults.standard),
+        antilog: antilog,
+        databaseDriverFactory: SqlDatabaseDriverFactory(),
+    )
+
+    let window = UIWindow()
+
+    coordinator = AppCoordinator(
+        window: window,
+        factory: AppComponent.factory
+    )
+    coordinator.start()
+
+    window.makeKeyAndVisible()
+    self.window = window
+
+    return true
+}
+```
+
+`AppCoordinator` прокидывает ее дальше, в дочерние координаторы, которые, в свою очередь, отправляют ее уже в контроллеры.
+Получение вьюмоедли в контроллере выглядит вот так:
+
+```
+vc.resetPasswordViewModel = factory
+.authFactory
+.createResetPasswordViewModel(eventsDispatcher: EventsDispatcher<ResetPasswordViewModelEventsListener>(listener: vc))
+```
+
+***Android***
+
+```kotlin
+val factory = SharedFactory(
+    AndroidSettings(
+        delegate = context.getSharedPreferences("app", MODE_PRIVATE)
+    ),
+    antilog = antilog,
+    databaseDriverFactory = SqlDatabaseDriverFactory(context)
+)
+
+val resetPasswordViewModel = factory.authFactory.createResetPasswordViewModel(
+    eventsDispatcher = eventsDispatcherOnMain()
+)
+```
+
 Наконец, как добавлять новые компоненты в фичи и вьюмодели, если вдруг что-то понадобилось: 
    - все что общее для вьюмоделей одной фичи - настраивается в фабрике
    - все, что общее для всех фабрик - настраивается в `SharedFactory`
 
-Параметры `SharedFactory` - это то, что мы не можем создать из общего кода а можем получить только с платформы.
 
 Таким образом, чтобы начать работу с общим кодом - нужно только создать объект `SharedFactory`, передав ему несколько параметров, доступных только на платформе.  
-Получить нужную вьюмодель можно будет следующим образом: `sharedFactory.authFactory.createAuthViewModel()` - быстро и просто, без всяких настроек
 
 ## Библиотека moko-resources
 
