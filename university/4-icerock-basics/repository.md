@@ -22,13 +22,51 @@ sidebar_position: 4
 - подписываемся на `Flow` или `LiveData` у источника данных
 
 ## Пример реализации
-### Реализация источника данных
 
-Мы будем реализовывать источник данных на основе библиотеки [multiplatform-settings](https://github.com/russhwolf/multiplatform-settings)
-Она позволяет возвращать flow, [гайд](https://github.com/russhwolf/multiplatform-settings#coroutine-apis) 
+### Common code
 
-Как будет выглядеть наш репозиторий в общем коде:
+В этом примере источником данных нам будет служить хранилище устройства, а средствами библиотеки [multiplatform-settings](https://github.com/russhwolf/multiplatform-settings) мы будем получать не просто значение по ключу, а `Flow` и подписываться на него.
+[Инструкция](https://github.com/russhwolf/multiplatform-settings#coroutine-apis) по подключению `multiplatform-settings-coroutines`.
 
+Начнем с класса `KeyValueStorage`, к которому будем обращаться через объект репозитория.   
+
+`KeyValueStorage.kt`:
+```kotlin
+private const val MESSAGE_KEY = "message_key"
+
+@ExperimentalSettingsApi
+class KeyValueStorage(private val settings: ObservableSettings, coroutineScope: CoroutineScope) {
+
+  val messageFlow: Flow<String?> = settings.getStringOrNullFlow(MESSAGE_KEY)
+  private var messageValue by settings.nullableString(MESSAGE_KEY)
+
+  fun changeMessageValue(message: String?){
+    this.messageValue = message
+  }
+
+
+  val nickname: MutableStateFlow<String> = settings.getStringMutableStateFlow(
+    coroutineScope,
+    "nickname_key"
+  )
+
+  fun resetData() {
+    settings.clear()
+  }
+}
+```
+
+Нам понадобятся:
+  - `MESSAGE_KEY` - константа-ключ, чтобы не хардкодить его
+  - `messageFlow` - `Flow` значения по ключу `MESSAGE_KEY`, на который мы будем подписываться
+  - `messageValue` - приватная переменная, с помощью которой мы сможем задать значение переменной по ключу `MESSAGE_KEY`
+  - `changeMessageValue(message: String?)` - функция-сеттер для `messageValue` 
+  - `resetData()` - функция для очистки значений всех сохраненных переменных
+
+На `UI` мы преобразуем `messageFlow` в `StateFlow`, чтобы заработал его функционал с доступом к последнему значению по переменной `value`.  
+`messageValue` мы используем из-за того, что в библиотеке `multiplatform-settings` нет возможности получить `MutableStateFlow`, а нам нужна возможность изменять значение, чтобы увидеть реактивность нашего репозитория. Преобразовать `Flow` в `MutableStateFlow` довольно проблематично, поэтому оставим пока так.
+
+Как будет выглядеть репозиторий:
 `Repository.kt`
 ```kotlin
 @ExperimentalSettingsApi
@@ -45,55 +83,23 @@ class Repository(observableSettings: ObservableSettings, coroutineScope: Corouti
 }
 ```
 
-`KeyValueStorage.kt`
-```kotlin
-@ExperimentalSettingsApi
-class KeyValueStorage(private val settings: ObservableSettings, coroutineScope: CoroutineScope) {
-  
-  val messageFlow: Flow<String?> = settings.getStringOrNullFlow("message")
-  private var messageValue by settings.nullableString("message")
+Все просто, работать мы будем не напрямую с `keyValueStorage`, а используя вспомогательные функции `setMessage(message: String?)` и `getMessage()`.
 
-  fun changeMessageValue(message: String?){
-    this.messageValue = message
-  }
+### Android
 
-  fun resetData() {
-    settings.clear()
-  }
-}
-```
+Наше приложение будет выглядеть следующим образом:
+  - `MainActivity` - для создания и инициализации графа навигации и репозитория
+  - два фрагмента, которые содержат элементы:
+    - `EditText` - для обновления значения во флоу
+    - `TextView` - для отображения значения из `Flow`
+    - кнопка для перехода на другой фрагмент, перед переходом будет происходить обновление значения во `Flow`
 
-Нам понадобятся две переменные `messageFlow` и `messageValue`, чтобы направить все общение UI на flow - messageValue сделаем приватной и установим функцию-сеттер
-
-flow мы преобразуем в stateFlow и подпишемся, а value нам нужно для сохранения данных в этот flow, из-за того, что преобразовать flow в MutableStateFlow довольно проблематично, оставим пока так.  
-
-Для простоты, создадим репозиторий в `MainActivity` (т.к. mainActivity будет жить, пока пересоздаются фрагменты, -> репозиторий тоже останется )
-```kotlin
-val repository: Repository by lazy {
-  val sharedPrefs = this.getSharedPreferences("app", Context.MODE_PRIVATE)
-  val settings = AndroidSettings(sharedPrefs)
-  Repository(settings, MainScope())
-}
-```
-
-Получать репозиторий во фрагментах будем следующийм образом:
-```kotlin
-val mainActivity: MainActivity = parentFragment?.activity as MainActivity
-val repository = mainActivity.repository
-```
-
-Далее, создадим два фрагмента, добавим в каждый следующие элементы: 
-  - editText - для обновления значения во флоу 
-  - textView - для отображения занчения из flow,  чтобы увидеть реактивность
-  - кнопка для перехода на другой фрагмент, перед переходом будет происходить обновление значения во flow
-  - кнопка, по которой покажется текущее значение из флоу
-
-объект flow во фрагменте
+`StateFlow` во фрагменте:
 ```kotlin
 val messageStateFlow: StateFlow<String?> = repository.getMessage().stateIn(lifecycleScope, SharingStarted.Eagerly, null)
 ```
 
-Подписка на флоу во фрагменте, теперь текствью отобразит флоу, когда он изменится без каких-либо действий
+Подписка на флоу во фрагменте, теперь в `TextView` всегда будет отображаться актуальное значение:
 ```kotlin
 lifecycleScope.launch {
   messageStateFlow.collect {
@@ -102,11 +108,7 @@ lifecycleScope.launch {
 }
 ```
 
-Действие по кнопке перехода: 
-- берем текст из эдиттекста
-- изменяем текущее значение flow
-- переходим на другой фрагмент
-
+Действие по кнопке перехода с одного фрагмента на другой:
 ```kotlin
 routeButton.setOnClickListener {
   val text = editText.editableText.toString()
@@ -115,51 +117,11 @@ routeButton.setOnClickListener {
   findNavController().navigate(R.id.action_firstFragment_to_secondFragment)
 }
 ```
+Изменяем текущее значение во `Flow` на то, что ввели в `EditText` и переходим на другой фрагмент.
+Таким образом `TextView` на обоих фрагментах будут реактивно обновляться при изменении значения `Flow`. Можете добавить еще по кнопке - для перехода между фрагментами без изменения `Flow`, чтобы убедиться в этом :)
 
-Кнопка вывода текущего значения, чтобы точно удостовериться, что там лежит
-```kotlin
-toastButton.setOnClickListener {
-  Toast.makeText(
-    requireContext(),
-    messageStateFlow.value,
-    Toast.LENGTH_SHORT
-  ).show()
-}
-```
-
-Таким образом textview на обоих фрагментах будут реактивно обновляться при изменении значения flow, можете добавить еще по кнопке - для перехода между фрагментами без изменения flow, посмотрим на  
-
-### Как подписаться на Flow
-
-***
-ПЕРЕПИСАТЬ
-***
-
-Итак, теперь мы получаем от таблицы не просто объект `Ship`, а `Flow`, на который можем подписаться из `viewModel`:
-
-Вариант подписки, используя `StateFlow`:
-```kotlin
-val currentShip: StateFlow<Ship?> = repository.getShipById(id).stateIn(viewModelScope, SharingStarted.Eagerly, null )
-```
-
-Вариант подписки, используя `LiveData`:
-```kotlin
-val currentShip: LiveData<Ship?> = repository.getShipById(id).asLiveData(viewModelScope, initialValue = null)
-```
-
-Теперь, если данные в таблице изменятся, то все методы, у которых изменилось возвращаемые значение, вызовутся еще раз. Все места в приложении, где используются данные из этого запроса, обновятся. Нигде не придется ничего вызывать и обновлять вручную. Данные изменились - `UI` сразу обновится.  
-
-Например: в источнике данных обновился `rating` корабля с идентификатором `id` - он автоматически обновится на всех экранах, где мы его отображаем, потому что результат `repository.getShipById(id)` - это `Flow`, а мы на него подписались.
+### iOS
+***Дописать***
 
 ## Практическое задание
-***
-ПЕРЕПИСАТЬ
-***
-
-Сделайте приложение, которое содержит: 
-- Реактивный репозиторий
-- Источник данных для репозитория - база данных [SQLDelight](https://cashapp.github.io/sqldelight/)
-- Экран со списком элементов, и двумя кнопками
-    - данные для списка реактивно тянутся от репозитория
-    - по нажатию на первую кнопку в БД добавляется еще один элемент списка
-    - по нажатию на вторую кнопку БД очищается
+Повторите пример с двумя репозиториями и реактивным репозиторием, работающем с `multiplatform-settings`.
