@@ -60,8 +60,9 @@ class KeyValueStorage(private val settings: ObservableSettings, coroutineScope: 
 На `UI` мы преобразуем `messageFlow` в `StateFlow`, чтобы заработал его функционал с доступом к последнему значению по переменной `value`.  
 `messageValue` мы используем из-за того, что в библиотеке `multiplatform-settings` нет возможности получить `MutableStateFlow`, а нам нужна возможность изменять значение, чтобы увидеть реактивность нашего репозитория. Преобразовать `Flow` в `MutableStateFlow` довольно проблематично, поэтому оставим пока так.
 
-Как будет выглядеть репозиторий:
-`Repository.kt`
+В репозитории мы будем работать не напрямую с `keyValueStorage`, а используя вспомогательные функции `setMessage(message: String?)` и `getMessage()`.  
+
+`Repository.kt`:
 ```kotlin
 @ExperimentalSettingsApi
 class Repository(observableSettings: ObservableSettings, coroutineScope: CoroutineScope) {
@@ -77,45 +78,21 @@ class Repository(observableSettings: ObservableSettings, coroutineScope: Corouti
 }
 ```
 
-Все просто, работать мы будем не напрямую с `keyValueStorage`, а используя вспомогательные функции `setMessage(message: String?)` и `getMessage()`.
-
-### Android
-
-Наше приложение будет выглядеть следующим образом:
-  - `MainActivity` - для создания и инициализации графа навигации и репозитория
-  - два фрагмента, которые содержат элементы:
-    - `EditText` - для обновления значения во флоу
-    - `TextView` - для отображения значения из `Flow`
-    - кнопка для перехода на другой фрагмент, перед переходом будет происходить обновление значения во `Flow`
-
-`StateFlow` во фрагменте:
+И наконец, вьюмодель:
+`ViewModel`:
 ```kotlin
-val messageStateFlow: StateFlow<String?> = repository.getMessage().stateIn(lifecycleScope, SharingStarted.Eagerly, null)
-```
+@ExperimentalSettingsApi
+class FirstViewModel(private val repository: Repository): ViewModel() {
 
-Подписка на флоу во фрагменте, теперь в `TextView` всегда будет отображаться актуальное значение:
-```kotlin
-lifecycleScope.launch {
-  messageStateFlow.collect {
-    titleVew.text = it
-  }
+    val message: Flow<String?> = repository.getMessage()
+
+    fun setMessage(message: String?){
+        repository.setMessage(message)
+    }
 }
 ```
 
-Действие по кнопке перехода с одного фрагмента на другой:
-```kotlin
-routeButton.setOnClickListener {
-  val text = editText.editableText.toString()
-  repository.setMessage(text)
-
-  findNavController().navigate(R.id.action_firstFragment_to_secondFragment)
-}
-```
-Изменяем текущее значение во `Flow` на то, что ввели в `EditText` и переходим на другой фрагмент.
-Таким образом `TextView` на обоих фрагментах будут реактивно обновляться при изменении значения `Flow`. Можете добавить еще по кнопке - для перехода между фрагментами без изменения `Flow`, чтобы убедиться в этом :)
-
-### iOS
-***Дописать***
+Теперь, со стороны `UI` нам достаточно будет просто подписаться на обновления `message`, и получать актуальные значения при его изменении. Изменять `message` можно будет используя функцию `setMessage(message: String?)`.
 
 ## Практическое задание
 Повторите пример с двумя репозиториями и реактивным репозиторием, работающем с `multiplatform-settings`.
