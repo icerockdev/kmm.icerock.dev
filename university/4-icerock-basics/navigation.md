@@ -169,4 +169,10 @@ actual class CStateFlow<T> actual constructor(
 Для более полного понимания проблемы и решения, советуем изучить [README](https://github.com/icerockdev/moko-kswift#readme) библиотеки и прочитать [статью](https://medium.com/icerock/how-to-implement-swift-friendly-api-with-kotlin-multiplatform-mobile-e68521a63b6d).
 
 ## Практическое задание
-`// TODO`
+
+Создайте следующее приложение:
+  - два экрана
+  - две вьюмодели
+  - обратотка событий перехода между экранами реализована:
+    - `EventsDispatcher`
+    - `Flow` и `moko-kswift`
