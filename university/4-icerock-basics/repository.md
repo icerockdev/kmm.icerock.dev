@@ -44,12 +44,6 @@ class KeyValueStorage(private val settings: ObservableSettings, coroutineScope: 
     this.messageValue = message
   }
 
-
-  val nickname: MutableStateFlow<String> = settings.getStringMutableStateFlow(
-    coroutineScope,
-    "nickname_key"
-  )
-
   fun resetData() {
     settings.clear()
   }
