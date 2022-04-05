@@ -43,7 +43,18 @@ fun main() {
 }
 ```
 
-Поскольку сервер еще не запущен, создадим тестовый `mock`-движок, и будем имитировать работу сервера:
+Результат, который получим:
+```text
+Exception in thread "main" java.nio.channels.UnresolvedAddressException
+	at java.base/sun.nio.ch.Net.checkAddress(Net.java:130)
+	at java.base/sun.nio.ch.SocketChannelImpl.connect(SocketChannelImpl.java:675)
+	at io.ktor.network.sockets.SocketImpl.connect$ktor_network(SocketImpl.kt:32)
+	at io.ktor.network.sockets.ConnectUtilsJvmKt.connect(ConnectUtilsJvm.kt:19)
+	...
+```
+Очевидно, получили ошибку, потому что такого сервера еще нет.
+
+Чтобы протестировать логику нашего приложения, создадим тестовый `mock`-движок, и будем имитировать работу сервера:
 ```kotlin
 val mockEngine = MockEngine { request ->
     respond(
@@ -64,6 +75,9 @@ fun main() {
 }
 ```
 
+Результат:
+```text
+Test server info
 
-
-
+Process finished with exit code 0
+```
