@@ -1,5 +1,5 @@
 ---
-sidebar_position: 4
+sidebar_position: 5
 ---
 
 # Реактивный источник данных
@@ -25,7 +25,7 @@ sidebar_position: 4
 
 ### Common code
 
-В этом примере источником данных нам будет служить хранилище устройства, а средствами библиотеки [multiplatform-settings](https://github.com/russhwolf/multiplatform-settings) мы будем получать не просто значение по ключу, а `Flow` и подписываться на него.
+В этом примере источником данных нам будет служить хранилище устройства, а средствами библиотеки [multiplatform-settings](https://github.com/russhwolf/multiplatform-settings) мы будем получать не просто значение по ключу, а `Flow` и подписываться на него.  
 [Инструкция](https://github.com/russhwolf/multiplatform-settings#coroutine-apis) по подключению `multiplatform-settings-coroutines`.
 
 Начнем с класса `KeyValueStorage`, к которому будем обращаться через объект репозитория.   
@@ -35,12 +35,12 @@ sidebar_position: 4
 private const val MESSAGE_KEY = "message_key"
 
 @ExperimentalSettingsApi
-class KeyValueStorage(private val settings: ObservableSettings, coroutineScope: CoroutineScope) {
+class KeyValueStorage(private val settings: ObservableSettings) {
 
-  val messageFlow: Flow<String?> = settings.getStringOrNullFlow(MESSAGE_KEY)
-  private var messageValue by settings.nullableString(MESSAGE_KEY)
+  val messageFlow: Flow<String?> = settings.getStringOrNullFlow(KEY)
+  private var messageValue: String? by settings.nullableString(KEY)
 
-  fun changeMessageValue(message: String?){
+  fun changeMessageValue(message: String?) {
     this.messageValue = message
   }
 
@@ -65,14 +65,14 @@ class KeyValueStorage(private val settings: ObservableSettings, coroutineScope: 
 `Repository.kt`:
 ```kotlin
 @ExperimentalSettingsApi
-class Repository(observableSettings: ObservableSettings, coroutineScope: CoroutineScope) {
-  private val keyValueStorage = KeyValueStorage(observableSettings, coroutineScope)
+class Repository(observableSettings: ObservableSettings) {
+  private val keyValueStorage = KeyValueStorage()
 
   fun getMessage(): Flow<String?> {
     return keyValueStorage.messageFlow
   }
 
-  fun setMessage(message: String?){
+  fun setMessage(message: String?) {
     keyValueStorage.changeMessageValue(message)
   }
 }
@@ -82,17 +82,26 @@ class Repository(observableSettings: ObservableSettings, coroutineScope: Corouti
 `ViewModel`:
 ```kotlin
 @ExperimentalSettingsApi
-class FirstViewModel(private val repository: Repository): ViewModel() {
+class FirstViewModel(private val repository: Repository) : ViewModel() {
 
-    val message: Flow<String?> = repository.getMessage()
+  val message: StateFlow<String?> = repository.getMessage().stateIn(viewModelScope)
 
-    fun setMessage(message: String?){
-        repository.setMessage(message)
-    }
+  fun setMessage(message: String?) {
+    repository.setMessage(message)
+  }
 }
 ```
 
 Теперь, со стороны `UI` нам достаточно будет просто подписаться на обновления `message`, и получать актуальные значения при его изменении. Изменять `message` можно будет используя функцию `setMessage(message: String?)`.
 
 ## Практическое задание
-Повторите пример, создайте две вьюмодели с общим реактивным репозиторием, работающем с `multiplatform-settings`.
+Наше приложение будет состоять из двух экранов: 
+- экран редактирования данных юзера
+- экран просмотра текущих данных юзера
+
+Создайте:
+- две вьюмодели для каждого экрана
+- один общий источник данных - `multiplatform-settings`
+- реактивный репозиторий 
+- на первом экране заполняются поля данных юзера и сохраняются в параметры устройства (имя, фамилия, отчество)
+- на втором экране можно посмотреть текущие данные пользователя
