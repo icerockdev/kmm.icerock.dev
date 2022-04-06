@@ -4,26 +4,99 @@ sidebar_position: 4
 
 # MVVM
 
-наши проекты мы делаем используя паттерн mvvm
-
-вьюмодель - часть общего кода
-
-ui android и ios цепляются к общему коду
-
-вьюмодель имеет набор лайвдат для односторонней и двусторонней подписки, о чем мы уже знаем из [статьи](/learning/android/states-events)
-
-Откуда взялись лайвдаты в общем коде? - из библиотеки moko-mvvm, перетянуты в общий код. На андроиде они нативные, на ios - используйте как реактивное хранилище
-
-Вьюмодель для андроида наследует родную андроидную, для ios самописная
-
-И для андроида и для айоса в библиотеке есть набор методов, для привязки лайвдат к ui 
+## moko-mvvm
+Все наши проекты мы делаем используя паттерн [Mvvm](https://habr.com/ru/post/338518/).  
+Логика приложения, находится во вьюмоделях, которые, в свою очередь, расположены в общем коде. На `Android` и `iOS` остается только реализовать `UI` и подцепиться к вьюмодели.  
+Как вы уже знаете из [статьи](/learning/android/states-events), вьюмодели имеют набор [LiveData](https://developer.android.com/topic/libraries/architecture/livedata) и [Flow](https://kotlinlang.org/docs/flow.html) объектов, для привязки со стороны `UI`.
 
 
-семпл мокомввм, оттуда показать на примере: 
-вот лайвдаты во вьюмодели
-вот как вяжемся методами на androdi 
-вот ка квяжемся на айос
+`LiveData` в общем коде доступна из библиотеки [moko-mvvm](/learning/libraries/moko/moko-mvvm):
+- для `Android` будет использована [нативная реализация](https://developer.android.com/topic/libraries/architecture/livedata)
+- для `iOS` же, `LiveData` это реактивное хранилище, реализация в `moko-mvvm`.
 
+Также, в `moko-mvvm` есть реализация класса `ViewModel`. Для `Android`, опять же, используется [нативная реализация](https://developer.android.com/topic/libraries/architecture/viewmodel), а для `iOS` - из `moko-mvvm`.
+
+Для `Android` и `iOS` в библиотеке содержится набор методов для привязки `UI` к  объектам `liveData`.
+
+Привязка `UI` к `LiveData` называется биндинг, от основновго метода привязки из `moko-mvvm` - `bind`:
+- [для Android](https://github.com/icerockdev/moko-mvvm/blob/master/mvvm-livedata/src/androidMain/kotlin/dev/icerock/moko/mvvm/utils/LiveDataExt.kt)
+- [для iOS](https://github.com/icerockdev/moko-mvvm/blob/master/mvvm-livedata/src/iosMain/kotlin/dev/icerock/moko/mvvm/utils/LiveDataExt.kt)
+
+### Примеры
+Рассмотрим [примеры](https://github.com/icerockdev/moko-mvvm/tree/master/sample) из `moko-mvvm`:
+
+`SimpleViewModel`:
+```kotlin
+class SimpleViewModel : ViewModel() {
+    private val _counter: MutableLiveData<Int> = MutableLiveData(0)
+    val counter: LiveData<String> = _counter.map { it.toString() }
+
+    fun onCounterButtonPressed() {
+        _counter.value += 1
+    }
+}
+```
+
+Биндинг в `Android`: воспользовались готовой функцией `bindText` - привязали значение поля `TextView` к `LiveData<String>` и установлили действие кнопке: 
+```kotlin
+binding.counterTextView.bindText(this.viewLifecycleOwner, viewModel.counter)
+
+binding.countButton.setOnClickListener {
+    viewModel.onCounterButtonPressed()
+}
+```
+
+Биндинг в `iOS`: также воспользовались готовой функцией, только уже для `iOS` - `bindText`, и установили действие кнопке:
+```
+counterLabel.bindText(liveData: viewModel.counter)
+    
+@IBAction func onCounterButtonPressed() {
+    viewModel.onCounterButtonPressed()
+}
+```
+
+### Extensions
+
+Если в `moko-mvvm` не оказалось нужной вам функции биндинга для `iOS` или `Android`, вы можете добавить свой `extension` к `LiveData`.  
+Например, добавим функцию `bindToMenuItemVisible` для связи `LiveData<Boolean>` и `MenuItem` на `Android`:
+```kotlin
+internal fun LiveData<Boolean>.bindToMenuItemVisible(
+    lifecycleOwner: LifecycleOwner,
+    menuItem: MenuItem
+): Closeable {
+    return bindNotNull(lifecycleOwner) { value ->
+        menuItem.isVisible = value
+    }
+}
+```
+
+Для `iOS` добавим функцию `bindToUIToolbarVisible` для связи `UIToolbar` c `LiveData<KotlinBoolean>` (на `iOS` из общего кода вместо `Boolean` приходит `KotlinBoolean`) вот как это будет выглядеть:
+```
+extension UIToolbar {
+    func bindToUIToolbarVisible(liveData: LiveData<KotlinBoolean>) {
+        liveData.addObserver { [weak self] value in
+            self?.isHidden = value!.boolValue
+        }
+    }
+}
+```
+
+Важно, в методах биндинга должна быть только привязка `liveData` к объекту `UI`, никакой логики быть не должно!
+Вся логика должна быть во вьюмодели, если нужно как-то преобразовать значение `liveData`, делайте это там.
+
+### Практика
+
+Выполните следующие действия: 
+    - склонируйте себе библиотеку [moko-mvvm](https://github.com/icerockdev/moko-mvvm)
+    - запустите `sample-app` на `Android` и `iOS`, убедитесь, что все работает (для `Android` там используется `DataBinding`, не пугайтесь)
+    - добавьте следующие изменения во `viewModel`:
+        - `isCheckBoxVisible: LiveData<Boolean>` переменную, для контроля за `visivility` элемента `checkBox`
+        - публичные функции `hideCheckBox` и `showCheckBox` - для изменения значения isCheckBoxVisible
+    - добавьте на `UI`: 
+        - `checkBox`, свяжите его с `isCheckBoxVisible`, воспользуйтесь функцией `bindVisibleOrGone`
+        - разберитесь с другими доступными для `checkBox` функциями биндинга: `bindEnabled`, `bindChecked`, `bindCheckedTwoWay` и т.д.
+        - две кнопки, действиями для них станут `hideCheckBox` и `showCheckBox` соответственно
+    - убедитесь, что все работает
 
 ## KMM
 Для начала, освежите в памяти что такое [события/действия](/learning/android/states-events#событие-действие), для чего они нужны и как реализуются на `Android`.
