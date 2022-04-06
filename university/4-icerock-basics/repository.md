@@ -12,7 +12,7 @@ sidebar_position: 5
 Чтобы на всех экранах отображать данные о постах в актуальном состоянии мы можем закидывать сервер запросами, однако нет гарантии, что мы нигде не ошибемся и где-нибудь не забудем добавить обновление. Из-за этого отображение поста на разных экранах будет отличаться. В любом случае, поддерживать такой проект будет очень тяжело.  
 
 Чтобы избежать всех этих проблем нам нужно использовать такой источник данных, который бы позволил обновлять данные автоматически, а не вручную.  
-То, что нам нужно называется ***Реактивный источник данных*** - он выдает подписки, т.е. что-то, на что мы можем подписаться на `UI`. Благодаря этому, при любых обновлениях данных в источнике на экране они также обновятся.   
+То, что нам нужно называется ***Реактивный источник данных*** - он выдает подписки, т.е. что-то, на что мы можем подписаться из. Благодаря этому, при любых обновлениях данных в источнике на экране они также обновятся.   
 
 Как это представлено в проекте: 
 - источник данных, который ильпользует паттерн [Observer](https://ru.wikipedia.org/wiki/%D0%9D%D0%B0%D0%B1%D0%BB%D1%8E%D0%B4%D0%B0%D1%82%D0%B5%D0%BB%D1%8C_(%D1%88%D0%B0%D0%B1%D0%BB%D0%BE%D0%BD_%D0%BF%D1%80%D0%BE%D0%B5%D0%BA%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F)), например [Flow](https://developer.android.com/kotlin/flow) или [LiveData](https://developer.android.com/topic/libraries/architecture/livedata):
@@ -34,10 +34,11 @@ sidebar_position: 5
 ```kotlin
 private const val MESSAGE_KEY = "message_key"
 
+@ExperimentalSettingsApi
 class KeyValueStorage(private val settings: ObservableSettings) {
 
-  val messageFlow: Flow<String?> = settings.getStringOrNullFlow(MESSAGE_KEY)
-  private var messageValue: String? by settings.nullableString(MESSAGE_KEY)
+  val messageFlow: Flow<String?> = settings.getStringOrNullFlow(KEY)
+  private var messageValue: String? by settings.nullableString(KEY)
 
   fun changeMessageValue(message: String?) {
     this.messageValue = message
@@ -63,6 +64,7 @@ class KeyValueStorage(private val settings: ObservableSettings) {
 
 `Repository.kt`:
 ```kotlin
+@ExperimentalSettingsApi
 class Repository(observableSettings: ObservableSettings) {
   private val keyValueStorage = KeyValueStorage()
 
@@ -79,10 +81,10 @@ class Repository(observableSettings: ObservableSettings) {
 И наконец, вьюмодель:
 `ViewModel`:
 ```kotlin
+@ExperimentalSettingsApi
 class FirstViewModel(private val repository: Repository) : ViewModel() {
 
-  val message: StateFlow<String?> =
-    repository.getMessage().stateIn(viewModelScope, SharingStarted.Lazily, "")
+  val message: StateFlow<String?> = repository.getMessage().stateIn(viewModelScope)
 
   fun setMessage(message: String?) {
     repository.setMessage(message)
