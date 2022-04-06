@@ -82,7 +82,7 @@ class Repository(observableSettings: ObservableSettings) {
 class FirstViewModel(private val repository: Repository) : ViewModel() {
 
   val message: StateFlow<String?> =
-    repository.getMessage().stateIn(viewModelScope, SharingStarted.Lazily, "")
+    repository.getMessage().stateIn(viewModelScope, SharingStarted.Lazily, null)
 
   fun setMessage(message: String?) {
     repository.setMessage(message)
