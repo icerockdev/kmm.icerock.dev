@@ -77,7 +77,11 @@ class MainViewModel : ViewModel() {
   - [пример](https://github.com/icerockdev/moko-resources#usage) добавления строк 
 
 ### Использование Google Sheets для генерации строк
-TODO
+Для строк локализации мы используем интеграцию с [Google Sheets](https://www.google.com/intl/ru_ru/sheets/about/). 
+Строки локализации описываются в таблицах и на их основе генерируются в проект. Делается это при помощи плагина [sheets-localizations-generator](https://gitlab.icerockdev.com/scl/sheets-localizations-generator).
+
+В проектах, созданных на основе [шаблона](https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate) есть файл [master.sh](https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate/-/blob/master/master.sh), в нем находится скрипт `localize`, который и генерирует строки на основе таблицы. 
+Для использования скрипта, в нем необходимо заменить `GSHEET_ID_HERE` на `ID` реальной таблицы. После добавления строк в таблицу, выполните скрипт `localize` в терминале: `./master.sh localize` и строки добавятся в проект.
 
 ### Практическое задание
   - склонируйте `moko-resources`
