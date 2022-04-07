@@ -84,19 +84,19 @@ extension UIToolbar {
 Важно, в методах биндинга должна быть только привязка `liveData` к объекту `UI`, никакой логики быть не должно!
 Вся логика должна быть во вьюмодели, если нужно как-то преобразовать значение `liveData`, делайте это там.
 
-### Практика
+### Практическое задание
 
 Выполните следующие действия: 
-    - склонируйте себе библиотеку [moko-mvvm](https://github.com/icerockdev/moko-mvvm)
-    - запустите `sample-app` на `Android` и `iOS`, убедитесь, что все работает (для `Android` там используется `DataBinding`, не пугайтесь)
-    - добавьте следующие изменения во `viewModel`:
-        - `isCheckBoxVisible: LiveData<Boolean>` переменную, для контроля за `visivility` элемента `checkBox`
-        - публичные функции `hideCheckBox` и `showCheckBox` - для изменения значения isCheckBoxVisible
-    - добавьте на `UI`: 
-        - `checkBox`, свяжите его с `isCheckBoxVisible`, воспользуйтесь функцией `bindVisibleOrGone`
-        - разберитесь с другими доступными для `checkBox` функциями биндинга: `bindEnabled`, `bindChecked`, `bindCheckedTwoWay` и т.д.
-        - две кнопки, действиями для них станут `hideCheckBox` и `showCheckBox` соответственно
-    - убедитесь, что все работает
+- склонируйте себе библиотеку [moko-mvvm](https://github.com/icerockdev/moko-mvvm)
+- запустите `sample-app` на `Android` и `iOS`, убедитесь, что все работает (для `Android` там используется `DataBinding`, не пугайтесь)
+- добавьте следующие изменения во `viewModel`:
+    - `isCheckBoxVisible: LiveData<Boolean>` переменную, для контроля за `visivility` элемента `checkBox`
+    - публичные функции `hideCheckBox` и `showCheckBox` - для изменения значения isCheckBoxVisible
+- добавьте на `UI`: 
+    - `checkBox`, свяжите его с `isCheckBoxVisible`, воспользуйтесь функцией `bindVisibleOrGone`
+    - разберитесь с другими доступными для `checkBox` функциями биндинга: `bindEnabled`, `bindChecked`, `bindCheckedTwoWay` и т.д.
+    - две кнопки, действиями для них станут `hideCheckBox` и `showCheckBox` соответственно
+- убедитесь, что все работает
 
 ## KMM
 Для начала, освежите в памяти что такое [события/действия](/learning/android/states-events#событие-действие), для чего они нужны и как реализуются на `Android`.
