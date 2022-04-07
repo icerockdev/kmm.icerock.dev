@@ -6,9 +6,6 @@ sidebar_position: 2
 
 В наших проектах мы активно пользуемся системой сборки - [gradle](https://gradle.org/), с которой вы познакомились в [`Android`-блоке](/university/android-basics/gradle).
 
-В этом разделе вы узнаете о том, какие ***приколюхи*** мы используем в проектах, зачем они нужны и какие проблемы решают
-
-[О конфигурации зависимостей](/learning/gradle/configuration)  
-[Composite builds](/learning/gradle/composite-build)  
-[Convention plugins](/learning/gradle/convention-plugins)  
-[Version catalogs](/learning/gradle/version-catalogs)  
+Изучите, какие фичи `gradle` мы используем в проектах, зачем они нужны и какие проблемы решают:
+- Как переиспользовать однотипный кода в `gradle` через [Convention plugins](/learning/gradle/convention-plugins) и [Composite builds](/learning/gradle/composite-build)
+- Что такое [Version catalogs](/learning/gradle/version-catalogs) и как с его помощью управлять списком внешних зависимостей.
