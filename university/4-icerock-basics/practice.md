@@ -19,16 +19,18 @@ sidebar_position: 11
    1. лицензия
 
 Технические требования:
-1. Сохранять токен авторизации в хранилище устройства: SharedPreferences для Android и NSUserDefaults для iOS. Работу с хранилищем делегировать классу KeyValueStorage
-1. Использовать multiplatform-settings для работы с хранилищем устройства
-1. Использовать moko-mvvm для внедрения всех ее возможностей, о которых вы узнали [статьи](/learning/libraries/moko/moko-mvvm) 
-1. Использовать moko-resources для использования строк локализации приложения
-1. Использовать moko-units для реализации списка репозиториев 
-1. Вся логика должна находиться в common коде   
-1. Навигация на iOS должна быть реализована используя AppCoordinator, без storyboards   
-1. Логика хранения данных должна находиться в common коде
-1. Логика работы с сетью должна находиться в common коде
-1. Для работы с сетью использовать Ktor Client
+1. В качестве шаблонного проекта использовать `mobile-moko-boilerplate`
+1. Создать отдельные модули для: `common` кода, фичи авторизации, и фичи репозитория. 
+1. Сохранять токен авторизации в хранилище устройства: `SharedPreferences` для `Android` и `NSUserDefaults` для `iOS`. Работу с хранилищем делегировать классу `KeyValueStorage`
+1. Использовать `multiplatform-settings` для работы с хранилищем устройства
+1. Использовать `moko-mvvm` для внедрения всех ее возможностей, о которых вы узнали [статьи](/learning/libraries/moko/moko-mvvm) 
+1. Использовать `moko-resources` для использования строк локализации приложения
+1. Использовать `moko-units` для реализации списка репозиториев 
+1. Вся логика должна находиться в `common` коде   
+1. Навигация на `iOS` должна быть реализована используя `AppCoordinator`, без `storyboards`   
+1. Логика хранения данных должна находиться в `common` коде
+1. Логика работы с сетью должна находиться в `common` коде
+1. Для работы с сетью использовать `Ktor Client`
 1. При перезапуске приложения авторизация должна сохраняться
 
 ## Граф зависимостей KMM приложения:
@@ -89,6 +91,7 @@ GitHubRepoRepository --> KeyValueStorage
 ```
 
 Материалы:
+1. [mobile-moko-boilerplate](https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate)
 1. [GitHub REST API](https://docs.github.com/en/rest)
 1. [GitHub Basic Authorization](https://docs.github.com/en/rest/overview/other-authentication-methods#basic-authentication)
 1. [GitHub user repositories](https://docs.github.com/en/rest/reference/repos#list-repositories-for-a-user)
