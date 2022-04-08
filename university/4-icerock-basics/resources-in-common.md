@@ -64,6 +64,8 @@ class MainViewModel : ViewModel() {
 }
 ```
 
+Ознакомьтесь детальнее с ней по материалам на странице [moko-resources](/learning/libraries/moko/moko-resources).
+
 ### Подключение и настройка:
 
 Выполните следующие шаги, ориентируясь на [README](https://github.com/icerockdev/moko-resources#installation) библиотеки:  
