@@ -30,7 +30,7 @@ val vehicleTitle = when (viewModel.vehicleType) {
 ```
 
 `iOS`:
-```
+```swift
 let vehicleTitle: String
 switch(viewModel.vehicleType) {
 case VehicleType.boat:

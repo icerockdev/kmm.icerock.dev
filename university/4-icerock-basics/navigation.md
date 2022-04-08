@@ -20,7 +20,7 @@ sidebar_position: 12
     - экраны верстаем в `.xib`
     - `navigation items` и более сложные настройки делаем через `код`
 
-## ApplicationCoordinator - практическое задание
+## Практическое задание
 
 В качестве практики предлагаем вам потренироваться в использовании `ApplicationCoordinator`. На основе [mobile-moko-boilerplate](https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate) сделать следующее приложение:
 - всего 2 экрана: `AuthViewController` и `HomeViewController` и 3 координатора: `AppCoordinator`, `AuthCoordinator` и `HomeCoordinator`
