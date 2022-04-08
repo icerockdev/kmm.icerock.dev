@@ -18,12 +18,29 @@ expect/actual - это механизм, позволяющий использо
 
 Для практики, выполните следующее задание. Используйте проект, который вы изменяли ранее:
 - Подключите [moshi](https://github.com/square/moshi) к Android таргету
-- Подключите pod [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON) к iOS приложению
-- Добавьте expect функцию `getValueByKeyFromJsonString(jsonString: String, key: String): String`
-- Добавьте в общий код константу `jsonStringConst`, проинициализируйте ее любым Json-ом, [сервис для генерации](https://json-generator.com/)
+- Подключите pod [NSTEasyJSON](https://github.com/bernikovich/NSTEasyJSON) к shared блоку
+    - Добавьте в Podfile строку `pod 'NSTEasyJSON'` 
+    - В gradle этого блока в разделе `cocoapods` добавить эту библиотеку: pod("NSTEasyJSON"). [Инструкция](https://kotlinlang.org/docs/native-cocoapods.html).  
+    ```kotlin
+    cocoapods {
+      summary = "Some description for the Shared Module"
+      homepage = "Link to the Shared Module homepage"
+      ios.deploymentTarget = "14.1"
+      podfile = project.file("../iosApp/Podfile")
+      framework {
+        baseName = "shared"
+      }
+      pod("NSTEasyJSON")
+    }
+    ```
+- Добавьте expect функцию `getValueByKeyFromJsonString(jsonString: String, key: String): String` в блок `shared/src/commonMain/kotlin`
+- Добавьте в блок `shared/src/commonMain/kotlin` константу `jsonStringConst`, проинициализируйте ее любым Json-ом, [сервис для генерации](https://json-generator.com/)
 - Для каждой платформы выведите на экран значение какого-нибудь поля
-    - Добавьте `actual` реализацию функции `getValueByKeyFromJsonString` для Android используя библиотеку moshi
-    - Добавьте `actual` реализацию функции `getValueByKeyFromJsonString` для iOS используя библиотеку SwiftyJSON
+    - Добавьте `actual` реализацию функции `getValueByKeyFromJsonString` в блок `shared/src/androidMain/kotlin` используя библиотеку moshi
+    - Добавьте `actual` реализацию функции `getValueByKeyFromJsonString` в блок `shared/src/iosMain/kotlin` используя библиотеку NSTEasyJSON
+      - Для получения доступа к библиотеке NSTEasyJSON, добавьте `import cocoapods.NSTEasyJSON.NSTEasyJSON`
+      - Как использовать функцию из файла в iOS проекте: при интерпретации общего кода в библиотеку для iOS, интерпретатор упаковывает всё, что находится вне классов в свой класс с постфиксом Kt, поэтому функция, находящаяся в файле `shared/src/iosMain/kotlin/getValueByKeyFromJsonString.kt` будет доступна на iOS вот так: `GetValueByKeyFromJsonStringKt.getValueByKeyFromJsonString(jsonString:, key:)`
+      
     
 ## typealias 
 
