@@ -1,3 +1,17 @@
 {
-    "cSpell.language": "en,ru-RU"
+    "cSpell.language": "en,ru-RU",
+    "cSpell.words": [
+        "detekt",
+        "fastcheck",
+        "Jetpack",
+        "kswift",
+        "MOKO",
+        "Multiplatform",
+        "MVVM",
+        "биндинга",
+        "логированием",
+        "Переиспользование",
+        "переиспользованием",
+        "переиспользования"
+    ]
 }

@@ -1,38 +1,43 @@
 ---
-sidebar_position: 6
+sidebar_position: 13
 ---
 
 # Практическое задание
+Нужно разработать мультиплатформенное приложение для просмотра GitHub репозиториев.
 
-Нужно объединить ранее сделанные Android и iOS приложения в единый репозиторий, добавить модуль общего кода и перенести из Android и iOS логику работы с сетью и хранением токена в общий код
+<iframe width="360" height="800" src="//www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FMh3ga5XAzyJNCY87NBp01G%2FGit_test%3Fnode-id%3D4%253A600%26scaling%3Dmin-zoom%26page-id%3D0%253A1%26starting-point-node-id%3D4%253A645" allowfullscreen></iframe>
 
 Во время работы над практическим заданием настоятельно рекомендуем обращаться к разделу [Памятки для разработчика](/university/memos/function)
 
 ## Функциональные возможности
 
-Остаются те же самые:
-
 1. Авторизация пользователя (personal access token)
 1. Просмотр списка репозиториев пользователя (первые 10)
 1. Просмотр детальной информации выбранного репозитория
-    1. описание
-    1. статистика (forks, stars, watchers)
-    1. ссылка на web страницу репозитория
-    1. лицензия
+   1. описание
+   1. статистика (forks, stars, watchers)
+   1. ссылка на web страницу репозитория
+   1. лицензия
 
 ## Технические требования
 
-1. Использовать multiplatform-settings для работы с хранилищем устройства
-1. Логика хранения данных должна находиться в common коде
-1. Логика работы с сетью должна находиться в common коде
-1. Для работы с сетью использовать Ktor Client
+1. В качестве шаблонного проекта использовать `mobile-moko-boilerplate`
+1. Создать отдельные модули для: `common` кода, фичи авторизации, и фичи репозитория. 
+1. Сохранять токен авторизации в хранилище устройства: `SharedPreferences` для `Android` и `NSUserDefaults` для `iOS`. Работу с хранилищем делегировать классу `KeyValueStorage`
+1. Использовать `multiplatform-settings` для работы с хранилищем устройства
+1. Использовать `moko-mvvm` для внедрения всех ее возможностей, о которых вы узнали [статьи](/learning/libraries/moko/moko-mvvm) 
+1. Использовать `moko-resources` для использования строк локализации приложения
+1. Использовать `moko-units` для реализации списка репозиториев 
+1. Вся логика должна находиться в `common` коде   
+1. Навигация на `iOS` должна быть реализована используя `AppCoordinator`, без `storyboards`   
+1. Логика хранения данных должна находиться в `common` коде
+1. Логика работы с сетью должна находиться в `common` коде
+1. Для работы с сетью использовать `Ktor Client`
 1. При перезапуске приложения авторизация должна сохраняться
 
-## Классы приложения 
+## Классы приложения
 
-Чтобы использовать `suspend` функции в общем коде, необходимо добавить аннотацию `@Throws`. Благодаря этой аннотации, компилятор Kotlin/Native сгенерирует функцию с `completion` для iOS
-
-common code:
+### mpp-library
 ```kotlin
 class AppRepository {
    
@@ -69,24 +74,8 @@ class KeyValueStorage {
 }
 ```
 
-android app:
+### mpp-library-feature-auth
 ```kotlin
-class MainActivity: AppCompatActivity {
-   // TODO:
-}
-
-class AuthFragment: Fragment {
-   // TODO:
-}
-
-class RepositoriesListFragment: Fragment {
-   // TODO:
-}
-
-class DetailInfoFragment: Fragment {
-   // TODO:
-}
-
 class AuthViewModel {
    val token: MutableLiveData<String>
    val state: LiveData<State>
@@ -109,7 +98,10 @@ class AuthViewModel {
 
    // TODO:
 }
+```
 
+### mpp-library-feature-repo
+```kotlin
 class RepositoryInfoViewModel {
    val state: LiveData<State>
 
@@ -147,7 +139,26 @@ class RepositoriesListViewModel {
 }
 ```
 
-ios app:
+### android-app
+```kotlin
+class MainActivity: AppCompatActivity {
+   // TODO:
+}
+
+class AuthFragment: Fragment {
+   // TODO:
+}
+
+class RepositoriesListFragment: Fragment {
+   // TODO:
+}
+
+class DetailInfoFragment: Fragment {
+   // TODO:
+}
+```
+
+### ios-app
 ```swift
 class RepositoriesListViewController: UIViewController {
    // TODO:
@@ -162,53 +173,50 @@ class AuthViewController: UIViewController {
 }
 ```
 
-
 ## Диаграмма классов
 
 На графе отображена зависимость компонентов KMM приложения друг от друга, цветами выделены подграфы:  
 Фиолетовый - Common, Зеленый - Android, Синий - iOS
 
 ```mermaid
-   classDiagram
+classDiagram
+class AuthViewModel:::common
    
-   class AppRepository:::common
-   class KeyValueStorage:::common
+class RepositoryInfoViewModel:::common
    
-   class MainActivity:::android
-   class AuthFragment:::android
-   class RepositoriesListFragment:::android
-   class DetailInfoFragment:::android
+class RepositoriesListViewModel:::common
    
-   class AuthViewModel:::android
+class GitHubRepoRepository:::common
+class KeyValueStorage:::common
+
+class MainActivity:::android
+class RepositoriesListFragment:::android
+class DetailInfoFragment:::android
+class AuthFragment:::android
+class RepositoriesListViewController:::ios
+class RepositoryDetailInfoViewController:::ios
+class AuthViewController:::ios
+
+MainActivity --> AuthFragment
+MainActivity --> RepositoriesListFragment
+MainActivity --> DetailInfoFragment
+RepositoriesListFragment --> RepositoriesListViewModel
+DetailInfoFragment --> RepositoryInfoViewModel
+AuthFragment --> AuthViewModel
    
-   class RepositoryInfoViewModel:::android
-   class RepositoriesListViewModel:::android
-   class KeyValueStorage:::android
-   
-   MainActivity --> AuthFragment
-   MainActivity --> RepositoriesListFragment
-   MainActivity --> DetailInfoFragment
-   
-   AuthFragment --> AuthViewModel
-   RepositoriesListFragment --> RepositoriesListViewModel
-   DetailInfoFragment --> RepositoryInfoViewModel
-   
-   RepositoryInfoViewModel --> AppRepository
-   AuthViewModel --> AppRepository
-   RepositoriesListViewModel --> AppRepository
-   
-   AppRepository --> KeyValueStorage
-   
-   class RepositoriesListViewController:::ios
-   class RepositoryDetailInfoViewController:::ios
-   class AuthViewController:::ios
-   
-   RepositoriesListViewController --> AppRepository
-   RepositoryDetailInfoViewController --> AppRepository
-   AuthViewController --> AppRepository
+RepositoriesListViewModel --> GitHubRepoRepository
+AuthViewModel --> GitHubRepoRepository
+RepositoryInfoViewModel --> GitHubRepoRepository
+       
+RepositoriesListViewController --> RepositoriesListViewModel
+RepositoryDetailInfoViewController --> RepositoryInfoViewModel
+AuthViewController --> AuthViewModel
+GitHubRepoRepository --> KeyValueStorage
 ```
 
-Материалы:
+## Материалы
+
+1. [mobile-moko-boilerplate](https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate)
 1. [GitHub REST API](https://docs.github.com/en/rest)
 1. [GitHub Basic Authorization](https://docs.github.com/en/rest/overview/other-authentication-methods#basic-authentication)
 1. [GitHub user repositories](https://docs.github.com/en/rest/reference/repos#list-repositories-for-a-user)

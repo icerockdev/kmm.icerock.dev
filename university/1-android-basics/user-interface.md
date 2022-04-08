@@ -44,7 +44,11 @@ sidebar_position: 4
 
 - [Navigate between screens](https://developer.android.com/courses/pathways/android-basics-kotlin-unit-3-pathway-1)
 - [Introduction to the Navigation component](https://developer.android.com/courses/pathways/android-basics-kotlin-unit-3-pathway-2)
-- [Передача данных между компонентами](/learning/android/data-sharing)
+  
+Обязательно прочитайте про [передачу данных между компонентами](/learning/android/data-sharing). Из этой статьи вы узнаете:
+- как правильно передавать данные между `Fragment`-ами и `Activity`
+- почему следует передавать идентефикаторы данных, а не сами данные
+- как реализовать строгое API передачи данных
 
 ## Верстка экрана
 

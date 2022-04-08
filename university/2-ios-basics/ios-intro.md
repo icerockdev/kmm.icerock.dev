@@ -7,8 +7,9 @@ sidebar_position: 0
 Любому разработчику, использующему Kotlin Multiplatform Mobile, необходимы уверенные базовые знания разработки под iOS,
 чтобы лучше писать общий код, и понимать логику и структуру iOS части приложения  
 Основные учебники для этого раздела - две официальные интерактивные
-книги [Develop in Swift Fundamentals](https://books.apple.com/ru/book/develop-in-swift-fundamentals/id1556365994?l=en)
+книги [Develop in Swift Fundamentals](https://books.apple.com/ru/book/develop-in-swift-fundamentals/id1581182804?l=en)
 и [Develop in Swift Data Collections](https://books.apple.com/ru/book/develop-in-swift-data-collections/id1581183203?l=en),
+
 в которых собрана и структурирована необходимая теория, а также практические задания по каждому разделу
 
 Для начала, пройдите опрос, чтобы понять свой текущий уровень знаний в iOS-разработке
