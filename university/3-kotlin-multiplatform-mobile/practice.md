@@ -32,139 +32,138 @@ sidebar_position: 6
 
 Чтобы использовать `suspend` функции в общем коде, необходимо добавить аннотацию `@Throws`. Благодаря этой аннотации, компилятор Kotlin/Native сгенерирует функцию с `completion` для iOS
 
+common code:
 ```kotlin
+class AppRepository {
    
-   // Классы common кода 
-   
-   class AppRepository {
-      
-      @Throws(Exception::class)
-      suspend fun getRepositories(): List<Repo> {
+   @Throws(Exception::class)
+   suspend fun getRepositories(): List<Repo> {
+      // TODO:
+   }
+
+   @Throws(Exception::class)
+   suspend fun getRepository(repoId: String): RepoDetails {
+      // TODO:
+   }
+
+   @Throws(Exception::class)
+   suspend fun getRepositoryReadme(
+      ownerName: String,
+      repositoryName: String,
+      branchName: String
+   ): String {
+      // TODO:
+   }
+
+   @Throws(Exception::class)
+   suspend fun signIn(token: String): UserInfo {
+      // TODO:
+   }
+
+   // TODO:
+}
+
+class KeyValueStorage {
+   var authToken: String?
+   var userName: String?
+}
+```
+
+android app:
+```kotlin
+class MainActivity: AppCompatActivity {
+   // TODO:
+}
+
+class AuthFragment: Fragment {
+   // TODO:
+}
+
+class RepositoriesListFragment: Fragment {
+   // TODO:
+}
+
+class DetailInfoFragment: Fragment {
+   // TODO:
+}
+
+class AuthViewModel {
+   val token: MutableLiveData<String>
+   val state: LiveData<State>
+   val actions: Flow<Action>
+
+   fun onSignButtonPressed() {
          // TODO:
-      }
-
-      @Throws(Exception::class)
-      suspend fun getRepository(repoId: String): RepoDetails {
-         // TODO:
-      }
-
-      @Throws(Exception::class)
-      suspend fun getRepositoryReadme(
-         ownerName: String,
-         repositoryName: String,
-         branchName: String
-      ): String {
-         // TODO:
-      }
-
-      @Throws(Exception::class)
-      suspend fun signIn(token: String): UserInfo {
-         // TODO:
-      }
-
-      // TODO:
    }
    
-   class KeyValueStorage {
-      var authToken: String?
-      var userName: String?
+   sealed interface State {
+      object Idle : State
+      object Loading : State
+      data class InvalidInput(val reason: String) : State
    }
    
-   // Классы Android-приложения
-
-   class MainActivity: AppCompatActivity {
-        // TODO:
-    }
-
-    class AuthFragment: Fragment {
-        // TODO:
-    }
-
-    class RepositoriesListFragment: Fragment {
-       // TODO:
-    }
-
-    class DetailInfoFragment: Fragment {
-       // TODO:
-    }
-
-   class AuthViewModel {
-      val token: MutableLiveData<String>
-      val state: LiveData<State>
-      val actions: Flow<Action>
-
-      fun onSignButtonPressed() {
-          // TODO:
-      }
-      
-      sealed interface State {
-         object Idle : State
-         object Loading : State
-         data class InvalidInput(val reason: String) : State
-      }
-      
-      sealed interface Action {
-         data class ShowError(val message: String) : Action
-         object RouteToMain : Action
-      }
-
-      // TODO:
+   sealed interface Action {
+      data class ShowError(val message: String) : Action
+      object RouteToMain : Action
    }
 
-   class RepositoryInfoViewModel {
-      val state: LiveData<State>
+   // TODO:
+}
 
-      sealed interface State {
-         object Loading : State
-         data class Error(val error: String) : State
+class RepositoryInfoViewModel {
+   val state: LiveData<State>
 
-         data class Loaded(
-            val githubRepo: Repo,
-            val readmeState: ReadmeState
-         ) : State
-      }
+   sealed interface State {
+      object Loading : State
+      data class Error(val error: String) : State
 
-      sealed interface ReadmeState {
-         object Loading : ReadmeState
-         object Empty : ReadmeState
-         data class Error(val error: String) : ReadmeState
-         data class Loaded(val markdown: String) : ReadmeState
-      }
-
-      // TODO:
+      data class Loaded(
+         val githubRepo: Repo,
+         val readmeState: ReadmeState
+      ) : State
    }
+
+   sealed interface ReadmeState {
+      object Loading : ReadmeState
+      object Empty : ReadmeState
+      data class Error(val error: String) : ReadmeState
+      data class Loaded(val markdown: String) : ReadmeState
+   }
+
+   // TODO:
+}
+
+class RepositoriesListViewModel {
+   val state: LiveData<State>
    
-   class RepositoriesListViewModel {
-      val state: LiveData<State>
-      
-      sealed interface State {
-         object Loading : State
-         data class Loaded(val repos: List<Repo>) : State
-         data class Error(val error: String) : State
-         object Empty : State
-      }
-
-      // TODO:
+   sealed interface State {
+      object Loading : State
+      data class Loaded(val repos: List<Repo>) : State
+      data class Error(val error: String) : State
+      object Empty : State
    }
 
-   // классы iOS-приложения 
+   // TODO:
+}
+```
 
-   class RepositoriesListViewController: UIViewController {
-      // TODO:
-   }
+ios app:
+```swift
+class RepositoriesListViewController: UIViewController {
+   // TODO:
+}
 
-   class RepositoryDetailInfoViewController: UIViewController {
-      // TODO:
-   }
+class RepositoryDetailInfoViewController: UIViewController {
+   // TODO:
+}
 
-   class AuthViewController: UIViewController {
-      // TODO:
-   }
-
+class AuthViewController: UIViewController {
+   // TODO:
+}
 ```
 
 
-## Граф зависимостей KMM приложения
+## Диаграмма классов
 
 На графе отображена зависимость компонентов KMM приложения друг от друга, цветами выделены подграфы:  
 Фиолетовый - Common, Зеленый - Android, Синий - iOS
