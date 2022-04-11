@@ -8,6 +8,19 @@ sidebar_position: 3
 Чтобы попрактиковаться, выполните следующее задание
 1. Откройте проект, который вы изменяли в разделе [expect/actual](expect-actual) или создайте новый по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html)
 1. Подключите multiplatform-settings
+    - Вариант 1, создайте expect/actual функцию, для получения `settings` на платформах
+      - получение `settings` для Android
+        ```kotlin
+        val delegate: SharedPreferences // ...
+        val settings: Settings = AndroidSettings(delegate)
+        ```
+      - получение `settings` для iOS
+        ```kotlin
+        val delegate: NSUserDefaults // ...
+        val settings: Settings = AppleSettings(delegate)
+        ```
+    - Вариант 2, используем плагин [mobile-multiplatform-gradle-plugin](https://github.com/icerockdev/mobile-multiplatform-gradle-plugin), подробнее о нём вы узнаете в блоке №4.
+    
 1. Сохраните название платформы в хранилище устройства в общем коде
 1. Для iOS и Android выведите на экран значение, которое сохранили в общем коде используя библиотеку
 
