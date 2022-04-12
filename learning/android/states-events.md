@@ -163,7 +163,7 @@ viewModel.state.observe(viewLifecycleOwner) { state ->
             binding.errorView.visibility = View.VISIBLE
             binding.errorMessage.text = state.error.getString(requireContext())
         }
-        is MyTestViewModel.State.Loaded -> {
+        is MyTestViewModel.State.Loaded, MyTestViewModel.State.Empty -> {
             binding.progressBar.visibility = View.GONE
             binding.errorView.visibility = View.GONE
             myAdapter.dataset = state.elementsList
@@ -173,8 +173,10 @@ viewModel.state.observe(viewLifecycleOwner) { state ->
 }
 ```
 Для каждого значения стейта мы обрабатываем одни и те же элементы. Для двух из трех значений стейта, например, скрываем `errorView`, а значений стейта может быть гораздо больше.  
+В добавок, при переходе от стейта к стейту, мы могли бы забыть изменить или скрыть какой-нибудь элемент, после чего бы долго и внимательно отсматривали бы каждый кейс `when`-а в поисках ошибки.
 
-Вместо этого, лучше устанавливать каждому элементу UI значение по отдельности, в зависимости от значения стейта. Вот как будет выглядеть новый вариант:
+Вместо этого, лучше устанавливать каждому элементу UI значение по отдельности, в зависимости от значения стейта.  
+Вот как будет выглядеть новый вариант:
 ```kotlin
 viewModel.state.observe(viewLifecycleOwner) { state ->
     binding.progressBar.visibility = if (state == State.Loading) View.VISIBLE else View.GONE
@@ -200,13 +202,13 @@ viewModel.state.observe(viewLifecycleOwner) { state ->
 ## Событие (действие)
 
 Чаще всего, `viewModel` не информирует `UI` обо всем подряд, а только тогда, когда необходимо выполнить какое-то действие, например: перейти на другой экран, показать `alert` или `toast`.
-Для реализации такого механизма, чтобы `UI` сразу же получил информацию о том, что пора что-то сделать, используется механизм [Channel](https://kotlinlang.org/docs/channels.html) или [Flow APIs](https://developer.android.com/kotlin/flow).
+Для реализации такого механизма, чтобы `UI` сразу же получил информацию о том, что пора что-то сделать, используется механизм [Channel](https://kotlinlang.org/docs/channels.html) и [Flow](https://developer.android.com/kotlin/flow).
 
-Разберем пример на основе `Flow APIs`. Со стороны вьюмодели у нас будет одна из реализаций `Flow APIs`. Со стороны `UI` мы подпишемся к нему и будем обрабатывать события.
+Разберем пример. Со стороны вьюмодели у нас будет `Channel`, который на публично будет виден как `Flow`. Со стороны `UI` мы подпишемся к нему и будем обрабатывать события.
 
 ```kotlin
-private val _actions: MutableSharedFlow<Action> = MutableSharedFlow()
-val actions: SharedFlow<Action> get() = _actions
+private val _actions: Channel<Action> = Channel(Channel.BUFFERED)
+val actions: Flow<Action> = _actions.receiveAsFlow()
 ```
 
 Подписка из `activity` в `onCreate`:
@@ -244,17 +246,18 @@ private fun handleAction(action: Action) {
     }
 }
 ```
-Для изменения значения `MutableSharedFlow` служат две функции [emit](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-shared-flow/#1664019279%2FFunctions%2F1975948010) и [tryEmit](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-shared-flow/#2089488660%2FFunctions%2F1975948010).
+Действия, в отличие от состояний, как раз нужно обрабатывать в `when`, потому что они никак не связаны друг с другом и просто запускают вызов нужного метода, в отличие от состояния, ориентируясь на которое элементы `UI` изменяются все вместе, при каждом новом состоянии.
+Для отправки событий в `Channel` служат две функции [send](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/index.html#-1166499008%2FFunctions%2F1975948010) и [trySend](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/index.html#-1976436467%2FFunctions%2F1975948010).
 ```kotlin
 viewModelScope.launch {
-    _actions.emit(State.Empty)
+    _actions.send(State.Empty)
 }
 
-_actions.tryEmit(State.Empty)
+_actions.trySend(State.Empty)
 ```
 Их отличия заключается в следующем:
-- `emit` засаспендится в случае невозможности добавления значения во `Flow` из-за превышения размера буфера значений. Будет висеть, пока место не освободится.
-- `tryEmit` же возвращает `Boolean`: `true` - если добавить новое значение удалось, `false` - если не удается добавить из-за превышения объема буфера значений. Это значит что если в очереди уже есть какие-то события, которые не успел получить UI, то новое просто будет утерено. Поэтому всегда следует использовать `emit`.
+- `send` засаспендится в случае невозможности добавления значения в `Channel` из-за превышения размера буфера значений. Будет висеть, пока место не освободится.
+- `trySend` же возвращает `Boolean`: `true` - если добавить новое значение удалось, `false` - если не удается добавить из-за превышения объема буфера значений. Это значит что если в очереди уже есть какие-то события, которые не успел получить UI, то новое просто будет утерено. Поэтому всегда следует использовать `send`.
 
 ## Дополнительно
 Для работы с событиями и состояниями у нас в компании используются возможности библиотеки [moko-mvvm](https://github.com/icerockdev/moko-mvvm). С ее помощью происходят привязки, как односторонняя, так и двусторонняя. Событиями занимается класс EventsDispatcher.
