@@ -8,7 +8,7 @@ Kotlin Serialization - это библиотека, предназначенна
 
 Основное ее преимущество - совместимость с Kotlin Multiplatform. Преобразование в общем коде в JSON и обратно, используя Kotlin Serialization, будет работать на iOS, Android и всех остальных платформах, поддерживаемых Kotlin.
 
-Познакомиться с библиотекой можно на [официальном сайте](https://kotlinlang.org/docs/serialization.html#libraries). Полная информация о библиотеке доступна в [гайде](https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/serialization-guide.md) на GitHub.
+Познакомиться с библиотекой можно на [официальном сайте](https://kotlinlang.org/docs/serialization.html#libraries). Полная информация о библиотеке доступна в [гайде](https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/serialization-guide.md) на GitHub. Для дальнейшего прохождения курса советуем ознакомиться с первой, второй и третьей главой.
 
 После изучения, для закрепления материала, советуем пройти [кодлабу](https://www.raywenderlich.com/26883403-android-data-serialization-tutorial-with-the-kotlin-serialization-library).
 Вы узнаете о возможностях библиотеки и потренируетесь на практике.
