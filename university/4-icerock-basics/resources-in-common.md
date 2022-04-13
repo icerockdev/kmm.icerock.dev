@@ -30,7 +30,7 @@ val vehicleTitle = when (viewModel.vehicleType) {
 ```
 
 `iOS`:
-```
+```swift
 let vehicleTitle: String
 switch(viewModel.vehicleType) {
 case VehicleType.boat:
@@ -63,6 +63,8 @@ class MainViewModel : ViewModel() {
     }
 }
 ```
+
+Ознакомьтесь детальнее с ней по материалам на странице [moko-resources](/learning/libraries/moko/moko-resources).
 
 ### Подключение и настройка:
 

@@ -9,7 +9,8 @@ sidebar_position: 13
 
 Во время работы над практическим заданием настоятельно рекомендуем обращаться к разделу [Памятки для разработчика](/university/memos/function)
 
-Функциональные возможности:
+## Функциональные возможности
+
 1. Авторизация пользователя (personal access token)
 1. Просмотр списка репозиториев пользователя (первые 10)
 1. Просмотр детальной информации выбранного репозитория
@@ -18,7 +19,8 @@ sidebar_position: 13
    1. ссылка на web страницу репозитория
    1. лицензия
 
-Технические требования:
+## Технические требования
+
 1. В качестве шаблонного проекта использовать `mobile-moko-boilerplate`
 1. Создать отдельные модули для: `common` кода, фичи авторизации, и фичи репозитория. 
 1. Сохранять токен авторизации в хранилище устройства: `SharedPreferences` для `Android` и `NSUserDefaults` для `iOS`. Работу с хранилищем делегировать классу `KeyValueStorage`
@@ -33,37 +35,159 @@ sidebar_position: 13
 1. Для работы с сетью использовать `Ktor Client`
 1. При перезапуске приложения авторизация должна сохраняться
 
-## Граф зависимостей KMM приложения:
+## Классы приложения
+
+### mpp-library
+```kotlin
+class AppRepository {
+   
+   @Throws(Exception::class)
+   suspend fun getRepositories(): List<Repo> {
+      // TODO:
+   }
+
+   @Throws(Exception::class)
+   suspend fun getRepository(repoId: String): RepoDetails {
+      // TODO:
+   }
+
+   @Throws(Exception::class)
+   suspend fun getRepositoryReadme(
+      ownerName: String,
+      repositoryName: String,
+      branchName: String
+   ): String {
+      // TODO:
+   }
+
+   @Throws(Exception::class)
+   suspend fun signIn(token: String): UserInfo {
+      // TODO:
+   }
+
+   // TODO:
+}
+
+class KeyValueStorage {
+   var authToken: String?
+   var userName: String?
+}
+```
+
+### mpp-library-feature-auth
+```kotlin
+class AuthViewModel {
+   val token: MutableLiveData<String>
+   val state: LiveData<State>
+   val actions: Flow<Action>
+
+   fun onSignButtonPressed() {
+         // TODO:
+   }
+   
+   sealed interface State {
+      object Idle : State
+      object Loading : State
+      data class InvalidInput(val reason: String) : State
+   }
+   
+   sealed interface Action {
+      data class ShowError(val message: String) : Action
+      object RouteToMain : Action
+   }
+
+   // TODO:
+}
+```
+
+### mpp-library-feature-repo
+```kotlin
+class RepositoryInfoViewModel {
+   val state: LiveData<State>
+
+   sealed interface State {
+      object Loading : State
+      data class Error(val error: String) : State
+
+      data class Loaded(
+         val githubRepo: Repo,
+         val readmeState: ReadmeState
+      ) : State
+   }
+
+   sealed interface ReadmeState {
+      object Loading : ReadmeState
+      object Empty : ReadmeState
+      data class Error(val error: String) : ReadmeState
+      data class Loaded(val markdown: String) : ReadmeState
+   }
+
+   // TODO:
+}
+
+class RepositoriesListViewModel {
+   val state: LiveData<State>
+   
+   sealed interface State {
+      object Loading : State
+      data class Loaded(val repos: List<Repo>) : State
+      data class Error(val error: String) : State
+      object Empty : State
+   }
+
+   // TODO:
+}
+```
+
+### android-app
+```kotlin
+class MainActivity: AppCompatActivity {
+   // TODO:
+}
+
+class AuthFragment: Fragment {
+   // TODO:
+}
+
+class RepositoriesListFragment: Fragment {
+   // TODO:
+}
+
+class DetailInfoFragment: Fragment {
+   // TODO:
+}
+```
+
+### ios-app
+```swift
+class RepositoriesListViewController: UIViewController {
+   // TODO:
+}
+
+class RepositoryDetailInfoViewController: UIViewController {
+   // TODO:
+}
+
+class AuthViewController: UIViewController {
+   // TODO:
+}
+```
+
+## Диаграмма классов
 
 На графе отображена зависимость компонентов KMM приложения друг от друга, цветами выделены подграфы:  
 Фиолетовый - Common, Зеленый - Android, Синий - iOS
 
 ```mermaid
 classDiagram
-class AuthViewModel:::common{
-   isLoading: LiveData~Boolean~
-   authResponseCode: LiveData~Int~
-   onSignButtonPressed(token: String)
-}
+class AuthViewModel:::common
    
-class RepositoryInfoViewModel:::common{
-   repositoryInfo: LiveData~RepoInfo?~
-   isLoading: LiveData~Boolean~
-}
+class RepositoryInfoViewModel:::common
    
-class RepositoriesListViewModel:::common {
-   isLoading: LiveData~Boolean~
-   repositories: LiveData:List~RepoEntity?~  
-}
+class RepositoriesListViewModel:::common
    
-class GitHubRepoRepository:::common{
-   repositories(username: String) FlowList~RepoEntityNullable~
-   repositoryInfo(ownerName: String, repositoryName: String, branchName: String) RepoInfoNullable
-   signIn(token: String)
-}
-class KeyValueStorage:::common{
-   authToken: String?
-}
+class GitHubRepoRepository:::common
+class KeyValueStorage:::common
 
 class MainActivity:::android
 class RepositoriesListFragment:::android
@@ -90,7 +214,8 @@ AuthViewController --> AuthViewModel
 GitHubRepoRepository --> KeyValueStorage
 ```
 
-Материалы:
+## Материалы
+
 1. [mobile-moko-boilerplate](https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate)
 1. [GitHub REST API](https://docs.github.com/en/rest)
 1. [GitHub Basic Authorization](https://docs.github.com/en/rest/overview/other-authentication-methods#basic-authentication)
