@@ -9,16 +9,36 @@ sidebar_position: 3
 
 ## Подключение, используя expect/actual
 Создайте expect/actual функцию, для получения `settings` на платформах
-  - получение `settings` для Android
+  - получение `settings` для Android  
+    `androidMain:`
     ```kotlin
-    val delegate: SharedPreferences // ...
-    val settings: Settings = AndroidSettings(delegate)
+    var appContext: Context? = null
+    
+    actual fun getSettings(): Settings {
+        val delegate = appContext!!.getSharedPreferences("app", Context.MODE_PRIVATE)
+        val settings = AndroidSettings(delegate)
+        return settings
+    }
     ```
-  - получение `settings` для iOS
+    Перед тем, как обращаться к функции `getSettings`, проинициализируйте переменную `appContext`.
+    
+  - получение `settings` для iOS  
+    `iosMain:`
     ```kotlin
-    val delegate: NSUserDefaults // ...
-    val settings: Settings = AppleSettings(delegate)
+    actual fun getSettings(): Settings {
+        val delegate = NSUserDefaults.standardUserDefaults
+        val settings: Settings = AppleSettings(delegate)
+        return settings
+    }
     ```
+
+## Подключение no-arg библиотеки
+Если вся работа с multiplatform-settings будет происходить в общем коде, вы можете использовать [no-arg-module](https://github.com/russhwolf/multiplatform-settings#no-arg-module).  
+Используя его, вам не придется инициализировать `Settings` на платформе, для `Android`, в качестве делегата будет использоваться `PreferenceManager.getDefaultSharedPreferences()`, а для iOS - `NSUserDefaults.standardUserDefaults`. 
+- подключите `no-arg` библиотеку к commonMain модулю: `implementation("com.russhwolf:multiplatform-settings-no-arg:0.8.1")`
+- создайте `settings`, сохраните значение, а затем прочитайте
+- протестируйте на обеих платформах
+
 ## Подключение напрямую к платформе
 Нам необходимо подключить библиотеку как `api`, чтобы ее классы были доступны за пределами общего модуля. Подробнее о разнице между `api` и `implementation` можете почитать [здесь](/learning/gradle/configuration).  
 Добавьте подключение библиотеки к общему модулю:
@@ -32,9 +52,9 @@ commonMain {
 ```
 Убедитесь, что класс `AndroidSettings` стал доступен в Android-проекте.  
 
-Однако, этого не достаточно, чтобы библиотека стала доступна и на iOS. Чтобы это сделать, необходимо добавить бинарники классов библиотеки к iOS фреймворку, в который собирается общий код.
+Однако, этого не достаточно, чтобы библиотека стала доступна и на iOS. Чтобы это сделать, необходимо добавить классы библиотеки в header iOS фреймворка, чтобы они стали видны из swift.
 По умолчанию, для `api`-зависимостей этого не происходит, потому что тогда бы бинарник фреймворка был бы огромный (кому интересно, почитайте об этом [тут](learning/kotlin-native/size_impact)).  
-Но, при желании, подключить бинарники библиотеки можно, для этого добавьте следующие строчки в раздел `cocoapods/framework` в `shared/build.gradle` файле: 
+Но, при желании, добавить классы в хидер можно, для этого добавьте следующие строчки в раздел `cocoapods/framework` в `shared/build.gradle` файле: 
 ```kotlin
 export("com.russhwolf:multiplatform-settings:0.8.1")
 transitiveExport = true
@@ -49,7 +69,6 @@ cocoapods {
     framework {
         baseName = "shared"
         export("dev.icerock.moko:fields:0.9.0")
-        transitiveExport = true
     }
 }
 ```
@@ -74,6 +93,7 @@ class KeyValueStorage(settings: Settings) {
 
 ## Практическое задание
 1. Откройте проект, который вы изменяли в разделе [expect/actual](expect-actual) или создайте новый по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html)
+1. Подключите multiplatform-settings, используя no-arg модуль библиотеки, убедитесь, что все работает
 1. Подключите multiplatform-settings напрямую к платформам, убедитесь, что все работает
 1. Подключите multiplatform-settings, используя expect/actual, убедитесь, что все работает
 1. Сохраните название платформы в хранилище устройства в общем коде
