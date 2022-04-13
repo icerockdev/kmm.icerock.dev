@@ -39,7 +39,7 @@ expect/actual - это механизм, позволяющий использо
     - Добавьте `actual` реализацию функции `getValueByKeyFromJsonString` в блок `shared/src/androidMain/kotlin` используя библиотеку moshi
     - Добавьте `actual` реализацию функции `getValueByKeyFromJsonString` в блок `shared/src/iosMain/kotlin` используя библиотеку NSTEasyJSON
       - Для получения доступа к библиотеке NSTEasyJSON, добавьте `import cocoapods.NSTEasyJSON.NSTEasyJSON`
-      - Как использовать функцию из файла в iOS проекте: при интерпретации общего кода в библиотеку для iOS, интерпретатор упаковывает всё, что находится вне классов в свой класс с постфиксом Kt, поэтому функция, находящаяся в файле `shared/src/iosMain/kotlin/getValueByKeyFromJsonString.kt` будет доступна на iOS вот так: `GetValueByKeyFromJsonStringKt.getValueByKeyFromJsonString(jsonString:, key:)`
+      - Как использовать функцию из файла в iOS проекте: во время компиляции компилятор складывает все top level декларации (функции и свойства вне класса) в синтетический класс Kt, поэтому функция, находящаяся в файле `shared/src/iosMain/kotlin/getValueByKeyFromJsonString.kt` будет доступна на iOS вот так: `GetValueByKeyFromJsonStringKt.getValueByKeyFromJsonString(jsonString:, key:)`
       
     
 ## typealias 
