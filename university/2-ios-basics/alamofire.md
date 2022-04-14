@@ -16,6 +16,4 @@ Alamofire - это простая в освоении и очень упроща
 получится приложение для загрузки картинки из интернета и другое - получение от [Fixer API](https://fixer.io/) курса
 валют и его отображение в таблице
 
-В заключение, посмотрите подробную [статью](https://swiftbook.ru/post/tutorials/tutorial-po-alamofire/) про Alamofire.
-Также пройдите кодлабу в статье, вы поработаете с [Immaga API](https://imagga.com/#APIs) и наглядно убедитесь в
-преимуществах Alamofire перед стандартными способами работы с сетью
+В заключение, выполните [кодлабу](https://www.raywenderlich.com/6587213-alamofire-5-tutorial-for-ios-getting-started) про Alamofire.
