@@ -145,6 +145,60 @@ sealed interface State {
 }
 ```
 
+### Обработка
+Общий стейт не стоит обрабатывать в `when`, потому что, из-за того, что, каждый элемент UI должен реагировать на каждое изменение стейта, придется при каждом значении стейта обновлять абсолютно все элементы. Для каждого элемента придется писать логику, в зависимости от стейта для всех возможных вариантов. При таком варианте обработки запутаться будет очень легко, когда потребуется внести изменения или найти ошибку. 
+
+Рассмотрим пример:
+```kotlin
+viewModel.state.observe(viewLifecycleOwner) { state ->
+    when (state) {
+        MyTestViewModel.State.Loading -> {
+            binding.progressBar.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.GONE
+            binding.errorView.visibility = View.GONE
+        }
+        is MyTestViewModel.State.Error -> {
+            binding.recyclerView.visibility = View.GONE
+            binding.progressBar.visibility = View.GONE
+            binding.errorView.visibility = View.VISIBLE
+            binding.errorMessage.text = state.error.getString(requireContext())
+        }
+        is MyTestViewModel.State.Loaded, MyTestViewModel.State.Empty -> {
+            binding.progressBar.visibility = View.GONE
+            binding.errorView.visibility = View.GONE
+            myAdapter.dataset = state.elementsList
+            binding.recyclerView.visibility = View.VISIBLE
+        }
+    }
+}
+```
+Для каждого значения стейта мы обрабатываем одни и те же элементы. Для двух из трех значений стейта, например, скрываем `errorView`, а значений стейта может быть гораздо больше.  
+В добавок, при переходе от стейта к стейту, мы могли бы забыть изменить или скрыть какой-нибудь элемент, после чего бы долго и внимательно отсматривали бы каждый кейс `when`-а в поисках ошибки.
+
+Вместо этого, лучше устанавливать каждому элементу UI значение по отдельности, в зависимости от значения стейта.  
+Вот как будет выглядеть новый вариант:
+```kotlin
+viewModel.state.observe(viewLifecycleOwner) { state ->
+    binding.progressBar.visibility = if (state == State.Loading) View.VISIBLE else View.GONE
+    binding.recyclerView.visibility = if (state == State.Loaded) View.VISIBLE else View.GONE
+    binding.errorView.visibility = if (state is MyViewModel.State.Error) View.VISIBLE else View.GONE
+
+    binding.errorMessage.text = if (state is MyViewModel.State.Error) {
+        state.error.getString(requireContext())
+    } else {
+        null
+    }
+
+    myAdapter.dataset = if (state is MyViewModel.State.Loaded) {
+        state.elementsList
+    } else {
+        emptyList()
+    }
+}
+```
+
+Теперь, для каждого элемента на основе значения стейта мы устанавливаем значение всего один раз, в одном единственном месте. Отлаживать и изменять такой код будет гораздо легче.
+
 ## Событие (действие)
 
 Чаще всего, `viewModel` не информирует `UI` обо всем подряд, а только тогда, когда необходимо выполнить какое-то действие, например: перейти на другой экран, показать `alert` или `toast`.
@@ -192,6 +246,7 @@ private fun handleAction(action: Action) {
     }
 }
 ```
+Действия, в отличие от состояний, как раз нужно обрабатывать в `when`, потому что они никак не связаны друг с другом и просто запускают вызов нужного метода, в отличие от состояния, ориентируясь на которое элементы `UI` изменяются все вместе, при каждом новом состоянии.
 Для отправки событий в `Channel` служат две функции [send](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/index.html#-1166499008%2FFunctions%2F1975948010) и [trySend](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/index.html#-1976436467%2FFunctions%2F1975948010).
 ```kotlin
 viewModelScope.launch {
