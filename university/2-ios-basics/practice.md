@@ -26,7 +26,7 @@ sidebar_position: 6
 ## Технические требования
 
 1. Реализация на Swift
-1. Использовать Interface Builder
+1. Использовать Interface Builder (xib, не storyboard)
 1. Использовать Alamofire для работы с REST API
 1. Использовать UITableView для отображения списка
 1. Использовать Constraints для экрана детальной информации
