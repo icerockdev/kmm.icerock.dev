@@ -153,5 +153,5 @@ class AppCoordinator: BaseCoordinator {
 ## Материалы
 
 - [Статья - How to use the coordinator pattern in iOS apps](https://www.hackingwithswift.com/articles/71/how-to-use-the-coordinator-pattern-in-ios-apps)
-- [Статься - Coordinator Tutorial for iOS: Getting Started](https://www.raywenderlich.com/158-coordinator-tutorial-for-ios-getting-started)
+- [Статья - Coordinator Tutorial for iOS: Getting Started](https://www.raywenderlich.com/158-coordinator-tutorial-for-ios-getting-started)
 - [Видео-разбор](https://www.youtube.com/watch?v=Pt9TGFzLVzc) использования `ApplicationCoordinator` для навигации между экранами
