@@ -19,8 +19,7 @@
   - [Cancellation and timeouts](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
     - Beginner   
       - `Job`, `cancel`, `cancelAndJoin`, `isActive`, `yield`, `NonCancellable`, `withTimeout`, `withTimeoutOrNull`, `CancellationException`, `TimeoutCancellationException`
-      - в корутине нужно проверять, хотят ли её отменить    ![image](https://user-images.githubusercontent.com/5010169/163702553-4e14d2ba-10eb-4edb-bd66-6a8a9fdc36f9.png)
-
+      - в корутине нужно проверять, хотят ли её отменить
       - проверка на отмену происходит в каждом suspension point, чтобы проверять чаще используйте: isActive, yield (Making computation code cancellable)
       - пример правильной и неправильной отмены корутины (Cancellation is cooperative)
       - работа корутины по time-out (Timeout)  
@@ -455,8 +454,6 @@ Supervision scope распространяет отмену только в от
 - [Buffering](https://kotlinlang.org/docs/flow.html#buffering) - буферизует выбросы потока через канал указанной емкости и запускает сборщик в отдельной сопрограмме.
 - [Conflation](https://kotlinlang.org/docs/flow.html#conflation) - emitter не приостановится из-за медленного коллектора, а удерживает свои элементы, пока коллектор их не запросит, а когда запросит, отправит самый новый элемент из тех, которые накопиились, потом заново начнет копить
 - [Processing the latest value](https://kotlinlang.org/docs/flow.html#processing-the-latest-value) - когда flow выдает новое значениеЮ блок действий для старого значения отменяется
-
-TODO
 
 ## Check Yourself
 
