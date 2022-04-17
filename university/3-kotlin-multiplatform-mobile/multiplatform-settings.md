@@ -7,6 +7,27 @@ sidebar_position: 3
 Ознакомьтесь с [multiplatform-settings](https://github.com/russhwolf/multiplatform-settings) - библиотекой, позволяющей сохранять key-value данные в параметры устройства из общего кода, используя `SharedPreferences` для Android и `NSUserDefaults` для iOS  
 Разберем варианты ее подключения к проекту.
 
+:::info
+Если вы используете [0.8.1](https://github.com/russhwolf/multiplatform-settings/releases/tag/v0.8.1) версию библиотеки, и [Kotlin 1.6.20](https://github.com/JetBrains/kotlin/releases/tag/v1.6.20), то, при выполнении таска `:linkDebugFrameworkIos` у вас произойдет ошибка:
+```text
+e: The symbol of unexpected type encountered during IR deserialization: IrSimpleFunctionPublicSymbolImpl, com.russhwolf.settings/Settings|-62081702699614493[0]. IrClassifierSymbol is expected.
+
+This could happen if there are two libraries, where one library was compiled against the different version of the other library than the one currently used in the project. Please check that the project configuration is correct and has consistent versions of dependencies.
+```
+
+Чтобы ее избежать, добавьте в `commonMain/build.gradle` следующее:
+```kotlin
+kotlin {
+    targets.withType<org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget> {
+        binaries.all {
+            freeCompilerArgs += "-Xlazy-ir-for-caches=disable"
+        }
+    }
+}
+```
+Более подробно о проблеме можете прочитать [здесь](https://githubhot.com/repo/russhwolf/multiplatform-settings/issues/106).
+:::
+
 ## Подключение, используя expect/actual
 Создайте expect/actual функцию, для получения `settings` на платформах
   - получение `settings` для Android  
@@ -67,7 +88,7 @@ cocoapods {
     podfile = project.file("../iosApp/Podfile")
     framework {
         baseName = "shared"
-        export("dev.icerock.moko:fields:0.9.0")
+        export("com.russhwolf:multiplatform-settings:0.8.1")
     }
 }
 ```
