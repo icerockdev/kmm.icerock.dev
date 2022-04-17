@@ -19,7 +19,8 @@
   - [Cancellation and timeouts](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
     - Beginner   
       - `Job`, `cancel`, `cancelAndJoin`, `isActive`, `yield`, `NonCancellable`, `withTimeout`, `withTimeoutOrNull`, `CancellationException`, `TimeoutCancellationException`
-      - в корутине нужно проверять, хотят ли её отменить    
+      - в корутине нужно проверять, хотят ли её отменить    ![image](https://user-images.githubusercontent.com/5010169/163702553-4e14d2ba-10eb-4edb-bd66-6a8a9fdc36f9.png)
+
       - проверка на отмену происходит в каждом suspension point, чтобы проверять чаще используйте: isActive, yield (Making computation code cancellable)
       - пример правильной и неправильной отмены корутины (Cancellation is cooperative)
       - работа корутины по time-out (Timeout)  
@@ -329,6 +330,52 @@ suspend fun doSomeParallelWork() {
 цикла - живет все время жизни процесса приложения, поэтому не рекомендуется к использованию без
 твердой уверенности что это верно.   
 
+#### Использование async
+
+При запуске асинхронных задач (вызов `async`) важно учитывать, что возникновение ошибки внутри задачи будет вызывать отмену текущего Scope. Поэтому важно запускать дочерний скоуп используя `coroutineScope` для выполнения асинхронных задач - тогда ошибка выполнения этих задач не сломает основной `CoroutineScope`, а будет выброшена как результат `coroutineScope` и сможет обработаться `try-catch`.
+
+Например в [следующем коде](https://pl.kotl.in/jAbDHCZMJ):
+```kotlin
+suspend fun main() {
+    coroutineScope {
+        launch {
+            try {
+                listOf<Deferred<Unit>>(
+                    async { TODO() },
+                    async { TODO() }
+                ).awaitAll()
+            } catch(exc: Throwable) {
+                println(exc.stackTraceToString())
+            }
+        }
+    }
+}
+```
+
+Блок `catch` не отловит ошибку, произойдет вылет приложения.
+
+[Исправленный вариант](https://pl.kotl.in/FE39k7QR-):
+```kotlin
+suspend fun main() {
+    coroutineScope {
+        launch {
+            try {
+                coroutineScope {
+                    listOf<Deferred<Unit>>(
+                        async { TODO() },
+                        async { TODO() }
+                    ).awaitAll()
+                }
+            } catch(exc: Throwable) {
+                println(exc.stackTraceToString())
+            }
+        }
+    }
+}
+```
+
+`coroutineScope` это suspend-функция, которая создаёт новый скоуп и идёт дальше только после его завершения и не привязывается к родительскому скоупу. Когда скоуп, созданный `coroutineScope`, упал, падает сама suspend-функция, а не весь родительский scope.
+
 ### CoroutineContext
 Корутина, запущенная другой, наследует весь контекст той, внутри которой она запустилась и становится для нее дочерней.
 Если остановить родителскую корутину, то остановятся и все дочерние корутины. 
@@ -408,13 +455,6 @@ Supervision scope распространяет отмену только в от
 - [Buffering](https://kotlinlang.org/docs/flow.html#buffering) - буферизует выбросы потока через канал указанной емкости и запускает сборщик в отдельной сопрограмме.
 - [Conflation](https://kotlinlang.org/docs/flow.html#conflation) - emitter не приостановится из-за медленного коллектора, а удерживает свои элементы, пока коллектор их не запросит, а когда запросит, отправит самый новый элемент из тех, которые накопиились, потом заново начнет копить
 - [Processing the latest value](https://kotlinlang.org/docs/flow.html#processing-the-latest-value) - когда flow выдает новое значениеЮ блок действий для старого значения отменяется
-
-## Использование async{}.await() во viewModelScope
--Была необходимость выполнить два асинхронных запроса в блоке try catch (пример приведён ниже)
-![image](https://user-images.githubusercontent.com/33836630/156528687-d176a21f-bcbf-4865-a61d-d19e1780af58.png)
-Казалось, тривиальная задача, но нас постигла неудача и заключаеться она в том, что блок catch не сумел отловить ошибку и приложение падает, так как: падает дочерняя корутина.
-Было принято решение использовать данный подход, так как:coroutineScope это suspend-функция, которая создаёт новый скоуп и идёт дальше только после его завершения и не привязывается к родительскому скоупу. Когда скоуп, созданный coroutineScope, упал, падает сама suspend-функция, а не некий воркер непонятно где(т.е. к скоупу родительскому оно не привязывается, но coroutineContext мержится с родительским)
-![image](https://user-images.githubusercontent.com/33836630/156530904-424eea45-bfa7-4419-af84-66583fd15b14.png)
 
 TODO
 
