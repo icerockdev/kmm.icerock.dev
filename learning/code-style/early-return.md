@@ -19,8 +19,7 @@ sidebar_position: 5
    **Как лучше сделать:**
    ```kotlin
    fun handleItemForIndex(index: Int, item: String?) {
-      if (item == null || index <= 0)
-         return
+      if (item == null || index <= 0) return
    
       val newIndex = handleIndex(index)
       item.handleData(newIndex)
