@@ -138,7 +138,7 @@ class AppCoordinator: BaseCoordinator {
             window: self.window!,
             factory: AppComponent.factory
         )
-        // запуск коррдинатора
+        // запуск координатора
         coordinator.start()
 
         // ....
