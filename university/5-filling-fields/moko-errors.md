@@ -6,6 +6,11 @@ sidebar_position: 3
 
 [moko-errors](https://github.com/icerockdev/moko-errors)
 
+В контексте форм нам нужен ExceptionHandler - с его помощью мы покажем пользователю сообщение об ошибке не реализуя его отдельно на обеих платформах
+
+### ExceptionHandler
+
+
 Из предыдущего блока вы уже немного знаете о [moko-errors](/university/icerock-basics/logging-and-errors#обработка-ошибок-в-общем-коде)  
 Теперь разберем, как moko-errors помогают определять ошибки валидации для полей ввода:
 

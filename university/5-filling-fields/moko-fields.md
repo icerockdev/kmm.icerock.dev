@@ -5,6 +5,13 @@ sidebar_position: 2
 # moko-fields
 
 ## moko-fields
+
+В контексте форм нам нужна вся библиотека - она предназначена для упрощения кода форм и дает готовые стандартные решения
+
+### FormField
+
+### Validation
+
 Для использования `FormField` в общем коде мы реализовали библиотеку [moko-fields](https://github.com/icerockdev/moko-fields).
 
 Для знакомства с библиотекой посмотрите материалы на странице в базе знаний - [moko-fields](/learning/libraries/moko/moko-fields).
