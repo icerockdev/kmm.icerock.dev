@@ -38,72 +38,54 @@ sidebar_position: 4
 
 ```json
 {
-  "sample_key1": {
-    "sample_key2": "sample_message",
-    "errors_array": [
-      {
-        "msg": "password used earlier",
-        "fld": "password"
-      }
-    ]
-  }
+  "validation": [
+    {
+      "message": "password used earlier",
+      "field": "password"
+    }
+  ]
 }
 ```
 
-Вот как будет выглядеть метод парсинга:
+Вот как выглядел бы наш кастомный класс парсера:
 ```kotlin
-@Suppress("ReturnCount", "NestedBlockDepth")
-override fun parseException(
-    request: HttpRequest,
-    response: HttpResponse,
-    responseBody: String?
-): ResponseException? {
-    @Suppress("TooGenericExceptionCaught")
-    try {
-        val body = responseBody.orEmpty()
-        val jsonRoot = json.parseToJsonElement(body)
-        if (jsonRoot is JsonObject) {
+class MyValidationExceptionParser(
+    private val json: Json
+) : HttpExceptionFactory.HttpExceptionParser {
 
-            val errors = jsonRoot.jsonObject.getValue(JSON_SAMPLE_KEY).jsonObject.getValue(
-                JSON_ERRORS_ARRAY_KEY).jsonArray
-
-            val errorsArray = ArrayList<ValidationException.Error>(errors.size)
-
-            errors.forEach { item ->
-                try {
-                    val jsonObject = item.jsonObject
-
-                    val message: String
-                    val field: String
-
-                    if (jsonObject.containsKey(JSON_MESSAGE_KEY)) {
-                        message = jsonObject.getValue(JSON_MESSAGE_KEY).jsonPrimitive.content
-                    } else return@forEach
-
-                    if (jsonObject.containsKey(JSON_FIELD_KEY)) {
-                        field = jsonObject.getValue(JSON_FIELD_KEY).jsonPrimitive.content
-                    } else return@forEach
-
-                    errorsArray.add(ValidationException.Error(field, message))
-                } catch (e: Exception) {
-                    // ignore item
+    override fun parseException(
+        request: HttpRequest,
+        response: HttpResponse,
+        responseBody: String?
+    ): ResponseException? {
+        return runCatching {
+            val body: String = responseBody.orEmpty()
+            val validationResponse: ValidationResponse =
+                json.decodeFromString(ValidationResponse.serializer(), body)
+            ValidationException(
+                request = request,
+                response = response,
+                message = body,
+                errors = validationResponse.validation.map { (field, message) ->
+                    ValidationException.Error(
+                        field = field,
+                        message = message
+                    )
                 }
-            }
-            return ValidationException(request, response, responseBody.orEmpty(), errorsArray)
-
-        } else {
-            return null
-        }
-    } catch (e: Exception) {
-        return null
+            )
+        }.getOrNull()
     }
-}
 
-companion object {
-    private const val JSON_SAMPLE_KEY = "sample_key1"
-    private const val JSON_ERRORS_ARRAY_KEY = "errors_array"
-    private const val JSON_MESSAGE_KEY = "msg"
-    private const val JSON_FIELD_KEY = "fld"
+    @Serializable
+    private data class ValidationResponse(
+        val validation: List<Error>
+    ) {
+        @Serializable
+        data class Error(
+            val field: String,
+            val message: String
+        )
+    }
 }
 ```
 
