@@ -22,7 +22,7 @@ sidebar_position: 4
 [
   {
     "message": "password used earlier",
-    "field": "title"
+    "field": "password"
   }
 ]
 ```
@@ -33,6 +33,79 @@ sidebar_position: 4
 - создать класс-наследник интерфейса HttpExceptionFactory.HttpExceptionParser
 - реализовать метод parseException
 - использовать ваш кастомный парсер при создании ExceptionFactory
+
+Допустим, нам понадобилось обработать следующий объект:
+
+```json
+{
+  "sample_key1": {
+    "sample_key2": "sample_message",
+    "errors_array": [
+      {
+        "msg": "password used earlier",
+        "fld": "password"
+      }
+    ]
+  }
+}
+```
+
+Вот как будет выглядеть метод парсинга:
+```kotlin
+@Suppress("ReturnCount", "NestedBlockDepth")
+override fun parseException(
+    request: HttpRequest,
+    response: HttpResponse,
+    responseBody: String?
+): ResponseException? {
+    @Suppress("TooGenericExceptionCaught")
+    try {
+        val body = responseBody.orEmpty()
+        val jsonRoot = json.parseToJsonElement(body)
+        if (jsonRoot is JsonObject) {
+
+            val errors = jsonRoot.jsonObject.getValue(JSON_SAMPLE_KEY).jsonObject.getValue(
+                JSON_ERRORS_ARRAY_KEY).jsonArray
+
+            val errorsArray = ArrayList<ValidationException.Error>(errors.size)
+
+            errors.forEach { item ->
+                try {
+                    val jsonObject = item.jsonObject
+
+                    val message: String
+                    val field: String
+
+                    if (jsonObject.containsKey(JSON_MESSAGE_KEY)) {
+                        message = jsonObject.getValue(JSON_MESSAGE_KEY).jsonPrimitive.content
+                    } else return@forEach
+
+                    if (jsonObject.containsKey(JSON_FIELD_KEY)) {
+                        field = jsonObject.getValue(JSON_FIELD_KEY).jsonPrimitive.content
+                    } else return@forEach
+
+                    errorsArray.add(ValidationException.Error(field, message))
+                } catch (e: Exception) {
+                    // ignore item
+                }
+            }
+            return ValidationException(request, response, responseBody.orEmpty(), errorsArray)
+
+        } else {
+            return null
+        }
+    } catch (e: Exception) {
+        return null
+    }
+}
+
+companion object {
+    private const val JSON_SAMPLE_KEY = "sample_key1"
+    private const val JSON_ERRORS_ARRAY_KEY = "errors_array"
+    private const val JSON_MESSAGE_KEY = "msg"
+    private const val JSON_FIELD_KEY = "fld"
+}
+```
 
 ## Практическое задание
 Добавьте свою реализацию парсера для обработки [объекта](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#client-errors), который приходит от GitHub REST API при ошибке валидации.
