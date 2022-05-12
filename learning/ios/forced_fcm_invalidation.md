@@ -29,15 +29,11 @@ func invalidateFCMToken() {
 }
 ```
 
-Метод необходимо будет вызвать из функции logout() в нужном месте
+Метод необходимо будет вызвать в тот момент, когда нужно сбросить токен. Например при логауте.
  
 ```shell
 func logout() {
     PushService.shared.invalidateFCMToken()
-    bearerToken = nil
-    refreshToken = nil
-    transport = nil
-    run()
 }
 ```
 
