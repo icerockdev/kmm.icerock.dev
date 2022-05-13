@@ -10,8 +10,7 @@ import { DiscussionEmbed } from 'disqus-react';
 import React from 'react';
 
 export default function DocPaginator(props) {
-    const metadata = props.metadata;
-    const fmtId = metadata.permalink.replace(/^\//, '').replace(/[\s\/]/gi, '-');
+    const fmtId = location.href.replace(/^\//, '').replace(/[\s\/]/gi, '-');
     const disqusId = fmtId == '' ? 'main' : fmtId;
 
     return (
@@ -21,7 +20,7 @@ export default function DocPaginator(props) {
             <DiscussionEmbed
                 shortname='kmm-icerock-dev'
                 config={{
-                    url: 'https://kmm.icerock.dev/' + metadata.permalink,
+                    url: location.href,
                     identifier: disqusId,
                 }}
             />
