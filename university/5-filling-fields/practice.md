@@ -27,3 +27,5 @@ sidebar_position: 5
 ## Материалы
 1. [GitHub Issues API](https://docs.github.com/en/rest/issues/issues#about-the-issues-api)
 1. [422 Unprocessable Entity response](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#client-errors)
+1. [Дизайн Android](https://www.figma.com/file/Mh3ga5XAzyJNCY87NBp01G/Git_test-Android?node-id=4426%3A4427)
+1. [Дизайн iOS](https://www.figma.com/file/XmpoCqkdWTGb2NGdR2bgiQ/Git_test-iOS?node-id=1532%3A1724)
