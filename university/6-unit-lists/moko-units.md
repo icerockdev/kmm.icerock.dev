@@ -4,4 +4,4 @@ sidebar_position: 2
 
 # moko-units
 
-как именовать юниты, чтобы не получать фиговые названия
+Ознакомьтесь со всеми материаломи со страницы [moko-units в базе знаний](/learning/libraries/moko/moko-units/).
