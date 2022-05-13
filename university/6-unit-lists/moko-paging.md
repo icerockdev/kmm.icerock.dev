@@ -5,29 +5,33 @@ sidebar_position: 3
 # moko-paging
 
 ## moko-paging
-посмотрите ***видео*** и изучите [страницу](/learning/libraries/moko/moko-paging) библиотеки в базе знаний
+посмотрите ***видео*** и изучите [страницу](/learning/libraries/moko/moko-paging) библиотеки в базе знаний.
 
 ## moko-mvvm-state
 
-Вы уже знаете, что такое Состояние или State из [статьи](/learning/android/states-events).
+`moko-paging` использует `ResourceState` - реализацию [состояния](/learning/android/states-events#единый-стейт-экрана) из [moko-mvvm](https://github.com/icerockdev/moko-mvvm/tree/master/mvvm-state), поэтому стоит разобраться с ней поподробнее.  
 
-Сейчас мы рассмотрим реализацию такого же стейта, но из библиотеки [moko-mvvm](https://github.com/icerockdev/moko-mvvm/tree/master/mvvm-state)  
+Рассмотрим класс [ResourceState<out T, out E>](https://github.com/icerockdev/moko-mvvm/blob/master/mvvm-state/src/commonMain/kotlin/dev/icerock/moko/mvvm/ResourceState.kt), он содержит четыре состояния:  
+- `Loading` - загрузка
+- `Success` - успешная загрузка
+- `Failed` - ошибка загрузки
+- `Empty` - пустота
+- `T` - тип данных, которые хранятся в объекте `Success`, при успешной загрузке  
+- `E` - тип ошибки, которая хранится в объекте `Failed`, соответственно, при ошибке
 
-Вам следует о нем знать, потому что его можно встретить на старых проектах, а также он подходит для использования экранов-списков
+Состояние `Empty` - самое спорное:
+- оно есть у списков
+- его нет у единичных элементов, которые либо загрузятся, либо нет
 
-подключение: 
-```kotlin
-commonMainApi("dev.icerock.moko:mvvm-state:0.13.0") 
-```
+Из-за этого мы обычно делаем свою реализацию класса `State`, чтобы не обрабатывать состояние `Empty`, которого просто нет. Однако, `ResourceState` все также удобно использовать для экранов-списков.  
 
-Класс [ResourceState](https://github.com/icerockdev/moko-mvvm/blob/master/mvvm-state/src/commonMain/kotlin/dev/icerock/moko/mvvm/ResourceState.kt) представляет из себя стейт с четырьмя состояниями:
-- Success
-- Failed
-- Loading
-- Empty
+В `moko-mvvm-state`, также, содержится и набор [extensions](https://github.com/icerockdev/moko-mvvm/tree/master/mvvm-state/src/commonMain/kotlin/dev/icerock/moko/mvvm/livedata) для более удобной работы с `ResourceState`, например:
+- [asState()](https://github.com/icerockdev/moko-mvvm/blob/master/mvvm-state/src/commonMain/kotlin/dev/icerock/moko/mvvm/StateExt.kt) - получить стейт из данных
+- [data()](https://github.com/icerockdev/moko-mvvm/blob/master/mvvm-state/src/commonMain/kotlin/dev/icerock/moko/mvvm/livedata/StateLiveDataExt.kt) - получить `LiveData` со значением из стейта
+- [concatData()](https://github.com/icerockdev/moko-mvvm/blob/master/mvvm-state/src/commonMain/kotlin/dev/icerock/moko/mvvm/livedata/StateLiveDataMerges.kt) - объединение двух стейтов
+- [dataTransform()](https://github.com/icerockdev/moko-mvvm/blob/master/mvvm-state/src/commonMain/kotlin/dev/icerock/moko/mvvm/livedata/StateLiveDataTransforms.kt) - преобразование полученных данных к другому типу. Например, `NewsItem` в `NewsUnitItem` - объект новости в объект для списка новостей
+- [errorTransform()](https://github.com/icerockdev/moko-mvvm/blob/master/mvvm-state/src/commonMain/kotlin/dev/icerock/moko/mvvm/livedata/StateLiveDataTransforms.kt) - преобразование полученной ошибки к другому типу, например `Throwable` в `StringDesc`
+- и т.д.
 
-Этот стейт находит свое применение на экранах-списках, потому что такие экраны содержат именно те состояния, которые представленны в ResourceState
-
-Проблема с использованием такого стейта на обычных экранах в том, что они, как правило, не имеют состояния Empty. Например, экран деталньной информации о репозитории - пустым может быть само содержимое репозитория, но не его состояние
-
-Также, библиотека содержет набор [extensions](https://github.com/icerockdev/moko-mvvm/tree/master/mvvm-state/src/commonMain/kotlin/dev/icerock/moko/mvvm/livedata) для более удобной работы со стейтом
+## Практическое задание
+Примените `moko-paging` на экране списка репозиториев.
