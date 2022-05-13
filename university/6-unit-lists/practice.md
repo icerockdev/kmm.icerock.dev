@@ -23,3 +23,4 @@ sidebar_position: 5
 
 ## Материалы
 1. [GitHub Issues API](https://docs.github.com/en/rest/issues/issues#about-the-issues-api)
+2. ***Дизайн***
