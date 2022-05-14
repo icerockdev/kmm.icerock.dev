@@ -8,7 +8,7 @@ sidebar_position: 5
 В реальных проектах мы крайне редко будем использовать `Storyboard` и `Seque`, значительно чаще для верстки используется `.xib` а навигация происходит через код. Поэтому с ней нужно попрактиковаться.  
 
 Для начала, советуем вам ознакомиться со всеми подходами для навигации и верстки:
-- обратите внимание на памятки: [Как удалить Storyboard](/university/memos/remove-storyboard) и [Как прейти от SwiftUI к UIKit](/university/memos/swiftui-to-uikit), они могут пригодиться вам в будущем.
+- обратите внимание на памятки: [Как удалить Storyboard](../memos/remove-storyboard) и [Как прейти от SwiftUI к UIKit](../memos/swiftui-to-uikit), они могут пригодиться вам в будущем.
 - [статья-сравнение](https://putkovdimi.medium.com/%D0%BF%D0%BE%D0%B4%D1%85%D0%BE%D0%B4%D1%8B-%D0%BA-%D1%80%D0%B5%D0%B0%D0%BB%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8-ui-%D0%B2-swift-22de5f1662f4) `.xib`, `.storyboard` и code для UI
 - [статья](https://habr.com/ru/company/mobileup/blog/456086/) о плюсах и минусах `.storyboard`
 - [видео](https://www.youtube.com/watch?v=lRfCAYaGldg) о том, как добавить `NavigationController` программно

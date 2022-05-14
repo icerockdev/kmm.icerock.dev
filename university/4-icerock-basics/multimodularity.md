@@ -126,4 +126,4 @@ sidebar_position: 3
 - Добавьте `myTestFeature` вручную
     - пакет - `ru.4test.package`
 - Проделайте те же самые действия при помощи [shaper](https://github.com/icerockdev/shaper/), используйте [шаблон](https://gitlab.icerockdev.com/scl/boilerplate/mobile-shaper-templates/-/blob/master/kmm/kmm-feature.yaml) для создания новой фичи.  
-  Рекомендуем сначала попробовать сделать это самостоятельно, не пользуясь [Памяткой](/university/memos/shaper).
+  Рекомендуем сначала попробовать сделать это самостоятельно, не пользуясь [Памяткой](../memos/shaper).
