@@ -10,7 +10,7 @@ sidebar_position: 5
 
 ## Gradle
 
-Мы используем [Gradle Wrapper](/learning/gradle/gradle-wrapper) как обертку, которая автоматизирует процесс установки нужной версии Gradle.
+Мы используем [Gradle Wrapper](./gradle-wrapper) как обертку, которая автоматизирует процесс установки нужной версии Gradle.
 
 Чтобы поменять версию Gradle в вашем проекте, необходимо перейти в директорию `gradle/wrapper` и открыть файл его настроек `gradle-wrapper.properties`:
 
