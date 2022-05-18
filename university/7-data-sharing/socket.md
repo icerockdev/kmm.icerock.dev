@@ -1,10 +1,26 @@
 ---
 sidebar_position: 1
 ---
- 
+
+#Socket
+
 че такое сокетное соединение
+https://android-tools.ru/coding/sokety-v-android/
+
+[про вебсокеты и okHttp](https://www.youtube.com/watch?v=tF0-p4FDepk)
+
 че такое веб сокеты
+[простенький видос](https://www.youtube.com/watch?v=SxMvxIHBahU)
+[хороший видос что это](https://www.youtube.com/watch?v=bTxax4k-b8o) про okHttp и его интерфейс
+[WebSocket](https://kotlinlang.org/api/latest/jvm/stdlib/org.w3c.dom/-web-socket/)
+
 В чем разница
+[Socket и WebSocket](https://ru.stackoverflow.com/questions/507746/%D0%92-%D1%87%D0%B5%D0%BC-%D1%80%D0%B0%D0%B7%D0%BD%D0%B8%D1%86%D0%B0-%D0%BC%D0%B5%D0%B6%D0%B4%D1%83-socket%D0%BE%D0%BC-%D0%B8-websocket%D0%BE%D0%BC)
+
+[Websocket Ktor](https://ktor.io/docs/creating-web-socket-chat.html#source_code)
+
+
+
 как выглядит со стороны iOS(URLSession) и Android(OKHttp)
 как можно в мультиплатформе(либо ктор заютать 2.0, там для обеих платформ есть поддержка вебсокетов) либо можно взять нашу либу moko-soсket-io, если у вас не чистые веб сокеты, а именно socket io протокол
 
@@ -27,6 +43,7 @@ SocketIO - взяли вебсокет и сделал протокол обме
 - обновление положения машинки такси на карте
 - обновление статуса про курьера
 - чатики (чтобы не кидать каждую секунду кидать запрос на получение новых сообщений)
+- биржи
 
 Есть более простая реализация замены сокетам это LongPooling-запросы
 
