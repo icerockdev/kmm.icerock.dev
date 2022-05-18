@@ -84,16 +84,55 @@
 
 Запуск приложения: 
 - Динамические библиотеки влияют на время холодного запуска приложения, в то время как использование статических библиотек может быть хорошей оптимизацией этого процесса.
-- Apple рекомендовала на WWDC использовать не более 6 динамических фреймворков
+- Apple [рекомендовала на WWDC 2016](https://youtu.be/PxV34oZxGLM?t=1781) использовать не более 6 динамических фреймворков, но с того времени уже прошло не мало времени и производительность устройств увеличилась. Поэтому советую рассчитывайте это количество так, чтобы
+время запуска приложение было оптимальным.
 
 Размер: 
--   самый большой размер приложения: использование динамической компоновки + встраивание модулей в приложение (компилятор не может оптимизировать, все символы должны быть включены)
+-   Самый большой размер приложения: использование динамической компоновки + встраивание модулей в приложение (компилятор не может оптимизировать, все символы должны быть включены).
 -  Когда статическая библиотека связана, она будет полностью скопирована в исполняемый файл. Если несколько модулей используют одну и ту же статическую библиотеку, то код будет попусту копироваться. 
 
 Безопасность запуска: 
 -  Весь статически связанный код проверяется и копируется во время сборки, поэтому у нас есть гарантия, что он работает. Код приложения не может рассинхронизироваться с API используемой библиотеки. 
-- Если несколько модулей используют одну и ту же статическую библиотеку, то это может вызвать проблемы ***duplicate symbols*** из-за дублирования символов в модуле 
+- Если несколько модулей используют одну и ту же статическую библиотеку, то это может вызвать проблемы из-за дублирования символов в модуле.
 
+### Пример дублирования символов
+
+Самый простой пример дублирования символов в исполняемом файле:
+есть проект приложения, динамическая библиотека и статическая библиотека (воспользуемся GMaps, т.к они поставляют свою зависимость в виде статического фреймворка). Подключаем GMaps к нашей динамической библиотеке и приложению, а саму динамическую библиотеку подключаем тоже к приложению как показано здесь: 
+
+![dublicate_symbols_podfile](static-dynamic-libs/dublicate_symbols_podfile.png)
+![dublicate_symbols_podfile](static-dynamic-libs/dublicate_symbols_embedded.png)
+
+После запуска приложения вы увидите ошибку:
+
+```
+objc[36567]: Class GMSMapsClearcutClient is implemented in both /private/var/containers/Bundle/Application
+495A9139-C4DA-4E4E-8677-0E7E49A3B4B6/DublicateSymbolsExample.app/Frameworks/GMapsExt.framework/GMapsExt (0x107580090) and /private/var
+containers/Bundle/Application/495A9139-C4DA-4E4E-8677-0E7E49A3B4B6/DublicateSymbolsExample.app/DublicateSymbolsExample (0x104e0d660). One
+of the two will be used. Which one is undefined.
+
+
+objc[36567]: Class GMSAPIClientParameters is implemented in both /private/var/containers/Bundle/Application
+495A9139-C4DA-4E4E-8677-0E7E49A3B4B6/DublicateSymbolsExample.app/Frameworks/GMapsExt.framework/GMapsExt (0x1075800e0) and /private/var
+containers/Bundle/Application/495A9139-C4DA-4E4E-8677-0E7E49A3B4B6/DublicateSymbolsExample.app/DublicateSymbolsExample (0x104e0d6b0). One
+of the two will be used. Which one is undefined.
+
+
+objc[36567]: Class GMSAddress is implemented in both /private/var/containers/Bundle/Application/495A9139-C4DA-4E4E-8677-0E7E49A3B4B6
+DublicateSymbolsExample.app/Frameworks/GMapsExt.framework/GMapsExt (0x107580130) and /private/var/containers/Bundle/Application
+495A9139-C4DA-4E4E-8677-0E7E49A3B4B6/DublicateSymbolsExample.app/DublicateSymbolsExample (0x104e0d700). One of the two will be used. Which
+one is undefined.
+
+
+objc[36567]: Class GMSAsyncInitServices is implemented in both /private/var/containers/Bundle/Application
+495A9139-C4DA-4E4E-8677-0E7E49A3B4B6/DublicateSymbolsExample.app/Frameworks/GMapsExt.framework/GMapsExt (0x107580180) and /private/var
+containers/Bundle/Application/495A9139-C4DA-4E4E-8677-0E7E49A3B4B6/DublicateSymbolsExample.app/DublicateSymbolsExample (0x104e0d750). One
+of the two will be used. Which one is undefined.
+
+...
+```
+
+Такое предупреждение говорит о том, что в исполняемом файле дублируются символы, что может привести к некорректной работе приложения.
 
 ### Пример
 
