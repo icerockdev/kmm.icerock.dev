@@ -103,7 +103,9 @@ if (response.status.isSuccess()) {
 ## Отправка файлов
 Для отправки файлов используются составные запросы со следующими типами содержимого:
 
-1. `multipart/form-data` ([ссылка на wiki](https://ru.wikipedia.org/wiki/Multipart/form-data))
+### multipart/form-data 
+
+[ссылка на wiki](https://ru.wikipedia.org/wiki/Multipart/form-data)
 
 Данный тип является наиболее распространенным и позволяет отправлять сразу несколько файлов в запросе. Каждый из передаваемых файлов будет описан в теле запроса с основной информацией по нему. Пример *body* такого запроса:
 ```
@@ -132,7 +134,7 @@ Content file
 
 При использовании данного подхода в ktor предусмотрен механизм создания `formData`. Здесь можно также разделить использование на несколько подходов:
 
-*Передача файла как ByteArray:*
+### Передача файла как ByteArray
 
 Данный подход хорошо описан в документации ktor ([ссылка на документацию](https://ktor.io/docs/request.html#upload_file)).
 Важной деталью в данной ссылке является добавление заголовка с файлом, который представлен в виде `byteArray`:
@@ -145,7 +147,7 @@ append("image", File("ktor_logo.png").readBytes(), Headers.build {
 ...
 ```
 
-*Передача файла как Input*
+### Передача файла как Input
 
 Этот подход подразумевает использование *kotlinx-io* `Input` ([ссылка на класс](https://ktor.kotlincn.net/kotlinx/io/io/input-output.html)). В таком случае используется другой подход формирования `formData`:
 ```kotlin
@@ -171,7 +173,7 @@ val data: List<PartData> = formData {
 
 Касаемо использования formData, существует несколько подходов в формировании *ktor* HTTP клиента:
 
-*submitFormWithBinaryData*
+### submitFormWithBinaryData
 
 Для использования этого метода необходимо заранее сформировать `formData`. Код с таким методом выглядит следующим образом:
 ```kotlin
@@ -181,7 +183,7 @@ val result = httpClient.submitFormWithBinaryData<String>(formData = data) {
 ```
 Здесь `data` - сформированная *multipart formData*. В теле httpClient возможны настройки самого клиента, в том числе url, хедеры, тип метода (**важный поинт - multipart/form-data запросы должны быть только POST запросами!**)
 
-*MultiPartFormDataContent*
+### MultiPartFormDataContent
 
 Здесь для ktor клиента в качестве *body* присваивается `MultiPartFormDataContent()`, параметром является список `PartData`, формируемый `formData`. Пример кода:
 ```kotlin
@@ -191,7 +193,7 @@ val result = httpClient.post<Unit> {
 }
 ```
 
-2. `application/octet-stream`
+### application/octet-stream
 
 Данный подход используется довольно редко, но все же используется. Для данного типа запроса нет возможности передать несколько параметров или файлов, можно отправлять файл, притом только один. Для реализации подхода необходимо создать класс, унаследованный от `WriteChannelContent` ([ссылка на класс](https://www.mvndoc.com/c/io.ktor/ktor-http-iosarm64/io/ktor/http/content/OutgoingContent.WriteChannelContent.html)). Пример кода:
 ```kotlin

@@ -22,6 +22,8 @@ sidebar_position: 9
 
 С полным списком плагинов, доступных в Ktor вы можете ознакомиться по [ссылке](https://github.com/ktorio/ktor/tree/main/ktor-client/ktor-client-core/common/src/io/ktor/client/plugins).  
 
+Также, примеры использования стандартных плагинов можно посмотреть в статье [Kotlin Multiplatform Mobile: Intercepting Network Request and Response](https://yusufabd.medium.com/kotlin-multiplatform-mobile-intercepting-network-request-and-response-6805a79b4699).
+
 Плагин выполняет свою задачу, как правило, для каждого запроса или ответа сервера. Чтобы понять, что делает каждый плагин, смотрите реализацию метода
 - `handle`, для плагинов из Ktor
 - `install` в `companion object`, для плагинов из `moko-network`
