@@ -32,6 +32,7 @@ sidebar_position: 9
 [Пример](https://github.com/icerockdev/moko-network/blob/0f8459ff2d51c6b7cade0cadd6d11066b7a55d60/sample/mpp-library/src/commonMain/kotlin/com/icerockdev/library/TestViewModel.kt#L40) создания `httpClient`, в котором происходит подключение и настройка плагинов.
 
 Теперь рассмотрим те [плагины](https://github.com/icerockdev/moko-network/tree/master/network/src/commonMain/kotlin/dev/icerock/moko/network/features), которые есть в `moko-network`.
+
 ### ExceptionFeature
 Эта фича просто кидает ошибку, если `status` ответа сервера неудачный. 
 ```kotlin
@@ -67,7 +68,7 @@ override fun install(feature: LanguageFeature, scope: HttpClient) {
 ```
 
 ### TokenFeature
-Эта фича к каждому запросу добавляет токен, например для авторизации, по ключу `tokenHeaderName`.    
+Эта фича к каждому запросу добавляет токен, например для авторизации, по ключу, которое вы укажите в `tokenHeaderName`, при настройке фичи. (обычно - authorization)    
 Для использования фичи необходимо реализовать метод получения токена - `getToken()`.
 ```kotlin
 override fun install(feature: TokenFeature, scope: HttpClient) {

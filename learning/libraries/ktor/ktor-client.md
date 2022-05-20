@@ -219,3 +219,6 @@ httpClient.put<String> {
 ```
 
 Про разницу типов содержимого более подробно можно прочитать по этой [ссылке](https://russianblogs.com/article/2287567080/)
+
+## Загрузка файлов 
+Ознакомьтесь с [документацией](https://ktor.io/docs/response.html#streaming) Ktor и [статьей](https://blog.kotlin-academy.com/download-files-with-ktor-and-coroutines-e96b1cc8b657) про загрузку файлов, используя Ktor.
