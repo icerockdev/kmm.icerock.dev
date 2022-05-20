@@ -343,3 +343,4 @@ class ViewController: UIViewController {
  - [Статическая/динамические библиотеки в iOS ](https://russianblogs.com/article/71841604682/)
  - [Введение в статические и динамические библиотеки и фреймворки на iOS](https://bpoplauschi.github.io/2021/10/24/Intro-to-static-and-dynamic-libraries-frameworks.html)
 
+<div style={{textAlign:"right"}}>Автор: <a href="https://github.com/kramlex">@kramlex</a></div>
