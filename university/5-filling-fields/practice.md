@@ -6,7 +6,7 @@ sidebar_position: 5
 Необходимо добавить новый функционал в ваше приложение, готовое после 4ого блока.
 Предлагаем сделать возможность создавать issue к репозиторию, с экрана детальной информации.
 
-Во время работы над практическим заданием настоятельно рекомендуем обращаться к разделу [Памятки для разработчика](/university/memos/function)
+Во время работы над практическим заданием настоятельно рекомендуем обращаться к разделу [Памятки для разработчика](../memos/function)
 
 ## Функциональные требования
 1. Добавьте в ваше Github-приложение новый экран - создание issue, используйте. Экран должен содержать:
@@ -27,3 +27,5 @@ sidebar_position: 5
 ## Материалы
 1. [GitHub Issues API](https://docs.github.com/en/rest/issues/issues#about-the-issues-api)
 1. [422 Unprocessable Entity response](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#client-errors)
+1. [Дизайн Android](https://www.figma.com/file/Mh3ga5XAzyJNCY87NBp01G/Git_test-Android?node-id=4426%3A4427)
+1. [Дизайн iOS](https://www.figma.com/file/XmpoCqkdWTGb2NGdR2bgiQ/Git_test-iOS?node-id=1532%3A1724)

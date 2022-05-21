@@ -64,7 +64,7 @@ class MainViewModel : ViewModel() {
 }
 ```
 
-Ознакомьтесь детальнее с ней по материалам на странице [moko-resources](/learning/libraries/moko/moko-resources).
+Ознакомьтесь детальнее с ней по материалам на странице [moko-resources](../../learning/libraries/moko/moko-resources).
 
 ### Подключение и настройка:
 

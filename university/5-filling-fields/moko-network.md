@@ -27,7 +27,7 @@ sidebar_position: 4
 ]
 ```
 
-Если создавать новый проект, используя [шаблон](/university/icerock-basics/mobile-moko-boilerplate) то там уже будет готовый httpClient, с настроенной ExceptionFactory, использующей как раз парсеры из библиотеки - дефолтный ErrorExceptionParser и ValidationExceptionParser для ошибок валидации.
+Если создавать новый проект, используя [шаблон](../icerock-basics/mobile-moko-boilerplate) то там уже будет готовый httpClient, с настроенной ExceptionFactory, использующей как раз парсеры из библиотеки - дефолтный ErrorExceptionParser и ValidationExceptionParser для ошибок валидации.
 
 Для создания собственного парсера необходимо: 
 - создать класс-наследник интерфейса HttpExceptionFactory.HttpExceptionParser

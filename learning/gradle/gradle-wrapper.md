@@ -81,7 +81,7 @@ zipStoreBase=GRADLE_USER_HOME
 zipStorePath=wrapper/dists
 ```
 
-Про обновление версий Gradle вы можете прочитать [тут](/learning/gradle/updating-versions#gradle).
+Про обновление версий Gradle вы можете прочитать [тут](./updating-versions#gradle).
 
 ## Материалы
 

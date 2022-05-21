@@ -7,7 +7,7 @@ sidebar_position: 6
 Нужно разработать android приложение для просмотра GitHub репозиториев.
 
 Во время работы над практическим заданием настоятельно рекомендуем обращаться к
-разделу [Памятки для разработчика](/university/memos/function)
+разделу [Памятки для разработчика](../../university/memos/function)
 
 ## Кликабельный прототип
 
@@ -32,6 +32,7 @@ sidebar_position: 6
 1. Использовать RecyclerView для отображения списка
 1. Использовать ConstraintLayout для экрана детальной информации
 1. Использовать Android Navigation Component для переходов между экранами
+1. Использовать View Binding для связывания верстки с кодом
 1. Экраны делать с помощью Fragment (подход Single Activity)
 1. Использовать Coroutines для асинхронности и многопоточности
 1. Использовать [Kotlinx.Serialization](https://github.com/Kotlin/kotlinx.serialization) для парсинга json
