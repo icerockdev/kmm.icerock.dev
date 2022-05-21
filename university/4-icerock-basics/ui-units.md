@@ -31,9 +31,7 @@ sidebar_position: 6
 
 Посмотрите видео материал с подробным пояснением причин обобщения реализации между платформами и принципами работы.
 
-<iframe src="//www.youtube.com/embed/ES6lHIwp5Jw?list=PL6yFiPOVXVUi90sQ66dtmuXP-1-TeHwl5" frameborder="0" allowfullscreen width="675" height="380"></iframe> 
-
-После ознакомления с видео материалом - дополните свои знания материалами со страницы [moko-units в базе знаний](../../learning/libraries/moko/moko-units/).
+<iframe src="//www.youtube.com/embed/ES6lHIwp5Jw?list=PL6yFiPOVXVUi90sQ66dtmuXP-1-TeHwl5" frameborder="0" allowfullscreen width="675" height="380"></iframe>
 
 ## Практическая задача
 
