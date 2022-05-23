@@ -19,7 +19,7 @@
   - [Cancellation and timeouts](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
     - Beginner   
       - `Job`, `cancel`, `cancelAndJoin`, `isActive`, `yield`, `NonCancellable`, `withTimeout`, `withTimeoutOrNull`, `CancellationException`, `TimeoutCancellationException`
-      - в корутине нужно проверять, хотят ли её отменить    
+      - в корутине нужно проверять, хотят ли её отменить
       - проверка на отмену происходит в каждом suspension point, чтобы проверять чаще используйте: isActive, yield (Making computation code cancellable)
       - пример правильной и неправильной отмены корутины (Cancellation is cooperative)
       - работа корутины по time-out (Timeout)  
@@ -328,6 +328,52 @@ suspend fun doSomeParallelWork() {
 (вызовом `CoroutineScope`), либо используется `GlobalScope`, который не имеет ограничения жизненного
 цикла - живет все время жизни процесса приложения, поэтому не рекомендуется к использованию без
 твердой уверенности что это верно.   
+
+#### Использование async
+
+При запуске асинхронных задач (вызов `async`) важно учитывать, что возникновение ошибки внутри задачи будет вызывать отмену текущего Scope. Поэтому важно запускать дочерний скоуп используя `coroutineScope` для выполнения асинхронных задач - тогда ошибка выполнения этих задач не сломает основной `CoroutineScope`, а будет выброшена как результат `coroutineScope` и сможет обработаться `try-catch`.
+
+Например в [следующем коде](https://pl.kotl.in/jAbDHCZMJ):
+```kotlin
+suspend fun main() {
+    coroutineScope {
+        launch {
+            try {
+                listOf<Deferred<Unit>>(
+                    async { TODO() },
+                    async { TODO() }
+                ).awaitAll()
+            } catch(exc: Throwable) {
+                println(exc.stackTraceToString())
+            }
+        }
+    }
+}
+```
+
+Блок `catch` не отловит ошибку, произойдет вылет приложения.
+
+[Исправленный вариант](https://pl.kotl.in/FE39k7QR-):
+```kotlin
+suspend fun main() {
+    coroutineScope {
+        launch {
+            try {
+                coroutineScope {
+                    listOf<Deferred<Unit>>(
+                        async { TODO() },
+                        async { TODO() }
+                    ).awaitAll()
+                }
+            } catch(exc: Throwable) {
+                println(exc.stackTraceToString())
+            }
+        }
+    }
+}
+```
+
+`coroutineScope` это suspend-функция, которая создаёт новый скоуп и идёт дальше только после его завершения и не привязывается к родительскому скоупу. Когда скоуп, созданный `coroutineScope`, упал, падает сама suspend-функция, а не весь родительский scope.
 
 ### CoroutineContext
 Корутина, запущенная другой, наследует весь контекст той, внутри которой она запустилась и становится для нее дочерней.

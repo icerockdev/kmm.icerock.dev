@@ -15,6 +15,7 @@ module.exports = {
   //   defaultLocale: 'ru',
   //   locales: ['ru', 'en'],
   // },
+  trailingSlash: false,
   themeConfig: {
     navbar: {
       title: 'Home',
@@ -144,9 +145,6 @@ module.exports = {
       ],
       copyright: `Copyright © ${new Date().getFullYear()} IceRock Development. Built with Docusaurus.`,
     },
-    gtag: {
-      trackingID: 'G-91G2XYQTXS',
-    },
     prism: {
       additionalLanguages: ['kotlin', 'swift'],
     },
@@ -185,7 +183,12 @@ module.exports = {
       },
     ],
     require.resolve('@docusaurus/plugin-content-pages'),
-    isProd && require.resolve('@docusaurus/plugin-google-gtag'),
+    [
+      '@docusaurus/plugin-google-gtag',
+      {
+        trackingID: 'G-91G2XYQTXS',
+      },
+    ],
     isProd && require.resolve('@docusaurus/plugin-sitemap')
   ],
   themes: [

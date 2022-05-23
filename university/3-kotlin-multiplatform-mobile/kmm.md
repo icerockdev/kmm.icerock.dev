@@ -11,6 +11,7 @@ sidebar_position: 1
 
 1. Знакомство с KMM начните с официальных [видео](https://www.youtube.com/playlist?list=PLlFc5cFwUnmy_oVc9YQzjasSNoAk4hk_C) для начинающих 
 1. Создайте свое первое мультиплатформенное приложение по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html)
+   - для iOS автоматически будет создано приложение на SwiftUI, [памятка](../memos/swiftui-to-uikit) по переходу на UIKit
 1. Разберитесь со структурой KMM приложения по [ссылке](https://kotlinlang.org/docs/kmm-understand-project-structure.html)
 1. [Кодлаба](https://kotlinlang.org/docs/kmm-integrate-in-existing-app.html) про изменение готового Android-приложения для работы с iOS
 1. [Инструкция](https://kotlinlang.org/docs/kmm-add-dependencies.html) по добавлению зависимостей к KMM модулю

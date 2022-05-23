@@ -47,7 +47,7 @@ sidebar_position: 3
 
 Когда мы нажимаем на кнопку Run в Xcode, начинается процесс сборки как и у любого другого iOS приложения через сам Xcode. Наш Xcode проект имеет зависимость на CocoaPod `MultiPlatformLibrary`, поэтому при компиляции приложения начнется и компиляция `MultiPlatformLibrary`.
 
-Узнать подробнее о том, как происходит компиляция этой зависимости и подключение сторонних подов, вы можете в [разделе обучения](/learning/ios/pods).
+Узнать подробнее о том, как происходит компиляция этой зависимости и подключение сторонних подов, вы можете в [разделе обучения](../learning/ios/pods).
 
 После того, как локальный под будет скомпилирова, а все остальные зависимости "подцеплены" нашим приложением, произойдет запуск.  
 
@@ -90,17 +90,17 @@ README.md
 Следующая важная составляющая нашего проекта - корневой gradle проект. Как было сказано ранее - для сборки обеих платформ используется gradle. Для android только он, а для ios gradle является одной из билдсистем. Корневая директория нашего проекта по сути и является корневым gradle проектом. `android-app` и `mpp-library` подключаются к этому коревому проекту как подпроекты.
 
 К коревому gradle проекту относятся:
-- `build-logic` - [композитно](/learning/gradle/composite-build) подключенный проект, несущий в себе логику сборки остальных подпроектов;
+- `build-logic` - [композитно](../learning/gradle/composite-build) подключенный проект, несущий в себе логику сборки остальных подпроектов;
 - `gradle.properties` - опции запуска gradle проекта;
 - `settings.gradle.kts` - файл настроек;
 - `build.gradle.kts` - файл конфигурации сборки.
-- `gradle` - директория [Gradle Wrapper'а](/learning/gradle/gradle-wrapper) - специального скрипта, который автоматизирует процесс установки нужной версии gradle.
+- `gradle` - директория [Gradle Wrapper'а](../learning/gradle/gradle-wrapper) - специального скрипта, который автоматизирует процесс установки нужной версии gradle.
   
-О том как обновить версию Gradle в проекте вы можете прочитать в [специальном разделе обучения](/learning/gradle/updating-versions). 
+О том как обновить версию Gradle в проекте вы можете прочитать в [специальном разделе обучения](../learning/gradle/updating-versions). 
 
 Больше файлов относящихся непосредственно к коревому gradle проекту в репозитории нет.
 
-### [buildSrc](/learning/gradle/buildSrc) (устарело, но бывает на проектах)
+### [buildSrc](../learning/gradle/buildSrc) (устарело, но бывает на проектах)
 
 :::caution
 
@@ -282,7 +282,7 @@ hiltCompiler = { module = "com.google.dagger:hilt-android-compiler", version.ref
 enableFeaturePreview("VERSION_CATALOGS")
 ```
 
-Больше информации о Version Catalogs можете найти [тут](/learning/gradle/version-catalogs).
+Больше информации о Version Catalogs можете найти [тут](../learning/gradle/version-catalogs).
 
 
 :::note
@@ -293,9 +293,9 @@ enableFeaturePreview("VERSION_CATALOGS")
 
 ### build-logic
 
-`build-logic` - [композитный](/learning/gradle/composite-build) проект. Он предназначен для реализации логики сборки, не привязанной к конкретному gradle модулю.
+`build-logic` - [композитный](../learning/gradle/composite-build) проект. Он предназначен для реализации логики сборки, не привязанной к конкретному gradle модулю.
 
-В этой директории можно увидеть собственный `build.gradle.kts` и исходный код библиотеки. `build.gradle.kts` определяет как будет собираться данная библиотека и какие зависимости ей требуются. Исходный код библиотеки в нашем композитном билде содержит [convention plugins](/learning/gradle/convention-plugins), нужные для сборки основного Gradle проекта.
+В этой директории можно увидеть собственный `build.gradle.kts` и исходный код библиотеки. `build.gradle.kts` определяет как будет собираться данная библиотека и какие зависимости ей требуются. Исходный код библиотеки в нашем композитном билде содержит [convention plugins](../learning/gradle/convention-plugins), нужные для сборки основного Gradle проекта.
 
 Внутри `build.gradle.kts` объявлены нужные зависимости:
 
@@ -337,7 +337,7 @@ VERSION_CODE=1
 xcodeproj=ios-app/ios-app.xcworkspace
 ```
 
-Более подробней о параметрах Gradle вы можете прочитать в [разделе обучения](/learning/gradle/build-environment).
+Более подробней о параметрах Gradle вы можете прочитать в [разделе обучения](../learning/gradle/build-environment).
 
 ### settings.gradle.kts
 
@@ -429,7 +429,7 @@ tasks.register("clean", Delete::class).configure {
     delete(rootProject.buildDir)
 }
 ```
-Подробнее о конфигурациях зависимостей вы можете прочитать в [разделе обучения](/learning/gradle/configuration).
+Подробнее о конфигурациях зависимостей вы можете прочитать в [разделе обучения](../learning/gradle/configuration).
 ## mpp-library
 
 ![mpp library folder](project-inside/project-inside-mpp-lib.png)
@@ -564,7 +564,7 @@ mokoNetwork {
 
 ### MultiplatformLibrary.podscpec
 
-Более подробно об этом файле вы можете прочитать [тут](/learning/ios/pods#podspec).
+Более подробно об этом файле вы можете прочитать [тут](../learning/ios/pods#podspec).
 
 ### src
 В папке `srс` находится исходный код общей библиотеки.
@@ -831,7 +831,7 @@ class MainApplication : Application() {
 
 ### Навигация в Android
 
-Для того, чтобы понять как устроена навигация в Android приложении можете ознакомиться с соответствующей статьей в [разделе обучения](/learning/android/navigation).
+Для того, чтобы понять как устроена навигация в Android приложении можете ознакомиться с соответствующей статьей в [разделе обучения](../learning/android/navigation).
 
 ## ios-app
 
@@ -849,7 +849,7 @@ class MainApplication : Application() {
 -  `Resources` - директория с ресурсами (например, R.swift и прочее);
 -  `Feature` - директория с фичами (еще не создана);
 
-В директории `BuildConfigurations` лежат файлы конфигурации сборки проекта, подробнее о них вы можете прочитать [тут](/learning/ios/configuration).
+В директории `BuildConfigurations` лежат файлы конфигурации сборки проекта, подробнее о них вы можете прочитать [тут](../learning/ios/configuration).
 
 ### Входная точка приложения
 
@@ -915,7 +915,7 @@ class AppComponent {
 
 Мы поняли что является отправной точкой нашего приложения, а теперь нам нужно понять как построена навигация в iOS приложение и какие подходы при работе с ней мы используем.
 
-Для этого можете ознакомиться со [статьей в разделе обучения](/learning/ios/navigation).
+Для этого можете ознакомиться со [статьей в разделе обучения](../learning/ios/navigation).
 
 ## master.sh
 

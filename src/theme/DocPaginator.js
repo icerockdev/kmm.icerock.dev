@@ -7,24 +7,27 @@
 
 import OriginalDocPaginator from '@theme-original/DocPaginator';
 import { DiscussionEmbed } from 'disqus-react';
+import BrowserOnly from '@docusaurus/BrowserOnly';
 import React from 'react';
 
 export default function DocPaginator(props) {
-    const metadata = props.metadata;
-    const fmtId = metadata.permalink.replace(/^\//, '').replace(/[\s\/]/gi, '-');
-    const disqusId = fmtId == '' ? 'main' : fmtId;
-
     return (
         <>
             <OriginalDocPaginator {...props} />
             <br/>
-            <DiscussionEmbed
-                shortname='kmm-icerock-dev'
-                config={{
-                    url: 'https://kmm.icerock.dev/' + metadata.permalink,
-                    identifier: disqusId,
+            <BrowserOnly>
+                { () => {
+                    const fmtId = window.location.href.replace(/^\//, '').replace(/[\s\/]/gi, '-');
+                    const disqusId = fmtId == '' ? 'main' : fmtId;
+                    <DiscussionEmbed
+                        shortname='kmm-icerock-dev'
+                        config={{
+                            url: window.location.href,
+                            identifier: disqusId,
+                        }}
+                    />
                 }}
-            />
+            </BrowserOnly>
         </>
     );
 }
