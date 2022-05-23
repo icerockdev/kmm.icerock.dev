@@ -7,6 +7,10 @@ sidebar_position: 5
 Библиотека [moko-paging](https://github.com/icerockdev/moko-paging) позволяет загружать
 список элементов, используя пагинацию.
 
+<iframe src="//www.youtube.com/embed/RoOBA0wuxyo" frameborder="0" allowfullscreen width="675" height="380"></iframe>
+<br/>
+<br/>
+
 ## Основные компоненты
 
 Главным компонентов является класс `Pagination`.
