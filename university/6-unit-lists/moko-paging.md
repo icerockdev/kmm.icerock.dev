@@ -5,7 +5,7 @@ sidebar_position: 3
 # moko-paging
 
 ## moko-paging
-посмотрите ***видео*** и изучите [страницу](/learning/libraries/moko/moko-paging) библиотеки в базе знаний.
+Изучите [страницу](/learning/libraries/moko/moko-paging) библиотеки в базе знаний.
 
 ## moko-mvvm-state
 
