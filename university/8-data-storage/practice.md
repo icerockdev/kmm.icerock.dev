@@ -3,7 +3,6 @@ sidebar_position: 4
 ---
 
 # Практическое задание
-В этом прак
 Добавьте в ваше приложение реактивный источник данных, используя базу данных SQLDelight, храните в ней данные о репозиториях.
 
 Во время работы над практическим заданием настоятельно рекомендуем обращаться к разделу [Памятки для разработчика](../memos/function)
@@ -19,7 +18,7 @@ sidebar_position: 4
 2. Использовать `okio` для работы с файлами в общем коде
 
 ## Материалы
-[okio](https://github.com/square/okio)
-[Документация](https://square.github.io/okio/3.x/okio/okio/okio/) okio
-[SQLDelight](https://cashapp.github.io/sqldelight/)
-[SQLDelight Getting Started with Multiplatform](https://cashapp.github.io/sqldelight/multiplatform_sqlite/)
+1. [okio](https://github.com/square/okio)
+2. [Документация](https://square.github.io/okio/3.x/okio/okio/okio/) okio
+3. [SQLDelight](https://cashapp.github.io/sqldelight/)
+4. SQLDelight [Getting Started with Multiplatform](https://cashapp.github.io/sqldelight/multiplatform_sqlite/)

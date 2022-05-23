@@ -162,4 +162,4 @@ val currentShip: LiveData<Ship?> = repository.getShipById(id).asLiveData(viewMod
 Например: в источнике данных обновился `rating` корабля с идентификатором `id` - он автоматически обновится на всех экранах, где мы его отображаем, потому что результат `repository.getShipById(id)` - это `Flow`, а мы на него подписались.
 
 ## Практическое задание
-Подключите базу данных [SQLDelight](https://cashapp.github.io/sqldelight/) к вашему приложению
+Подключите базу данных [SQLDelight](https://cashapp.github.io/sqldelight/) к вашему приложению.
