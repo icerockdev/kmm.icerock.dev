@@ -12,7 +12,6 @@ sidebar_position: 5
 ## Функциональные требования
 1. Добавьте в ваше Github-приложение новый экран - список issue, экран должен содержать:
     - пагинированный список issues репозитория
-    - экран просмотра issue
     - кнопку `Create issue` переместить с экрана детальной информации о репозитории на экран списка issues
 
 ## Технические требования
@@ -23,4 +22,5 @@ sidebar_position: 5
 
 ## Материалы
 1. [GitHub Issues API](https://docs.github.com/en/rest/issues/issues#about-the-issues-api)
-2. ***Дизайн***
+1. [Дизайн Android](https://www.figma.com/file/Mh3ga5XAzyJNCY87NBp01G/Git_test-Android?node-id=5224%3A4137)
+1. [Дизайн iOS](https://www.figma.com/file/XmpoCqkdWTGb2NGdR2bgiQ/Git_test-iOS?node-id=1753%3A1777)
