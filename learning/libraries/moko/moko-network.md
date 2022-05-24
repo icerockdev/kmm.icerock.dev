@@ -7,7 +7,28 @@ sidebar_position: 9
 ## moko-network
 Библиотека [moko-network](https://github.com/icerockdev/moko-network) - позволяет генерировать сущности и API классы из OpenAPI (Swagger) файлов. 
 
-***ВИДОСИК***
+<iframe src="//www.youtube.com/embed/98r5muoeO7U" frameborder="0" allowfullscreen width="675" height="380"></iframe>
+<br/>
+<br/>
+
+## moko-network-errors
+Библиотека `moko-network` содержит внутри себя модуль `moko-network-errors` - интеграцию с `moko-errors`, чтобы удобно обрабатывать ошибки сети. 
+Для начала, ознакомьтесь с этим модулем по [README](https://github.com/icerockdev/moko-network#moko-network-errors).
+
+Для использования этого модуля, проделайте следующие действия:
+1. Подключить его в project.build.gradle: `commonMainApi("dev.icerock.moko:network-errors:$mokoNetworkVersion")`
+2. Вызвать метод для регистрации основных ошибок сети: `ExceptionMappersStorage.registerAllNetworkMappers()`, его реализацию можете посмотреть [тут](https://github.com/icerockdev/moko-network/blob/0f8459ff2d51c6b7cade0cadd6d11066b7a55d60/network-errors/src/commonMain/kotlin/dev/icerock/moko/network/errors/NetworkExceptionMappers.kt#L27). 
+    - Если вы хотите изменить текст при основных ошибках сети - переопределите параметр `errorsTexts` метода `registerAllNetworkMappers`.
+    - Если вы хотите добавить обработку другого класса ошибок, используйте `ExceptionMappersStorage.register` - [метод](https://github.com/icerockdev/moko-errors/blob/8bfccf376ccbbcf1b87a7522d08df182143f0cf3/errors/src/commonMain/kotlin/dev/icerock/moko/errors/mappers/ExceptionMappersStorage.kt#L31) из `moko-errors`.
+3. Используйте `exceptionHandler` для автоматической обработки ошибок сети:
+   ```kotlin
+   viewModelScope.launch {
+      exceptionHandler.handle {
+         api.mareTestRequest()
+         // ...
+      }.execute()
+   }
+   ```
 
 ## Features
 Библиотека `moko-network` содержит в себе фичи - классы, реализующие интерфейс `HttpClientFeature` из Ktor.  
