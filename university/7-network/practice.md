@@ -26,5 +26,5 @@ sidebar_position: 6
 ## Материалы
 1. [GitHub Issues API](https://docs.github.com/en/rest/issues/issues#about-the-issues-api)
 2. [ImageBB API](https://api.imgbb.com/)
-3. ***ДОБАВИТЬ Дизайн Android***
-4. ***ДОБАВИТЬ Дизайн iOS***
+3. [Дизайн Android](https://www.figma.com/file/Mh3ga5XAzyJNCY87NBp01G/Git_test-Android?node-id=5364%3A4308)
+4. [Дизайн iOS](https://www.figma.com/file/XmpoCqkdWTGb2NGdR2bgiQ/Git_test-iOS?node-id=1816%3A1750)
