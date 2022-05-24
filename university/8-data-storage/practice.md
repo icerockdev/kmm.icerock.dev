@@ -10,15 +10,20 @@ sidebar_position: 4
 ## Функциональные требования
 - Данные о репозиториях должны храниться в базе данных
 - Данные о репозиториях должны реактивно обновляться
-- Обновлять данные о репозитории раз в N секунд, все остальное время брать из БД
 - Вынести работу с файлами(добавление картинки к issue) в общий код
+- Возможность сделать pull-to-refresh на экране детального вида репозитория
 
 ## Технические требования
 1. Использовать `SQLDelight` базу данных
-2. Использовать `okio` для работы с файлами в общем коде
+2. Использовать миграции для обновления структуры базы данных
+3. Использовать `okio` для работы с файлами в общем коде
+
+## Test cases
+На экране детального просмотра репозитория видим N звездочек. Заходим на сайт GitHub - ставим там этому репозиторию звездочку, делаем на экране pull-to-refresh - видим N+1 звездочек. Возвращаемся на экран списка репозиториев - там количество звездочек также обновилось.  
 
 ## Материалы
 1. [okio](https://github.com/square/okio)
 2. [Документация](https://square.github.io/okio/3.x/okio/okio/okio/) okio
 3. [SQLDelight](https://cashapp.github.io/sqldelight/)
-4. SQLDelight [Getting Started with Multiplatform](https://cashapp.github.io/sqldelight/multiplatform_sqlite/)
+4. [SQLDelight Getting Started with Multiplatform](https://cashapp.github.io/sqldelight/multiplatform_sqlite/)
+5. [SQLDelight Migrations](https://cashapp.github.io/sqldelight/jvm_sqlite/migrations/)

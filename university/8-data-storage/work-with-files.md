@@ -10,4 +10,4 @@ sidebar_position: 3
 Изучите документацию по [подключению](https://square.github.io/okio/multiplatform/#gradle-configuration) и [использованию](https://square.github.io/okio/file_system/) `okio` в общем коде.
 
 ## Практическое задание
-Вынесите логику работы с файлами в общий код, используя библиотеку `okio`.
+Вынесите логику работы с файлами (для добавления картинки к issue) в общий код, используя библиотеку `okio`.

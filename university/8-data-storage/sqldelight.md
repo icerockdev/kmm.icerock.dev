@@ -2,7 +2,17 @@
 sidebar_position: 2
 ---
 
-# SqlDelight
+# SQLDelight
+
+## SQLDelight
+
+[SQLDelight](https://cashapp.github.io/sqldelight/multiplatform_sqlite/) - это библиотека для удобной работы с БД в общем коде. Она позволяет генерировать классы и методы для работы с базой данных.
+
+Статьи для пошаговой настройки библиотеки:
+- [Configuring SQLDelight and implementing cache logic](https://play.kotlinlang.org/hands-on/Networking%20and%20Data%20Storage%20with%20Kotlin%20Multiplatfrom%20Mobile/05_Configuring_SQLDelight_an_implementing_cache) от Kotlin
+- [Настройка SQLDelight для хранения данных](https://runebook.dev/ru/docs/kotlin/docs/kmm-configure-sqldelight-for-data-storage)
+
+Изучите [что такое миграции](https://ru.stackoverflow.com/questions/325882/%D0%97%D0%B0%D1%87%D0%B5%D0%BC-%D0%BD%D1%83%D0%B6%D0%BD%D1%8B-%D0%BC%D0%B8%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D0%B8) и [прочитайте](https://cashapp.github.io/sqldelight/jvm_sqlite/migrations/) как их создавать в SQLDelight.
 
 ## Реактивный источник данных c SQLDelight
 
@@ -162,4 +172,12 @@ val currentShip: LiveData<Ship?> = repository.getShipById(id).asLiveData(viewMod
 Например: в источнике данных обновился `rating` корабля с идентификатором `id` - он автоматически обновится на всех экранах, где мы его отображаем, потому что результат `repository.getShipById(id)` - это `Flow`, а мы на него подписались.
 
 ## Практическое задание
-Подключите базу данных [SQLDelight](https://cashapp.github.io/sqldelight/) к вашему приложению.
+Подключите базу данных [SQLDelight](https://cashapp.github.io/sqldelight/multiplatform_sqlite/) к вашему приложению, выполните следующие условия: 
+  - Создание БД должно происходить в `SharedFactory`
+  - Доступ к БД должен быть только у репозитория 
+  - Создайте таблицу - `RepoTable` с двумя столбцами: id и testMessage
+  - Создайте метод для добавления записи в БД
+  - Создайте метод для получения всех записей в БД
+  - Протестируйте работоспособность вашей БД
+
+Главно - чтобы проект запустился и заработал на обеих платформах, дальше в практике мы заполним БД.
