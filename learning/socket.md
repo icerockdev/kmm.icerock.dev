@@ -49,7 +49,7 @@ Web Socket. Что это такое? Как с этим жить? - [видео
 
 [Использование](https://socket.io/blog/native-socket-io-and-android/) SocketIO на Android.
 
-Если ваш сервер использует SocketIO, то вы также можете использовать библиотеку [moko-soсket-io](../../learning/libraries/moko/moko-socket-io) на стороне клиента.  
+Если ваш сервер использует SocketIO, то вы также можете использовать библиотеку [moko-soсket-io](../learning/libraries/moko/moko-socket-io) на стороне клиента.  
 
 [Страница](https://myrusakov.ru/long-polling-websockets-sse-and-comet.html) про запросы, с картинками.
 
