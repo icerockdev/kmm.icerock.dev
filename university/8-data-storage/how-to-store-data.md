@@ -50,4 +50,4 @@ sidebar_position: 1
 
 ## Отличия Sql от NoSql
 Прочитайте [статью](https://smoff.ru/howitworks/otlichiya-sql-nosql) про разницу между SQL и NoSQL базами данных.  
-Пример реляционной базы данных - [SQLDelight](https://cashapp.github.io/sqldelight/multiplatform_sqlite/), нереляционной - [MongoDB Realm](https://www.mongodb.com/docs/realm/get-started/introduction-mobile/) ([описание](https://github.com/realm/realm-kotlin))
+Пример реляционной базы данных - [SQLDelight](https://github.com/cashapp/sqldelight/) ([описание](https://cashapp.github.io/sqldelight/multiplatform_sqlite/)), нереляционной - [MongoDB Realm](https://github.com/realm/realm-kotlin) ([описание](https://www.mongodb.com/docs/realm/get-started/introduction-mobile/))
