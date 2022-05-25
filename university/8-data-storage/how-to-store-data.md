@@ -49,5 +49,5 @@ sidebar_position: 1
 Большие файлы должны сохраняться как файлы, чтобы их можно было читать и записывать потоково, чтобы не забивать оперативную память устройства. Читать и записывать потоково в БД мы не можем, а в файл - можем.
 
 ## Отличия Sql от NoSql
-Прочитайте [статью](https://smoff.ru/howitworks/otlichiya-sql-nosql) про разницу между SQL и NoSQL базами данных.
-Пример реляционной базы данных - [SQLDelight](https://cashapp.github.io/sqldelight/multiplatform_sqlite/), нереляционной - [GitHub](https://github.com/realm/realm-kotlin) [MongoDB Realm](https://www.mongodb.com/docs/realm/get-started/introduction-mobile/).
+Прочитайте [статью](https://smoff.ru/howitworks/otlichiya-sql-nosql) про разницу между SQL и NoSQL базами данных.  
+Пример реляционной базы данных - [SQLDelight](https://cashapp.github.io/sqldelight/multiplatform_sqlite/), нереляционной - [MongoDB Realm](https://www.mongodb.com/docs/realm/get-started/introduction-mobile/) ([описание](https://github.com/realm/realm-kotlin))
