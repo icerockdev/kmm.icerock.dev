@@ -4,8 +4,45 @@ sidebar_position: 2
 
 # moko-permissions
 
-## Получение разрешений на Andrdid
+**moko-permissions** - библиотека для работы с разрешениями из общего кода.  
+Прежде чем мы перейдем к ее изучению, разберем то, как получать разрешения на каждой платформе по отдельности.
+
+## Получение разрешений на Android
+Изучите раздел [Permissions](https://developer.android.com/guide/topics/permissions/overview) из документации, вы узнаете: 
+- Какие бывают типы разрешений
+- Как объявлять необходимые приложению разрешения
+- Как запрашивать разрешения 
+- Что такое one-time разрешения
 
 ## Получение разрешений на iOS
+Для начала, изучите раздел [Accessing User Data and Resources](https://developer.apple.com/design/human-interface-guidelines/ios/app-architecture/accessing-user-data/).
 
-## Получение разрешений c moko-permissons
+На iOS доступ к разрешениям не так структурирован, как на Android. Получение конкретного разрешения связано, как правило, с конкретным классом, например: 
+- [Notifications](https://developer.apple.com/documentation/usernotifications/asking_permission_to_use_notifications)
+- [Media Capture](https://developer.apple.com/documentation/avfoundation/cameras_and_media_capture/requesting_authorization_for_media_capture_on_ios)
+- [Location Services](https://developer.apple.com/documentation/corelocation/requesting_authorization_for_location_services)
+
+## Получение разрешений c moko-permissions
+Теперь, когда вы знакомы с тем, как работать с разрешениями в общем коде, разберем библиотеку [moko-permissions](https://github.com/icerockdev/moko-permissions), которая упростит получение и работу с разрешениями в общем коде.  
+Для начала, ознакомьтесь с [Readme](https://github.com/icerockdev/moko-permissions#mobile-kotlin-runtime-permissions-multiplatform-controller) библиотеки.  
+[Список разрешений](https://github.com/icerockdev/moko-permissions#mobile-kotlin-runtime-permissions-multiplatform-controller), которые позволяет получить библиотека.
+
+## Denied and DeniedAlways
+Результаты запроса разрешения на Android могут быть следующие:
+- Granted - разрешение получено
+- Denied - для текущей сессии разрешение не получено, можно запросить повторно в следующей сессии
+  - в случае непредоставления разрешения в следующий раз, после denied - оно перейдет в состояние DeniedAlways
+- DeniedAlways - для всего приложения разрешение не предоставлено, системным запросом разрешение больше не получить.
+  - сразу можно установить, если поставить флаг: "Больше не показывать"
+
+Также, на iOS, в отличие от Android состояния разрешения бывают только granted и  always denied. Из always denied переход в granted также возможен только в настройках приложения.
+
+Из случая DeniedAlways установить разрешение в Granted можно только в настройках приложения. Поэтому, нужно направлять юзера туда и уточнять, что именно ему нужно сделать.
+
+Чтобы получше разобраться, в каких случаях результат запроса будет Denied, а в каких DeniedAlways, предлагаем вам запустить sample библиотеки и протестировать самостоятельно.
+
+## Практическое задание
+Логику получения разрешений в общем коде вы сделаете в финальном практическом задании, а пока: 
+- подключите к вашему проекту библиотеку moko-permissions
+- дополните viewModel, которая отвечает за работу с файлами устройства
+- настройте iOS и Android приложения
