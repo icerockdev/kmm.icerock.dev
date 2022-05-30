@@ -25,7 +25,9 @@ sidebar_position: 2
 ## Получение разрешений c moko-permissions
 Теперь, когда вы знакомы с тем, как работать с разрешениями в общем коде, разберем библиотеку [moko-permissions](https://github.com/icerockdev/moko-permissions), которая упростит получение и работу с разрешениями в общем коде.  
 Для начала, ознакомьтесь с [Readme](https://github.com/icerockdev/moko-permissions#mobile-kotlin-runtime-permissions-multiplatform-controller) библиотеки.  
-[Список разрешений](https://github.com/icerockdev/moko-permissions#mobile-kotlin-runtime-permissions-multiplatform-controller), которые позволяет получить библиотека.
+[Список разрешений](https://github.com/icerockdev/moko-permissions#mobile-kotlin-runtime-permissions-multiplatform-controller), которые позволяет получить библиотека.  
+
+Изучите [страницу](../../learning/libraries/moko/moko-permissions) библиотеки в базе знаний.
 
 ## Denied and DeniedAlways
 Результаты запроса разрешения на Android могут быть следующие:
@@ -45,4 +47,4 @@ sidebar_position: 2
 Логику получения разрешений в общем коде вы сделаете в финальном практическом задании, а пока: 
 - подключите к вашему проекту библиотеку moko-permissions
 - дополните viewModel, которая отвечает за работу с файлами устройства
-- настройте iOS и Android приложения
+- настройте iOS и Android приложения, убедитесь, что поведение приложения не изменилось
