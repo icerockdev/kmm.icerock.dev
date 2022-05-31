@@ -7,21 +7,15 @@ sidebar_position: 4
 
 ## Android
 Работа с файлами на Android в библиотеке сделана стандартными средствами Android:
-- [MediaStore](https://developer.android.com/reference/android/provider/MediaStore) - предоставляет достууп к коллекции файлов
+- [Intent.ACTION_PICK](https://developer.android.com/reference/android/content/Intent#ACTION_PICK) и [Intent.ACTION_GET_CONTENT](https://developer.android.com/reference/android/content/Intent#ACTION_GET_CONTENT) [Intent(MediaStore.ACTION_IMAGE_CAPTURE)](https://developer.android.com/reference/kotlin/android/provider/MediaStore#action_image_capture) для выбора фото и видео из галереи или с камеры
+- [MaterialFilePicker](https://github.com/nbsp-team/MaterialFilePicker) - для доступа и отображения файловой системы
+- [MediaStore](https://developer.android.com/reference/android/provider/MediaStore) - предоставляет доступ к коллекции файлов
 - [MediaPlayer](https://developer.android.com/reference/android/media/MediaPlayer) - для воспроизведения аудио/видео файлов
 - [MediaMetadataRetriever](https://developer.android.com/reference/android/media/MediaMetadataRetriever) - предоставляет интерфейс для получения кадров из мультимедиа файла
 - и тд.
 
 ## iOS
 Для реализации iOS библиотека использует следующие 
-- [Core Graphics](https://developer.apple.com/documentation/coregraphics) - для рендеринга
 - [UIKit.UIGraphicsBeginImageContextWithOptions](https://developer.apple.com/documentation/uikit/1623912-uigraphicsbeginimagecontextwitho) - для создания битмапа на основе графического контента
 - [UIKit.UIGraphicsGetImageFromCurrentImageContext](https://developer.apple.com/documentation/uikit/1623924-uigraphicsgetimagefromcurrentima) - получение Image на основе битмапа
 - и тд
-
-## Практическое задание
-Логику получения картинок в общем коде вы переделаете в финальном практическом задании, а пока:
-- подключите к вашему проекту библиотеку moko-geo
-- дополните viewModel, которая отвечает за работу с файлами устройства
-- настройте iOS и Android приложения, убедитесь, что поведение приложения не изменилось
-

@@ -23,28 +23,8 @@ sidebar_position: 2
 - [Location Services](https://developer.apple.com/documentation/corelocation/requesting_authorization_for_location_services)
 
 ## Получение разрешений c moko-permissions
-Теперь, когда вы знакомы с тем, как работать с разрешениями в общем коде, разберем библиотеку [moko-permissions](https://github.com/icerockdev/moko-permissions), которая упростит получение и работу с разрешениями в общем коде.  
+Теперь, когда вы знакомы с тем, как работать с разрешениями на каждой платформе, разберем библиотеку [moko-permissions](https://github.com/icerockdev/moko-permissions), которая упростит получение и работу с разрешениями в общем коде.  
 Для начала, ознакомьтесь с [Readme](https://github.com/icerockdev/moko-permissions#mobile-kotlin-runtime-permissions-multiplatform-controller) библиотеки.  
 [Список разрешений](https://github.com/icerockdev/moko-permissions#mobile-kotlin-runtime-permissions-multiplatform-controller), которые позволяет получить библиотека.  
 
 Изучите [страницу](../../learning/libraries/moko/moko-permissions) библиотеки в базе знаний.
-
-## Denied and DeniedAlways
-Результаты запроса разрешения на Android могут быть следующие:
-- Granted - разрешение получено
-- Denied - для текущей сессии разрешение не получено, можно запросить повторно в следующей сессии
-  - в случае непредоставления разрешения в следующий раз, после denied - оно перейдет в состояние DeniedAlways
-- DeniedAlways - для всего приложения разрешение не предоставлено, системным запросом разрешение больше не получить.
-  - сразу можно установить, если поставить флаг: "Больше не показывать"
-
-Также, на iOS, в отличие от Android состояния разрешения бывают только granted и  always denied. Из always denied переход в granted также возможен только в настройках приложения.
-
-Из случая DeniedAlways установить разрешение в Granted можно только в настройках приложения. Поэтому, нужно направлять юзера туда и уточнять, что именно ему нужно сделать.
-
-Чтобы получше разобраться, в каких случаях результат запроса будет Denied, а в каких DeniedAlways, предлагаем вам запустить sample библиотеки и протестировать самостоятельно.
-
-## Практическое задание
-Логику получения разрешений в общем коде вы сделаете в финальном практическом задании, а пока: 
-- подключите к вашему проекту библиотеку moko-permissions
-- дополните viewModel, которая отвечает за работу с файлами устройства
-- настройте iOS и Android приложения, убедитесь, что поведение приложения не изменилось

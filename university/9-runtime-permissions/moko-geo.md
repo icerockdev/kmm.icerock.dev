@@ -8,9 +8,12 @@ sidebar_position: 3
 
 Изучите [страницу](../../learning/libraries/moko/moko-geo) библиотеки в базе знаний.
 
+Чтобы лучше понимать работу библиотеки, разберите то, как реализована работа с локаицей на платформах:
+
 ### Google Play services 
 Со стороны Android **moko-geo** использует [Google Play services](https://developers.google.com/android/guides/setup)  
-Для работы с объектом [Location](https://developer.android.com/reference/android/location/Location.html) используется класс [FusedLocationProviderClient](https://developers.google.com/android/reference/com/google/android/gms/location/FusedLocationProviderClient.html).
+[Get last known location](https://developer.android.com/training/location/retrieve-current) - просмотрите задачу про получение последней известной локации. 
 
 ### Core Location
-На iOS **moko-geo** работает с геолокацией при помощи [Core Location](https://developer.apple.com/documentation/corelocation).
+На iOS **moko-geo** работает с геолокацией при помощи [Core Location](https://developer.apple.com/documentation/corelocation).  
+Прочитайте [статью](https://levelup.gitconnected.com/core-location-setting-up-core-location-with-uikit-fc7980565b4f) про получение геолокации используя Core Location.
