@@ -4,11 +4,10 @@ sidebar_position: 3
 
 # moko-geo
 
-## moko-geo 
-
+## moko-geo
 Изучите [страницу](../../learning/libraries/moko/moko-geo) библиотеки в базе знаний.
 
-Чтобы лучше понимать работу библиотеки, разберите то, как реализована работа с локаицей на платформах:
+Чтобы лучше понимать работу библиотеки, разберите как реализована работа с локацией на каждой платформе.
 
 ### Google Play services 
 Со стороны Android **moko-geo** использует [Google Play services](https://developers.google.com/android/guides/setup)  

@@ -24,7 +24,7 @@ sidebar_position: 2
 
 ## Получение разрешений c moko-permissions
 Теперь, когда вы знакомы с тем, как работать с разрешениями на каждой платформе, разберем библиотеку [moko-permissions](https://github.com/icerockdev/moko-permissions), которая упростит получение и работу с разрешениями в общем коде.  
-Для начала, ознакомьтесь с [Readme](https://github.com/icerockdev/moko-permissions#mobile-kotlin-runtime-permissions-multiplatform-controller) библиотеки.  
-[Список разрешений](https://github.com/icerockdev/moko-permissions#mobile-kotlin-runtime-permissions-multiplatform-controller), которые позволяет получить библиотека.  
+Для начала, ознакомьтесь с [Readme](https://github.com/icerockdev/moko-permissions#readme) библиотеки.  
+[Список разрешений](https://github.com/icerockdev/moko-permissions#list-of-supported-permissions), которые позволяет получить библиотека.  
 
 Изучите [страницу](../../learning/libraries/moko/moko-permissions) библиотеки в базе знаний.
