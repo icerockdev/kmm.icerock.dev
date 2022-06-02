@@ -7,8 +7,8 @@ sidebar_position: 4
 
 Изучите, как реализовать функционал библиотеки можно было бы нативно на каждой платформе:
 - Android:
-  - [Выбор фото из галереи устройства](https://handyopinion.com/pick-image-from-gallery-in-kotlin-android/)  
-  - [Получение фото от камеры](http://developer.alexanderklimov.ru/android/photocamera.php) 
+  - [Выбор фото из галереи устройства](https://developer.android.com/guide/components/intents-common#GetFile)  
+  - [Получение фото от камеры](https://developer.android.com/guide/components/intents-common#ImageCapture) 
 - iOS:
-  - [Выбор фото из галереи](https://russianblogs.com/article/52391027975/)  
-  - [Получение фото от камеры](https://russianblogs.com/article/49971508514/)  
+  - [Выбор фото из галереи](https://developer.apple.com/documentation/photokit/selecting_photos_and_videos_in_ios)  
+  - [Получение фото от камеры](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/CameraAndPhotoLib_TopicsForIOS/Articles/TakingPicturesAndMovies.html#//apple_ref/doc/uid/TP40010406)  
