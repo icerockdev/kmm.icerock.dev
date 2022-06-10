@@ -66,7 +66,7 @@ sidebar_position: 4
 
 Многое в практиках от Google показывается через Layout Editor, но важно также смотреть и понимать что получается в результирующем xml. Чтобы понимать, к чему приводят действия в Layout Editor, читайте xml после действий в редакторе.
 
-Также, общепринятой практикой при верстке через xml является использование [tools:text](https://developer.android.com/studio/write/tool-attributes) для всех элементов UI, у которых есть поле `text`.
+Также, общепринятой практикой при верстке через xml является использование [tools](https://developer.android.com/studio/write/tool-attributes) для всех UI элементов. 
 
 ### ConstraintLayout
 
