@@ -5,7 +5,7 @@ sidebar_position: 1
 # Основы Kotlin Multiplatform Mobile
 
 Для начала, чтобы разобраться, что из себя представляет технология Kotlin Multiplatform Mobile, советуем изучить [официальный сайт](https://kotlinlang.org/lp/mobile/).
-Также, для лучшего понимания, как Kotlin Multiplatform помогает сократить время разработки, советуем прочитать нашу небольшую [статью](https://vc.ru/services/167078-kak-kotlin-multiplatform-pomogaet-sokratit-vremya-razrabotki-prilozheniy)
+Также, для лучшего понимания, как Kotlin Multiplatform помогает сократить время разработки, советуем прочитать две статьи: [от JetBrains](https://blog.jetbrains.com/ru/kotlin/2020/08/kotlin-multiplatform-mobile-goes-alpha/) и [от IceRock](https://vc.ru/services/167078-kak-kotlin-multiplatform-pomogaet-sokratit-vremya-razrabotki-prilozheniy)
 
 Далее, можете переходить к изучению технологии в [документации](https://kotlinlang.org/docs/mpp-intro.html)
 
