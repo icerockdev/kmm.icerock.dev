@@ -4,7 +4,7 @@ sidebar_position: 4
 
 # Как прейти от SwiftUI к UIKit
 
-Если вы создаете проект по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html), то заметите, что iOS приложение создастся используя SwiftUI, а на UIKit.
+Если вы создаете проект по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html), то заметите, что iOS приложение создастся используя SwiftUI, а не UIKit.
 
 Чтобы использовать UIKit, вместо SwiftUI выполните следующие шаги: 
 1. Удалите существующий target.
