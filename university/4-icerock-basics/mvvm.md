@@ -289,7 +289,7 @@ extension EventsViewController: EventsViewModelEventsListener {
 Теперь разберемся со второй проблемой - преобразованием `sealed interface` к `enum` в Swift.
 
 Используя плагин [moko-kswift](https://github.com/icerockdev/moko-kswift), мы можем получать автоматически генерируемые Swift `enum`, соответствующие `sealed-interface`-ам общего кода, а после работать с ними в `switch`.  
-Для более полного понимания проблемы и решения, советуем изучить [README](https://github.com/icerockdev/moko-kswift#readme) библиотеки и обязательно прочитайте [статью](https://medium.com/icerock/how-to-implement-swift-friendly-api-with-kotlin-multiplatform-mobile-e68521a63b6d), там вы узнаете весь порядок действий на примере.
+Для более полного понимания проблемы и её решения, изучите [страницу](../../learning/libraries/moko/moko-kswift) плагина в базе знаний и [README](https://github.com/icerockdev/moko-kswift#readme).
 
 ## Удобное public api общего кода
 
