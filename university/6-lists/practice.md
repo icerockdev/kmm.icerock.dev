@@ -18,7 +18,6 @@ sidebar_position: 5
 1. Использовать `moko-units` для реализации списка issues
 2. Использовать `moko-errors` для отображения пользователю информации об ошибке
 3. Использовать `moko-paging` для пагинации - постраничной загрузки данных
-4. Кнопка создания issue должна представлять из себя unit, находящийся всегда на самом верху списка issues
 
 ## Материалы
 1. [GitHub Issues API](https://docs.github.com/en/rest/issues/issues#about-the-issues-api)
