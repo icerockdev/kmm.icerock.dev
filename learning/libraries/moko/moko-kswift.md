@@ -14,16 +14,24 @@ sidebar_position: 10
 
 ## Способы подключения
 ### Cocapods
+При подключении плагина `moko-kswift` он добавит следующие такски в gradle: 
+- `mpp-library/Tasks/cocoapods/kSwiftMultiplatformLibraryPodspec` - если подключен наш плагин [dev.icerock.mobile.multiplatform.ios-framework](https://github.com/icerockdev/mobile-multiplatform-gradle-plugin)
+- `mpp-library-pods/Tasks/cocoapods/kSwiftmpp_library_podsPodspec` - если подключен плагин [cocoapods](https://kotlinlang.org/docs/native-cocoapods.html) от JetBrains
 
-Это более предпочтительный вариант, потому что сразу видно, что есть импорты, в них можно заглянуть и тд
+Обе эти таски генерируют `mpp-library/MultiplatformLibrarySwift.podspec` файл.  
+После этого нужно просто подключить его `pod MultiplatformLibrarySwift` в `iosApp/Podfile`.
 
-Вызвав специальную gradle-таску сгенерируется podfile, который также подключаем в основном podfile, таким образом, все сгенеренные файлы будут доступны в swift через import.
+Чтобы использовать - просто подключить `import MultiplatformLibrarySwift` в нужном файле   
 
-после подключения плагина и сборки проекта необходимо просто подключить сгенерированные файлы (находятся по пути `../shared/build/cocoapods/framework/sharedSwift/..`) к iOS проекту.
+***Этот вариант более предпочтителен к использованию, потому что***
+- Меньше конфликтов с именами, файл доступен только там, где мы его подключили
+- Лучше воспроизводимость - `buildPhase` на сборку Kotlin-кода всегда происходит при компиляции пода
 
-### Project integration
+### Напрямую
+Если фреймворк общего кода подключен к iOS-проекту напрямую, то сгенерированные файлы подключить при помощи `cocoapods` не получится, потому что `pod MultiplatformLibrarySwift` внутри себя имеет зависимость от основного фреймворка - `MultiplatformLibrary`.  
+Поэтому, единственным вариантом остается подключать сгенерированные файлы к проекту - добавить их вручную (находятся по пути `../shared/build/cocoapods/framework/sharedSwift/..`).
 
-Если фреймворк подключен напрямую к проекту, то вариант с cocoapods не сработает, потому что там под зависит от пода фреймворка. Поэтому единственным вариантом остается подключать файлики к проекту
+При самой первой сборке iOS проекта, без предварительной сборки Kotlin, Xcode будет ругаться, что у него нет сгенерированных файлов.
 
 ## mvvm-livedata, mvvm-flow и moko-kswift в одном проекте 
 
