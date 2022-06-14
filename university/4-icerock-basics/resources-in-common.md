@@ -75,10 +75,10 @@ class MainViewModel : ViewModel() {
   - подключите плагин `"dev.icerock.mobile.multiplatform-resources"`
   - подключите зависимость `"dev.icerock.moko:resources:$MOKO_RESOURCES_VERSION"`
   - добавьте и настройте блок `multiplatformResources`
-    Настройка `iOS`:
+- Настройка `iOS`:
   - добавьте и настройте `Localizations` в `infoPlist`
   - добавьте [Build Phase](https://github.com/icerockdev/moko-resources#static-kotlin-frameworks-support), не забудьте изменить `yourframeworkproject`
-  - [пример](https://github.com/icerockdev/moko-resources#usage) добавления строк 
+- [пример](https://github.com/icerockdev/moko-resources#usage) добавления строк 
 
 ## Использование Google Sheets для генерации строк
 Для строк локализации мы используем интеграцию с [Google Sheets](https://www.google.com/intl/ru_ru/sheets/about/). 
