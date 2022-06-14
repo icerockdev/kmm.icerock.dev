@@ -27,62 +27,36 @@ sidebar_position: 10
 
 ## mvvm-livedata, mvvm-flow и moko-kswift в одном проекте 
 
-Начиная с [moko-mvvm-0.13.0](https://github.com/icerockdev/moko-mvvm/releases/tag/release%2F0.13.0) появилась поддержка деклоративного UI - Jetpack Compose и Swift UI. Но деклоративный UI полностью использует mvvm-flow модуль, нету EventDispatcher, о событиях сообщаем через Flow, а для iOS используем CFlow  
-Однако, часть библиотек все еще использует livedata
-- пагинация
-- филды 
-- и тд
+### Проблема
+Начиная с [moko-mvvm-0.13.0](https://github.com/icerockdev/moko-mvvm/releases/tag/release%2F0.13.0) появилась поддержка декларативного UI - `Jetpack Compose` и `SwiftUI`. Она основана на `mvvm-flow`, без `mvvm-livedata`.  
 
-Поэтому, пока все библиотеки не обновятся до поддержки и филдов и лайвдат, нам надо микосовать и то и то. 
+Однако, на момент написания, часть библиотек еще использовала модуль `mvvm-livedata`
+- `moko-paging-0.7.1`
+- `moko-fields-0.9.0`
+- ...
 
-на Android все норм, а на iOS есть проблемаL=% 
-- в mvvm-livedata и в mvvm-flow есть экстеншены и биндинги к вьюхам, с одинаковыми именами
-- компилятор kotlin-native, чтобы избежать конфликтов с одинаковыми именами, создаст эти экстеншены с поджопниками. А moko-kswift, в свою очередь, ничего не знает про этим поджопники, он ожидает экстеншены без поджопников, и ничего нагенерить не сможет
+Поэтому, пока все библиотеки не обновятся до поддержки и `mvvm-flow` и `mvvm-livedata`, нам иногда придется подключать оба этих модуля. В этом случае возникает проблема с генерацией `extensions` для `iOS`.  
 
-Решение проблемы:
-делаем файлик `mpp-library/src/iosMain/UIKitBindings.kt`
+В `mvvm-livedata` и в `mvvm-flow` есть экстеншены с одинаковыми именами, для биндинга UI элемента к `State`.
+Компилятор `Kotlin/Native` видит конфликты имен, чтобы их избежать он создаст эти экстеншены с `_`.  
+Однако, плагин `moko-kswift` ничего не знает про новые измененные названия `extensions` c `_`, он ожидает экстеншены с такими же именами, какие были в `Kotlin`, поэтому ничего сгенерировать не сможет.
 
-Там объявляем все экстеншены, которые нам нужны на свифт из модулей mvvm-flow или mvvm-livedata
-например:
-
-```
-import dev.icerock.moko.mvvm.livedata.mutableLiveData
+### Решение 
+В `mpp-library/src/iosMain/...` создаем файл со всеми экстеншенами из `mvvm-flow` или `mvvm-livedata`, которые понадобятся нам на платформах, например:
+```kotlin
 import dev.icerock.moko.mvvm.livedata.bindTextTwoWay
-
 import dev.icerock.moko.mvvm.flow.bindTextTwoWay
+...
 
 fun UITextField.bindTextTwoWay(livedata: MutableLiveData<String>) = bindTextTwoWay(livedata)
 
 fun UITextField.bindTextTwoWay(flow: CStateFlow<String>) = bindTextTwoWay(flow)
 ```
-
-
-moko-kswift сгеренит один файлик, где будут все экстегшены, но каждый будет обращаться туда, куда ему надо
-
-Оригинальные модули библиотек нужно будет добавить в исключения для moko-kswift,
-
-excludeLibrary("mvvm-livedata")
-excludeLibrary("mvvm-flow")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Оригинальные модули библиотек нужно будет добавить в [исключения](https://github.com/icerockdev/moko-kswift#how-to-exclude-generation-of-entries-from-some-libraries) для `moko-kswift`, чтобы генерация происходила только на основе файла из `iosMain`.
+```kotlin
+kswift {
+    excludeLibrary("mvvm-livedata")
+    excludeLibrary("mvvm-flow") 
+}
+```
+На основе этого `moko-kswift` успешно сгенерирует файл, где будут все эти экстеншены, но с нормальными именами. 
