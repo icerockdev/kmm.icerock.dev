@@ -7,29 +7,41 @@ sidebar_position: 10
 ## moko-kswift
 
 [moko-kswift](https://github.com/icerockdev/moko-kswift) - этот плагин, позволяет автоматически генерировать Swift-friendly API из общего кода:
-- `enum`-ы, соответствующие `sealed-interface`-ам из общего кода, чтобы работать их в `switch` без ветки `default`
-- `extensions`, объявленные в общем коде
+- `enum`-ы, соответствующие `sealed-interface`-ам из общего кода, чтобы использовать их в `switch` без ветки `default`
+- `extensions` к платформенным классам (`UILabel` и тд) и интерфейсам
 
-Детали подключения плагина вы можете узнать из его [README](https://github.com/icerockdev/moko-kswift#readme) и [стати](https://medium.com/icerock/how-to-implement-swift-friendly-api-with-kotlin-multiplatform-mobile-e68521a63b6d).
+Детали подключения плагина вы можете узнать из его [README](https://github.com/icerockdev/moko-kswift#readme) и [статьи](https://medium.com/icerock/how-to-implement-swift-friendly-api-with-kotlin-multiplatform-mobile-e68521a63b6d).
 
 ## Способы подключения
 ### Cocapods
-При подключении плагина `moko-kswift` он добавит следующие такски в gradle: 
-- `mpp-library/Tasks/cocoapods/kSwiftMultiplatformLibraryPodspec` - если подключен наш плагин [dev.icerock.mobile.multiplatform.ios-framework](https://github.com/icerockdev/mobile-multiplatform-gradle-plugin)
-- `mpp-library-pods/Tasks/cocoapods/kSwiftmpp_library_podsPodspec` - если подключен плагин [cocoapods](https://kotlinlang.org/docs/native-cocoapods.html) от JetBrains
+При подключении плагина `moko-kswift` он добавит следующие таски в gradle. Имя таски генерируется по принципу: `kSwift` + `framework name` + `Podspec`, находиться они будут в группе `cocoapods`. 
+- `:mpp-library:kSwiftMultiplatformLibraryPodspec` - если подключен наш плагин [dev.icerock.mobile.multiplatform.ios-framework](https://github.com/icerockdev/mobile-multiplatform-gradle-plugin)
+- `:mpp-library-pods:kSwiftmpp_library_podsPodspec` - если подключен плагин [cocoapods](https://kotlinlang.org/docs/native-cocoapods.html) от JetBrains
 
-Обе эти таски генерируют `mpp-library/MultiplatformLibrarySwift.podspec` файл.  
-После этого нужно просто подключить его `pod MultiplatformLibrarySwift` в `iosApp/Podfile`.
+Обе эти таски генерируют `.podspec` файл. Его имя будет: `framework_name` + `Swift.podspec`, например `mpp-library/MultiplatformLibrarySwift.podspec`.  
 
-Чтобы использовать - просто подключить `import MultiplatformLibrarySwift` в нужном файле   
+После этого нужно просто подключить его `pod MultiplatformLibrarySwift` в `iosApp/Podfile` и использовать `import MultiplatformLibrarySwift` в нужном файле.
 
 ***Этот вариант более предпочтителен к использованию, потому что***
-- Меньше конфликтов с именами, файл доступен только там, где мы его подключили
-- Лучше воспроизводимость - `buildPhase` на сборку Kotlin-кода всегда происходит при компиляции пода
+- Меньше конфликтов с именами, сгенерированные классы и методы доступны только там, где мы его подключили
+- Лучше воспроизводимость - `buildPhase` на сборку Kotlin-кода всегда происходит при компиляции пода. Реже будет происходить непонятная ошибка из-за не скомпилированного заранее Kotlin модуля.
+
+Однако, сгенерированные файлы можно подключить и вручную, генерируются они по пути `../framework_name/build/cocoapods/framework/framework_nameSwift/..`
 
 ### Напрямую
 Если фреймворк общего кода подключен к iOS-проекту напрямую, то сгенерированные файлы подключить при помощи `cocoapods` не получится, потому что `pod MultiplatformLibrarySwift` внутри себя имеет зависимость от основного фреймворка - `MultiplatformLibrary`.  
-Поэтому, единственным вариантом остается подключать сгенерированные файлы к проекту - добавить их вручную (находятся по пути `../shared/build/cocoapods/framework/sharedSwift/..`).
+Чтобы сгенерированные файлы всегда находились в одном месте, можно добавить таску в `framework_name/build.radle`, которая переместит сгенерированные файлы в `generated/swift`. После этого нужно просто подключить их вручную к iOS проекту.
+```kotlin
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink>().matching {
+    it.binary is org.jetbrains.kotlin.gradle.plugin.mpp.Framework
+}.configureEach {
+    doLast {
+        val swiftDirectory = File(destinationDir, "${binary.baseName}Swift")
+        val xcodeSwiftDirectory = File(buildDir, "generated/swift")
+        swiftDirectory.copyRecursively(xcodeSwiftDirectory, overwrite = true)
+    }
+}
+```
 
 При самой первой сборке iOS проекта, без предварительной сборки Kotlin, Xcode будет ругаться, что у него нет сгенерированных файлов.
 
