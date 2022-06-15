@@ -7,7 +7,7 @@ sidebar_position: 14
 
 <iframe width="360" height="800" src="//www.figma.com/embed?embed_host=share&url=https%3A%2F%2Fwww.figma.com%2Fproto%2FMh3ga5XAzyJNCY87NBp01G%2FGit_test%3Fnode-id%3D4%253A600%26scaling%3Dmin-zoom%26page-id%3D0%253A1%26starting-point-node-id%3D4%253A645" allowfullscreen></iframe>
 
-Во время работы над практическим заданием настоятельно рекомендуем обращаться к разделу [Памятки для разработчика](../memos/function)
+Во время работы над практическим заданием настоятельно рекомендуем обращаться к разделу [Памятки для разработчика](../../university/memos/best-practices)
 
 ## Функциональные возможности
 
@@ -221,12 +221,13 @@ GitHubRepoRepository --> KeyValueStorage
 ## Материалы
 
 1. [mobile-moko-boilerplate](https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate)
-1. [GitHub REST API](https://docs.github.com/en/rest)
-1. [GitHub Basic Authorization](https://docs.github.com/en/rest/overview/other-authentication-methods#basic-authentication)
-1. [GitHub user repositories](https://docs.github.com/en/rest/reference/repos#list-repositories-for-a-user)
-1. [Kotlinx.Serialization guide](https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/basic-serialization.md#json-decoding)
-1. [Подключение Ktor Client](https://ktor.io/docs/gradle.html)
-1. [Настройке запросов в Ktor Client](https://ktor.io/docs/request.html)
-1. [multiplatform-settings](https://github.com/russhwolf/multiplatform-settings)
-1. [Android Дизайн](https://www.figma.com/file/Mh3ga5XAzyJNCY87NBp01G/Git_test)
-1. [iOS Дизайн](https://www.figma.com/file/XmpoCqkdWTGb2NGdR2bgiQ/Git_test-iOS)
+   - [инструкция](https://confluence.icerockdev.com/pages/viewpage.action?pageId=69437109) по созданию и настройке проекта на основе `mobile-moko-boilerplate`
+2. [GitHub REST API](https://docs.github.com/en/rest)
+3. [GitHub Basic Authorization](https://docs.github.com/en/rest/overview/other-authentication-methods#basic-authentication)
+4. [GitHub user repositories](https://docs.github.com/en/rest/reference/repos#list-repositories-for-a-user)
+5. [Kotlinx.Serialization guide](https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/basic-serialization.md#json-decoding)
+6. [Подключение Ktor Client](https://ktor.io/docs/gradle.html)
+7. [Настройке запросов в Ktor Client](https://ktor.io/docs/request.html)
+8. [multiplatform-settings](https://github.com/russhwolf/multiplatform-settings)
+9. [Android Дизайн](https://www.figma.com/file/Mh3ga5XAzyJNCY87NBp01G/Git_test)
+10. [iOS Дизайн](https://www.figma.com/file/XmpoCqkdWTGb2NGdR2bgiQ/Git_test-iOS)
