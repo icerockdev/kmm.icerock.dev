@@ -1,8 +1,13 @@
-# Состояния и события
+---
+sidebar_position: 21
+---
+
+
+# Единый стейт экрана
 
 ## Состояние
 
-Когда мы в любой момент можем узнать текущее значение какой-нибудь переменной, то это называется ***состояние***. 
+Когда мы в любой момент можем узнать текущее значение какой-нибудь переменной, то это называется ***состояние***.
 Примеры: значение текстового поля, включена кнопка или нет, заголовок на экране и тд.
 
 Состояния бывают двух видов: изменяемые [MutableLiveData](https://developer.android.com/reference/android/arch/lifecycle/MutableLiveData) / [MutableStateFlow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-state-flow/index.html) и неизменяемые [LiveData](https://developer.android.com/reference/android/arch/lifecycle/LiveData) / [StateFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
@@ -13,12 +18,12 @@
 Описывать `viewModel` нужно так, будто бы юзер будет взаимодействовать напрямую с ней. Разберем, как мы будем описывать состояния вьюмодели на примере экрана авторизации.
 На UI должны быть:
 - поле ввода номера телефона
-- поле ввода смс-кода 
+- поле ввода смс-кода
 - кнопка повторной отправки смс-кода
 - кнопка "Зарегистрироваться"
 - текстовое поле с таймером до следующей возможности отправить смс-код
 - активити-индикатор
-  
+
 Разобьем эти элементы на две группы, в зависимости от того, с каким типом состояния они будут работать - изменяемым или неизменяемым.
 
 **Изменяемые состояния:**
@@ -33,12 +38,12 @@
 - текстовое поле с таймером до следующей возможности отправить смс-код `val smsCodeTimer LiveData(String)`
 - активити-индикатор `val isIndicatorVisible LiveData(Boolean)`
 
-Все эти элементы работают с неизменяемыми состояниями, т.к. они изменяется только со стороны вьюмодели, юзер изменить его никак не сможет. Если значение неизменяемого состояния будет меняться после инициализации, то для изменения внутри вьюмодели создается `private MutableLiveData`, а для привязки к фрагменту используется `LiveData`, которая геттером берет изменяемую. На неизменяемые состояния нужно просто подписаться из `UI`.  
+Все эти элементы работают с неизменяемыми состояниями, т.к. они изменяется только со стороны вьюмодели, юзер изменить его никак не сможет. Если значение неизменяемого состояния будет меняться после инициализации, то для изменения внутри вьюмодели создается `private MutableLiveData`, а для привязки к фрагменту используется `LiveData`, которая геттером берет изменяемую. На неизменяемые состояния нужно просто подписаться из `UI`.
 
 Теперь, рассмотрим как делаются двусторонняя и односторонняя привязки:  
 **Совет**: используйте [Extensions](https://kotlinlang.org/docs/extensions.html) для распространенных функций привязки, чтобы использовать их во всем проекте, а не делать каждый раз вручную.
-## Двусторонняя привязка:
 
+## Двусторонняя привязка
 Сделаем двустороннюю привязку для связи `EditText` и `MutableLiveData(String)`
 
 ```kotlin
@@ -62,14 +67,13 @@ fun EditText.bindTextTwoWay(liveData: MutableLiveData<String>, lifecycleOwner: L
     }
 }
 ```
-Во фргаменте нужно будет просто вызвать метод: 
+Во фргаменте нужно будет просто вызвать метод:
 ```kotlin
 phoneNunberEditText.bindTextTwoWay(liveData = viewModel.phoneNumber, lifecycleOwner = viewLifecycleOwner)
 ```
 
 ## Одностороння привязка
-
-Разберем, как делается односторонняя привязка на примере текстового поля с таймером повторной отправки смс-кода: 
+Разберем, как делается односторонняя привязка на примере текстового поля с таймером повторной отправки смс-кода:
 
 ```kotlin
 private val _smsCodeTimer: MutableLiveData<String> = MutableLiveData("")
@@ -89,7 +93,7 @@ fun LiveData<String>.bindToTextViewText(textView: TextView, lifecycleOwner: Life
 viewModel.smsCodeTimer.bindToTextViewText(textView = timerTextView, lifecycleOwner = viewLifecycleOwner)
 ```
 
-## Единый стейт экрана 
+## Единый стейт экрана
 
 Еще один подход, который помогает избегать противоречивого состояния экрана представляет из себя привязку нескольких UI компонентов к одному объекту-состоянию всего экрана.
 
@@ -107,7 +111,7 @@ viewModel.smsCodeTimer.bindToTextViewText(textView = timerTextView, lifecycleOwn
 
 Значения лайвдат противоречат друг другу, потому что по нашей задуманной логике не может быть одновременно `loaded = {объект новости}` и `isDataEmpty = true`, но у нас это случилось, и придется долго искать ошибку.
 
-Чтобы не допускать такого, переделать это можно следующим образом: 
+Чтобы не допускать такого, переделать это можно следующим образом:
 Создать `data class State`, а во вьюмодели переменную `val state: LiveData(State)`.
 
 ```kotlin
@@ -119,7 +123,7 @@ data class State(
 )
 ```
 
-Однако, мы опять не застраховались от того, что где-то случайно будет создан следующий объект:  
+Однако, мы опять не застраховались от того, что где-то случайно будет создан следующий объект:
 ```kotlin
 State(
     loading = true,
@@ -145,10 +149,10 @@ sealed interface State {
 }
 ```
 
-### Обработка
-Общий стейт не стоит обрабатывать в `when`, потому что, из-за того, что, каждый элемент UI должен реагировать на каждое изменение стейта, придется при каждом значении стейта обновлять абсолютно все элементы. Для каждого элемента придется писать логику, в зависимости от стейта для всех возможных вариантов. При таком варианте обработки запутаться будет очень легко, когда потребуется внести изменения или найти ошибку. 
+### Обработка на Android
+Общий стейт не стоит обрабатывать в `when`, потому что, из-за того, что, каждый элемент UI должен реагировать на каждое изменение стейта, придется при каждом значении стейта обновлять абсолютно все элементы. Для каждого элемента придется писать логику, в зависимости от стейта для всех возможных вариантов. При таком варианте обработки запутаться будет очень легко, когда потребуется внести изменения или найти ошибку.
 
-Рассмотрим пример:
+#### Пример ненадежной обработки
 ```kotlin
 viewModel.state.observe(viewLifecycleOwner) { state ->
     when (state) {
@@ -175,8 +179,9 @@ viewModel.state.observe(viewLifecycleOwner) { state ->
 Для каждого значения стейта мы обрабатываем одни и те же элементы. Для двух из трех значений стейта, например, скрываем `errorView`, а значений стейта может быть гораздо больше.  
 В добавок, при переходе от стейта к стейту, мы могли бы забыть изменить или скрыть какой-нибудь элемент, после чего бы долго и внимательно отсматривали бы каждый кейс `when`-а в поисках ошибки.
 
-Вместо этого, лучше устанавливать каждому элементу UI значение по отдельности, в зависимости от значения стейта.  
-Вот как будет выглядеть новый вариант:
+Вместо этого, лучше устанавливать каждому элементу UI значение по отдельности, в зависимости от значения стейта.
+
+#### Пример надежной обработки
 ```kotlin
 viewModel.state.observe(viewLifecycleOwner) { state ->
     binding.progressBar.visibility = if (state == State.Loading) View.VISIBLE else View.GONE
@@ -198,6 +203,88 @@ viewModel.state.observe(viewLifecycleOwner) { state ->
 ```
 
 Теперь, для каждого элемента на основе значения стейта мы устанавливаем значение всего один раз, в одном единственном месте. Отлаживать и изменять такой код будет гораздо легче.
+
+### Обработка на iOS
+#### moko-kswift
+
+Используя [moko-kswift](../libraries/moko/moko-kswift) у нас есть возможность использовать `sealed interface` для `State` и `Actions` из общего кода в виде `enum` в Swift, чтобы можно было обрабатывать объекты в `switch` без ветки `default`.
+
+Это очень полезно для обработки `Actions`, потому что при появлении нового `Action` в общем коде, iOS приложение не скомпилируется из-за того, что не все объекты `enum` будут обработаны.
+
+Однако, вариант обработки в `switch case` не подходит для объектов `State`, потому что на основе `State` устанавливается состояние экрана - а это множество вьюх, которым нужно выставить: текст, видимость, цвет и так далее.  
+Получается, при обработке стейта в `switch case` нам пришлось бы в каждом `case` устанавливать значения всем этим вьюхам. В таком случае у нас бы не было абсолютно никакой гарантии, что мы не забыли настроить какую-нибудь вьюху.
+
+#### Пример ненадежной обработки
+```swift
+private func bindState(
+    _ state: SomeStateKs<SomeObject>
+) {
+    switch(state) {
+    case .empty(_):
+        titleLabel.isHidden = false
+        titleLabel.text = "empty_title"
+        descriptionLabel.isHidden = false
+        button.isHidden = false
+        button.setTitle("refresh button", for: .normal)
+    case .failed(let error):
+        titleLabel.isHidden = false
+        titleLabel.text = "error title"
+        descriptionLabel.isHidden = false
+        descriptionLabel.text = error.error?.localized() ?? ""
+        button.setTitle("retry button", for: .normal)
+    case .success
+        titleLabel.isHidden = true
+        descriptionLabel.isHidden = true
+        button.setTitle("", for: .normal)
+        button.isHidden = true
+    }
+}
+```
+
+#### Пример надежной обработки
+```swift
+private func bindState(
+    _ state: SomeStateKs<SomeObject>
+) {
+    let isTitleHidden: Bool
+    let title: String
+    let description: String
+    let buttonTitle: String
+    
+    switch(state) {
+    case .empty(_):
+        isTitleHidden = false
+        title = "empty_title"
+        description = "description is empty"
+        buttonTitle = "refresh button"
+    case .failed(let error):
+        isTitleHidden = false
+        title = "error_title"
+        description = error.error?.localized() ?? ""
+        buttonTitle = "retry button"
+    case .success:
+        isTitleHidden = true
+        title = ""
+        description = ""
+        buttonTitle = ""
+    }
+    
+    titleLabel.isHidden = isTitleHidden
+    titleLabel.text = title
+    descriptionLabel.isHidden = isTitleHidden
+    descriptionLabel.text = description
+    button.isHidden = isTitleHidden
+    button.setTitle(buttonTitle, for: .normal)
+}
+```
+Мы используем особенность Swift - `let` переменные не обязательно инициализировать сразу при создании, главное - проинициализировать их до первого к ним обращения, и за этим следит компилятор.
+
+Это позволяет нам создать `let` переменные, проинициализировать их в `switch case` в зависимости от стейта и присвоить вьюхам их значения.    
+Если мы забудем проинициализировать какую либо из переменных в одном из `case` и присвоим ее вьюхе - то приложение не скомпилируется.  
+Тем самым, при любом состоянии стейта все вьюхи гарантированно будут проинициализорованы значениями относительно конкретного стейта.
+
+#### Extensions к State
+Также, можно создать свои `extensions` к классу `StateKs`, где на основе стейта вьюхе присваивается конкретное значение. Пример [extensions](https://github.com/Alex009/moko-paging-sample/blob/e0d64280ca956773b6578d645a410f32fc6bfa8f/iosApp/iosApp/ResourceStateExt.swift) и [использования](https://github.com/Alex009/moko-paging-sample/blob/e0d64280ca956773b6578d645a410f32fc6bfa8f/iosApp/iosApp/NewsViewController.swift#L45).
 
 ## Событие (действие)
 
