@@ -21,7 +21,7 @@ sidebar_position: 5
 
 Ознакомиться детальнее с ViewModel и LiveData помогут следующие материалы:
 
-- [States and Events](../../learning/android/states-events) - статья о состояних и событиях
+- [Единый стейт экрана](../../learning/state) - статья о состояних и событиях
 - [Android Kotlin Fundamentals: 5.1 ViewModel](https://developer.android.com/codelabs/kotlin-android-training-view-model) - не пропуская Summary и тест в Homework
 - [Android Kotlin Fundamentals: LiveData and LiveData observers](https://developer.android.com/codelabs/kotlin-android-training-live-data) - не пропуская Summary и тест в Homework
 - [Incorporate Lifecycle-Aware Components](https://developer.android.com/codelabs/android-lifecycles) - для закрепления связей жизненного цикла android компонентов и ViewModel, LiveData
