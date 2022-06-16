@@ -30,7 +30,7 @@ sidebar_position: 10
 
 ### Напрямую
 Если фреймворк общего кода подключен к iOS-проекту напрямую, то сгенерированные файлы подключить при помощи `cocoapods` не получится, потому что `pod MultiplatformLibrarySwift` внутри себя имеет зависимость от основного фреймворка - `MultiplatformLibrary`.  
-Чтобы сгенерированные файлы всегда находились в одном месте, можно добавить таску в `framework_name/build.radle`, которая переместит сгенерированные файлы в `generated/swift`. После этого нужно просто подключить их вручную к iOS проекту.
+Чтобы сгенерированные файлы всегда находились в одном месте, можно добавить таску в `shared_module/build.gradle`, которая переместит сгенерированные файлы в `build/generated/swift`. После этого нужно просто подключить их вручную к iOS проекту.
 ```kotlin
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink>().matching {
     it.binary is org.jetbrains.kotlin.gradle.plugin.mpp.Framework
@@ -43,7 +43,7 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink>().matching {
 }
 ```
 
-При самой первой сборке iOS проекта, без предварительной сборки Kotlin, Xcode будет ругаться, что у него нет сгенерированных файлов.
+При самой первой сборке iOS проекта, без предварительной сборки Kotlin, Xcode будет ругаться, что у него нет сгенерированных файлов. Поэтому нужно вручную предварительно компилировать Kotlin Framework и только потом собирать iOS в Xcode.
 
 ## mvvm-livedata, mvvm-flow и moko-kswift в одном проекте 
 
@@ -51,22 +51,22 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink>().matching {
 Начиная с [moko-mvvm-0.13.0](https://github.com/icerockdev/moko-mvvm/releases/tag/release%2F0.13.0) появилась поддержка декларативного UI - `Jetpack Compose` и `SwiftUI`. Она основана на `mvvm-flow`, без `mvvm-livedata`.  
 
 Однако, на момент написания, часть библиотек еще использовала модуль `mvvm-livedata`
-- `moko-paging-0.7.1`
-- `moko-fields-0.9.0`
+- `moko-paging:0.7.1`
+- `moko-fields:0.9.0`
 - ...
 
 Поэтому, пока все библиотеки не обновятся до поддержки и `mvvm-flow` и `mvvm-livedata`, нам иногда придется подключать оба этих модуля. В этом случае возникает проблема с генерацией `extensions` для `iOS`.  
 
 В `mvvm-livedata` и в `mvvm-flow` есть экстеншены с одинаковыми именами, для биндинга UI элемента к `State`.
 Компилятор `Kotlin/Native` видит конфликты имен, чтобы их избежать он создаст эти экстеншены с `_`.  
-Однако, плагин `moko-kswift` ничего не знает про новые измененные названия `extensions` c `_`, он ожидает экстеншены с такими же именами, какие были в `Kotlin`, поэтому ничего сгенерировать не сможет.
+Однако, плагин `moko-kswift` ничего не знает про новые измененные названия `extensions` c `_`, он ожидает экстеншены с такими же именами, какие были в `Kotlin`, поэтому сгенерированный код окажется некорректным (будет использовать не верные имена функций).
 
 ### Решение 
 В `mpp-library/src/iosMain/...` создаем файл со всеми экстеншенами из `mvvm-flow` или `mvvm-livedata`, которые понадобятся нам на платформах, например:
 ```kotlin
 import dev.icerock.moko.mvvm.livedata.bindTextTwoWay
 import dev.icerock.moko.mvvm.flow.bindTextTwoWay
-...
+// ...
 
 fun UITextField.bindTextTwoWay(livedata: MutableLiveData<String>) = bindTextTwoWay(livedata)
 
