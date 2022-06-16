@@ -207,7 +207,7 @@ viewModel.state.observe(viewLifecycleOwner) { state ->
 ### Обработка на iOS
 #### moko-kswift
 
-Используя [moko-kswift](../libraries/moko/moko-kswift) у нас есть возможность использовать `sealed interface` для `State` и `Actions` из общего кода в виде `enum` в Swift, чтобы можно было обрабатывать объекты в `switch` без ветки `default`.
+Используя [moko-kswift](libraries/moko/moko-kswift) у нас есть возможность использовать `sealed interface` для `State` и `Actions` из общего кода в виде `enum` в Swift, чтобы можно было обрабатывать объекты в `switch` без ветки `default`.
 
 Это очень полезно для обработки `Actions`, потому что при появлении нового `Action` в общем коде, iOS приложение не скомпилируется из-за того, что не все объекты `enum` будут обработаны.
 
