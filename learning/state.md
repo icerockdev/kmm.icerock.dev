@@ -232,9 +232,10 @@ private func bindState(
         descriptionLabel.isHidden = false
         descriptionLabel.text = error.error?.localized() ?? ""
         button.setTitle("retry button", for: .normal)
-    case .success
+    case .success(let data):
         titleLabel.isHidden = true
         descriptionLabel.isHidden = true
+        descriptionLabel.text = data
         button.setTitle("", for: .normal)
         button.isHidden = true
     }
@@ -246,35 +247,31 @@ private func bindState(
 private func bindState(
     _ state: SomeStateKs<SomeObject>
 ) {
-    let isTitleHidden: Bool
-    let title: String
-    let description: String
-    let buttonTitle: String
+    let title: String?
+    let description: String?
+    let buttonTitle: String?
     
     switch(state) {
     case .empty(_):
-        isTitleHidden = false
         title = "empty_title"
         description = "description is empty"
         buttonTitle = "refresh button"
     case .failed(let error):
-        isTitleHidden = false
         title = "error_title"
         description = error.error?.localized() ?? ""
         buttonTitle = "retry button"
-    case .success:
-        isTitleHidden = true
-        title = ""
-        description = ""
-        buttonTitle = ""
+    case .success(let data):
+        title = nil
+        description = data
+        buttonTitle = nil
     }
     
-    titleLabel.isHidden = isTitleHidden
-    titleLabel.text = title
-    descriptionLabel.isHidden = isTitleHidden
-    descriptionLabel.text = description
-    button.isHidden = isTitleHidden
-    button.setTitle(buttonTitle, for: .normal)
+    titleLabel.isHidden = title == nil
+    titleLabel.text = title ?? ""
+    descriptionLabel.isHidden = description == nil
+    descriptionLabel.text = description ?? ""
+    button.isHidden = buttonTitle == nil
+    button.setTitle(buttonTitle ?? "", for: .normal)
 }
 ```
 Мы используем особенность Swift - `let` переменные не обязательно инициализировать сразу при создании, главное - проинициализировать их до первого к ним обращения, и за этим следит компилятор.
