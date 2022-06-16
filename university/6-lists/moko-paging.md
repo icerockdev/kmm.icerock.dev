@@ -9,7 +9,7 @@ sidebar_position: 3
 
 ## moko-mvvm-state
 
-`moko-paging` использует `ResourceState` - реализацию [состояния](/learning/android/states-events#единый-стейт-экрана) из [moko-mvvm](https://github.com/icerockdev/moko-mvvm/tree/master/mvvm-state), поэтому стоит разобраться с ней поподробнее.  
+`moko-paging` использует `ResourceState` - реализацию [состояния](/learning/state#единый-стейт-экрана) из [moko-mvvm](https://github.com/icerockdev/moko-mvvm/tree/master/mvvm-state), поэтому стоит разобраться с ней поподробнее.  
 
 Рассмотрим класс [ResourceState<out T, out E>](https://github.com/icerockdev/moko-mvvm/blob/master/mvvm-state/src/commonMain/kotlin/dev/icerock/moko/mvvm/ResourceState.kt), он содержит четыре состояния:  
 - `Loading` - загрузка
