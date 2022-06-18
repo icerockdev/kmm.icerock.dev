@@ -6,7 +6,9 @@ sidebar_position: 10
 
 Библиотека [moko-permissions](https://github.com/icerockdev/moko-permissions) позволяет получать runtime permissions в общем коде. 
 
-***ВИДОСИК***
+<iframe src="//www.youtube.com/embed/qDhGnTbX8XY" frameborder="0" allowfullscreen width="675" height="380"></iframe>
+<br/>
+<br/>
 
 ## Denied and DeniedAlways
 Результаты запроса разрешения на Android могут быть следующие:
