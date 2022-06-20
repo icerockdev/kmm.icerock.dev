@@ -9,3 +9,4 @@ sidebar_position: 3
 - [Interoperability with Swift/Objective-C](https://kotlinlang.org/docs/native-objc-interop.html)
 - [Russell Wolf - The Kotlin/Swift boundary](https://vimeo.com/625847664)
 - [Реализация ObjectiveC протоколов в Kotlin](objc_protocol.md)
+- [Kotlin/Swift interopedia](https://github.com/hhru/kotlin-swift-interopedia)
