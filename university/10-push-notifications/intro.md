@@ -9,4 +9,4 @@ sidebar_position: 0
 - что такое Push notifications
 - как подключить Firebase Cloud Messaging к iOS и Android
 - как настроить Push notifications на iOS и Android
-- как использовать Push notifications в общем коде
+- за что отвечает общий код при работе с Push notifications 
