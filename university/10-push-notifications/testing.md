@@ -30,20 +30,18 @@ sidebar_position: 3
 ```json
 {
  "to" : "FCM Registration token",
- "collapse_key" : "type_a",
  "notification" : {
      "body" : "Body of Your Notification",
      "title": "Title of Your Notification"
  },
  "data" : {
-     "body" : "Body of Your Notification in Data",
-     "title": "Title of Your Notification in Title",
-     "key_1" : "Value for key_1",
-     "key_2" : "Value for key_2"
+     "something_key" : "Something value from server"
  }
 }
 ```
-Не забудте заменить `FCM Registration token` на реальный токен устройстова.
+Поле `data` - отвечает за различные параметры для пуша, которые может отправить сервер. Например, пуш о публикации какой-нибудь новости, в `data` может быть `news_id: 123`.    
+
+Не забудьте заменить `FCM Registration token` на реальный токен устройства.
 
 ![img.png](media/postman-request-body-example.png)
 
@@ -52,3 +50,4 @@ sidebar_position: 3
 
 Результат запроса:
 ![img.png](media/response-example.png)
+![img.jpg](media/response-example-phone.png)
