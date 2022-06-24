@@ -27,3 +27,4 @@ sidebar_position: 3
 - [настройка](https://firebase.google.com/docs/cloud-messaging/android/client) FCM в Android приложении
 - [настройка](https://firebase.google.com/docs/cloud-messaging/ios/client) FCM в iOS приложении
   - [APNs key](https://drive.google.com/file/d/1PetTvRcQguLAFBYz07to-Bh43nr7K0ok/view?usp=sharing) (доступено для IceRock Development)
+  - Если у вас нет ключа, создайте его в своем [Apple Developer Member Center](https://developer.apple.com/membercenter/index.action) 
