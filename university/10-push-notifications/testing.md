@@ -1,5 +1,5 @@
 ---
-sidebar_position: 3
+sidebar_position: 2
 ---
 
 # Тестирование
@@ -50,4 +50,10 @@ sidebar_position: 3
 
 Результат запроса:
 ![img.png](media/response-example.png)
+
+:::info
+Пуши на Android можно протестировать на эмуляторе.  
+Пуши на iOS протестировать на эмуляторе не получится, только на реальном девайсе.
+:::
+
 ![img.jpg](media/response-example-phone.png)

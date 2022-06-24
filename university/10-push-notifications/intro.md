@@ -3,7 +3,7 @@ sidebar_position: 0
 ---
 
 # Вводная
-Последний блок курса - работа с **Firebase Push notifications** на Android и iOS.
+В завершающем блоке нашего курса предлагаем вам познакомиться с работой **Firebase Push notifications** на Android и iOS.
 
 По завершении блока вы узнаете:
 - что такое Push notifications
