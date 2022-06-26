@@ -21,7 +21,7 @@ sidebar_position: 3
 - iOS и Android приложения должны отображать пуши, даже если приложение свернуто
 
 ## Материалы
-- [новое KMM приложение](https://kotlinlang.org/docs/multiplatform-mobile-create-first-app.html)  
+- [Create your first cross-platform mobile app – tutorial](https://kotlinlang.org/docs/multiplatform-mobile-create-first-app.html)  
 - [подключение](https://firebase.google.com/docs/android/setup) Android приложения к Firebase
 - [подключение](https://firebase.google.com/docs/ios/setup) iOS приложения к Firebase
 - [настройка](https://firebase.google.com/docs/cloud-messaging/android/client) FCM в Android приложении

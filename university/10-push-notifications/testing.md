@@ -10,10 +10,10 @@ sidebar_position: 2
 ![img.png](media/setup-push.png)
 ![img.png](media/send-test-push.png)
 
-Однако пуши, отправленные через Firebase Console, по неизвестной причине не всегда доходят, поэтому тестировать пуши лучше не через консоль, а отправляя POST-запросы. Сделать это можно, например, через Postman.
+Однако пуши, отправленные через Firebase Console, по неизвестной причине не всегда доходят, поэтому тестировать пуши лучше не через консоль, а отправляя POST-запросы на [Firebase API](https://firebase.google.com/docs/reference/fcm/rest). Сделать это можно, например, через Postman.
 
 ## Cloud Messaging API (Legacy)
-Чтобы посылать запросы на `https://fcm.googleapis.com` нам необходимо как-то авторизоваться. Это можно сделать при помощи токена, который можно получить подключив `Cloud Messaging API (Legacy)`
+Чтобы посылать запросы на `https://fcm.googleapis.com`, нам необходимо как-то авторизоваться. Это можно сделать при помощи токена, который можно получить подключив `Cloud Messaging API (Legacy)`
 ![img.png](media/legacy-api.png)
 ![img.png](media/enable-api.png)
 
@@ -23,7 +23,7 @@ sidebar_position: 2
 ## Postman
 [Postman](https://www.postman.com/downloads/) - это приложение, позволяющие посылать различные запросы. C его помощью мы будем тестировать отправку пушей. 
 
-Создадим новый запрос типа `POST` и `URL = https://fcm.googleapis.com/fcm/send`
+Создадим новый запрос типа `POST` с `URL = https://fcm.googleapis.com/fcm/send`
 ![img.png](media/postman-request-example.png)
 
 Далее, добавим `JSON body` запроса:
@@ -39,9 +39,16 @@ sidebar_position: 2
  }
 }
 ```
-Поле `data` - отвечает за различные параметры для пуша, которые может отправить сервер. Например, пуш о публикации какой-нибудь новости, в `data` может быть `news_id: 123`.    
+Поле `data` - отвечает за различные параметры для пуша, которые может отправить сервер. Например, пуш о публикации какой-нибудь новости может содержать
+```json
+"data" : {
+     "news_id" : "123"
+ }
+```
 
+:::info
 Не забудьте заменить `FCM Registration token` на реальный токен устройства.
+:::
 
 ![img.png](media/postman-request-body-example.png)
 
