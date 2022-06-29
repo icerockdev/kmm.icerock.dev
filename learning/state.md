@@ -46,6 +46,7 @@ sidebar_position: 21
 ## Двусторонняя привязка
 Сделаем двустороннюю привязку для связи `EditText` и `MutableLiveData(String)`
 
+**Вариант с самостоятельным созданием `TextWatcher`**:
 ```kotlin
 fun EditText.bindTextTwoWay(liveData: MutableLiveData<String>, lifecycleOwner: LifecycleOwner){
     val textWatcher = object : TextWatcher {
@@ -63,6 +64,22 @@ fun EditText.bindTextTwoWay(liveData: MutableLiveData<String>, lifecycleOwner: L
         //  проверка делается для того, чтобы не провоцировать рекурсию при изменении значения editText на точно такое же
         if (this.text.toString() == text) return@observe
         
+        this.setText(text)
+    }
+}
+```
+
+**Более компактный вариант, в `doOnTextChanged` создастся `TextWatcher` и привяжется автоматически**:
+```kotlin
+fun EditText.bindTextTwoWay(liveData: MutableLiveData<String>, lifecycleOwner: LifecycleOwner) {
+    this.doOnTextChanged { s, start, count, after ->
+        liveData.value = s.toString()
+    }
+
+    liveData.observe(lifecycleOwner) { text ->
+        //  проверка делается для того, чтобы не провоцировать рекурсию при изменении значения editText на точно такое же
+        if (this.text.toString() == text) return@observe
+
         this.setText(text)
     }
 }

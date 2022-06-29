@@ -13,7 +13,7 @@ sidebar_position: 3
 - подключите iOS-приложение к Firebase. Firebase подключайте используя [cocoapods](https://firebase.google.com/docs/ios/installation-methods#cocoapods)
 - настройте FCM в Android-приложении
 - настройте FCM в iOS-приложении
-- протеструйте приложения используя
+- протестируйте приложения используя
   - Firebase Console
   - Postman
 
@@ -26,5 +26,6 @@ sidebar_position: 3
 - [подключение](https://firebase.google.com/docs/ios/setup) iOS приложения к Firebase
 - [настройка](https://firebase.google.com/docs/cloud-messaging/android/client) FCM в Android приложении
 - [настройка](https://firebase.google.com/docs/cloud-messaging/ios/client) FCM в iOS приложении
-  - [APNs key](https://drive.google.com/file/d/1PetTvRcQguLAFBYz07to-Bh43nr7K0ok/view?usp=sharing) (доступено для IceRock Development)
+  - [APNs key](https://drive.google.com/file/d/1PetTvRcQguLAFBYz07to-Bh43nr7K0ok/view?usp=sharing) (доступен для IceRock Development)
+    - название файла APNs содержит KeyID и TeamID: AuthKey_mobiledevelopment_KeyID(TeamID) 
   - Если у вас нет ключа, создайте его в своем [Apple Developer Member Center](https://developer.apple.com/membercenter/index.action) 
