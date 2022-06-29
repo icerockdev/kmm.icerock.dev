@@ -75,6 +75,9 @@ kotlin {
 - [Маппер](https://kotlinlang.org/docs/native-objc-interop.html#mappings) типов Kotlin со Swift и Objective-C 
 - [Преобразование методов throwable-методов](https://kotlinlang.org/docs/native-objc-interop.html#errors-and-exceptions)
 
+## Работа с памятью
+Прочитайте [статью](../../learning/memory_management) из базы знаний, посвященную работе с памятью в Android, Kotlin/Native и iOS.
+
 ## Вопросы для самопроверки
 - Объясните в двух словах, что такое KMM, какие проблемы решает?
 - Что такое Shared-модуль?  
