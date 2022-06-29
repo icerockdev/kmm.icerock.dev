@@ -46,3 +46,7 @@
 .common > rect {
   fill:rgb(174, 146, 252) !important;
 }
+
+.purple-text {
+  color: rebeccapurple;
+}
