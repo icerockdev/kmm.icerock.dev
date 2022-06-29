@@ -47,6 +47,10 @@
   fill:rgb(174, 146, 252) !important;
 }
 
-.purple-text {
-  color: rebeccapurple;
+.not-in-review {
+  color: #fc0;
+  border-left-color: #fc0;
+  border-left-style: solid;
+  border-left-width: 7px;
+  padding-left: 10px;
 }

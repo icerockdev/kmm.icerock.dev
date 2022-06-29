@@ -33,13 +33,20 @@ sidebar_position: 0
 Код не должен содержать никаких дебажных `print` и закомменченных строк, которые не несут никакой смысловой нагрузки
 :::
 1.
-:::warning ЭТО В РЕВЬЮ НЕ ОТМЕЧАЕТСЯ, СЛЕДИТЕ САМОСТОЯТЕЛЬНО
-<details>
+<details className="admonition admonition-warning alert alert--danger">
   <summary>Следите за неймингом</summary>
     <p>У вас не должно быть переменных и методов, которые не несут в названии никакой информации о том, для чего они предназначены.</p>
     Например: <code>binding.button.setOnCLickListener &#123; buttonClickAction() &#125;</code> - ни кнопка, ни метод не несут абсолютно никакой информации о том, к чему они относятся
 </details>
-:::
+1.
+<details className="admonition admonition-warning alert alert--danger">
+  <summary> Кликабельные элементы UI не должны сами решать, какой метод вьюмодели им вызывать </summary>
+    <ul>
+        <li> <code>exitButton.setOnClickListener  &#123; viewModel.clearUserData() &#125;</code> - UI не должен говорить вьюмодели - чисти данные пользователя </li>
+        <li> <code>exitButton.setOnClickListener &#123; viewModel.onExitButtonPressed() &#125;</code> - UI должен говорить вьюмодели - нажата кнопка <code>exitButton</code></li>
+        <li> Публичное API вьюмодели должно быть таким, чтобы по нему явно было понятно, когда его использовать </li>
+    </ul>
+</details>
 1. 
 :::info
 Максимально настраивайте UI элемент в `.xml` или `.xib`, чтобы не заниматься его настройкой в коде
@@ -92,7 +99,7 @@ sidebar_position: 0
 1.
 <details>
   <summary>Нейминг переменных для <code>State</code> и <code>Action</code></summary>
-        Если вы используете <code>State</code> и <code>Actions</code>, то либо просто называйте переменые вьюмодели <code>state</code> и <code>actions</code>, либо называйте так, чтобы в их имени обязательно фигурировало, что это <code>state</code> или <code>actions</code>.
+        Если вы используете <code>State</code> и <code>Actions</code>, то либо просто называйте переменные вьюмодели <code>state</code> и <code>actions</code>, либо называйте так, чтобы в их имени обязательно фигурировало, что это <code>state</code> или <code>actions</code>.
 </details>
 1.
 <details>
@@ -116,15 +123,6 @@ sidebar_position: 0
 <details>
   <summary> Не используйте форскасты </summary>
         О том, когда их действительно нужно использовать вы поймете, когда дорастёте до мидла :)
-</details>
-1.
-<details>
-  <summary> Кликабельные элементы UI не должны сами решать, какой метод вьюмодели им вызывать </summary>
-    <ul>
-        <li> <code>exitButton.setOnClickListener  &#123; viewModel.clearUserData() &#125;</code> - UI не должен говорить вьюмодели - чисти данные пользователя </li>
-        <li> <code>exitButton.setOnClickListener &#123; viewModel.onExitButtonPressed() &#125;</code> - UI должен говорить вьюмодели - нажата кнопка <code>exitButton</code></li>
-        <li> Публичное API вьюмодели должно быть таким, чтобы по нему явно было понятно, когда его использовать </li>
-    </ul>
 </details>
 1.
 <details>
@@ -184,6 +182,29 @@ sidebar_position: 0
 :::warning ЭТО В РЕВЬЮ НЕ ОТМЕЧАЕТСЯ, СЛЕДИТЕ САМОСТОЯТЕЛЬНО
 `Extensions` для каждого класса должны находиться строго в отдельных файлах, с соответствующим названием файла - `ClassName+Extensions`
 :::
+1.
+<details className="admonition admonition-warning alert alert--danger">
+  <summary> Устанавливайте версии подов в <code>Podfile</code></summary>
+    <ul>
+        <li> Версии установленных подов можно посмотреть после установки подов в файле <code>Podfile.lock</code></li>
+        <li> Если версии подов не будут явно обозначены - то у нового разработчика, или у тебя (на другом компе) при установке подов могут подтянуться более новые версии. Есть вероятность, что в этих новых подах что-то будет изменено и проект не скомпилируется. Либо, как сейчас популярно, в библиотеку всунут зловредный код в новой версии он тоже скачается :) </li>
+    </ul>
+</details>
+1. 
+<details className="admonition admonition-warning alert alert--danger">
+  <summary> Называйте <code>ViewController</code>-ы правильно</summary>
+        Все <code>ViewController</code>-ы должны называться с окончанием <code>ViewController</code>, а не <code>Screen</code>, потому что <code>Screen</code>- это экран девайса. <code>ViewController</code> не обязательно занимает весь экран, их на экране сразу несколько: твой собственный, <code>UINavigationController</code>, <code>UITabBarController</code>, модалки
+</details>
+1.
+<details className="admonition admonition-warning alert alert--danger">
+  <summary> Называйте <code>@IBOutlet</code>-ы правильно</summary>
+    <ul>
+        <li>Все аутлеты должны содержать в название тех данных приложения, которые будут в нем отображаться</li>
+        <li>По названию каждого аутлета должно быть однозначно понятно, к какому классу <code>View</code> он относится</li>
+        <li>Пример плохого нейминга для поля с описанием чего-либо - <code>@IBOutlet private var label: UILabel!</code></li>
+        <li>Хороший нейминг - <code>@IBOutlet private var descriptionLabel: UITextView!</code></li>
+    </ul>
+</details>
 1. 
 :::info
 Обрабатывайте стейты на iOS [правильно](../../learning/state#обработка-на-ios)
@@ -224,29 +245,6 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
 </details>
 1. 
 <details>
-  <summary> Устанавливайте версии подов в <code>Podfile</code></summary>
-    <ul>
-        <li> Версии установленных подов можно посмотреть после установки подов в файле <code>Podfile.lock</code></li>
-        <li> Если версии подов не будут явно обозначены - то у нового разработчика, или у тебя (на другом компе) при установке подов могут подтянуться более новые версии. Есть вероятность, что в этих новых подах что-то будет изменено и проект не скомпилируется. Либо, как сейчас популярно, в библиотеку всунут зловредный код в новой версии он тоже скачается :) </li>
-    </ul>
-</details>
-1. 
-<details>
-  <summary> Называйте <code>ViewController</code>-ы правильно</summary>
-        Все <code>ViewController</code>-ы должны называться с окончанием <code>ViewController</code>, а не <code>Screen</code>, потому что <code>Screen</code>- это экран девайса. <code>ViewController</code> не обязательно занимает весь экран, их на экране сразу несколько: твой собственный, <code>UINavigationController</code>, <code>UITabBarController</code>, модалки
-</details>
-1. 
-<details>
-  <summary> Называйте <code>@IBOutlet</code>-ы правильно</summary>
-    <ul>
-        <li>Все аутлеты должны содержать в название тех данных приложения, которые будут в нем отображаться</li>
-        <li>По названию каждого аутлета должно быть однозначно понятно, к какому классу <code>View</code> он относится</li>
-        <li>Пример плохого нейминга для поля с описанием чего-либо - <code>@IBOutlet private var label: UILabel!</code></li>
-        <li>Хороший нейминг - <code>@IBOutlet private var descriptionLabel: UITextView!</code></li>
-    </ul>
-</details>
-1. 
-<details>
   <summary>Работа с ресурсами из <code>R.swift</code></summary>
     <ul>
         <li>Когда вы добавили картинки, цвета и другие ресурсы в Assets, вы можете получить к ним доступ через <code>R.swift</code>, например: <code>R.image.somethingImage()</code></li>
@@ -255,6 +253,14 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
 </details>
 
 ### UI
+1.
+<details className="admonition admonition-warning alert alert--danger">
+  <summary>Проверяйте имя файла картинки, которую скачали с <code>Figma</code></summary>
+    <ul>
+        <li> Имя картинки должно явно обозначать, что это за картинка, аналогично с неймингом переменных</li>
+        <li> Векторные картинки должны быть <code>single scale</code></li>
+    </ul>
+</details>
 1.
 <details>
   <summary> Используйте кастомные <code>View</code></summary>
@@ -273,14 +279,6 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
 </details>
 1.
 <details>
-  <summary>Проверяйте имя файла картинки, которую скачали с <code>Figma</code></summary>
-    <ul>
-        <li> Имя картинки должно явно обозначать, что это за картинка, аналогично с неймингом переменных</li>
-        <li> Векторные картинки должны быть <code>single scale</code></li>
-    </ul>
-</details>
-1.
-<details>
   <summary> Если фон во всем приложении одинаковый - устанавливайте его правильно</summary>
     <ul>
         <li> Вариант 1: установить в <code>AppDelegate</code>, <code>navigationController?.navigationBar.barStyle = .black</code> - сразу после создания контроллера устанавливаем цвет </li>
@@ -290,6 +288,10 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
 
 ## Android
 ### Logic
+1.
+:::warning ЭТО В РЕВЬЮ НЕ ОТМЕЧАЕТСЯ, СЛЕДИТЕ САМОСТОЯТЕЛЬНО
+Во `Fragment`-ах корутины нужно запускать во `viewLifecycleScope`, а не `lifecycleScope`. Т.е. привязываться ко вьюхе, а не к фрагменту.
+:::
 1.
 :::info
 Обрабатывайте стейты на Android [правильно](../../learning/state#обработка-на-android)
@@ -301,10 +303,6 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
 1.
 :::info
 Тема приложения должна выставляться в `AndroidManifest`, а не в `Activity` и `Fragment`-ах.
-:::
-1.
-:::info
-Во `Fragment`-ах корутины нужно запускать во `viewLifecycleScope`, а не `lifecycleScope`. Т.е. привязываться ко вьюхе, а не к фрагменту.
 :::
 1.
 :::info
@@ -401,6 +399,14 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
 Не использовать `bias` для расположения элемента на экране
 :::
 1.
+<details className="admonition admonition-warning alert alert--danger">
+  <summary><code>xml</code> называйте аналогично названию класса</summary>
+    <ul>
+        <li>Плохой нейминг: <code>DetailRepoInfoFragment</code> и <code>fragment_detail_repo</code></li>
+        <li>Хороший нейминг: <code>DetailInfoFragment</code> и <code>detail_info_fragment</code></li>
+    </ul>
+</details>
+1.
 :::info
 Отступы всегда должны быть кратны ***4*** (8, 16, 24, 32), если в дизайне по-другому, задавайте вопросы
 :::
@@ -441,14 +447,6 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
 <details>
   <summary>Используя свои стили, всегда наследуйтесь от дефолтного, чтобы не потерять его настройки</summary>
         Не указывайте размеры <code>width</code> и <code>height</code> в стилях
-</details>
-1.
-<details>
-  <summary><code>xml</code> называйте аналогично названию класса</summary>
-    <ul>
-        <li>Плохой нейминг: <code>DetailRepoInfoFragment</code> и <code>fragment_detail_repo</code></li>
-        <li>Хороший нейминг: <code>DetailInfoFragment</code> и <code>detail_info_fragment</code></li>
-    </ul>
 </details>
 1.
 <details>
