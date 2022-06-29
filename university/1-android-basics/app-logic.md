@@ -36,9 +36,9 @@ CodeLab [Get data from the internet](https://developer.android.com/codelabs/basi
 
 В CodeLab [Get data from the internet](https://developer.android.com/codelabs/basic-android-kotlin-training-getting-data-internet) для выполнения асинхронной задачи (обращения к серверу) использовались [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines). Это популярная библиотека для выполнения асинхронных и многопоточных задач.
 
-Ознакомимся с библиотекой детальнее используя Hands On [Introduction to Coroutines and Channels](https://play.kotlinlang.org/hands-on/Introduction%20to%20Coroutines%20and%20Channels/).
+Свое знакомство с Coroutines начните с изучения раздела документации [coroutines basics](https://kotlinlang.org/docs/coroutines-basics.html), а затем выполните Hands On [Introduction to Coroutines and Channels](https://play.kotlinlang.org/hands-on/Introduction%20to%20Coroutines%20and%20Channels/).
 
-В дальнейшем (вне текущего курса) для изучения coroutines используй подборку материалов из [раздела Learning](../../learning/libraries/kotlinx/coroutines).
+В дальнейшем (вне текущего курса) для изучения coroutines используйте подборку материалов из [базы знаний](../../learning/libraries/kotlinx/coroutines).
 
 ## Dependency Injection
 
