@@ -154,6 +154,74 @@ extension UIToolbar {
 Важно, в методах биндинга должна быть только привязка `liveData` к объекту `UI`, никакой логики быть не должно!
 Вся логика должна быть во `ViewModel`, если нужно как-то преобразовать значение `liveData`, делайте это там.
 
+### MvvmActivity и MvvmFragment
+В moko-mvvm реализованы абстрактные классы [MvvmFragment](https://github.com/icerockdev/moko-mvvm/blob/b4b2ed1a86451bd303aa0733ecd776be96c6f455/mvvm-viewbinding/src/main/kotlin/dev/icerock/moko/mvvm/viewbinding/MvvmEventsFragment.kt) и [MvvmActivity](https://github.com/icerockdev/moko-mvvm/blob/b6f2630df03bbd405e5659d85ea7df03f38e5dc7/mvvm-viewbinding/src/main/kotlin/dev/icerock/moko/mvvm/viewbinding/MvvmActivity.kt), наследуясь от которых вы:
+- автоматически получите доступ к `binding` и `viewModel` 
+
+Пример фрагмента, наследника обычного Fragment:
+```kotlin
+@AndroidEntryPoint
+class TestFragment : Fragment() {
+    private var _binding: TestFragmentBinding? = null
+
+    private val binding
+        get() = _binding!!
+
+    @Inject
+    lateinit var testFactory: TestFactory
+
+    private lateinit var viewModel: TestViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel = getViewModel {
+            testFactory.createTestViewModel()
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = TestFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.testLayout.bindFormField(viewLifecycleOwner, viewModel.testText)
+    }
+}
+```
+
+А теперь тот же самый фрагмент, но наследник MvvmFragment: 
+```kotlin
+@AndroidEntryPoint
+class TestFragment : MvvmFragment<TestFragmentBinding, AuthViewModel>() {
+  @Inject
+  lateinit var testFactory: TestFactory
+
+  override val viewModelClass: Class<AuthViewModel>
+    get() = AuthViewModel::class.java
+
+  override fun viewBindingInflate(
+    inflater: LayoutInflater,
+    container: ViewGroup?
+  ): TestFragmentBinding = TestFragmentBinding
+    .inflate(inflater, container, false)
+
+  override fun viewModelFactory(): ViewModelProvider.Factory = ViewModelFactory {
+    testFactory.createTestViewModel()
+  }
+
+  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    binding.testLayout.bindFormField(viewLifecycleOwner, viewModel.testText)
+  }
+}
+```
+
 ### Передача событий из ViewModel на UI
 
 Для начала, освежите в памяти что такое [события/действия](../../learning/state#событие-действие), для чего они нужны и как реализуются на Android.
