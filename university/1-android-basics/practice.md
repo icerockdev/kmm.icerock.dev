@@ -147,7 +147,6 @@ sidebar_position: 6
 
    class KeyValueStorage {
       var authToken: String?
-      var userName: String?
    }
 ```
 
