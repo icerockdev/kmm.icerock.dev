@@ -69,7 +69,6 @@ class AppRepository {
 
 class KeyValueStorage {
    var authToken: String?
-   var userName: String?
 }
 ```
 

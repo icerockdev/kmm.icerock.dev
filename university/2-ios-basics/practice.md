@@ -73,10 +73,16 @@ sidebar_position: 6
       
       // TODO:
    }
-   
+
    class KeyValueStorage {
-      val authToken: String?
-      val userName: String?
+      var authToken: String? {
+         get {
+            // TODO()
+         }
+         set {
+            // TODO()
+         }
+      }
    }
 
 ```
