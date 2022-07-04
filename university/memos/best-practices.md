@@ -114,7 +114,7 @@ sidebar_position: 0
 <details>
   <summary>Не допускайте сильной вложенности кода</summary>
     <ul>
-        <li> Используйте <a href="../../code-style/early-return">early return</a></li>
+        <li> Используйте <a href="../../learning/code-style/early-return">early return</a></li>
         <li> Избегайте callback hell</li>
         <li> <code>somethingButton.setOnClickListener &#123; somethingButtonPressed() &#125;</code> - устанавливайте действие на клик одной функцией, не пишите логику сразу в <code>setOnClickListener</code> </li>
     </ul>
