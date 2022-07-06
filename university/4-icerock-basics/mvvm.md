@@ -193,6 +193,12 @@ class TestFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.testLayout.bindFormField(viewLifecycleOwner, viewModel.testText)
     }
+    
+    override fun onDestroyView() {
+        super.onDestroyView()
+        
+        _binding = null
+    }
 }
 ```
 
