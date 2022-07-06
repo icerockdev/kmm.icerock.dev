@@ -133,7 +133,7 @@ sidebar_position: 0
 1. 
 <details>
   <summary> Связь UI с <code>viewModel</code> должна полностью находиться в функции <code>bindToViewModel</code> </summary>
-    Функция <code>bindToViewModel</code> должна быть легкочитаема, поэтому должна вызывать другие функции, которые связывают конкретный UI элемент с <code>viewModel</code>
+    Функция <code>bindToViewModel</code> должна быть легко читаема, поэтому должна вызывать другие функции, которые связывают конкретный UI элемент с <code>viewModel</code>
 </details>
 1. 
 <details>
