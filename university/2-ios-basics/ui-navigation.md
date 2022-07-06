@@ -24,7 +24,7 @@ sidebar_position: 5
 
 ### Instructions
 Создайте новую `View` и добавьте на неё какую-нибудь вьюху, например - `UILabel`.
-![img.png](media/create-view.png)
+![create-view.png](media/create-view.png)
 
 Создайте новый `Swift File` со следующим содержанием:
 ```swift
@@ -50,13 +50,21 @@ class MyCustomView: UIView {
 }
 ```
 Укажите `Class` для `File's Owner` вьюхе, которую вы только что создали
-![img.png](media/set-filesowner-class.png)
+![set-filesowner-class.png](media/set-filesowner-class.png)
 
 Теперь добавьте новую `View` на `ViewController` и укажите ей класс - `MyCustomView`
-![img.png](media/add-view-to-controller.png)
+![add-view-to-controller.png](media/add-view-to-controller.png)
 
 Кастомная вьюха готова, мы можем обращаться ко всем ее публичным аутлетам и настраивать как нам нужно 
-![img.png](media/use-custom-view.png)
+![use-custom-view.png](media/use-custom-view.png)
+
+### Подключение сторонней View
+Помимо своей собственной кастомной вьюхи, может понадобиться использовать в `.xib` вьюху из другой библиотеки, например - [MDCActivityIndicator](https://material.io/components/progress-indicators/ios#circular-progress-indicator) для индикатора загрузки.  
+Делается это точно также, как и с кастомной вьюхой:
+1. Добавьте `View` в `xib`
+2. Укажите класс для `View`
+3. Свяжите `View` c `ViewController` при помощи `IBOutlet`
+4. При необходимости, настройте `View` в коде
 
 ## Особенности UITableViewController
 На практике `UITableViewController` не используется, потому что таблица лежит в корне и это не позволяет добавлять другие вью на экран. Чтобы убедиться в этом, создайте контроллер-наследник `UITableViewController` и попробуйте добавить несколько вьюшек 
