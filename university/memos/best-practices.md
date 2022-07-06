@@ -11,35 +11,29 @@ sidebar_position: 0
 
 Для самопроверки, обращайтесь к тому разделу, которым вы сейчас занимаетесь.  
 
+## Критичные пункты для ревью
+:::warning
+При нарушении любого из пунктов данного списка ревью будет прервано и отдано на исправление без полной проверки оставшегося кода
+:::
+
+1. Соответствие [кодстайлу](../../learning/code-style/general-rules)
+1. Если приложение поддерживает не только портретную ориентацию, проверяйте все экраны на соответствие дизайну перед отправкой на ревью
+1. Не должно быть никакого хардкода текста, который показывается пользователю, надо использовать строки локализации
+1. Проверяйте, что не добавили в `git` ничего лишнего, [настройте](https://kmm.icerock.dev/university/memos/gitignore) `.gitignore`
+1. Код не должен содержать никаких дебажных `print` и закомменченных строк, которые не несут никакой смысловой нагрузки
+1. (iOS) Все `@IBOutlet` должны быть приватными
+1. (iOS) `Extensions` для каждого класса должны находиться строго в отдельных файлах, с соответствующим названием файла - `ClassName+Extensions`
+1. (Android) Не использовать без реальной необходимости `bias` для расположения элемента на экране
+
 ## Общее
 1.
-:::tip ОБЯЗАТЕЛЬНО
-Проверяйте по [кодстайлу](../../learning/code-style/it-in-lambdas) все то, что вы написали
-:::
-1.
-:::warning ЭТО В РЕВЬЮ НЕ ОТМЕЧАЕТСЯ, СЛЕДИТЕ САМОСТОЯТЕЛЬНО
-Если приложение поддерживает не только портретную ориентацию, проверяйте все экраны на соответствие дизайну перед отправкой на ревью
-:::
-1.
-:::warning ЭТО В РЕВЬЮ НЕ ОТМЕЧАЕТСЯ, СЛЕДИТЕ САМОСТОЯТЕЛЬНО
-Не должно быть никакого хардкода текста, который показывается пользователю, надо использовать строки локализации
-:::
-1.
-:::warning ЭТО В РЕВЬЮ НЕ ОТМЕЧАЕТСЯ, СЛЕДИТЕ САМОСТОЯТЕЛЬНО
-Проверяйте, что не добавили в `git` ничего лишнего, [настройте](https://kmm.icerock.dev/university/memos/gitignore) `.gitignore`
-:::
-1.
-:::warning ЭТО В РЕВЬЮ НЕ ОТМЕЧАЕТСЯ, СЛЕДИТЕ САМОСТОЯТЕЛЬНО
-Код не должен содержать никаких дебажных `print` и закомменченных строк, которые не несут никакой смысловой нагрузки
-:::
-1.
-<details className="admonition admonition-warning alert alert--danger">
+<details>
   <summary>Следите за неймингом</summary>
     <p>У вас не должно быть переменных и методов, которые не несут в названии никакой информации о том, для чего они предназначены.</p>
     Например: <code>binding.button.setOnCLickListener &#123; buttonClickAction() &#125;</code> - ни кнопка, ни метод не несут абсолютно никакой информации о том, к чему они относятся
 </details>
 1.
-<details className="admonition admonition-warning alert alert--danger">
+<details>
   <summary> Кликабельные элементы UI не должны сами решать, какой метод вьюмодели им вызывать </summary>
     <ul>
         <li> <code>exitButton.setOnClickListener  &#123; viewModel.clearUserData() &#125;</code> - UI не должен говорить вьюмодели - чисти данные пользователя </li>
@@ -48,22 +42,14 @@ sidebar_position: 0
     </ul>
 </details>
 1. 
-:::info
 Максимально настраивайте UI элемент в `.xml` или `.xib`, чтобы не заниматься его настройкой в коде
-:::
 1.
-:::info
 Используйте аннотации [@Throws](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throws/) только в случае, если это попадает в Swift код
-:::
 1.
-:::info
 Используйте [weakLambda](../../learning/libraries/moko/moko-units#можно-ли-передавать-лямбду-в-unititem), чтобы сохранять `receiver` слабой ссылкой
-:::
 1.
-:::info
 Не создавайте общий класс констант - рано или поздно получится свалка.  
 Константы должны создаваться именно там, где они имеют смысл
-:::
 1.
 <details>
   <summary>Продумывайте имена функций и их содержимое</summary>
@@ -174,16 +160,8 @@ sidebar_position: 0
 
 ## iOS
 ### Logic
-1. 
-:::warning ЭТО В РЕВЬЮ НЕ ОТМЕЧАЕТСЯ, СЛЕДИТЕ САМОСТОЯТЕЛЬНО
-Все <code>@IBOutlet</code> должны быть приватными
-:::
 1.
-:::warning ЭТО В РЕВЬЮ НЕ ОТМЕЧАЕТСЯ, СЛЕДИТЕ САМОСТОЯТЕЛЬНО
-`Extensions` для каждого класса должны находиться строго в отдельных файлах, с соответствующим названием файла - `ClassName+Extensions`
-:::
-1.
-<details className="admonition admonition-warning alert alert--danger">
+<details>
   <summary> Устанавливайте версии подов в <code>Podfile</code></summary>
     <ul>
         <li> Версии установленных подов можно посмотреть после установки подов в файле <code>Podfile.lock</code></li>
@@ -191,12 +169,12 @@ sidebar_position: 0
     </ul>
 </details>
 1. 
-<details className="admonition admonition-warning alert alert--danger">
+<details>
   <summary> Называйте <code>ViewController</code>-ы правильно</summary>
         Все <code>ViewController</code>-ы должны называться с окончанием <code>ViewController</code>, а не <code>Screen</code>, потому что <code>Screen</code>- это экран девайса. <code>ViewController</code> не обязательно занимает весь экран, их на экране сразу несколько: твой собственный, <code>UINavigationController</code>, <code>UITabBarController</code>, модалки
 </details>
 1.
-<details className="admonition admonition-warning alert alert--danger">
+<details>
   <summary> Называйте <code>@IBOutlet</code>-ы правильно</summary>
     <ul>
         <li>Все аутлеты должны содержать в название тех данных приложения, которые будут в нем отображаться</li>
@@ -206,21 +184,13 @@ sidebar_position: 0
     </ul>
 </details>
 1. 
-:::info
 Обрабатывайте стейты на iOS [правильно](../../learning/state#обработка-на-ios)
-:::
 1.
-:::info
 SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewController`
-:::
 1.
-:::info
 Не устанавливайте ресурсы для UI элементов в `xib` (текст, картинки и тд). Также, все строки локализации должны устанавливаться во `ViewController` в отдельной функции `localize()`
-:::
 1.
-:::info
 Все изменения конфигурации проекта должны производиться в [xcconfig](https://kmm.icerock.dev/learning/ios/configuration)
-:::
 1. 
 <details>
   <summary>Не забывайте про <a href="../../learning/memory_management">циклы</a> сильных ссылок </summary>
@@ -254,7 +224,7 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
 
 ### UI
 1.
-<details className="admonition admonition-warning alert alert--danger">
+<details>
   <summary>Проверяйте имя файла картинки, которую скачали с <code>Figma</code></summary>
     <ul>
         <li> Имя картинки должно явно обозначать, что это за картинка, аналогично с неймингом переменных</li>
@@ -289,82 +259,90 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
 ## Android
 ### Logic
 1.
-:::warning ЭТО В РЕВЬЮ НЕ ОТМЕЧАЕТСЯ, СЛЕДИТЕ САМОСТОЯТЕЛЬНО
-Во `Fragment`-ах корутины нужно запускать во `viewLifecycleScope`, а не `lifecycleScope`. Т.е. привязываться ко вьюхе, а не к фрагменту.
-:::
+Во `Fragment`-ах аккуратно выбирайте скоуп запуска корутины - если нужно работать только пока есть view - используйте `viewLifecycleScope`, а не `lifecycleScope`.
 1.
-:::info
 Обрабатывайте стейты на Android [правильно](../../learning/state#обработка-на-android)
-:::
 1.
-:::info
 Подписка вью на вьюмодель должна создаваться сразу, как только мы их создали, в методе `onViewCreated`.
-:::
 1.
-:::info
 Тема приложения должна выставляться в `AndroidManifest`, а не в `Activity` и `Fragment`-ах.
-:::
 1.
-:::info
 ***На чистом `Android`*** при работе со списками не забывайте смотреть [сюда](../../learning/android/adapter)
-:::
 1.
-:::info
 Константы класса должны находиться в `сompanion object`, а в свойствах должно быть все то, что уникально для каждого экземпляра класса
-:::
-1. Используйте конструкцию `with(binding...)` для `XML` элементов правильно. Не стоит ей злоупотреблять, иначе она будет только ухудшать читаемость.
-   - не стоит использовать `binding`
-      ```kotlin
-      private fun setToolBar() {
-          with(binding.toolbar) {
-              navigationIcon = AppCompatResources.getDrawable(
-                  requireContext(),
-                  R.drawable.arrow_back
-              )
-              setNavigationOnClickListener {
-                  findNavController().navigateUp()
-              }
-              setOnMenuItemClickListener { menuItem ->
-                  when (menuItem.itemId) {
-                      R.id.action_logout -> {
-                          viewModel.onLogoutPressed()
-                          true
-                      }
-                      else -> {
-                          false
-                      }
-                  }
-              }
-          }
-      }
-      ```
-   - стоит использовать `binding`
-      ```kotlin
-      with(binding.view1.subview1.subsubview1) {
-          label1.text = TODO()
-          button1.setOnClickListener { TODO() }
-          image1.imageAlpha = TODO()
-          view11.subview1.button1.setOnClickListener { TODO() }
-          view11.subview2.button2.setOnClickListener { TODO() }
-      }
-      ```
-1. Не запутайтесь с удалением `Observer`:
-    - так ничего не удалится
-      ```kotlin
-      private val request = MutableLiveData<...>()
-      request.observeForever {
-          if (it != null) {
-              ...
-          }
-      }
-      request.removeObserver { }
-      ```
-    - а вот так удалится
-      ```kotlin
-      private val request = MutableLiveData<...>()
-      private val requestObserver: Observer<...?> = Observer { ... }
-      request.removeObserver(requestObserver)
-      ```
+1. 
+<details>
+  <summary>Используйте конструкцию `with(binding...)` для `XML` элементов правильно. Не стоит ей злоупотреблять, иначе она будет только ухудшать читаемость</summary>
+  <ul>
+    <li>
+      не стоит использовать
+      <code>
+      {`private fun setToolBar() {
+    with(binding.toolbar) {
+        navigationIcon = AppCompatResources.getDrawable(
+            requireContext(),
+            R.drawable.arrow_back
+        )
+        setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+        setOnMenuItemClickListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.action_logout -> {
+                    viewModel.onLogoutPressed()
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
+    }
+}`}
+      </code>
+    </li>
+    <li>
+      стоит использовать
+      <code>
+      {`with(binding.view1.subview1.subsubview1) {
+    label1.text = TODO()
+    button1.setOnClickListener { TODO() }
+    image1.imageAlpha = TODO()
+    view11.subview1.button1.setOnClickListener { TODO() }
+    view11.subview2.button2.setOnClickListener { TODO() }
+}`}
+      </code>
+    </li>
+  </ul>
+</details>
+1. 
+<details>
+  <summary>Не запутайтесь с удалением `Observer`</summary>
+  <ul>
+    <li>
+    так ничего не удалится
+    <code>
+    {`private val request = MutableLiveData<...>()
+request.observeForever {
+    if (it != null) {
+        ...
+    }
+}
+request.removeObserver { }
+`}
+    </code>
+    </li>
+    <li>
+    а вот так удалится
+    <code>
+    {`private val request = MutableLiveData<...>()
+private val requestObserver: Observer<...> = Observer { ... }
+request.removeObserver(requestObserver)
+`}
+    </code>
+    </li>
+  </ul>
+</details>
 1.
 <details>
   <summary> Если в вашем приложении есть логика по выбору стартовой навигации</summary>
@@ -373,15 +351,16 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
         <li> Убедитесь, что установили граф в <code>activity_main.xml</code></li>
     </ul>
 </details>
-1.
-<details>
-  <summary> Если вы не используете <a href="https://developer.android.com/guide/navigation/navigation-pass-data">navigation-safe-args-gradle-plugin</a> </summary>
-    <ul>
-        <li> Аргументы фрагмента получайте через <code>requireArguments()</code></li>
-        <li> Если какого-то аргумента нет - кидайте кастомную ошибку, что нет конкретного аргумента</li>
-        <li> Используйте вычисляемые свойства для работы с аргументами: <code>private val something: String get() = requireArguments().getString(SOMETHING_KEY) ?: throw NoArgumentsException(lostArgument: SOMETHING_KEY)</code>`</li>
-    </ul>
-</details>
+1. Если вы не используете [navigation-safe-args-gradle-plugin](https://developer.android.com/guide/navigation/navigation-pass-data)
+    - Аргументы фрагмента получайте через `requireArguments()`
+    - Если какого-то аргумента нет - кидайте кастомную ошибку, что нет конкретного аргумента
+    -
+    <details> 
+    <summary>Используйте вычисляемые свойства для работы с аргументами</summary>
+    <code>
+    {`private val something: String get() = requireArguments().getString(SOMETHING_KEY) ?: throw NoArgumentsException(lostArgument: SOMETHING_KEY)`}
+    </code>
+    </details>
 1.
 <details>
   <summary> Используйте <code>lateinit</code> правильно</summary>
@@ -395,25 +374,15 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
 
 ### UI
 1.
-:::warning ЭТО В РЕВЬЮ НЕ ОТМЕЧАЕТСЯ, СЛЕДИТЕ САМОСТОЯТЕЛЬНО
-Не использовать `bias` для расположения элемента на экране
-:::
-1.
-<details className="admonition admonition-warning alert alert--danger">
+<details>
   <summary><code>xml</code> называйте аналогично названию класса</summary>
     <ul>
         <li>Плохой нейминг: <code>DetailRepoInfoFragment</code> и <code>fragment_detail_repo</code></li>
         <li>Хороший нейминг: <code>DetailInfoFragment</code> и <code>detail_info_fragment</code></li>
     </ul>
 </details>
-1.
-:::info
-Отступы всегда должны быть кратны ***4*** (8, 16, 24, 32), если в дизайне по-другому, задавайте вопросы
-:::
-1.
-:::info
-Если какой-то набор элементов используется на нескольких экранах - выносите его в отдельный `.xml` и подключайте с помощью [include](https://developer.android.com/training/improving-layouts/reusing-layouts)
-:::
+1. Отступы всегда должны быть кратны ***4*** (8, 16, 24, 32), если в дизайне по-другому, задавайте вопросы
+1. Если какой-то набор элементов используется на нескольких экранах - выносите его в отдельный `.xml` и подключайте с помощью [include](https://developer.android.com/training/improving-layouts/reusing-layouts)
 1.
 <details>
   <summary> Используйте константы для отступов в приложении правильно: </summary>
@@ -463,7 +432,7 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
   - если конфликты есть, вам нужно смержить ветку, в которую вы собираетесь мержить в ту, которую вы собираетесь мержить, и исправить конфликты
 - При повторной отправке на ревью пройдитесь по всем предыдущим комментариям и убедитесь, что все исправили, отвечайте на каждый коммент, чтобы ничего не пропустить и ревьювер сразу понимал, что вы это исправили
 - После каждого коммита выделяйте немного времени, чтобы отсмотреть все изменения, на наличие ошибок, перечисленных на этой странице.
-- Обязательно обращайте внимание на пункты, выделенные красным. Ошибки в этих пунктах ***НЕ БУДУТ*** отмечены на ревью, вам нужно будет найти и исправить их самостоятельно.
+- Обязательно обращайте внимание на [критичные для ревью пункты](#критичные-пункты-для-ревью). Ошибки в этих пунктах будут ***прерывать*** ревью.
 - После создания итогового merge request, отсмотрите все сделанные в нем изменения. Благодаря тому, что вы проверяли их после каждого коммита, это не займет у вас слишком много времени.
 - Чем чаще вы будете перепроверять себя, тем больше ошибок будите видеть и сможете не допускать их в будущем 
 
