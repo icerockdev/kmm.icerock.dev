@@ -46,3 +46,11 @@
 .common > rect {
   fill:rgb(174, 146, 252) !important;
 }
+
+li details {
+  background-color: unset !important;
+  border: unset !important;
+  box-shadow: unset !important;
+  padding: unset !important;
+  margin: unset !important;
+}
