@@ -7,7 +7,14 @@ sidebar_position: 3
 ## okio
 
 Для работы с файлами в общем коде мы будем пользоваться библиотекой [okio](https://square.github.io/okio/).  
-Изучите документацию по [подключению](https://square.github.io/okio/multiplatform/#gradle-configuration) и [использованию](https://square.github.io/okio/file_system/) `okio` в общем коде.
+
+Вам нужно будет использовать - [FileSystem.SYSTEM](https://square.github.io/okio/file_system/).
+
+Доступа к нему непосредственно из общего кода нет, потому что на `JavaScript`, который также поддерживает библиотека, доступ к тому же функционалу происходит по-другому. Поэтому, необходимо сделать `expect/actual` функции для доступа к `FileSystem.SYSTEM` из общего кода.
+
+Также, `okio` не использует [иерархическую мультиплатформу](https://kotlinlang.org/docs/multiplatform-hierarchy.html) - это значит что таргеты (в нашем случае - iOS) не используют `iosMain` для шаринга общей для iOS логики. Поэтому, создать `actual` функцию для доступа к `FileSystem.SYSTEM` в `iosMain` не получится, придется создать эту функцию отдельно для каждого таргета: `iosArm64`, `iosX64`, `iosSimulatorArm64`.  
+
+Изучите документацию по [подключению](https://square.github.io/okio/multiplatform/#gradle-configuration).
 
 ## Практическое задание
 Вынесите логику работы с файлами (для добавления картинки к issue) в общий код, используя библиотеку `okio`.

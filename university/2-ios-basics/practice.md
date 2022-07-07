@@ -75,14 +75,7 @@ sidebar_position: 6
    }
 
    class KeyValueStorage {
-      var authToken: String? {
-         get {
-            // TODO()
-         }
-         set {
-            // TODO()
-         }
-      }
+      var authToken: String?
    }
 
 ```
