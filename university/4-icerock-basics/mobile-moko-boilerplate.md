@@ -51,5 +51,6 @@ sidebar_position: 1
 
 ## Практическое задание
 
-Выполните CodeLab [IceRock KMM onboarding #1 - разворачивание проекта](https://codelabs.kmp.icerock.dev/codelabs/kmm-icerock-onboarding-1-ru/index.html).
-
+1. Выполните CodeLab [IceRock KMM onboarding #1 - разворачивание проекта](https://codelabs.kmp.icerock.dev/codelabs/kmm-icerock-onboarding-1-ru/index.html). - вот это может уже не надо, или написать чтобы после создания нового проекта выполнили кодлабу но уже на этом своем проекте, а для запуска его тоже смотрели в колдабу
+2. Создайте и настройте новый проект на основе шаблона `mobile-moko-boilerplate`, этот проект вы будете дорабатывать на протяжении всего курса
+3. После настройки нового проекта он должен успешно проходить CI

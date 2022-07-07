@@ -1,5 +1,5 @@
 ---
-sidebar_position: 13
+sidebar_position: 14
 ---
 
 # Навигация между экранами
@@ -22,6 +22,11 @@ sidebar_position: 13
 
 ## Практическое задание
 
+***подробно описать про добавление координаторов в iOS часть практики***
+- Добавьте навигацию с координаторами в iOS приложение
+- Настройте работу общего кода с iOS приложением (получение вьюмоделей, стейты сделать с moko-kswift)
+
+***Старая практика***  
 В качестве практики предлагаем вам потренироваться в использовании `AppCoordinator`. На основе [mobile-moko-boilerplate](https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate) сделать следующее приложение:
 - всего 2 экрана: `AuthViewController` и `HomeViewController` и 3 координатора: `AppCoordinator`, `AuthCoordinator` и `HomeCoordinator`
 - `AuthViewController` - экран регистрации, добавьте сюда поле для ввода никнейма и кнопку "Login"

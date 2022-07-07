@@ -17,9 +17,9 @@ sidebar_position: 8
 - ![img.png](media/add-files-to-ios-app.png)
 - ![img.png](media/add-rgenerated.png)
 
+сюда дописать что можно форскастить цвета потому-то потому-то (в best-practice вроде про это уже писал)
+
 ## Практическое задание 
-1. создайте проект по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html)
-1. перейдите от SwiftUI к UIKit, а затем удалите Storyboard, создайте StartViewController, начинайте запуск приложения с него
-1. добавьте какую-нибудь картинку в Assets из [дизайна](https://www.figma.com/file/XmpoCqkdWTGb2NGdR2bgiQ/Git_test-iOS)
-1. подключите библиотеку R.swift
-1. отобразите картинку из ресурсов на экране, используя R.swift, убедитесь, что все работает
+- Подключите R.swift в ваше iOS-приложение
+- переделайте доступ ко всем ресурсам в iOS приложении через R.swift (строки, картинки, цвета)
+- Убедитесь что все работает
