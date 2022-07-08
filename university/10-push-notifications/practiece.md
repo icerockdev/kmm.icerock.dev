@@ -3,14 +3,11 @@ sidebar_position: 3
 ---
 
 # Практическое задание
-Подключите и протестируйте `Firebase Cloud Messaging` на iOS и Android.  
+Подключите и протестируйте `Firebase Cloud Messaging` к вашему приложению. 
 
 Во время работы над практическим заданием настоятельно рекомендуем обращаться к разделу [Памятки для разработчика](../../university/memos/best-practices)
 
 Порядок действий:
-- создайте новое приложение используя `Kotlin Multiplatform Mobile plugin`
-- подключите Android-приложение к Firebase
-- подключите iOS-приложение к Firebase. Firebase подключайте используя [cocoapods](https://firebase.google.com/docs/ios/installation-methods#cocoapods)
 - настройте FCM в Android-приложении
 - настройте FCM в iOS-приложении
 - протестируйте приложения используя

@@ -4,12 +4,12 @@ sidebar_position: 1
 
 # Push notifications
 
-## Push notifications
+## Notifications
 
-Push notifications - это всплывающие сообщения-уведомления, которые показываются пользователю, даже если само приложение сейчас свернуто.
-
+Push notifications - это те всплывающие сообщения-уведомления, которые были отправлены сервером.  
 Чтобы получше разобраться с тем, что такое пуши и для чего они используются, советуем прочитать [статью](https://www.sostav.ru/blogs/254470/32008/).
 
+Используя Firebase можно отправлять два типа уведомлений - Notification message и Data message. О разнице между ними вы можете узнать из [документации](https://firebase.google.com/docs/cloud-messaging/concept-options) и [видео](https://www.youtube.com/watch?v=61lY61gUq3g).
 
 ## Firebase Cloud Messaging
 [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging) (FCM) - это сервис, позволяющий интегрировать отправку push-уведомлений в ваше приложение.
