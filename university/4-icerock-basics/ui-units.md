@@ -1,5 +1,5 @@
 ---
-sidebar_position: 7
+sidebar_position: 9
 ---
 # Построение экранов вертикальными списками
 
@@ -34,4 +34,6 @@ sidebar_position: 7
 <iframe src="//www.youtube.com/embed/ES6lHIwp5Jw?list=PL6yFiPOVXVUi90sQ66dtmuXP-1-TeHwl5" frameborder="0" allowfullscreen width="675" height="380"></iframe>
 
 ## Практическая задача
+- Используйте проект, готовый после раздела [Ресурсы в общем коде](./resources-in-common#практическое-задание)
 - используйте `moko-units` для реализации списка репозиториев в общем коде
+- Android приложение должно работать, ***к iOS вопросы, потому что еще не отправляли iOS с общим кодом дружить***
