@@ -226,3 +226,5 @@ result += "not "
 ````kotlin
 this.result += secondValue
 ````
+
+<div style={{textAlign:"right"}}>Автор: <a href="https://github.com/maria-93">@maria-93</a></div>
