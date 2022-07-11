@@ -18,11 +18,8 @@ sidebar_position: 3
 - iOS и Android приложения должны отображать пуши, даже если приложение свернуто
 
 ## Материалы
-- [Create your first cross-platform mobile app – tutorial](https://kotlinlang.org/docs/multiplatform-mobile-create-first-app.html)  
-- [подключение](https://firebase.google.com/docs/android/setup) Android приложения к Firebase
-- [подключение](https://firebase.google.com/docs/ios/setup) iOS приложения к Firebase
-- [настройка](https://firebase.google.com/docs/cloud-messaging/android/client) FCM в Android приложении
-- [настройка](https://firebase.google.com/docs/cloud-messaging/ios/client) FCM в iOS приложении
+- [подключение](https://firebase.google.com/docs/cloud-messaging/android/client) FCM в Android приложение
+- [подключение](https://firebase.google.com/docs/cloud-messaging/ios/client) FCM в iOS приложение
   - [APNs key](https://drive.google.com/file/d/1PetTvRcQguLAFBYz07to-Bh43nr7K0ok/view?usp=sharing) (доступен для IceRock Development)
-    - название файла APNs содержит KeyID и TeamID: AuthKey_mobiledevelopment_KeyID(TeamID) 
+    - Название файла APNs содержит KeyID и TeamID: AuthKey_mobiledevelopment_KeyID(TeamID) 
   - Если у вас нет ключа, создайте его в своем [Apple Developer Member Center](https://developer.apple.com/membercenter/index.action) 
