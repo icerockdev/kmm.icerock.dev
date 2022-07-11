@@ -51,7 +51,7 @@ sidebar_position: 1
 
 ## Практическое задание
 
-1. Выполните первые два пункта из CodeLab [IceRock KMM onboarding #1](https://codelabs.kmp.icerock.dev/codelabs/kmm-icerock-onboarding-1-ru/index.html), чтобы правильно настроить рабочее окружение.
+1. Выполните первые два пункта из CodeLab [IceRock KMM onboarding #1](https://codelabs.kmp.icerock.dev/codelabs/kmm-icerock-onboarding-1-ru/index.html), чтобы правильно настроить рабочее окружение
 2. Создайте и настройте новый проект на основе шаблона `mobile-moko-boilerplate`, этот проект вы будете дорабатывать на протяжении всего курса
 3. Убедитесь, что проект успешно проходит проверки CI
-4. Выполните оставшиеся пункты из CodeLab [IceRock KMM onboarding #1](https://codelabs.kmp.icerock.dev/codelabs/kmm-icerock-onboarding-1-ru/index.html), но уже в проекте, созданном на прошлом шаге
+4. Выполните пункты из CodeLab [IceRock KMM onboarding #1](https://codelabs.kmp.icerock.dev/codelabs/kmm-icerock-onboarding-1-ru/index.html), начиная с четвертого, но уже в проекте, созданном на прошлом шаге
