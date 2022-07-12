@@ -33,8 +33,8 @@ sidebar_position: 10
 
 <iframe src="//www.youtube.com/embed/ES6lHIwp5Jw?list=PL6yFiPOVXVUi90sQ66dtmuXP-1-TeHwl5" frameborder="0" allowfullscreen width="675" height="380"></iframe>
 
-## Практическая задача
+## Практическое задание
 - Используйте проект, готовый после раздела [Ресурсы на iOS](./ios-resources#практическое-задание)
 - Подключите `moko-units`
-- Реализуйте логику построения списков в общем коде (список репозиториев)
+- Реализуйте логику построения списков в общем коде (только для списка репозиториев)
 - iOS и Android приложения должны работать
