@@ -1,5 +1,5 @@
 ---
-sidebar_position: 9
+sidebar_position: 5
 ---
 
 # Внедрение зависимостей
@@ -232,18 +232,16 @@ val authFactory: AuthFactory by lazy {
 Параметры `SharedFactory` - это то, что мы не можем создать из общего кода а можем получить только с платформы.
 
 
-iOS
+***iOS***
 
-класс со статической переменной - фабрикой
+Класс со статической переменной - фабрикой
 ```
 class AppComponent {
     static var factory: SharedFactory!
 }
 ```
 
-в методе `application` инициализируем фабрику и прокидываем дальше в `AppCoordinator`. О нем вы узнаете уже в следующем разделе `Навигация между экранами`.
-
-
+В методе `application` класса `AppDelegate` инициализируем фабрику и прокидываем дальше в `AppCoordinator`. О нем вы узнаете уже в следующем разделе `Навигация между экранами`.
 ```
 func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
     FirebaseApp.configure()
@@ -308,3 +306,7 @@ val resetPasswordViewModel = factory.authFactory.createResetPasswordViewModel(
 
 
 Таким образом, чтобы начать работу с общим кодом - нужно только создать объект `SharedFactory`, передав ему несколько параметров, доступных только на платформе.  
+
+## Практическое задание
+- Используйте проект, готовый после раздела [Многомодульность](./multimodularity#практическое-задание)
+- Добавьте фабрики для создания фичей

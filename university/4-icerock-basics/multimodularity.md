@@ -121,9 +121,9 @@ sidebar_position: 3
 
 Генератор - [Shaper](https://github.com/icerockdev/shaper/)
 
-## Практика
-- Запустите [mobile-moko-boilerplate](https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate)
-- Добавьте `myTestFeature` вручную
-    - пакет - `ru.4test.package`
-- Проделайте те же самые действия при помощи [shaper](https://github.com/icerockdev/shaper/), используйте [шаблон](https://gitlab.icerockdev.com/scl/boilerplate/mobile-shaper-templates/-/blob/master/kmm/kmm-feature.yaml) для создания новой фичи.  
-  Рекомендуем сначала попробовать сделать это самостоятельно, не пользуясь [Памяткой](../memos/shaper).
+## Практическое задание
+- Используйте проект, созданный в разделе [Шаблон для новых проектов](./mobile-moko-boilerplate#практическое-задание)
+- Добавьте две фичи вашего приложения (это заготовки на будущее, пока не переносите код из практики третьего блока)
+  - **фича авторизации** - добавьте её в проект вручную
+  - **фича репозиториев** - её добавьте в проект при помощи [shaper](https://github.com/icerockdev/shaper/), используйте [шаблон](https://gitlab.icerockdev.com/scl/boilerplate/mobile-shaper-templates/-/blob/master/kmm/kmm-feature.yaml) для создания новой фичи. Рекомендуем сначала попробовать сделать это самостоятельно, не пользуясь [Памяткой](../memos/shaper).
+- Убедитесь, что проект компилируется

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 6
+sidebar_position: 10
 ---
 # Построение экранов вертикальными списками
 
@@ -33,8 +33,8 @@ sidebar_position: 6
 
 <iframe src="//www.youtube.com/embed/ES6lHIwp5Jw?list=PL6yFiPOVXVUi90sQ66dtmuXP-1-TeHwl5" frameborder="0" allowfullscreen width="675" height="380"></iframe>
 
-## Практическая задача
-
-- Склонируйте репозиторий библиотеки себе - https://github.com/icerockdev/moko-units
-- Запустите приложение пример на android и iOS
-- Добавьте свой новый Unit в существующий список
+## Практическое задание
+- Используйте проект, готовый после раздела [Ресурсы на iOS](./ios-resources#практическое-задание)
+- Подключите `moko-units`
+- Реализуйте логику построения списков в общем коде (только для списка репозиториев)
+- iOS и Android приложения должны работать

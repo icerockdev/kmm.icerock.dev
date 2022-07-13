@@ -1,5 +1,5 @@
 ---
-sidebar_position: 13
+sidebar_position: 8
 ---
 
 # Навигация между экранами
@@ -21,14 +21,8 @@ sidebar_position: 13
     - `navigation items` и более сложные настройки делаем через `код`
 
 ## Практическое задание
-
-В качестве практики предлагаем вам потренироваться в использовании `AppCoordinator`. На основе [mobile-moko-boilerplate](https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate) сделать следующее приложение:
-- всего 2 экрана: `AuthViewController` и `HomeViewController` и 3 координатора: `AppCoordinator`, `AuthCoordinator` и `HomeCoordinator`
-- `AuthViewController` - экран регистрации, добавьте сюда поле для ввода никнейма и кнопку "Login"
-- `HomeViewController` - основной экран приложения, добавьте сюда `Label` с приветствием юзера по никнейму и кнопку "Logout"
-- никнейм сохранять в параметры устройства используя `NSUserDefaults`
-- использовать `AppCoordinator` для первичной навигации:
-  - если никнейм есть в `NSUserDefaults` - запускать `HomeViewController`
-  - иначе - запускать `AuthCoordinator`
-- не использовать `.storyboard`, создавайте необходимые контроллеры и свяжите их с `.xib`
-- для `AuthViewController` используйте `.xib` с таким же именем, а для `HomeViewController` создайте `.xib` с отличающимся именем
+- Используйте проект, готовый после раздела [Ресурсы в общем коде](./resources-in-common#практическое-задание)
+- Добавьте навигацию в iOS приложение, используя подход `Coordinator`
+- `AppCoordinator` - для первичной навигации
+  - если авторизация уже пройдена - запускать `RepoCoordinator`
+  - иначе - `AuthCoordinator`

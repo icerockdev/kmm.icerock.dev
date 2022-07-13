@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 6
 ---
 
 # MVVM
@@ -375,19 +375,14 @@ extension EventsViewController: EventsViewModelEventsListener {
 - `suspend` функции все внутри Kotlin кода.
 
 ## Практическое задание
-
-Выполните следующие действия: 
-- Клонируйте себе библиотеку [moko-mvvm](https://github.com/icerockdev/moko-mvvm)
-- Запустите sample-app на Android и iOS, убедитесь, что все работает (для Android там используется DataBinding, не пугайтесь)
-- Добавьте следующие изменения во `ViewModel`:
-    - `isCheckBoxVisible: LiveData<Boolean>` переменную, для контроля за `visibility` элемента `checkBox`
-    - публичные функции `hideCheckBox` и `showCheckBox` - для изменения значения `isCheckBoxVisible`
-- Добавьте на UI: 
-    - `checkBox`, свяжите его с `isCheckBoxVisible`, воспользуйтесь функцией `bindVisibleOrGone`
-    - разберитесь с другими доступными для `checkBox` функциями биндинга: `bindEnabled`, `bindChecked`, `bindCheckedTwoWay` и т.д.
-    - две кнопки, действиями для них станут `hideCheckBox` и `showCheckBox` соответственно
-- Убедитесь, что все работает
-- Сделайте два экрана, с кнопками для перехода друг на друга
-    - с первого экрана переходим на второй используя `EventsDispatcher`
-    - со второго экрана переходим на первый используя `Flow` и moko-kswift
-
+- Используйте проект, готовый после раздела [Внедрение зависимостей](./di#практическое-задание)
+- Подключите библиотеку `moko-mvvm`
+- Подключите плагин `moko-kswift`
+- Добавьте в ваши фичи репозиторий, необходимые классы и вьюмодели, которые вы делали в третьем блоке для Android, все вьюмодели наследуйте от `ViewModel` из `moko-mvvm`
+  - Ориентируйтесь на классы из практики 3его блока и [диаграмму классов mpp-library](./practice#классы-приложения)
+  - Используйте `CFlow` и `CStateFlow` для для `state` public API
+- Добавьте необходимые фрагменты в Android-приложение, фрагменты наследуйте от `MvvmFragment` из `moko-mvvm`, ориентируйтесь на практику 3 блока
+- Добавьте необходимые `ViewController`-ы в iOS приложение, все `ViewController`-ы наследуйте от `MVVMController` из `moko-mvvm`
+- Подключите вьюмодели к iOS и Android
+- Настройте Android и iOS приложения - их логикой, кроме управления списков, должен управлять общий код
+- Приложения должны запускаться
