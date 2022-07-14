@@ -25,15 +25,16 @@
 После установки запустить приложение на симуляторе можно командой:
 
 ```shell
-ios-sim -d [deviceName] launch [source]
+ios-sim -d=[deviceName] launch [source]
 ```
 
 где **[deviceName]** - имя девайса, на котором мы хотим протестировать сборку, **[source]** - путь до файла .app
 
+Пример:
+
+```shell
+ios-sim -d="iPhone 12, 15.4" launch /Users/trainee/Downloads/mokoApp.app
+```
+
 Список доступных девайсов можно увидеть командой `ios-sim showdevicetypes`
 
-:::important
-
-Сборки на устройствах с процессорами M1 и Intel могут отличаться
-
-:::
