@@ -30,7 +30,7 @@ private val keyValueStorage: KeyValueStorage by lazy {
 // парсер json от https://github.com/Kotlin/kotlinx.serialization
 private val json: Json by lazy {
     Json {
-        // чтобы если в api появятся новые ключи то у нас приложеине их будет игнорировать, а не крешиться
+        // чтобы если в api появятся новые ключи то у нас приложение их будет игнорировать, а не крашиться
         ignoreUnknownKeys = true
     }
 }
@@ -173,6 +173,30 @@ val data: List<PartData> = formData {
 
 Касаемо использования formData, существует несколько подходов в формировании *ktor* HTTP клиента:
 
+### Передача файла как Input в common коде
+
+Чтобы реализовать потоковую передачу файла в общем коде, используя ktor, необходимо получить объект [Input](https://api.ktor.io/older/1.6.8/ktor-io/io.ktor.utils.io.core/-input/index.html) на основе файла. Сделать это в общем коде можно используя expect/actual функции:  
+
+***commonMain:***
+```kotlin
+expect fun inputByFilepath(filePath: String): Input
+```
+***androidMain:***
+```kotlin
+actual fun inputByFilepath(filePath: String): Input{
+    val file = File(filePath)
+    val inputStream = file.inputStream()
+    return inputStream.asInput()
+}
+```
+***iosMain:***
+```kotlin
+actual fun inputByFilepath(filePath: String): Input {
+    val fileHandle = NSFileHandle.fileHandleForReadingAtPath(path = filePath)
+    return Input(fileHandle!!.fileDescriptor)
+}
+```
+
 ### submitFormWithBinaryData
 
 Для использования этого метода необходимо заранее сформировать `formData`. Код с таким методом выглядит следующим образом:
@@ -222,3 +246,73 @@ httpClient.put<String> {
 
 ## Загрузка файлов 
 Ознакомьтесь с [документацией](https://ktor.io/docs/response.html#streaming) Ktor и [статьей](https://blog.kotlin-academy.com/download-files-with-ktor-and-coroutines-e96b1cc8b657) про загрузку файлов, используя Ktor.
+
+### Загрузка файлов в кеш
+Если в приложении есть работа с какими-то файлами, то имеет смысл загрузить их в кэш приложения, чтобы обеспечить к ним более быстрый доступ и, тем самым, ускорить работу приложения.   
+
+Разберем кэширование на примере работы с картинками - юзер выбирает картинку с устройства, прикрепляет ее к сообщению - картинка из памяти устройства сохраняется в кэш, в сообщении сохраняется путь до этой картинки. Когда он просмотрит это сообщение, например, после повторного открытия приложения - картинка уже будет загружаться из кэша, что значительно ускорит процесс ее загрузки.
+#### на Android
+Для начала - у нас есть кнопка, нажимая на которую мы запускаем [неявный Intent](https://developer.android.com/guide/components/intents-filters#ExampleSend) `ACTION_PICK`.
+```kotlin
+binding.attachImgButton.setOnClickListener {
+    val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+    startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE)
+}
+```
+И обрабатываем результат, который вернула нам эта активити:
+```kotlin
+override fun onActivityResult(requestCode: Int, resultCode: Int, returnIntent: Intent?) {
+    if (resultCode != Activity.RESULT_OK) {
+        return
+    }
+    
+    returnIntent?.data?.also { returnUri ->
+        // получаем имя файла если есть, иначе создаем со своим
+        val fileName = returnUri.lastPathSegment ?: "MyCachedImageFile"
+        // создаем файл в кэшах приложения
+        val cachedImageFile = File
+            .createTempFile(fileName, ".jpeg", requireContext().cacheDir)
+        // продолжаем логику, когда файл уже загружен в кэш
+        viewModel.onFilesLoaded(imageTitle = fileName, imagePath = cachedImageFile.path)
+    }
+}
+```
+
+#### на iOS
+По нажатию кнопки запускаем [UIImagePickerController](https://developer.apple.com/documentation/uikit/uiimagepickercontroller), который предоставляет системный интерфейс для выбора картинок из галереи, фото с камеры, записи видео, и т.д.
+```swift
+    @IBAction private func onAttachFilesButtonPressed(_: Any) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        
+        // указываем, откуда хотим получать картинку - photoLibrary
+        if UIImagePickerController.isSourceTypeAvailable(.photoLibrary) {
+            imagePicker.sourceType = .photoLibrary
+            self.present(imagePicker, animated: true)
+        }
+    }
+```
+
+```swift
+    func imagePickerController(_: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+        guard let selectedImage = info[.originalImage] as? UIImage,
+              let imageUrl = info[.imageURL] as? URL else { return }
+        // получаем путь до директории кэшэй
+        guard let cacheURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else { return }
+
+        // получаем путь, куда будет сохранена наша картинка 
+        let imageCacheURL: URL = cacheURL.appendingPathComponent(imageUrl.lastPathComponent)
+
+        // пробуем сохранить картинку в кэш
+        do {
+            try data.write(to: imageCacheURL)
+        } catch let e {
+            print("Error saving data in cache: \(e)")
+        }
+        
+        // продолжаем логику, когда файл уже загружен в кэш
+        issuesViewModel.onFilesLoaded(imagePath: imageCacheURL.path, imageTitle: imageUrl.lastPathComponent)
+
+        dismiss(animated: true, completion: nil)
+    }
+```
