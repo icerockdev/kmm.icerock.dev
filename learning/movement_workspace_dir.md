@@ -6,18 +6,22 @@
 Скорость доступа к файлам внешнего носителя практически не будет отличаться, если подключение выполнено через USB 3.0/Thunderbolt интерфейс, а характеристики внешнего носителя на чтение запись начинаются от 450/300Мб/с, это связано с тем, что большинство файлов проектов и программ имеют малый объем и большие скорости накопителей не принесут ощутимого прироста производительности, но использование HDD для этих целей однозначно не рекомендуется.  
 :::
 
+## ВАЖНО ЗНАТЬ
+
+После выполнения этапов данной инструкции функция **Восстановление окон после загрузки системы** для интерактивных оболочек работает некорректно, после восстановления приложения будут использовать пути установленные по-умолчанию, для таких приложений необходимо выполнить ручной перезапуск. Если вы знаете как исправить данную особенность, нажмите на ссылку внизу страницы и отправьте нам реквест с информацией.
+
 #### Используемые директории
 
 При разработке для мультиплатформы мы часто используем вот эти директории:
 
 - проектов для android/kmm:  
-  `/%USERNAME%/AndroidStudioProjects`
+  `~/AndroidStudioProjects`
 - проектов для xcode:  
-  `/%USERNAME%/Documents/xCode`
+  `~/Documents/xCode`
 - расположение файлов Gradle:  
-  `/%USERNAME%/.gradle`
+  `~/.gradle`
 - расположение файлов Kotlin-Native (где Gradle хранит версии Kotlin-Native):  
-  `/%USERNAME%/.konan`
+  `~/.konan`
 - расположение Archive:  
   `/Library/Developer/Xcode/Archives`
 - расположение DerivedData:  
@@ -46,9 +50,9 @@
 
 В открывшемся файле добавляем строку:
 
-`export KONAN_DEV_DIR=/Volumes/ExternalDrive/KONAN/.konan`
+`export KONAN_DATA_DIR=/Volumes/ExternalDrive/KONAN/.konan`
 
-Для экономии времени можем перенести папку .konan из директории `/%USERNAME%/.konan` в заранее созданную нами папку.
+Для экономии времени можем перенести папку .konan из директории `~/.konan` в заранее созданную нами папку.
 
 #### Перенос .gradle
 
@@ -70,7 +74,7 @@
 
 `Settings -> Appearance & Behavior -> System Settings -> Android SDK`
 
-![Android SDK Installation](https://github.com/ExNDY/kmm.icerock.dev/blob/movement_workspace_dir/learning/android_sdk_setup.jpg "Android SDK Installation")
+![Android SDK Installation](android_sdk_setup.jpg "Android SDK Installation")
 
 В строке Android SDK Location отображается текущий путь, где хранятся скачанные компоненты sdk. Нажимаем Edit, появившийся диалог позволяет настроить необходимые компонент и самое главное путь до них. Выбираем необходимые, а путь, где будем дальше хранить SDK, меняем на:
 
@@ -82,7 +86,7 @@
 `export ANDROID_SDK_ROOT=/Volumes/Drive/SDK/Android/`
 
 После выполненных шагов, ваш файл должен иметь, примерно, такой вид:
-![environment complete for .zshenv](https://github.com/ExNDY/kmm.icerock.dev/blob/movement_workspace_dir/learning/environment_complete_example.png "Completed .zshenv")
+![environment complete for .zshenv](environment_complete_example.png "Completed .zshenv")
 
 #### Перенос Android Studio
 
@@ -102,7 +106,7 @@
 
 Установить Xcode на другой носитель отличный от системного полностью - нельзя, привязка симуляторов и других необходимых зависимостей требует их наличия по пути по-умолчанию, но мы можем перенести установленное приложение Xcode из папки Программы, например, в нашу созданную папку App.
 
-![move xcode in other dir](https://github.com/ExNDY/kmm.icerock.dev/blob/movement_workspace_dir/learning/move_xcode_in_other_dir.png "Move Xcode.app in App folder")
+![move xcode in other dir](move_xcode_in_other_dir.png "Move Xcode.app in App folder")
 
 Если вы попытаетесь скомпилировать свои проекты, то обнаружите сообщение, что Xcode не найден по пути, который указан в окружении и необходимо указать актуальную директорию. Для этого в терминале вводим:
 
@@ -116,7 +120,7 @@
 
 Следующий шаг - запустить Xcode и открыть Preference -> Вкладку Locations и изменить пути до Derived Data и Archives, на путь до созданных нами директорий.
 
-![location of workspace dir in Xcode preferences](https://github.com/ExNDY/kmm.icerock.dev/blob/movement_workspace_dir/learning/change_xcode_paths_workdir.png "Xcode workspace dir")
+![location of workspace dir in Xcode preferences](change_xcode_paths_workdir.png "Xcode workspace dir")
 
 #### Добавление значений переменных окружения в Xcode
 
