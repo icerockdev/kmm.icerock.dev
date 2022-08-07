@@ -74,7 +74,7 @@
 
 `Settings -> Appearance & Behavior -> System Settings -> Android SDK`
 
-![Android SDK Installation](android_sdk_setup.jpg "Android SDK Installation")
+![Android SDK Installation](android_sdk_setup.jpg)
 
 В строке Android SDK Location отображается текущий путь, где хранятся скачанные компоненты sdk. Нажимаем Edit, появившийся диалог позволяет настроить необходимые компонент и самое главное путь до них. Выбираем необходимые, а путь, где будем дальше хранить SDK, меняем на:
 
@@ -86,7 +86,7 @@
 `export ANDROID_SDK_ROOT=/Volumes/Drive/SDK/Android/`
 
 После выполненных шагов, ваш файл должен иметь, примерно, такой вид:
-![environment complete for .zshenv](environment_complete_example.png "Completed .zshenv")
+![environment complete for .zshenv](environment_complete_example.png)
 
 #### Перенос Android Studio
 
@@ -106,7 +106,7 @@
 
 Установить Xcode на другой носитель отличный от системного полностью - нельзя, привязка симуляторов и других необходимых зависимостей требует их наличия по пути по-умолчанию, но мы можем перенести установленное приложение Xcode из папки Программы, например, в нашу созданную папку App.
 
-![move xcode in other dir](move_xcode_in_other_dir.png "Move Xcode.app in App folder")
+![move xcode in other dir](move_xcode_in_other_dir.png)
 
 Если вы попытаетесь скомпилировать свои проекты, то обнаружите сообщение, что Xcode не найден по пути, который указан в окружении и необходимо указать актуальную директорию. Для этого в терминале вводим:
 
@@ -120,7 +120,7 @@
 
 Следующий шаг - запустить Xcode и открыть Preference -> Вкладку Locations и изменить пути до Derived Data и Archives, на путь до созданных нами директорий.
 
-![location of workspace dir in Xcode preferences](change_xcode_paths_workdir.png "Xcode workspace dir")
+![location of workspace dir in Xcode preferences](change_xcode_paths_workdir.png)
 
 #### Добавление значений переменных окружения в Xcode
 
