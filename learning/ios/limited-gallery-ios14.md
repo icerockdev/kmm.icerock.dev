@@ -49,7 +49,8 @@ PHPhotoLibrary.shared().presentLimitedLibraryPicker(from: viewController)
 
 **Наблюдение за изменением библиотеки:**
 
-Чтобы отслеживать изменения в ограниченном выборе библиотеки пользователя, используйте стандартный API наблюдателя изменений, [как описано в разделе наблюдение за изменениями в библиотеке фотографий](https://developer.apple.com/documentation/photokit/phphotolibrary/observing_changes_in_the_photo_library). Зарегистрируйте свое приложение, чтобы получать уведомления, поскольку система уведомляет его об изменениях состояния:
+Чтобы отслеживать изменения в ограниченном выборе библиотеки пользователя, используйте стандартный API наблюдателя изменений, [как описано в разделе наблюдение за изменениями в библиотеке фотографий](https://developer.apple.com/documentation/photokit/phphotolibrary/observing_changes_in_the_photo_library).  
+Зарегистрируйте свое приложение, чтобы получать уведомления, поскольку система уведомляет его об изменениях состояния:
 ```swift
     override func viewDidLoad() {
         super.viewDidLoad()
