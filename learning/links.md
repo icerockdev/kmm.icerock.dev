@@ -66,6 +66,7 @@ sidebar_position: 23
 - [Kotlin Multiplatform on the Web](https://doist.dev/posts/filterist-kotlin-multiplatform-javascript-exploration)
 - [Using SwiftUI with View Model written in Kotlin Multiplatform Mobile](https://lwesterhoff.medium.com/using-swiftui-with-view-model-written-in-kotlin-multiplatform-mobile-67cf7b6da551)
 - [The journey of Lunabee Studio with KMM](https://medium.com/@anthony.couhier/the-journey-of-lunabee-studio-with-kmm-66895316959e) - графики сравнения Native и KMM
+- [Create a Kotlin/Multiplatform library with Swift](https://medium.com/kodein-koders/create-a-kotlin-multiplatform-library-with-swift-1a818b2dc1b0) - интеграция static swift library в kmm библиотеку
 
 ## Projects
 
