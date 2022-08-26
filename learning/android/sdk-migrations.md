@@ -1,5 +1,10 @@
 # Android SDK migration
 
+## Android 13
+
+- [Официальная дока](https://developer.android.com/about/versions/13/behavior-changes-13?hl=en)
+- [Статья разбор](https://medium.com/tech-takeaways/migrating-my-app-to-android-13-f5ad0649d23d)
+
 ## Android 12 (API 31)
 
 - Официальная дока по релизу: https://developer.android.com/about/versions/12
