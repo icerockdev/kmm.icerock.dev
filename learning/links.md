@@ -21,6 +21,9 @@ sidebar_position: 23
 - [Александр Верещагин (Devexperts) — Как мы внедряли Kotlin Multiplatform](https://www.youtube.com/watch?v=D3X5TJpbiaY)
 - [Александр Нозик | Визуализация данных на Kotlin-Multiplatform](https://www.youtube.com/watch?v=8F0e_JaoUBU)
 - [Kotlin Multiplatform Mobile: Real World Lessons Learned](https://youtu.be/qcwFizHMV4Y)
+- [NATIVE UI WITH MULTIPLATFORM COMPOSE](https://www.droidcon.com/2022/09/29/native-ui-with-multiplatform-compose/) - про проект Redwood, который рисует нативный для Android, iOS, Web UI, под управлением Jetpack Compose
+- [SIMPLIFIED SWIFT MULTIPLATFORM INTEGRATION](https://www.droidcon.com/2022/09/29/simplified-swift-multiplatform-integration/) - как подключить Swift код внутрь Kotlin кода
+- [KOTLIN MULTIPLATFORM AT FIVE YEARS](https://www.droidcon.com/2022/09/29/kotlin-multiplatform-at-five-years/)
 
 ## Posts
 
@@ -67,6 +70,12 @@ sidebar_position: 23
 - [Using SwiftUI with View Model written in Kotlin Multiplatform Mobile](https://lwesterhoff.medium.com/using-swiftui-with-view-model-written-in-kotlin-multiplatform-mobile-67cf7b6da551)
 - [The journey of Lunabee Studio with KMM](https://medium.com/@anthony.couhier/the-journey-of-lunabee-studio-with-kmm-66895316959e) - графики сравнения Native и KMM
 - [Create a Kotlin/Multiplatform library with Swift](https://medium.com/kodein-koders/create-a-kotlin-multiplatform-library-with-swift-1a818b2dc1b0) - интеграция static swift library в kmm библиотеку
+- [The iOS Engineer’s Guide to Beginning Kotlin Multiplatform Development](https://artandscienceofcoding.com/science/kmm-for-ios-engineers/)
+- [Why iOS Engineers Should Avoid This Glorified KMM Technique](https://artandscienceofcoding.com/science/avoid-this-kmm-technique/)
+- [The Art of Multiplatform Programming: The Secret to Maximizing Shared Code](https://artandscienceofcoding.com/science/kmm-maximizing-shared-code/)
+- [Compose UI for iOS](https://touchlab.co/compose-ui-for-ios/) - опыт Touchlab по использованию Jetpack Compose for iOS (с render'ом на Canvas как flutter)
+- [Swift/Kotlin ViewModel alignment in a Kotlin Multiplatform project](https://johnoreilly.dev/posts/swift-kotlin-viewmodel-kmm-comparison/)
+- [Zero To Hero in KMM with Compose and SwiftUi](https://proandroiddev.com/zero-to-hero-in-kmm-with-compose-and-swiftui-d8951f7d80b7)
 
 ## Projects
 
