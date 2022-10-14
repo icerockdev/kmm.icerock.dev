@@ -115,8 +115,29 @@ The key to the title string in the app's string resources to use to localize the
 
 Ознакомьтесь с [развернутой информацией](https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages) по возможным действиям с контентом ваших пуш-уведомлений.
 
+## Неочевидные моменты при реализации протокола UNUserNotificationCenterDelegate
+Протокол содержит два метода, которые используются для обработки входящих push-уведомлений:
+
+1. Приложение находится на переднем плане:
+
+```swift
+userNotificationCenter(_:willPresent:withCompletionHandler:)
+```
+
+2. Приложение находится в фоне или на переднем плане и пользователь нажимает на push-уведомление:
+
+```swift
+userNotificationCenter(_:didReceive:withCompletionHandler:)
+```
+
+Неочевидный момент в том, что после реализации обоих этих методов протокола и если реализован метод application(_:didReceiveRemoteNotification:) в AppDelegate, то он больше не будет вызываться. Если реализовать только один из методов протокола, то метод application(_:didReceiveRemoteNotification:) вызываться будет. Что следует знать об этом методе:
+- Это самый старый из методов обработки push-уведомлений.
+- Он был признан устаревшим на iOS 10 и выше.
+- Его использование ограничено, поэтому вместо него следует использовать фреймворк UserNotifications.
+
 ## Полезные ресурсы
 
+- Официальный пример реализации push-уведомлений от Firebase. [Firebase Messaging Quickstart iOS](https://github.com/firebase/quickstart-ios/blob/master/messaging/MessagingExampleSwift/AppDelegate.swift)
 - Статья про [принудительный сброс FCM токена](./forced_fcm_invalidation)
 - [Отправка](https://firebase.google.com/docs/cloud-messaging/ios/first-message#send_a_notification_message) тестового уведомления
 - [Отправка изображений](https://firebase.google.com/docs/cloud-messaging/ios/send-image) в уведомлениях
