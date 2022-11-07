@@ -638,3 +638,7 @@ Android Studio и добавить зависимость в ``app/gradle.kts``.
 ![img.png](media/gpu_profiler_3.png)
 
 Судя по результатам, оптимизировать еще есть куда.
+
+## Полезные ссылки
+
+- [Gotchas in Jetpack Compose Recomposition](https://multithreaded.stitchfix.com/blog/2022/08/05/jetpack-compose-recomposition/)
