@@ -76,6 +76,7 @@ sidebar_position: 23
 - [Compose UI for iOS](https://touchlab.co/compose-ui-for-ios/) - опыт Touchlab по использованию Jetpack Compose for iOS (с render'ом на Canvas как flutter)
 - [Swift/Kotlin ViewModel alignment in a Kotlin Multiplatform project](https://johnoreilly.dev/posts/swift-kotlin-viewmodel-kmm-comparison/)
 - [Zero To Hero in KMM with Compose and SwiftUi](https://proandroiddev.com/zero-to-hero-in-kmm-with-compose-and-swiftui-d8951f7d80b7)
+- [Public key pinning using Ktor for Android and iOS (KMM)](https://medium.com/@MrHardikTrivedi/public-key-pinning-using-ktor-for-android-and-ios-kmm-61066cb34321)
 
 ## Projects
 
