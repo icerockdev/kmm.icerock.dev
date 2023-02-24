@@ -15,7 +15,7 @@ Foreground - сервис выполняет функционал заметны
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 ```
 
-И foreground и Background сервисы запускается на main потоке
+И foreground и Background сервисы запускаются на main потоке
 
 Background - сервис выполняет функционал скрытый от пользователя. Начиная с API-26 фоновые сервисы имеют некоторые ограничения при свернутом приложении, например они не могут получить геолокацию
 
