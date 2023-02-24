@@ -4,6 +4,10 @@ sidebar_position: 1
 
 # Материалы для обучения
 
+##Официальная документация
+- [Документация на английском](https://kotlinlang.org/docs/home.html)
+- [Документация на русском](https://kotlinlang.ru/) Фанатский перевод официальной документации котлина на русский язык.
+
 ## Бесплатные курсы
 
 ### Kotlin
@@ -25,3 +29,4 @@ sidebar_position: 1
 
 - [Atomic Kotlin](https://www.atomickotlin.com/atomickotlin/) - подойдет для новичков в программировании. Медленные и подробные пояснения
 - [Kotlin в действии](https://www.ozon.ru/product/kotlin-v-deystvii-143582448/) - для людей с Java опытом
+- [Effective Kotlin](https://kt.academy/book/effectivekotlin) - для людей уже с опытом в Котлине. Книга посвящена лучшим практикам использования языка.
