@@ -19,6 +19,6 @@ sidebar_position: 7
         id = this.id,
         name = this.name,
         timezone = this.timezone?.toDomain(),
-        deviceParameters = this.parameterList?.map { it.toDomain() }.orEmpty()
+        deviceParameters = this.parameterList?.map(Parameter::toDomain).orEmpty()
     )
     ```
