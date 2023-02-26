@@ -18,9 +18,9 @@
       - пример легковестности корутин по сравнению с потоками
   - [Cancellation and timeouts](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
     - Beginner   
-      - `Job`, `cancel`, `cancelAndJoin`, `isActive`, `yield`, `NonCancellable`, `withTimeout`, `withTimeoutOrNull`, `CancellationException`, `TimeoutCancellationException`
+      - `Job`, `cancel`, `cancelAndJoin`, `isActive`, `ensureActive`, `NonCancellable`, `withTimeout`, `withTimeoutOrNull`, `CancellationException`, `TimeoutCancellationException`
       - в корутине нужно проверять, хотят ли её отменить
-      - проверка на отмену происходит в каждом suspension point, чтобы проверять чаще используйте: isActive, yield (Making computation code cancellable)
+      - проверка на отмену происходит в каждом suspension point, чтобы проверять чаще используйте: ensureActive. Или проверяйте статус Job с помощью флага isActive (Making computation code cancellable)
       - пример правильной и неправильной отмены корутины (Cancellation is cooperative)
       - работа корутины по time-out (Timeout)  
       - работа с ресурсами внутри withTimeout блока, пример проблемы и решения (timeout and resources)
@@ -28,10 +28,14 @@
     - Beginner
       - `async`, `Deferred`, `Job`, `await`, `start`
       - примеры последовательного и асинхронного запуска
+     
       - отложенный запуск корутины, отличия между запуском start и await (Lazy started async)
-      - корутина, возвращающая значение - async, Deferred  
+      - корутина, возвращающая значение - async, Deferred
       - хороший стиль объявления async-функции (Async-style functions)
       - пример возникновения ошибок в coroutineScope (Structured concurrency with async)
+    - Intermediate
+      - `awaitAll`
+       - [Пример с параллельным запуском множества запросов и работа с их результатами](https://proandroiddev.com/awaiting-multiple-coroutines-the-clean-way-75469f8df160)
   - [Coroutine context and dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)  
     - Beginner
       - `CoroutineContext`, `CoroutineScope`, `Dispatcher`, `Unconfined`, `newSingleThreadContext`, `Job`, `join`, `asContextElement`
@@ -94,7 +98,7 @@
   - `Structured Concurrency`, `coroutineScope`
   - Beginner
     - как пришли к Structured Concurrency, какие проблемы решает, какие преимущества дает
-    - корутины не глобальные, как потоки, они связаны с локальной областью действия в вашем приложении, которая представляет собой объект с ограниченным временем жизни, например элемент пользовательского интерфейса
+    - корутины не глобальные, как потоки. Они связаны со своим скоупом, который представляет собой объект с ограниченным временем жизни. Например элемент UI.
 
 - 🎦 [KotlinConf 2019: Asynchronous Data Streams with Kotlin Flow by Roman Elizarov](https://www.youtube.com/watch?v=tYcqn48SMT8)
   - `suspend`, `Channel`, `hot`, `flow`, `operators`, `Flowable`
@@ -217,6 +221,7 @@
       - любой объект, который передается через Channel или Flow автоматически замораживается
   
 - 🎦 [Roman Elizarov — Structured concurrency](https://www.youtube.com/watch?v=Mj5P47F6nJg)
+- [CodeLab от JetBrains с основами применения механизмов корутин и каналов](https://kotlinlang.org/docs/coroutines-and-channels.html)
 
 ### Advanced
 
