@@ -77,6 +77,7 @@ sidebar_position: 23
 - [Swift/Kotlin ViewModel alignment in a Kotlin Multiplatform project](https://johnoreilly.dev/posts/swift-kotlin-viewmodel-kmm-comparison/)
 - [Zero To Hero in KMM with Compose and SwiftUi](https://proandroiddev.com/zero-to-hero-in-kmm-with-compose-and-swiftui-d8951f7d80b7)
 - [Public key pinning using Ktor for Android and iOS (KMM)](https://medium.com/@MrHardikTrivedi/public-key-pinning-using-ktor-for-android-and-ios-kmm-61066cb34321)
+- [Testing on Kotlin Multiplatform and a Strategy to Speed Up Development Time](https://akjaw.com/testing-on-kotlin-multiplatform-and-strategy-to-speed-up-development/) - про авто-тестирование фич
 
 ## Projects
 
