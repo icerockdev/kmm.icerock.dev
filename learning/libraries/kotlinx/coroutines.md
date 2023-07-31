@@ -428,6 +428,8 @@ fun startTimer() {
 
 Вывод - вызов `delay` не останавливает работу потока.
 
+Более детальное сравнение `delay` и `Thread.sleep` можете прочитать в [статье](https://blog.shreyaspatil.dev/sleepless-concurrency-delay-vs-threadsleep)
+
 ### Механика отмены канала
 
 Для закрытия канала используется метод close()
