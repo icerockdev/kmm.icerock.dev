@@ -14,6 +14,11 @@ Kotlin Serialization - это библиотека, предназначенна
 
 После изучения, для закрепления материала, советуем пройти [кодлабу](https://www.raywenderlich.com/26883403-android-data-serialization-tutorial-with-the-kotlin-serialization-library).
 Вы узнаете о возможностях библиотеки и потренируетесь на практике.
+Как довести starter project кодлабы до рабочего состояния:
+1. В Gradle build поднять Java, jvm -> 17, в Gradle wrapper версию -> 7.2
+2. Сделать Upgrade AGP, рекомендуемый Android Studio (7.0.2-> 7.5)
+3. Поднять Compile SDK -> 31
+4. В Манифесте внести исправления: 1) android:exported="true" под tag <activity, 2) package="com.raywenderlich.android.borednomore" под tag <manifest следующей строкой под xmlns:tools=…
 
 ## Вопросы для самопроверки
 - Для чего нужны аннотации `@Serializable`, `@Transient`, `@Required`, `@SerialName`?
