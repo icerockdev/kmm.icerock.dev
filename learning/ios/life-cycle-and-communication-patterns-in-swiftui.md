@@ -1,17 +1,35 @@
-# Жизненный цикл SwiftUI
+# Жизненный цикл и cпособы передачи данных в SwiftUI.
+
+## Жизненный цикл SwiftUI
 
 Жизненный цикл — это серия событий, которые происходят от создания представления SwiftUI до его уничтожения.
 
-**ViewGraph**
+### ViewGraph
 
 ViewGraph управляет иерархией представлений, отображаемой и не отображаемой. Их соответствующие имена — DisplayList и ViewList:
 
 • Иерархия без рендеринга — это определение того, что должно отображаться на экране. SwiftUI создает его, используя тела структур представления, которые мы предоставляем. При каждом обновлении пользовательского интерфейса SwiftUI просматривает предыдущие и новые снимки иерархии без рендеринга для расчета изменений. Он использует AttributeGraph для представления атрибутов представления и выполнения различий.  
 • SwiftUI использует иерархию рендеринга для создания реального рисунка. Представления из этой иерархии имеют свои собственные идентификаторы, а их время жизни соответствует тому, как долго они отображаются на экране.  
 
-**View hierarchy**
+### View hierarchy
 
-![view-hierarchy.png](swiftui-optimization/view-hierarchy.png)
+```swift
+struct ContentView: View {
+    var body: some View {
+        Text("Hello, world!")
+            .background(Color.yellow)
+            .font(.title)
+            .dump()
+    }
+}
+
+extension View {
+    func dump() -> Self {
+        print(Mirror(reflecting: self))
+        return self
+    }
+}
+```
 
 *Будет распечатано*
 
@@ -19,11 +37,11 @@ ViewGraph управляет иерархией представлений, от
 Mirror for ModifiedContent<ModifiedContent<Text, _BackgroundModifier<Color>>, _EnvironmentKeyWritingModifier<Optional<Font>>>
 ```
 
-**View Lifecycle**
+### View Lifecycle
 
 Каждое представление в SwiftUI имеет жизненный цикл, который мы можем наблюдать и манипулировать им на трех основных фазах. Три фазы — появление, обновление и исчезновение. Они показаны на диаграмме ниже:
 
-![view-lifecycle.png](swiftui-optimization/view-lifecycle.png)
+![view-lifecycle.png](life-cycle-and-communication-patterns-in-swiftui/view-lifecycle.png)
 
 Помимо трех фаз жизненного цикла, существует две фазы рендеринга: Layout и Commit (макет и фиксация)
 
@@ -48,7 +66,7 @@ struct ContentView: View {
 
 Появление означает вставку представления в view graph (граф представления). На этом этапе представление инициализируется, подписывается на состояние и отображается в первый раз.
 
-![appearing.png](swiftui-optimization/appearing.png)
+![appearing.png](life-cycle-and-communication-patterns-in-swiftui/appearing.png)
 
 • Во время инициализации представление не связано с состоянием. Это удешевляет построение представлений, поскольку вся иерархия представлений строится заранее.  
 • После инициализации и до вычисления тела представление подключается к состоянию.  
@@ -60,7 +78,7 @@ struct ContentView: View {
 
 Обновление выполняется в ответ на внешнее событие или мутацию состояния.
 
-![updating.png](swiftui-optimization/updating.png)
+![updating.png](life-cycle-and-communication-patterns-in-swiftui/updating.png)
 
 **Note:** *External event* означает издателя Combine, который является единой абстракцией для представления внешних изменений в SwiftUI
 
@@ -79,21 +97,409 @@ struct ContentView: View {
 Важно отметить, что метод **onAppear()** вызовется вновь, если представление будет перерисовано вследствие изменений данных или состояния, и станет видимым на экране после перерисовки. SwiftUI вызывает **onAppear()** каждый раз, когда представление становится видимым на экране, независимо от того, были ли какие-либо изменения данных или состояния, которые вызвали перерисовку.
 Это может быть полезным, если вам нужно выполнить какие-либо действия при каждом появлении представления, включая его первое появление и последующие перерисовки (.opacity = 1 не приводит к вызову данного метода, например через if else, switch, ForEach - метод будет вызываться многократно).
 
-![onAppear.png](swiftui-optimization/onAppear.png)
+```swift
+struct ContentView: View {
+    @State private var isShowText = false
+    
+    var body: some View {
+        VStack {
+            if isShowText {
+                Text("Hello, World!")
+                    .onAppear {
+                        print("Text appeared")
+                    }
+            }
+            
+            Button("Show/Hide Text") {
+                isShowText.toggle()
+            }
+        }
+    }
+}
+```
 
 **Disappearing**
 
 Исчезновение означает удаление представления из иерархии или когда представление больше не активно.
 
-![disappearing.png](swiftui-optimization/disappearing.png)
+![disappearing.png](life-cycle-and-communication-patterns-in-swiftui/disappearing.png)
 
 Метод onDisappear() вызывается после удаления представления из иерархии или когда представление больше не активно (например при переходе вперед по навигации). Подобно onAppear(), onDisappear() вызывается сверху вниз: от родительского представления к дочернему. 
 
 Важно отметить, что метод **onDisappear()** подобно **onAppear()** вызовется вновь после удаления представления из иерархии или когда представление больше не активно (.opacity = 0 не приводит к вызову данного метода, например через if else, switch, ForEach -  метод будет вызываться многократно).
 
-![onDisappear.png](swiftui-optimization/onDisappear.png)
+```swift
+struct ContentView: View {
+    @State private var isShowText = false
+    
+    var body: some View {
+        VStack {
+            if isShowText {
+                Text("Hello, World!")
+                    .onDisappear {
+                        print("Text disappeared")
+                    }
+            }
+            
+            Button("Show/Hide Text") {
+                isShowText.toggle()
+            }
+        }
+    }
+}
+```
 
-# Ответы на вопросы:
+## Способы передачи данных в SwiftUI
+
+Правильный выбор использования передачи данных оптимизирует излишнюю перерисовку view. Подробно рассмотрим все доступные варианты и некоторые рекомендации относительно того, когда и какой механизм следует использовать.
+
+### От родителя к прямому дочернему— используйте инициализатор
+
+Самый распространенный способ передачи данных в SwiftUI — из родительского представления в его прямой дочерний элемент. Родитель просто создает экземпляр дочернего элемента и передает данные его инициализатору.
+
+Учитывая приложение todo со следующей иерархией представлений:
+
+![demo-1.png](life-cycle-and-communication-patterns-in-swiftui/demo-1.png)
+
+Вот как мы можем отправить список задач из ContentView в TodoListView:
+
+```swift
+struct ContentView: View {
+    let items = [
+        TodoItem(title: "Item #1"),
+        TodoItem(title: "Item #2"),
+        TodoItem(title: "Item #3")
+    ]
+        
+    var body: some View {
+        TodoListView(items: items)
+    }
+}
+
+struct TodoListView: View {
+    let items: [TodoItem]
+    // ...
+}
+```
+
+Аналогичным образом мы можем передать TodoItem из списка в отдельную строку:
+
+```swift
+struct TodoListView: View {
+    let items: [TodoItem]
+    
+    var body: some View {
+        List(items) { item in
+            TodoItemView(item: item)
+        }
+    }
+}
+
+struct TodoItemView: View {
+    let item: TodoItem
+    
+    var body: some View {
+        Text(item.title)
+    }
+}
+```
+
+![demo-2.png](life-cycle-and-communication-patterns-in-swiftui/demo-2.png)
+
+### От родителя к отдаленному дочернему – используйте Environment
+
+Часто у нас есть зависимости, которые требуются некоторым представлениям в иерархии, но не всем. Представьте, что нам нужно передать кеш изображений из корня композиции приложения (он же SceneDelegate) в TodoItemDetail:
+
+![demo-3.png](life-cycle-and-communication-patterns-in-swiftui/demo-3.png)
+
+Если мы передадим кеш изображений через инициализатор, мы создадим 3 ненужных уровня косвенности и соединим все промежуточные представления с кешем изображений. Это звучит плохо.
+
+К счастью, SwiftUI предлагает готовое решение. Познакомьтесь с средой, которая по сути представляет собой словарь с настройками для всего приложения. SwiftUI автоматически передает его из родительского представления своим дочерним элементам. Среда позволяет нам вставлять произвольные значения в иерархию представлений и читать их только при необходимости.
+
+Давайте посмотрим, как мы можем внедрить кеш изображений в среду. Это реализуется следующим образом:
+
+```swift
+protocol ImageCache {
+    subscript(_ key: String) -> UlImage? { get set }
+}
+
+struct TemporaryImageCache: ImageCache {
+    private let cache = NSCache<NSString, UIImage>()
+    
+    subscript(_ key: String) -> UIImage? {
+        get { cache.object(forkey: key as NSString) }
+        set {
+            newValue == nil
+                ? cache.removebject(forKey: key as NSString)
+                : cache.setObject(newValue ?? UIImage(), forKey: key as NSString)
+        }
+    }
+}
+```
+
+Теперь добавьте кеш изображений в среду:
+
+```swift
+struct ImageCacheKey: EnvironmentKey {
+    static let defaultValue: ImageCache = TemporaryImageCache()
+}
+
+extension EnvironmentValues {
+    var imageCache: ImageCache {
+        get { self[ImageCacheKey.self] }
+        set { self[ImageCacheKey.self] = newValue }
+    }
+}
+```
+
+Мы можем прочитать значение из среды, используя оболочку свойства @Environment:
+
+```swift
+struct TodoItemDetail: View {
+    @Environment(\.imageCache) var cache: ImageCache
+    
+    let item: TodoItem
+    
+    var body: some View {
+        // ...
+    }
+}
+```
+
+Обратите внимание, что кэш изображений по умолчанию будет создан при первом доступе к нему через @Environment.
+
+### От дочернего к прямому родителю — используйте @Binding и callback
+
+Существует два способа передачи данных от дочернего элемента к его прямому родителю — с использованием @Binding и callback. Вот несколько аргументов, которые помогут сделать выбор:
+
+• Когда нам нужно передать данные одним способом — используйте callback.  
+• Когда нам нужно передать данные двумя способами — используйте @Binding.  
+
+*Callback*
+
+Очевидный вариант использования механизма обратного вызова — кнопки. Допустим, мы хотим добавить информационную кнопку в строку списка дел:
+
+![demo-4.png](life-cycle-and-communication-patterns-in-swiftui/demo-4.png)
+
+И обработайте действие кнопки в строке списка задач:
+
+```swift
+struct TodoItemView: View {
+    let item: TodoItem
+    
+    var body: some View {
+        HStack {
+            Text(item.title)
+            
+            Spacer()
+            
+            Button(action: onDetail) { 
+                Image(systemName: "info.circle")
+                    .foregroundColor(.blue) 
+            }
+        }
+    }
+
+    func onDetail { 
+        // ... 
+    }
+}
+```
+
+Или мы можем решить обрабатывать события касания в списке задач:
+
+```swift
+struct TodoListView: View {
+    let items: [TodoItem]
+    
+    var body: some View {
+        List(items) { item in
+            TodoItemView(item: item) {
+                print("Detail selected", item)
+            }
+        }
+    }
+}
+
+struct TodoItemView: View {
+    let onDetail: () -> Void
+    // ...
+
+    var body: some View {
+        // ...
+        
+        Button(action: onDetail) { 
+            // ...
+        }
+    }
+}
+```
+
+Цепочка вызовов выглядит следующим образом:
+
+![demo-5.png](life-cycle-and-communication-patterns-in-swiftui/demo-5.png)
+
+*Binding*
+
+@Binding позволяет нам объявить свойство, которое принадлежит родителю, но может быть изменено как родителем, так и дочерним элементом, эффективно передавая эти изменения туда и обратно.
+
+Для API, использующего привязку, мы рассмотрим метод List(item:content:), который представляет модальный лист. Вот как мы можем использовать его для отображения подробностей элемента задачи:
+
+```swift
+struct TodoListView: View {
+    @State var itemDetailSelection: TodoItem?
+    
+    let items: [TodoItem]
+    
+    var body: some View {
+        List(items) { item in
+            TodoItemView(item: item) {
+                self.itemDetailSelection = item
+            }
+        }
+        .sheet(item: $itemDetailSelection) { item in
+            TodoItemDetail(item: item)
+        }
+    }
+}
+```
+
+### От дочернего к отдаленному родителю – используйте PreferenceKey
+
+SwiftUI имеет систему предпочтений, которая позволяет нам передавать пары ключ-значение вверх по иерархии представлений. Процесс следующий:
+
+Реализуйте собственный PreferenceKey, который представляет собой именованное значение, создаваемое представлением.
+В дочернем представлении прикрепите пару ключ-значение.
+В родительском представлении прикрепите обратный вызов, который отслеживает изменения этого предпочтения.
+В качестве примера рассмотрим, как мы можем использовать настройки представления SwiftUI для отображения оповещения. Начнем с реализации ключа предпочтения:
+
+```swift
+struct AlertPreferenceKey: PreferenceKey {
+    static var defaultValue: PresentableAlert?
+
+    static func reduce(
+        value: inout PresentableAlert?, 
+        nextValue: () -> PresentableAlert?
+    ) {
+        value = nextValue()
+    }
+}
+```
+
+Протокол PreferenceKey предъявляет два требования. Мы должны предоставить значение по умолчанию для предпочтения и метод reduce(), который объединяет все дочерние значения в одно, видимое их родительскому элементу. Поэтому в методе reduce() мы сохраняем последнее предоставленное значение.
+
+PresentableAlert определяется следующим образом:
+
+```swift
+struct PresentableAlert: Equatable, Identifiable {
+    let id = UUID()
+    let title: String
+    let message: String?
+    
+    static func == (lhs: PresentableAlert, rhs: PresentableAlert) -> Bool {
+        lhs.id == rhs.id
+    }
+}
+```
+
+Соответствие протоколу Equatable важно, поскольку оно позволяет SwiftUI определять различия и вызывать родительский элемент только при изменении предпочтений. Имея AlertPreferenceKey, мы теперь можем использовать параметр Preference(key:value:) для передачи оповещения вверх по дереву представления:
+
+```swift
+struct ViewWithAlert: View {
+    @State private var alert: PresentableAlert?
+    
+    var body: some View {
+        Button(
+            "Show alert",
+            action: {
+                alert = PresentableAlert(title: "Title", message: "Message") 
+            }
+        )
+        .preference(key: AlertPreferenceKey.self, value: alert)
+    }
+}
+```
+
+Теперь мы можем использовать onPreferenceChange() для чтения оповещения из текущего дерева представления. Обратите внимание, что ContentView является дальним родителем ViewWithAlert:
+
+```swift
+struct ContentView: View {
+    @State private var alert: PresentableAlert?
+    
+    var body: some View {
+        HelloWorldView()
+            .onPreferenceChange(AlertPreferenceKey.self) { alert = $0 }
+            .alert(item: $alert) { alert in
+                Alert(
+                    title: Text(alert.title), 
+                    message: alert.message.map(Text.init)
+                )
+            }
+    }
+}
+
+struct HelloWorldView: View {
+    var body: some View {
+        ZStack {
+            Color.yellow
+            
+            VStack {
+                Text("Hello, World!")
+                
+                ViewWithAlert()
+            }
+        }
+    }
+}
+```
+
+### Между дочерними – используйте @State
+
+Чтобы передавать данные между дочерними представлениями, нам нужно поднять состояние на один уровень выше и использовать их родительское представление в качестве посредника.
+
+В качестве примера мы рассмотрим Toggle и Button с синхронизированным состоянием:
+
+```swift
+struct ContentView: View {
+    // 1.
+    @State var isOn = false
+    
+    var body: some View {
+        VStack {
+            // 2.
+            Toggle(isOn: $isOn) { EmptyView() }
+                .labelsHidden()
+
+            // 3.
+            Button(action: { isOn.toggle() }) { 
+                isOn ? Text("Turn Off") : Text("Turn On") 
+            }
+        }
+    }
+}
+```
+
+Вот что мы делаем:
+
+1. Создайте @State в родительском представлении.
+2. Используйте @Binding, чтобы передать состояние переключателю и позволить переключателю изменять состояние.
+3. Используйте инициализатор, чтобы передать состояние кнопке. Используйте callback, чтобы передать событие касания обратно.
+
+Поток общения выглядит следующим образом:
+
+![demo-6.png](life-cycle-and-communication-patterns-in-swiftui/demo-6.png)
+
+*Давайте подытожим шаблоны взаимодействия между представлениями SwiftUI:*
+
+От родителя к прямому дочернему — используйте инициализатор.
+От родителя к удаленному дочернему — используйте @Environment.
+От дочернего к прямому родителю — используйте @Binding и callback.
+От дочернего к отдаленному родителю — используйте PreferenceKey.
+Между дочерними – используйте @State.
+
+Количество механизмов, доступных для передачи данных между представлениями SwiftUI, на первый взгляд может показаться огромным. Но как только мы систематизируем их, все они будут иметь уникальные требования и варианты использования.
+
+## Ответы на вопросы:
 
 **1. Как оптимальнее выносить куски кода: через @ViewBuilder функцию, через @ViewBuilder переменную или через отдельную структуру.**
 
@@ -107,27 +513,27 @@ struct ContentView: View {
 @ViewBuilder
 private var text: some View {
     if isShow {
-        Text(«Title1»)
+        Text("Title1")
     } else {
-        Text(«Title2»)
+        Text("Title2")
     }
 }
 
 private var text: some View {
     ZStack {
         if isShow {
-            return Text(«Title1»)
+            return Text("Title1")
         } else {
-            return Text(«Title2»)
+            return Text("Title2")
         }
     }
 }
 
 private var text: some View {
     if isShow {
-        return Text(«Title1»)
+        return Text("Title1")
     } else {
-        return Text(«Title2»)
+        return Text("Title2")
     }
 }
 ```
@@ -165,7 +571,7 @@ private var text: some View {
 
 Чтобы рассмотреть разницу в их работе, был создан тестовый проект, в котором по нажатию на кнопку меняется шрифт в ParentView и далее происходит изменение размера ChildView. С помощь метода .dump() можно отслеживать работу ViewGraph. Из теста можно заметить, что в ChildViewWithGeometry, GeometryReader пересчитывает размер своего контейнера при каждом изменении в ParentView и заполняет собой все пространство, в то время как .infinity фрейм просто заполняет собой все пространство, не требуя дополнительных расчетов. Весьма интересными становятся результаты теста с использованием Binding и callback.
 
-![test-infinity.png](swiftui-optimization/test-infinity.png)
+![test-infinity.png](life-cycle-and-communication-patterns-in-swiftui/test-infinity.png)
 
 ```swift
 import SwiftUI
@@ -239,135 +645,3 @@ struct ChildViewWithGeometry: View {
     ParentView()
 }
 ```
-
-# Способы передачи данных в SwiftUI
-
-Правильный выбор использования передачи данных оптимизирует излишнюю перерисовку view. Подробно рассмотрим все доступные варианты и некоторые рекомендации относительно того, когда и какой механизм следует использовать.
-
-**От родителя к прямому дочернему— используйте инициализатор**
-
-Самый распространенный способ передачи данных в SwiftUI — из родительского представления в его прямой дочерний элемент. Родитель просто создает экземпляр дочернего элемента и передает данные его инициализатору.
-
-Учитывая приложение todo со следующей иерархией представлений:
-
-![demo-1.png](swiftui-optimization/demo-1.png)
-
-Вот как мы можем отправить список задач из ContentView в TodoListView:
-
-![demo-2.png](swiftui-optimization/demo-2.png)
-
-Аналогичным образом мы можем передать TodoItem из списка в отдельную строку:
-
-![demo-3.png](swiftui-optimization/demo-3.png)
-
-![demo-4.png](swiftui-optimization/demo-4.png)
-
-**От родителя к отдаленному дочернему – используйте Environment**
-
-Часто у нас есть зависимости, которые требуются некоторым представлениям в иерархии, но не всем. Представьте, что нам нужно передать кеш изображений из корня композиции приложения (он же SceneDelegate) в TodoItemDetail:
-
-![demo-5.png](swiftui-optimization/demo-5.png)
-
-Если мы передадим кеш изображений через инициализатор, мы создадим 3 ненужных уровня косвенности и соединим все промежуточные представления с кешем изображений. Это звучит плохо.
-
-К счастью, SwiftUI предлагает готовое решение. Познакомьтесь с средой, которая по сути представляет собой словарь с настройками для всего приложения. SwiftUI автоматически передает его из родительского представления своим дочерним элементам. Среда позволяет нам вставлять произвольные значения в иерархию представлений и читать их только при необходимости.
-
-Давайте посмотрим, как мы можем внедрить кеш изображений в среду. Это реализуется следующим образом:
-
-![demo-6.png](swiftui-optimization/demo-6.png)
-
-Теперь добавьте кеш изображений в среду:
-
-![demo-7.png](swiftui-optimization/demo-7.png)
-
-Мы можем прочитать значение из среды, используя оболочку свойства @Environment:
-
-![demo-8.png](swiftui-optimization/demo-8.png)
-
-Обратите внимание, что кэш изображений по умолчанию будет создан при первом доступе к нему через @Environment.
-
-**От дочернего к прямому родителю — используйте @Binding и callback**
-
-Существует два способа передачи данных от дочернего элемента к его прямому родителю — с использованием @Binding и callback. Вот несколько аргументов, которые помогут сделать выбор:
-
-• Когда нам нужно передать данные одним способом — используйте callback.  
-• Когда нам нужно передать данные двумя способами — используйте @Binding.  
-
-*Callback*
-
-Очевидный вариант использования механизма обратного вызова — кнопки. Допустим, мы хотим добавить информационную кнопку в строку списка дел:
-
-![demo-9.png](swiftui-optimization/demo-9.png)
-
-И обработайте действие кнопки в строке списка задач:
-
-![demo-10.png](swiftui-optimization/demo-10.png)
-
-Или мы можем решить обрабатывать события касания в списке задач:
-
-![demo-11.png](swiftui-optimization/demo-11.png)
-
-Цепочка вызовов выглядит следующим образом:
-
-![demo-12.png](swiftui-optimization/demo-12.png)
-
-*Binding*
-
-@Binding позволяет нам объявить свойство, которое принадлежит родителю, но может быть изменено как родителем, так и дочерним элементом, эффективно передавая эти изменения туда и обратно.
-
-Для API, использующего привязку, мы рассмотрим метод List(item:content:), который представляет модальный лист. Вот как мы можем использовать его для отображения подробностей элемента задачи:
-
-![demo-13.png](swiftui-optimization/demo-13.png)
-
-**От дочернего к отдаленному родителю – используйте PreferenceKey**
-
-SwiftUI имеет систему предпочтений, которая позволяет нам передавать пары ключ-значение вверх по иерархии представлений. Процесс следующий:
-
-Реализуйте собственный PreferenceKey, который представляет собой именованное значение, создаваемое представлением.
-В дочернем представлении прикрепите пару ключ-значение.
-В родительском представлении прикрепите обратный вызов, который отслеживает изменения этого предпочтения.
-В качестве примера рассмотрим, как мы можем использовать настройки представления SwiftUI для отображения оповещения. Начнем с реализации ключа предпочтения:
-
-![demo-14.png](swiftui-optimization/demo-14.png)
-
-Протокол PreferenceKey предъявляет два требования. Мы должны предоставить значение по умолчанию для предпочтения и метод reduce(), который объединяет все дочерние значения в одно, видимое их родительскому элементу. Поэтому в методе reduce() мы сохраняем последнее предоставленное значение.
-
-PresentableAlert определяется следующим образом:
-
-![demo-15.png](swiftui-optimization/demo-15.png)
-
-Соответствие протоколу Equatable важно, поскольку оно позволяет SwiftUI определять различия и вызывать родительский элемент только при изменении предпочтений. Имея AlertPreferenceKey, мы теперь можем использовать параметр Preference(key:value:) для передачи оповещения вверх по дереву представления:
-
-![demo-16.png](swiftui-optimization/demo-16.png)
-
-Теперь мы можем использовать onPreferenceChange() для чтения оповещения из текущего дерева представления. Обратите внимание, что ContentView является дальним родителем ViewWithAlert:
-
-![demo-17.png](swiftui-optimization/demo-17.png)
-
-**Между дочерними – используйте @State**
-
-Чтобы передавать данные между дочерними представлениями, нам нужно поднять состояние на один уровень выше и использовать их родительское представление в качестве посредника.
-
-В качестве примера мы рассмотрим Toggle и Button с синхронизированным состоянием:
-
-![demo-18.png](swiftui-optimization/demo-18.png)
-
-Вот что мы делаем:
-
-1. Создайте @State в родительском представлении.
-2. Используйте @Binding, чтобы передать состояние переключателю и позволить переключателю изменять состояние.
-3. Используйте инициализатор, чтобы передать состояние кнопке. Используйте callback, чтобы передать событие касания обратно.
-
-Поток общения выглядит следующим образом:
-
-![demo-19.png](swiftui-optimization/demo-19.png)
-
-*Давайте подытожим шаблоны взаимодействия между представлениями SwiftUI:*
-
-От родителя к прямому дочернему — используйте инициализатор.
-От родителя к удаленному дочернему — используйте @Environment.
-От дочернего к прямому родителю — используйте @Binding и callback.
-От дочернего к отдаленному родителю — используйте PreferenceKey.
-Между дочерними – используйте @State.
-
-Количество механизмов, доступных для передачи данных между представлениями SwiftUI, на первый взгляд может показаться огромным. Но как только мы систематизируем их, все они будут иметь уникальные требования и варианты использования.
