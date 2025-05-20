@@ -8,7 +8,7 @@ sidebar_position: 3
 
 Следующее видео расскажет о том что такое система сборки, зачем она нужна и что предоставляет Gradle (местами есть уход в излишнее на данный момент детали, поэтому не страшно если что-то из видео будет не совсем понятно сразу).
 
-<iframe src="//www.youtube.com/embed/WOBok2u-SL8" frameborder="0" allowfullscreen width="675" height="380"></iframe>
+<iframe src="//www.youtube.com/embed/23BJW4w0gkY?list=PL6yFiPOVXVUi90sQ66dtmuXP-1-TeHwl5" frameborder="0" allowfullscreen width="675" height="380"></iframe>
 <br/>
 <br/>
 
