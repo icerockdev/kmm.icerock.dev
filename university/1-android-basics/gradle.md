@@ -12,9 +12,10 @@ sidebar_position: 3
 <br/>
 <br/>
 
-## Gradle и Kotlin DSL
+## Может потребоваться в будущем
+### Gradle и Kotlin DSL
 
-В следующем видео можно увидеть как происходит перевод groovy скриптов на kotlin для большей помощи IDE в написании билд скриптов.
+В настоящее время проекты создаются сразу с Kotlin, но на старых проектах можно встретиться с groovy скриптами. В следующем видео можно увидеть, как происходит перевод groovy скриптов на kotlin для большей помощи IDE в написании билд скриптов.
 
 <iframe src="//www.youtube.com/embed/bhUy6JrSSr8" frameborder="0" allowfullscreen width="675" height="380"></iframe>
 <br/>
@@ -22,7 +23,7 @@ sidebar_position: 3
 
 При возникновении сложностей на практике - пользуйтесь [документацией Gradle о поддержке Kotlin DSL](https://docs.gradle.org/current/userguide/kotlin_dsl.html).
 
-## Gradle детальнее
+### Gradle детальнее
 
 <iframe src="//www.youtube.com/embed/Yft6h7JkWo0" frameborder="0" allowfullscreen width="675" height="380"></iframe>
 <br/>
