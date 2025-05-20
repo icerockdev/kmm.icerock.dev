@@ -50,6 +50,6 @@ sidebar_position: 3
    ```kotlin
    val usersList = listOf<User>()
    val count = 100
-   val productList = domainProducts.map(::domainToProduct)
-   val messageText = message.text
+   val productList: List<Product> = domainProducts.map(::domainToProduct)
+   val messageText: String = message.text
    ```

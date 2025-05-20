@@ -24,6 +24,7 @@ sidebar_position: 23
 - [NATIVE UI WITH MULTIPLATFORM COMPOSE](https://www.droidcon.com/2022/09/29/native-ui-with-multiplatform-compose/) - про проект Redwood, который рисует нативный для Android, iOS, Web UI, под управлением Jetpack Compose
 - [SIMPLIFIED SWIFT MULTIPLATFORM INTEGRATION](https://www.droidcon.com/2022/09/29/simplified-swift-multiplatform-integration/) - как подключить Swift код внутрь Kotlin кода
 - [KOTLIN MULTIPLATFORM AT FIVE YEARS](https://www.droidcon.com/2022/09/29/kotlin-multiplatform-at-five-years/)
+- [Денис Супрун — KMP на ОС Аврора: проблемы и пути их решения](https://www.youtube.com/watch?v=PEiJIw023XM)
 
 ## Posts
 
@@ -78,9 +79,12 @@ sidebar_position: 23
 - [Zero To Hero in KMM with Compose and SwiftUi](https://proandroiddev.com/zero-to-hero-in-kmm-with-compose-and-swiftui-d8951f7d80b7)
 - [Public key pinning using Ktor for Android and iOS (KMM)](https://medium.com/@MrHardikTrivedi/public-key-pinning-using-ktor-for-android-and-ios-kmm-61066cb34321)
 - [Testing on Kotlin Multiplatform and a Strategy to Speed Up Development Time](https://akjaw.com/testing-on-kotlin-multiplatform-and-strategy-to-speed-up-development/) - про авто-тестирование фич
+- [Manage configurations for the different environment (eg: staging, prod) in Kotlin Multiplatform](https://sujanpoudel.me/blogs/kmp-setup-config-for-different-environment-in-kmp/)
+- [Convert Your Native Project to Kotlin Multiplatform: Why, When and How](https://www.thedroidsonroids.com/blog/convert-native-to-kotlin-multiplatform-guide)
 
 ## Projects
 
 - [multiplatform-precompiled-demo](https://gitlab.icerockdev.com/multiplatform-precompiled-demo)
 - [klutter](https://github.com/buijs-dev/klutter) - Flutter + Kotlin Multiplatform
 - [Kotlin Multiplatform Wizard](https://terrakok.github.io/kmp-web-wizard/) - generator of applications
+- [Kotlin JS resources gradle plugin](https://gitlab.com/opensavvy/automation/kotlin-js-resources)
