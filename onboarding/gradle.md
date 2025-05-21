@@ -17,11 +17,11 @@ sidebar_position: 4
 - [Gradle Wrapper](../learning/gradle/gradle-wrapper)
 - [Обновление версий](../learning/gradle/updating-versions)
 - [Version catalogs](../learning/gradle/version-catalogs)
+- [Convention plugins](../learning/gradle/convention-plugins)
 
 ### Материал со Звездочкой
 - [Dependency configurations](../learning/gradle/configuration)  - очень хорошо бы понять, но если сходу не получается, вернись к нему позже.
   
 ### Может потребоваться в будущем
-- [Convention plugins](../learning/gradle/convention-plugins)
 - [Composite builds](../learning/gradle/composite-build)
 - [BuildSrc](../learning/gradle/buildSrc)  - давно не используем, но может встретиться на старых проектах.
