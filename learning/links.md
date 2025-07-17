@@ -81,6 +81,7 @@ sidebar_position: 23
 - [Testing on Kotlin Multiplatform and a Strategy to Speed Up Development Time](https://akjaw.com/testing-on-kotlin-multiplatform-and-strategy-to-speed-up-development/) - про авто-тестирование фич
 - [Manage configurations for the different environment (eg: staging, prod) in Kotlin Multiplatform](https://sujanpoudel.me/blogs/kmp-setup-config-for-different-environment-in-kmp/)
 - [Convert Your Native Project to Kotlin Multiplatform: Why, When and How](https://www.thedroidsonroids.com/blog/convert-native-to-kotlin-multiplatform-guide)
+- [Exploring Kotlin (native) compilation](https://medium.com/mateedevs/exploring-kotlin-native-compilation-7d396b0b7fde)
 
 ## Projects
 
