@@ -12,9 +12,11 @@ MOKO - это разработанные в компании мультипла�
 - `sample-проект` с практическим применением библиотеки. Вы можете склонировать себе репозиторий библиотеки и запустить `sample-app`
 - `Issues` - список обнаруженных ошибок в работе библиотеки, а также предложения по обновлению библиотеки. Если вы заметите ошибку в работе какой-либо MOKO-библиотеки или у вас есть предложение по изменению существующей - зафиксируйте свои мысли в `issue`
 
-Посмотрите обзорную презентацию из материалов [о MOKO в целом](../learning/libraries/moko) и изучите основные MOKO-библиотеки, чаще всего используемые в наших проектах:
-- Материалы [о MOKO resources](https://kmm.icerock.dev/university/icerock-basics/resources-in-common#библиотека-moko-resources), [дополнение](../learning/libraries/moko/moko-resources)
-- Материалы [о MOKO MVVM](https://kmm.icerock.dev/university/icerock-basics/mvvm#moko-mvvm), [дополнительное видео](../learning/libraries/moko/moko-mvvm)
-- Материалы [о МОКО Network](https://kmm.icerock.dev/university/network/moko-network), [дополнительно об ExceptionFactory](https://kmm.icerock.dev/university/filling-fields/moko-network#exceptionfactory)
-- Материалы [о MOKO paging](../learning/libraries/moko/moko-paging)
-- Материалы [о MOKO units](../learning/libraries/moko/moko-units)
+Посмотрите обзорную презентацию из материалов [о MOKO в целом](../learning/libraries/moko).
+Изучите библиотеку [MOKO resources](https://kmm.icerock.dev/university/icerock-basics/resources-in-common#библиотека-moko-resources), [дополнение](../learning/libraries/moko/moko-resources).
+
+Также ознакомьтесь с:
+- использованием классов-оберток [CFlow и CStateFlow](..university/icerock-basics/mvvm#flow-c-moko-kswift) из [MOKO MVVM](../learning/libraries/moko/moko-mvvm)
+- использованием [mvvm-state](..university/lists/moko-paging#moko-mvvm-state) из MOKO MVVM
+- зачем нужна библиотека [МОКО Network](..learning/libraries/moko/moko-network)
+- видео [о MOKO paging](../learning/libraries/moko/moko-paging), конкретные примеры текущего применения стоит смотреть в текущих проектах.
