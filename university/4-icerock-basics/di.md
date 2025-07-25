@@ -13,7 +13,7 @@ sidebar_position: 5
 - общие картинки 
 - и т.д.
 
-Поэтому, нам нужно обеспечить передачу некоторых общих компонентов и классов во все модули. Использовать один общий модуль для таких компонентов мы не можем, это также описывалось в блоке [многомодульность](multimodularity).  
+Поэтому нам нужно обеспечить передачу некоторых общих компонентов и классов во все модули. Использовать один общий модуль для таких компонентов мы не можем, это также описывалось в блоке [многомодульность](multimodularity).  
 В этом случае нам подойдет вариант с обратной зависимостью:
 - модули не зависят от каких-то компонент
 - необходимые модулю компоненты будут предоставляться извне
@@ -24,7 +24,7 @@ sidebar_position: 5
 ### Пример
 Допустим, мы делаем фичу авторизации.  
 Для авторизации нам нужно: отправить запрос на сервер с номером телефона и кодом авторизации.  
-За логику работы с сетью у нас отвечает общий для всех модулей репозиторий. Поэтому, в фиче авторизации объявляем интерфейс с функцией `signIn`:
+За логику работы с сетью у нас отвечает общий для всех модулей репозиторий. Поэтому в фиче авторизации объявляем интерфейс с функцией `signIn`:
 
 ```kotlin
 interface AuthRepository {
@@ -43,48 +43,39 @@ class AuthViewModel(
 ) 
 ```
 Таким образом вьюмодель как бы объявляет: мне для работы нужен кто-то, кто реализует интерфейс `AuthRepository`, потому что у него есть нужный мне метод `signIn`. Мне вообще не важно, кто и как будет его реализовывать.  
-В классе общего репозитория реализуем интерфейс `AuthRepository` и, при создании фичи будем передавать объект общего репозитория.
+В классе общего репозитория реализуем интерфейс `AuthRepository` и при создании фичи будем передавать объект общего репозитория.
 
 ## DI на проектах
 
 Вся логика приложения находится в общем коде. На платформах (`iOS` и `Android`) мы просто реализуем `UI` и связываем его с логикой.
-В общем коде вся логика сосредоточена во вьюмоделях разных фич, поэтому, для каждого экрана от общего кода нужно получить нужную ему вьюмодель.
+В общем коде вся логика сосредоточена во вьюмоделях разных фич, поэтому для каждого экрана от общего кода нужно получить нужную ему вьюмодель.
 
 Однако, вьюмодель - это как правило большой и сложный класс, который нуждается в настройке.  
 Например, для создания стандартной вьюмодели ей необходимы:
-- строки локализации - строки, использующиеся в общем коде
 - репозиторий, через который идет общение с источником данных
 - `exceptionHandler` - объект, реализующий интерфейс [ExceptionHandler](https://github.com/icerockdev/moko-errors/blob/ece79111fb5a9451e6179ba8c5367213c117421b/errors/src/commonMain/kotlin/dev/icerock/moko/errors/handler/ExceptionHandler.kt) и помогающий обрабатывать ошибки из общего кода (о нем вы узнаете позднее из `moko-errors`)
-- `eventsDispatcher` - объект, служащий для отправки событий(actions) от `viewModel` на `UI` (о нем вы узнаете уже в следующем разделе) 
 
 Наша цель - избавить платформу от сложности настройки вьюмоделей, чтобы не пришлось во фрагменте или вьюконтроллере получать все эти объекты, необходимые для создания вьюмодели.
 
-Решение - по максимуму оставить логику настройки вьюмоделей в общем коде, чтобы со стороны платформы можно было практически сразу получить готовую вьюмодель.
+Решение - по максимуму оставить логику настройки вьюмоделей в общем коде, используя Koin для предоставления зависимостей, чтобы со стороны платформы можно было получить готовую вьюмодель.
 
 ### Уровень фичи
 
-Первый уровень абстракции над вьюмоделями это фабрика фичи. Она позволяет получить все вьюмодели одной фичи. Разбирать будем на примере фичи авторизации, а вьюмодель, которую мы хотим получить - вьюмодель экрана сброса пароля.
+Нам потребуется модуль Koin для получения всех вьюмоделей одной фичи. Разбирать будем на примере фичи авторизации, а вьюмодель, которую мы хотим получить - вьюмодель экрана сброса пароля.
 
-Начнем с вьюмодели: 
+Начнем с вьюмодели, которую создадим в папке presentation фичи: 
 
 `ResetPasswordViewModel.kt`:
 ```kotlin
 class ResetPasswordViewModel(
-   override val eventsDispatcher: EventsDispatcher<EventsListener>,
-   val exceptionHandler: ExceptionHandler,
-   private val repository: ResetPasswordRepository,
-   private val strings: Strings
+   private val repository: ResetPasswordRepository
 ) {
-   interface Strings {
-      val resetDescription: StringDesc
-   }
+   ...
 }
 ```
-Вьюмодель объявляет интерфейс `Strings` - необходимые ей строки локализации. Далее мы разберем это подробнее. 
+Рядом с `ResetPasswordViewModel` в папке model создаем интерфейс репозитория. В конструктор `ResetPasswordViewModel` принимает объект, который реализует этот интерфейс. В данном случае - кого-то, кто реализует метод для сброса пароля.  
 
-Рядом с `ResetPasswordViewModel` создаем интерфейс репозитория. Сделали мы это для того, чтобы не устанавливать связь фича-модуля на модуль со строками локализации. В конструктор `ResetPasswordViewModel` принимает объект, который реализует этот интерфейс. В данном случае - кого-то, кто реализует метод для сброса пароля.  
-
-`ResetPasswordRepository.kt`
+`ResetPasswordRepository.kt`:
 ```kotlin
 interface ResetPasswordRepository {
    suspend fun resetPassword(
@@ -93,45 +84,53 @@ interface ResetPasswordRepository {
    )
 }
 ```
-Класс репозитория фичи - `AuthRepository`, который будет реализовывать этот интерфейс разберем позднее.
+Класс репозитория фичи - `AuthRepositoryImpl`, который будет реализовывать этот интерфейс разберем позднее.
 
-Теперь сделаем `AuthFactory` - класс, с помощью которого будем настраивать общие компоненты вьюмоделей фичи авторизации и создавать их. Класс фабрики также объявляется в модуле фичи.
+Теперь сделаем `featureAuthModule` - модуль Koin, с помощью которого будем предоставлять зависимости для вьюмоделей фичи авторизации и создавать вьюмодели.
 
-`AuthFactory.kt`:
+`featureAuthModule.kt`:
 ```kotlin
-class AuthFactory(
-   private val createExceptionHandler: () -> ExceptionHandler,
-   private val authRepository: AuthRepository,
-   private val strings: Strings
-) {
-   fun createResetPasswordViewModel(
-      eventsDispatcher: EventsDispatcher<ResetPasswordViewModel.EventsListener>
-   ) = ResetPasswordViewModel(
-      eventsDispatcher = eventsDispatcher,
-      exceptionHandler = createExceptionHandler(),
-      repository = authRepository,
-      strings = strings
-   )
+...
+import org.koin.core.Koin
+import org.koin.core.module.Module
+import org.koin.core.module.dsl.factoryOf
+import org.koin.core.parameter.parametersOf
+import org.koin.dsl.module
 
-   interface Strings : ResetPasswordViewModel.Strings
+val featureAuthModule: Module = module {
+    factoryOf(::ResetPasswordViewModel)
+    factoryOf(::AuthPhoneViewModel)
+    factoryOf(::AuthCodeViewModel)
 }
-```
-`interface Strings` фабрики реализует все интерфейсы `Strings` из других вьюмоделей. 
+fun Koin.createResetPasswordViewModel(): ResetPasswordViewModel {
+    return get<ResetPasswordViewModel>()
+}
 
-В эту фабрику мы будем добавлять методы, аналогичные `createResetPasswordViewModel` для создания других вьюмоделей, для них всех `createExceptionHandler`, `repository` и `strings` будут одинаковыми.
+fun Koin.createAuthPhoneViewModel: AuthPhoneViewModel {
+    return get<AuthPhoneViewModel>()
+}
 
-Теперь у нас есть доступ ко всем вьюмоделям фичи авторизации - чтобы создать какую-либо вьюмодель нужно просто вызвать нужную функцию у фабрики и передать один единственный аргумент. 
+fun Koin.createAuthCodeViewModel(phone: String): AuthCodeViewModel {
+    return get<AuthCodeViewModel> {
+        parametersOf(phone)
+    }
+}
+``` 
 
-### Уроверь mpp-library
+В этот модуль мы будем добавлять методы, аналогичные `createResetPasswordViewModel` для создания других вьюмоделей, для них всех `repository` будет одинаковым.
 
-Логика работы приложения с источником данных (сервер, БД и т.д.) выносятся в классы - репозитории, в данном случае сделаем репозиторий для фичи авторизации - `AuthRepository`
+Теперь у нас есть доступ ко всем вьюмоделям фичи авторизации, чтобы создать какую-либо вьюмодель нужно просто вызвать нужную функцию, где требуется, с передачей аргумента (в примере выше это номер телефона). 
 
-`AuthRepository.kt`:
+### Уровень mpp-library
+
+Логика работы приложения с источником данных (сервер, БД и т.д.) выносятся в классы - репозитории, в данном случае сделаем репозиторий для фичи авторизации, имплементирующий интерфейс ResetPasswordRepository - `AuthRepositoryImpl`
+
+`AuthRepositoryImpl.kt`:
 ```kotlin
-internal class AuthRepository constructor(
+class AuthRepositoryImpl internal constructor(
     private val keyValueStorage: KeyValueStorage,
     private val dao: AppDao,
-    private val coroutineScope: CoroutineScope
+    private val api: AuthApi
 ) : ResetPasswordRepository {
    override fun resetPassword(
       phoneNumber: String,
@@ -143,170 +142,176 @@ internal class AuthRepository constructor(
 ```
 Этот класс реализует все интерфейсы вьюмоделей фичи авторизации для работы с источником данных. Для всех новых вьюмоделей других фичей мы будем объявлять свои интерфейсы, и реализовывать их в классе репозитория конкретной фичи, а затем прокидывать объект репозитория всем вьюмоделям.
 
-Второй уровень абстракции: фабрика фабрик - `SharedFactory`. В ней мы также создадим все фабрики, как до этого создавали вьюмодели в фабриках, настроим их, чтобы для работы с общим кодом нужно было создать только одну общую фабрику - `SharedFactory`.
+Также нам потребуется модуль Koin для получения всех репозиториев, в том числе для фичи авторизации.
 
-`SharedFactory.kt`:
 ```kotlin
-class SharedFactory internal constructor(
-    settings: Settings,
-    antilogs: List<Antilog>,
-    databaseDriverFactory: DatabaseDriverFactory,
-    repositoryCoroutineScope: CoroutineScope
-) {
-    // public constructor for platform side usage
-    constructor(
-        settings: Settings,
-        antilog: Antilog?,
-        databaseDriverFactory: DatabaseDriverFactory?,
-        mpiServiceConnector: MpiServiceConnector?
-    ) : this(
-        settings = settings,
-        antilogs = listOfNotNull(
-            antilog,
-            CrashReportingAntilog(CrashlyticsLogger())
-        ),
-        databaseDriverFactory = databaseDriverFactory,
-        mpiServiceConnector = mpiServiceConnector,
-        repositoryCoroutineScope = CoroutineScope(Dispatchers.Main)
-    )
-    
-    internal val authRepository: AuthRepository by lazy {
-        AuthRepository(
-            //TODO
+...
+import org.koin.core.module.Module
+import org.koin.core.module.dsl.binds
+import org.koin.core.module.dsl.singleOf
+import org.koin.dsl.bind
+import org.koin.dsl.module
+
+internal val repositoriesModule: Module = module {
+    singleOf(::AuthRepositoryImpl) {
+        binds(
+            classes = listOf(
+                ResetPasswordRepository::class,
+                AuthCodeRepository::class,
+                ...
+            )
         )
     }
+    singleOf(::ProfileRepositoryImpl) bind ProfileRepository::class
 
-    val authFactory: AuthFactory by lazy {
-        AuthFactory(
-            createExceptionHandler = ::createExceptionHandler,
-            authRepository = authRepository,
-            strings = object : AuthFactory.Strings {
-                override val resetDescription: StringDesc =
-                    MR.strings.reset_description.desc()
-            }
+```
+Теперь нужно собрать все модули фичей в `FeatureModule.kt`:
+```kotlin
+internal val featuresModules = module {
+    includes(featureAuthModule)
+    includes(featureProfileModule)
+    ...
+}
+```
+
+Теперь нужно зарегистрировать все модули Koin:
+
+```kotlin
+internal fun registerKoinModules(
+    baseUrl: String
+): List<Module> = listOf(
+    apiModule(baseUrl = baseUrl),
+    featuresModules,
+    repositoriesModule,
+    ...
+)
+```
+
+Также в commonMain подготовим функцию для инициализации Koin:
+
+```kotlin
+fun startDI(
+    baseUrl: String,
+    antilog: Antilog?,
+    exceptionLogger: ExceptionLogger,
+    appDeclaration: KoinAppDeclaration? = null
+): KoinApplication {
+    antilog?.also { Napier.base(antilog = it) }
+    Napier.base(CrashReportingAntilog(exceptionLogger))
+    configureExceptionMappers()
+
+    return startKoin {
+        modules(
+            registerKoinModules(
+                baseUrl = baseUrl
+            )
         )
+        appDeclaration?.invoke(this)
     }
-
-    private fun createExceptionHandler(): ExceptionHandler = ExceptionHandler(
-        // TODO
-    )
 }
 ```
-В `SharedFactory` мы создали оставшиеся необходимые фабрикам компоненты - `authRepository` и `createExceptionHandler`, а также установили все строки локализации, необходимые фиче.  
-Поскольку, вьюмодель у нас пока что-то одна, объект `strings` для `AuthFactory` содержит только строки `ResetPasswordViewModel`. Если бы вьюмоделей было больше - все необходимые им строки задавались бы здесь.
 
 ***
-Фиче может понадобиться гораздо больше строк локализации, чем одна, и самих фич в проекте может быть очень много. Если инициализировать строки локализации каждой в фабрики фичей именно в `SharedFactory`, то класс со временем сильно разрастется и ориентироваться в нем будет сложно.  
-Предлагаем вам использовать вспомогательные функции, расположенные рядом с `SharedFactory`, чтобы инициализировать фабрики строками именно там, а в `SharedFactory` вызывать эти функции.
 
-`AuthFactoryInit.kt`:
-```kotlin
-internal fun AuthFactory(
-    createExceptionHandler: () -> ExceptionHandler,
-    authRepository: AuthRepositoryInterface
-): AuthFactory {
-    return AuthFactory(
-        createExceptionHandler = createExceptionHandler,
-        authRepository = authRepository,
-        strings = object : AuthFactory.Strings {
-            override val resetDescription: StringDesc =
-                MR.strings.reset_description.desc()
-        }
-    )
-}
-```
-Вызов в `SharedFactory`:
+### Уровень платформы
 
-```kotlin
-val authFactory: AuthFactory by lazy {
-    AuthFactory(
-        createExceptionHandler = ::createExceptionHandler,
-        authRepository = authRepository
-    )
-}
-```
-***
-
-### Уроверь платформы
-
-Параметры `SharedFactory` - это то, что мы не можем создать из общего кода а можем получить только с платформы.
-
+Параметры `startDI` - это то, что мы не можем создать из общего кода, а можем получить только с платформы.
 
 ***iOS***
 
-Класс со статической переменной - фабрикой
+Для удобства создаем `Koin.swift`:
+```swift
+typealias KoinApplication = Koin_coreKoinApplication
+typealias Koin = Koin_coreKoin
 ```
-class AppComponent {
-    static var factory: SharedFactory!
+И `KoinManager.swift`:
+
+```swift
+fileprivate var koinInstance: Koin!
+
+extension Koin {
+    static var shared: Koin {
+        return koinInstance
+    }
+
+    internal static func setup() {
+        guard koinInstance == nil else {
+            fatalError("koin already initialized!")
+        }
+
+        let antilog: Antilog?
+        #if DEBUG
+            antilog = DebugAntilog(defaultTag: "debug")
+        #else
+            antilog = nil
+        #endif
+
+        let koinApp: KoinApplication = KoinKt.startDI(
+            baseUrl: Environment.Keys.serverBaseUrl.value(),
+            antilog: antilog,
+            exceptionLogger: CrashlyticsExceptionLogger()
+        )
+
+        koinInstance = koinApp.koin
+    }
 }
+
 ```
 
-В методе `application` класса `AppDelegate` инициализируем фабрику и прокидываем дальше в `AppCoordinator`. О нем вы узнаете уже в следующем разделе `Навигация между экранами`.
+В методе `application` класса `AppDelegate` инициализируем Koin.
 ```
-func application(_: UIApplication, didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+func application(
+    _: UIApplication,
+    didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]? = nil
+) -> Bool {
     FirebaseApp.configure()
-    MokoFirebaseCrashlytics.setup()
 
-    let antilog: Antilog?
     #if DEBUG
-        antilog = DebugAntilog(defaultTag: "debug")
-    #else
-        antilog = nil
+        Crashlytics.crashlytics().setCrashlyticsCollectionEnabled(false)
     #endif
 
-    AppComponent.factory = SharedFactory(
-        settings: AppleSettings(delegate: UserDefaults.standard),
-        antilog: antilog,
-        databaseDriverFactory: SqlDatabaseDriverFactory(),
-    )
-
-    let window = UIWindow()
-
-    coordinator = AppCoordinator(
-        window: window,
-        factory: AppComponent.factory
-    )
-    coordinator.start()
-
-    window.makeKeyAndVisible()
-    self.window = window
+    Koin.setup()
 
     return true
 }
 ```
 
-`AppCoordinator` прокидывает ее дальше, в дочерние координаторы, которые, в свою очередь, отправляют ее уже в контроллеры.
-Получение вьюмоедли в контроллере выглядит вот так:
+Получение вьюмодели в контроллере выглядит вот так:
 
 ```
-vc.resetPasswordViewModel = factory
-.authFactory
-.createResetPasswordViewModel(eventsDispatcher: EventsDispatcher<ResetPasswordViewModelEventsListener>(listener: vc))
+private var resetPasswordViewModel: ResetPasswordViewModel = Koin.shared
+    .createResetPasswordViewModel()
 ```
 
 ***Android***
 
 ```kotlin
-val factory = SharedFactory(
-    AndroidSettings(
-        delegate = context.getSharedPreferences("app", MODE_PRIVATE)
-    ),
-    antilog = antilog,
-    databaseDriverFactory = SqlDatabaseDriverFactory(context)
-)
+class MainApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        ...
+        val antilog: LogcatAntilog? = if (BuildConfig.DEBUG) {
+            LogcatAntilog()
+        } else {
+            null
+        }
 
-val resetPasswordViewModel = factory.authFactory.createResetPasswordViewModel(
-    eventsDispatcher = eventsDispatcherOnMain()
-)
+        startDI(
+            baseUrl = BuildConfig.BASE_URL,
+            antilog = antilog,
+            exceptionLogger = CrashlyticsLogger()
+        ) {
+            if (BuildConfig.DEBUG) {
+                androidLogger()
+            }
+            androidContext(this@MainApplication)
+        }
+    }
+}
 ```
 
-Наконец, как добавлять новые компоненты в фичи и вьюмодели, если вдруг что-то понадобилось: 
-   - все что общее для вьюмоделей одной фичи - настраивается в фабрике
-   - все, что общее для всех фабрик - настраивается в `SharedFactory`
-
-
-Таким образом, чтобы начать работу с общим кодом - нужно только создать объект `SharedFactory`, передав ему несколько параметров, доступных только на платформе.  
+Таким образом, чтобы начать работу с общим кодом, нужно только инициализировать Koin c помощью `startDI`, передав ему несколько параметров, доступных только на платформе.
 
 ## Практическое задание
 - Используйте проект, готовый после раздела [Многомодульность](./multimodularity#практическое-задание)
-- Добавьте фабрики для создания фичей
+- Добавьте модули Koin для фичей и его инициализацию
