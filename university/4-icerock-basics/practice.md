@@ -30,19 +30,20 @@ sidebar_position: 16
 7. Использовать `moko-resources` для использования строк локализации приложения
 8. Использовать `moko-units` для реализации списка репозиториев 
 9. Использовать `ExceptionMappersStorage` из `moko-errors` (не используйте `ExceptionHandler`)
-10. Вся логика должна находиться в `common` коде   
-11. Навигация на `iOS` должна быть реализована используя `AppCoordinator`, без `storyboards`   
-12. Логика хранения данных должна находиться в `common` коде
-13. Логика работы с сетью должна находиться в `common` коде
-14. Для работы с сетью использовать `Ktor Client`
-15. Используйте доменные сущности, вместо сетевых
-16. При перезапуске приложения авторизация должна сохраняться
-17. Использовать локализацию для всех строк, показываемых пользователю
-18. Использовать векторную графику везде, где это возможно
-19. Обеспечить поддержку Android API 21
-20. Локализовать проект используя `sheets-localizations-generator`
+10. Вся логика должна находиться в `common` коде
+11. Используйте Koin для внедрения зависимостей
+12. Навигация на `iOS` должна быть реализована используя `AppCoordinator`, без `storyboards`   
+13. Логика хранения данных должна находиться в `common` коде
+14. Логика работы с сетью должна находиться в `common` коде
+15. Для работы с сетью использовать `Ktor Client`
+16. Используйте доменные сущности, вместо сетевых
+17. При перезапуске приложения авторизация должна сохраняться
+18. Использовать локализацию для всех строк, показываемых пользователю
+19. Использовать векторную графику везде, где это возможно
+20. Обеспечить поддержку Android API 21
+21. Локализовать проект используя `sheets-localizations-generator`
     - обеспечьте поддержку русского и английского языков
-21. Обеспечить поддержку iOS 13.0
+22. Обеспечить поддержку iOS 13.0
 
 ## Классы приложения
 
@@ -233,5 +234,6 @@ GitHubRepoRepository --> KeyValueStorage
 6. [Подключение Ktor Client](https://ktor.io/docs/gradle.html)
 7. [Настройке запросов в Ktor Client](https://ktor.io/docs/request.html)
 8. [multiplatform-settings](https://github.com/russhwolf/multiplatform-settings)
-9. [Android Дизайн](https://www.figma.com/file/Mh3ga5XAzyJNCY87NBp01G/Git_test)
-10. [iOS Дизайн](https://www.figma.com/file/XmpoCqkdWTGb2NGdR2bgiQ/Git_test-iOS)
+9. [Koin](https://github.com/InsertKoinIO/koin)
+10. [Android Дизайн](https://www.figma.com/file/Mh3ga5XAzyJNCY87NBp01G/Git_test)
+11. [iOS Дизайн](https://www.figma.com/file/XmpoCqkdWTGb2NGdR2bgiQ/Git_test-iOS)
