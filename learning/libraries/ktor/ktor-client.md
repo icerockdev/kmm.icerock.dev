@@ -147,55 +147,7 @@ append("image", File("ktor_logo.png").readBytes(), Headers.build {
 ...
 ```
 
-### Передача файла как Input
-
-Этот подход подразумевает использование *kotlinx-io* `Input` ([ссылка на класс](https://ktor.kotlincn.net/kotlinx/io/io/input-output.html)). В таком случае используется другой подход формирования `formData`:
-```kotlin
-val data: List<PartData> = formData {
-    appendInput(
-        key = "yourKey",
-        block = { input },
-        headers = Headers.build {
-            append(
-                HttpHeaders.ContentType,
-                ContentType.Application.OctetStream.toString()
-            )
-            append(
-                HttpHeaders.ContentDisposition, ContentDisposition.File
-                    .withParameter(ContentDisposition.Parameters.FileName, fileName)
-                    .toString()
-            )
-        }
-    )
-}
-```
-В примере представлен вариант добавления `headers`, по умолчанию *Empty*. Здесь можно конфигурировать хедеры под ваши нужды.
-
 Касаемо использования formData, существует несколько подходов в формировании *ktor* HTTP клиента:
-
-### Передача файла как Input в common коде
-
-Чтобы реализовать потоковую передачу файла в общем коде, используя ktor, необходимо получить объект [Input](https://api.ktor.io/older/1.6.8/ktor-io/io.ktor.utils.io.core/-input/index.html) на основе файла. Сделать это в общем коде можно используя expect/actual функции:  
-
-***commonMain:***
-```kotlin
-expect fun inputByFilepath(filePath: String): Input
-```
-***androidMain:***
-```kotlin
-actual fun inputByFilepath(filePath: String): Input{
-    val file = File(filePath)
-    val inputStream = file.inputStream()
-    return inputStream.asInput()
-}
-```
-***iosMain:***
-```kotlin
-actual fun inputByFilepath(filePath: String): Input {
-    val fileHandle = NSFileHandle.fileHandleForReadingAtPath(path = filePath)
-    return Input(fileHandle!!.fileDescriptor)
-}
-```
 
 ### submitFormWithBinaryData
 
