@@ -19,7 +19,7 @@ sidebar_position: 0
 - Верстка UI используя xml layout
 - Библиотеки AndroidX и Jetpack от Google
 - `RecyclerView`
-- `LiveData`
+- Kotlin flows, `StateFlow`, `SharedFlow`
 - `ViewModel`
 - Жизненный цикл `Application`, `Activity`, `Fragment`, `ViewModel`
 - `ViewBinding`
