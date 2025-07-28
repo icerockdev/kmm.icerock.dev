@@ -169,6 +169,147 @@ val result = httpClient.post<Unit> {
 }
 ```
 
+### Пример реализации на Android
+
+Стек: Retrofit 2.11.0, KotlinX.io, Multipart-formdata для передачи файла.
+Для передачи файла в Retrofit надо представить его в формате понятном ему - RequestBody. Создаем наследника данного класса:
+
+```kotlin
+import kotlinx.io.Buffer
+import kotlinx.io.readByteArray
+import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody
+import okio.BufferedSink
+import io.example.FileSource
+import kotlin.math.min
+
+class FileSourceRequestBody(
+    private val fileSource: FileSource,
+    private val onUploadCallback: (Float) -> Unit,
+) : RequestBody() {
+
+	// Определяем тип контента для передачи в заголовке MediaType
+    override fun contentType(): MediaType? {
+        return when {
+            fileSource.fileName.endsWith(".png", ignoreCase = true) -> "image/png"
+            fileSource.fileName.endsWith(".jpg", ignoreCase = true) ||
+                fileSource.fileName.endsWith(".jpeg", ignoreCase = true) -> "image/jpeg"
+            fileSource.fileName.endsWith(".bmp", ignoreCase = true) -> "image/bmp"
+            fileSource.fileName.endsWith(".gif", ignoreCase = true) -> "image/gif"
+            fileSource.fileName.endsWith(".webp", ignoreCase = true) -> "image/webp"
+            else -> "application/octet-stream"
+        }.toMediaTypeOrNull()
+    }
+
+    override fun contentLength(): Long {
+        return fileSource.fileSize
+    }
+
+    override fun writeTo(sink: BufferedSink) {
+        // Создаем буфер
+        val buffer = Buffer()
+        // Объем загруженный на сервер, для расчета прогресса загрузки
+        var totalBytesRead = 0L
+
+        // Открываем поток, который будет закрыт автоматически по окончании работы с ним
+        fileSource.source.use { source ->
+            var readBytes: Long
+
+            while (totalBytesRead != fileSource.fileSize) {
+                // Читаем файл по размеру буффера, либо по оставшемуся количеству от файла для загрузки
+                // Чтение происходит с удалением прочитанных байтов из source
+                readBytes = source.readAtMostTo(
+                    sink = buffer,
+                    byteCount = min(
+                        a = DEFAULT_BUFFER_SIZE,
+                        b = fileSource.fileSize - totalBytesRead
+                    )
+                )
+
+                totalBytesRead += readBytes
+
+                // Записываем прочитанный объем в исходящий поток данных
+                sink.write(
+                    source = buffer.readByteArray(),
+                    offset = 0,
+                    byteCount = readBytes.toInt()
+                )
+
+                // Вычисляем прогресс загрузки
+                calculateProgress(totalBytesRead, onUploadCallback)
+            }
+
+            // Очищаем текущий поток
+            sink.flush()
+        }
+    }
+
+    private fun calculateProgress(
+        totalBytesRead: Long,
+        onUploadCallback: (Float) -> Unit,
+    ) {
+        val progress: Float = (totalBytesRead / contentLength().toFloat())
+        onUploadCallback(progress)
+    }
+
+    companion object {
+        private const val DEFAULT_BUFFER_SIZE = 4096L
+    }
+}
+```
+
+В качестве входящих параметров для класса нужно передать информацию о файле, вторым параметром передаем callback для отображения прогресса загрузки на ui. Структура FileSource:
+
+```kotlin
+import kotlinx.io.RawSource
+
+data class FileSource(
+    val fileName: String,
+    val source: RawSource,
+    val fileSize: Long,
+)
+```
+Теперь когда готовы основные структуры для загрузки файла на сервер, давайте создадим интерфейс для нашего API:
+
+```kotlin
+import okhttp3.MultipartBody
+import retrofit2.Response
+import retrofit2.http.Multipart
+import retrofit2.http.POST
+import retrofit2.http.Part
+
+interface UploadApi {
+    @Multipart
+    @POST("/api/images")
+    suspend fun uploadImage(
+        @Part image: MultipartBody.Part,
+    ): Response<SuccessDto>
+}
+```
+Для обозначения, что в теле запроса содержится multi-part на него нужно повесить аннотацию '@Multipart', а для параметра содержащий его '@Part'. При вызове данного запроса в репозитории необходимо будет создать MultipartBody.Part, вызывом createFormData: 
+
+```kotlin
+...    
+	suspend fun uploadImage(
+        fileSource: FileSource,
+        onUploadCallback: (Float) -> Unit,
+    ): ImageUploadResult {
+        return uploadApi.uploadImage(
+                image = MultipartBody.Part.createFormData(
+                    name = "image", // имя Multipart файла указанное в api бекенда
+                    filename = fileSource.fileName, // Имя файла передается в заголовке form-data
+                    body = FileSourceRequestBody(
+                        fileSource = fileSource,
+                        onUploadCallback = onUploadCallback
+                    )
+                )
+            )
+        }.toDomain()
+    }
+...
+```
+
 ### application/octet-stream
 
 Данный подход используется довольно редко, но все же используется. Для данного типа запроса нет возможности передать несколько параметров или файлов, можно отправлять файл, притом только один. Для реализации подхода необходимо создать класс, унаследованный от `WriteChannelContent` ([ссылка на класс](https://www.mvndoc.com/c/io.ktor/ktor-http-iosarm64/io/ktor/http/content/OutgoingContent.WriteChannelContent.html)). Пример кода:
