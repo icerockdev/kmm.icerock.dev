@@ -15,15 +15,51 @@ sidebar_position: 6
 ## FormField
 
 Потребность в библиотеке возникла из-за того, что для создания логики формы ввода в общем коде необходимы следующие элементы:
-- `LiveData(String)` - текст поля
-- `LiveData(Bool)` - валидно/невалидно поле 
-- `LiveData(String)` - текст ошибки валидации
+- `LiveData/StateFlow(String)` - текст поля
+- `LiveData/StateFlow(Bool)` - валидно/невалидно поле 
+- `LiveData/StateFlow(String)` - текст ошибки валидации
 
 А представьте, что у вас 7 или 8 таких полей, получится много однотипного кода, в котором легко будет запутаться и допустить ошибку.
 
-Библиотека позволяет использовать специальный класс `FormField` для форм ввода, который включает в себя все эти три лайвдаты.
+Библиотека позволяет использовать специальный класс `FormField` для форм ввода, который включает в себя все эти три лайвдаты/стейт флоу.
 
 Для создания `FormField` необходимо только установить тип и задать валидацию для этого значения. Тип поля не обязательно должен быть `String`, подойдет любой, который можно как-то установить: `int`, `bitmap`, `data` и тд.
+
+Для Jetpack Compose и Compose Multiplatform двусторонная связка для передачи значения введенного текста поля в View Model не работает, необходимо реализовывать на UI TextField c onValueChange.<br/>
+В коде экрана:
+
+```kotlin
+val (code, onCodeChange) = viewModel.code.data.collectAsMutableState()
+
+AuthCodeContent(
+    code = code,
+    onCodeChange = onCodeChange,
+    codeError = viewModel.code.error.collectAsState().value?.localized(),
+    ...
+)
+```
+В контенте экрана:
+```kotlin
+@Composable
+fun AuthCodeContent(
+    code: String,
+    onCodeChange: (String) -> Unit,
+    codeError: String?,
+    ...
+) {
+    ...
+    BasicTextField(
+        ...
+        value = code,
+        onValueChange = { newValue ->
+            onCodeChange(newValue)
+        },
+        isError = codeError !=null
+    )
+    ...
+}
+
+```
 
 ## Валидация
 Разберем, как добавлять валидацию в `FormField`:
@@ -36,3 +72,4 @@ sidebar_position: 6
 - поля можно объединить в список и валидировать их одновременно
 - валидация полей может быть завязана на других полях (пароль + повторите пароль)
 - у FormField есть поле `isValid` и `validationError`
+
