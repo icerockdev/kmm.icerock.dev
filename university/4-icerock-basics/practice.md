@@ -26,7 +26,7 @@ sidebar_position: 16
 3. Создать отдельные модули для: `common` кода, фичи авторизации, и фичи репозитория. 
 4. Сохранять токен авторизации в хранилище устройства: `SharedPreferences` для `Android` и `NSUserDefaults` для `iOS`. Работу с хранилищем делегировать классу `KeyValueStorage`
 5. Использовать `multiplatform-settings` для работы с хранилищем устройства
-6. Использовать `moko-mvvm` для внедрения всех ее возможностей, о которых вы узнали [статьи](../../learning/libraries/moko/moko-mvvm) 
+6. Использовать `moko-mvvm` для внедрения всех ее возможностей, о которых вы узнали из [статьи](../../learning/libraries/moko/moko-mvvm) 
 7. Использовать `moko-resources` для использования строк локализации приложения
 8. Использовать `moko-units` для реализации списка репозиториев 
 9. Использовать `ExceptionMappersStorage` из `moko-errors` (не используйте `ExceptionHandler`)
@@ -85,8 +85,8 @@ class KeyValueStorage {
 ### mpp-library-feature-auth
 ```kotlin
 class AuthViewModel {
-   val token: MutableLiveData<String>
-   val state: LiveData<State>
+   val token: MutableStateFlow<String>
+   val state: StateFlow<State>
    val actions: Flow<Action>
 
    fun onSignButtonPressed() {
@@ -111,7 +111,7 @@ class AuthViewModel {
 ### mpp-library-feature-repo
 ```kotlin
 class RepositoryInfoViewModel {
-   val state: LiveData<State>
+   val state: StateFlow<State>
 
    sealed interface State {
       object Loading : State
@@ -134,7 +134,7 @@ class RepositoryInfoViewModel {
 }
 
 class RepositoriesListViewModel {
-   val state: LiveData<State>
+   val state: StateFlow<State>
    
    sealed interface State {
       object Loading : State
