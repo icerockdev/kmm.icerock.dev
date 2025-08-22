@@ -15,17 +15,14 @@ sidebar_position: 0
     - `Service`
     - `BroadcastReceiver`
     - `ContentProvider`
-- `Fragment`
-- Верстка UI используя xml layout
+- Верстка UI используя Compose
 - Библиотеки AndroidX и Jetpack от Google
-- `RecyclerView`
-- `LiveData`
+- Kotlin flows, `StateFlow`, `SharedFlow`
 - `ViewModel`
-- Жизненный цикл `Application`, `Activity`, `Fragment`, `ViewModel`
-- `ViewBinding`
+- Жизненный цикл `Application`, `Activity`, `ViewModel`
 - Библиотека Android Navigation Component от Google
 - Библиотека Retrofit от Square
-- Библиотека Hilt от Google
+- Библиотека Koin
 
 :::info
 Для тех кому всё перечисленное уже знакомо, использовано на практике и есть уверенное понимание о чем речь - можно пропустить ознакомление с теоретическим блоком и сразу перейти к [практической задаче](practice).

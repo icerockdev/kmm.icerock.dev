@@ -19,12 +19,12 @@ sidebar_position: 5
 
 ## ViewModel
 
-Ознакомиться детальнее с ViewModel и LiveData помогут следующие материалы:
+Ознакомиться детальнее с ViewModel и Kotlin flows помогут следующие материалы:
 
 - [Единый стейт экрана](../../learning/state) - статья о состояних и событиях
-- [Android Kotlin Fundamentals: 5.1 ViewModel](https://developer.android.com/codelabs/kotlin-android-training-view-model) - не пропуская Summary и тест в Homework
-- [Android Kotlin Fundamentals: LiveData and LiveData observers](https://developer.android.com/codelabs/kotlin-android-training-live-data) - не пропуская Summary и тест в Homework
-- [Incorporate Lifecycle-Aware Components](https://developer.android.com/codelabs/android-lifecycles) - для закрепления связей жизненного цикла android компонентов и ViewModel, LiveData
+- [Kotlin Flows on Android](https://developer.android.com/kotlin/flow)
+- [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [Android Basics Compose: 5. ViewModel and State in Compose](https://developer.android.com/codelabs/basic-android-kotlin-compose-viewmodel-and-state) - для закрепления связей жизненного цикла android компонентов и ViewModel, StateFlow. Не пропуская Conclusion и ссылки в нем
 
 ## Retrofit
 
