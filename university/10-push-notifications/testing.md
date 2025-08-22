@@ -60,4 +60,4 @@ sidebar_position: 2
 
 
 Пуши на Android можно протестировать на эмуляторе без особых сложностей.  
-Чтобы разобраться, как тестировать push-уведомления на симуляторе iOS, прочитайте [тьюториал](https://sparrowcode.io/ru/tutorials/testing-push-notifications-ios-simulator).
+Чтобы разобраться, как тестировать push-уведомления на симуляторе iOS, прочитайте [туториал](https://sparrowcode.io/ru/tutorials/testing-push-notifications-ios-simulator).
