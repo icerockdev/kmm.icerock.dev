@@ -26,51 +26,51 @@ sidebar_position: 6
 
 ## moko-mvvm
 
-Для использования MVVM мы реализовали библиотеку [moko-mvvm](https://github.com/icerockdev/moko-mvvm). Главное, что мы стремились достичь при ее реализации, это использование оригинальных классов JetPack `ViewModel` и `LiveData` со стороны Android, чтобы продолжить использовать существующие в Android интеграции с данными классами (включая логику хранения `ViewModel` в `ViewModelStore` чтобы переживать смену конфигурации). Для iOS стороны (и других платформ тоже) классы `ViewModel` и `LiveData` были реализованы нами, в более простом виде чем в Android (так как только в Android есть сложный жизненный цикл компонентов с пересозданием). По сути классы `ViewModel` и `LiveData` являются expect классами с разными actual реализациями на платформах.
+Для использования MVVM мы реализовали библиотеку [moko-mvvm](https://github.com/icerockdev/moko-mvvm). Главное, что мы стремились достичь при ее реализации, это использование оригинальных классов JetPack `ViewModel` и `StateFlow` со стороны Android, чтобы продолжить использовать существующие в Android интеграции с данными классами (включая логику хранения `ViewModel` в `ViewModelStore` чтобы переживать смену конфигурации). Для iOS стороны (и других платформ тоже) классы `ViewModel` и `StateFlow` были реализованы нами, в более простом виде чем в Android (так как только в Android есть сложный жизненный цикл компонентов с пересозданием). По сути классы `ViewModel` и `StateFlow` являются expect классами с разными actual реализациями на платформах.
 
 Для знакомства с библиотекой посмотрите материалы на странице в базе знаний - [moko-mvvm](../../learning/libraries/moko/moko-mvvm).
 
-### Привязка LiveData к UI
+### Привязка StateFlow к UI
 
-В библиотеке также содержатся готовые методы для привязки `LiveData` к UI элементам, по аналогии с методами, которые были использованы нами в [статье про State](../../learning/state). Данные методы доступны и для Android и для iOS, а поэтому в большинстве случаев вам не потребуется писать вручную привязку каждого типа данных к каждому UI элементу.
+В библиотеке также содержатся готовые методы для привязки `StateFlow` к UI элементам, по аналогии с методами, которые были использованы нами в [статье про State](../../learning/state). Данные методы доступны и для Android и для iOS, а поэтому в большинстве случаев вам не потребуется писать вручную привязку каждого типа данных к каждому UI элементу.
 
-Привязкой UI к `LiveData` называется binding, и основано на использовании метода `bind`:
-- [для Android](https://github.com/icerockdev/moko-mvvm/blob/master/mvvm-livedata/src/androidMain/kotlin/dev/icerock/moko/mvvm/utils/LiveDataExt.kt)
-- [для iOS](https://github.com/icerockdev/moko-mvvm/blob/master/mvvm-livedata/src/iosMain/kotlin/dev/icerock/moko/mvvm/utils/LiveDataExt.kt)
+Привязкой UI к `StateFlow` называется binding, и основано на использовании метода `bind`:
+- [для Android](https://github.com/icerockdev/moko-mvvm/blob/master/mvvm-flow/src/androidMain/kotlin/dev/icerock/moko/mvvm/flow/binding/BindingBase.kt)
+- [для iOS](https://github.com/icerockdev/moko-mvvm/blob/master/mvvm-flow/src/iosMain/kotlin/dev/icerock/moko/mvvm/flow/binding/BindingBase.kt)
 
 Для Android нам доступны например:
 ```kotlin
 fun EditText.bindTextTwoWay(
     lifecycleOwner: LifecycleOwner,
-    liveData: MutableLiveData<String>
-): Closeable
+    flow: MutableStateFlow<String>
+): DisposableHandle
 
 fun TextView.bindText(
     lifecycleOwner: LifecycleOwner,
-    liveData: LiveData<String>
-): Closeable
+    flow: StateFlow<String>
+): DisposableHandle
 
 fun View.bindVisibleOrGone(
     lifecycleOwner: LifecycleOwner,
-    liveData: LiveData<Boolean>
-): Closeable
+    flow: StateFlow<Boolean>
+): DisposableHandle
 ```
 
 И для iOS соответственно:
 ```swift
 extension UITextField {
   @discardableResult
-  func bindTextTwoWay(liveData: MutableLiveData<NSString>) -> Closeable
+  func bindTextTwoWay(flow: CMutableStateFlow<String>) -> DisposableHandle
 }
 
 extension UILabel {
   @discardableResult
-  func bindText<T : NSString>(liveData: LiveData<T>) -> Closeable
+  func bindText<T : String>(flow: CStateFlow<T>) -> DisposableHandle
 }
 
 extension UIView {
   @discardableResult
-  func bindHidden(liveData: LiveData<KotlinBoolean>) -> Closeable
+  func bindHidden(flow: CStateFlow<Boolean>) -> DisposableHandle
 }
 ```
 
@@ -79,8 +79,8 @@ extension UIView {
 shared code:
 ```kotlin
 class SimpleViewModel : ViewModel() {
-    private val _counter: MutableLiveData<Int> = MutableLiveData(0)
-    val counter: LiveData<String> = _counter.map { it.toString() }
+    private val _counter: MutableStateFlow<Int> = MutableStateFlow(0)
+    val counter: CStateFlow<String> = _counter.map { it.toString() }.cStateFlow()
 
     fun onCounterButtonPressed() {
         _counter.value += 1
@@ -115,7 +115,7 @@ class SimpleViewController: UIViewController {
         
         viewModel = SimpleViewModel()
         
-        counterLabel.bindText(liveData: viewModel.counter)
+        counterLabel.bindText(flow: viewModel.counter)
     }
     
     @IBAction func onCounterButtonPressed() {
@@ -126,24 +126,24 @@ class SimpleViewController: UIViewController {
 
 #### Добавление своих расширений
 
-Если в `moko-mvvm` не оказалось нужной вам функции биндинга для `iOS` или `Android`, вы можете добавить свой `extension` к `LiveData`.  
-Например, добавим функцию `bindToMenuItemVisible` для связи `LiveData<Boolean>` и `MenuItem` на `Android`:
+Если в `moko-mvvm` не оказалось нужной вам функции биндинга для `iOS` или `Android`, вы можете добавить свой `extension` к `CStateFlow`.  
+Например, добавим функцию `bindToMenuItemVisible` для связи `CStateFlow<Boolean>` и `MenuItem` на `Android`:
 ```kotlin
-internal fun LiveData<Boolean>.bindToMenuItemVisible(
+internal fun CStateFlow<Boolean>.bindToMenuItemVisible(
     lifecycleOwner: LifecycleOwner,
     menuItem: MenuItem
-): Closeable {
-    return bindNotNull(lifecycleOwner) { value ->
+): DisposableHandle {
+    return bind(lifecycleOwner) { value ->
         menuItem.isVisible = value
     }
 }
 ```
 
-Для `iOS` добавим функцию `bindToUIToolbarVisible` для связи `UIToolbar` c `LiveData<KotlinBoolean>` (на `iOS` из общего кода вместо `Boolean` приходит `KotlinBoolean`) вот как это будет выглядеть:
+Для `iOS` добавим функцию `bindToUIToolbarVisible` для связи `UIToolbar` c `CStateFlow<KotlinBoolean>` (на `iOS` из общего кода вместо `Boolean` приходит `KotlinBoolean`) вот как это будет выглядеть:
 ```swift
 extension UIToolbar {
-    func bindToUIToolbarVisible(liveData: LiveData<KotlinBoolean>) -> Closeable {
-        return liveData.addCloseableObserver { [weak self] value in
+    func bindToUIToolbarVisible(flow: CStateFlow<KotlinBoolean>) -> DisposableHandle {
+        return flow.subscribe { [weak self] value in
             let kotlinBool = value as! KotlinBoolean
             self?.isHidden = kotlinBool.boolValue
         }
@@ -151,8 +151,8 @@ extension UIToolbar {
 }
 ```
 
-Важно, в методах биндинга должна быть только привязка `liveData` к объекту `UI`, никакой логики быть не должно!
-Вся логика должна быть во `ViewModel`, если нужно как-то преобразовать значение `liveData`, делайте это там.
+Важно, в методах биндинга должна быть только привязка `flow` к объекту `UI`, никакой логики быть не должно!
+Вся логика должна быть во `ViewModel`, если нужно как-то преобразовать значение `flow`, делайте это там.
 
 ### MvvmActivity и MvvmFragment
 В moko-mvvm реализованы абстрактные классы [MvvmFragment](https://github.com/icerockdev/moko-mvvm/blob/b4b2ed1a86451bd303aa0733ecd776be96c6f455/mvvm-viewbinding/src/main/kotlin/dev/icerock/moko/mvvm/viewbinding/MvvmEventsFragment.kt) и [MvvmActivity](https://github.com/icerockdev/moko-mvvm/blob/b6f2630df03bbd405e5659d85ea7df03f38e5dc7/mvvm-viewbinding/src/main/kotlin/dev/icerock/moko/mvvm/viewbinding/MvvmActivity.kt), наследуясь от которых вы:
@@ -235,7 +235,6 @@ class TestFragment : MvvmFragment<TestFragmentBinding, AuthViewModel>() {
 
 Разберем несколько подходов для передачи событий от `ViewModel` на UI:
 - используя `Flow`
-- используя `EventsDispatcher` из [moko-mvvm](https://github.com/icerockdev/moko-mvvm)
 - используя `Flow` вместе с [moko-kswift](https://github.com/icerockdev/moko-kswift)
 
 #### Flow
@@ -266,89 +265,48 @@ sealed interface Action {
 В Kotlin-мире мы получим ошибку при компиляции, надо будет добавить в `when` обработку еще одного объекта - нового, который только что добавили во `ViewModel`.  
 А на iOS компилятор нам ничего не подскажет, потому что новый объект будет обрабатываться в ветке `else`. Из-за этого, логика перехода на iOS нарушится. Поиск ошибки может занять некоторое время, в зависимости от знаний разработчика.  
 
-Чтобы не сталкиваться с этим на практике мы долгое время использовали другой подход - с помощью `EventsDispatcher` из [moko-mvvm](https://github.com/icerockdev/moko-mvvm). Разберемся, как он работает.
+Чтобы не сталкиваться с этим на практике мы используем другой подход - с помощью `Channel`. Разберемся, как он работает
 
-#### EventsDispatcher
+#### Передача Action с помощью Channel
 
-С этим подходом нужно разобраться, потому что на многих наших проектах сейчас используется именно он.  
-`EventDispatcher` - это класс с одной единственной задачей - гарантировать доставку события и вызов его обработчика на UI, после сигнала от `ViewModel`.
-
-Во `ViewModel` объявляется интерфейс с методами, реализация которых ей нужна на платформе, например, метод для перехода на какой-нибудь экран:
-
-```kotlin 
-interface EventsListener {
-    fun routeToMainPage()
+Во view model добавляем канал и события для передачи:
+```kotlin
+private val _actions: Channel<Actions> = Channel()
+val actions: CFlow<Actions> = _actions.receiveAsFlow().cFlow()
+...
+sealed interface Actions {
+    data class ShowMessage(val messageText: StringDesc) : Actions
+    data object RouteToBack : Actions
 }
 ```
-
-Далее, все что остается сделать, чтобы вызвать событие на `UI` - это получить во `ViewModel` объект `eventsDispatcher` и, когда пора переходить на главный экран, послать платформе это событие простым вызовом метода:
+В Android подписываемся на события. В экране на Compose UI это выглядит так:
 ```kotlin
-class EventsViewModel(
-    val eventsDispatcher: EventsDispatcher<EventsListener>
-) : ViewModel() {
-
-    fun onButtonPressed() {
-        eventsDispatcher.dispatchEvent { routeToMainPage() }
-    }
-
-    interface EventsListener {
-        fun routeToMainPage()
-    }
-}
-```
-
-На платформах `Fragment` и `UIViewController` реализуют этот интерфейс.
-Пример реализации на Android:
-
-```kotlin
-class EventsFragment: Fragment(R.layout.fragment_simple), EventsViewModel.EventsListener {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val viewModel: EventsViewModel = getViewModel { 
-            EventsViewModel(eventsDispatcherOnMain()) 
+viewModel.actions.observeAsActions { action ->
+    when (action) {
+        is Actions.ShowMessage -> {
+            ...
         }
 
-        viewModel.eventsDispatcher.bind(lifecycleOwner = this, listener = this)
-    }
-
-    override fun routeToMainPage() {
-        TODO("some routing")
+        Actions.RouteToBack -> {
+            ...
+        }
     }
 }
 ```
-
-Пример на iOS:
-
+В iOS подписка выглядит так:
 ```swift
-class EventsViewController: UIViewController {
-    private var viewModel: EventsViewModel!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        viewModel = EventsViewModel(
-            eventsDispatcher: EventsDispatcher(listener: self)
-        )
-    }
-}
-
-extension EventsViewController: EventsViewModelEventsListener {
-    func routeToMainPage() {
-        fatalError("some routing")
+viewModel.actions.subscribe { [weak self] action in
+    guard let self = self,
+          let action = action else { return }
+    let actionKs = SimpleViewModelActionKs(action)
+    switch actionKs {
+    case .showMessage(let data):
+        ...
+    case .routeToBack:
+        ...
     }
 }
 ```
-
-За счет интерфейса обе платформы знают, какой набор действий должны поддерживать.  
-Если во `ViewModel` нужно будет добавить еще одно событие, и мы забудем реализовать его на какой-нибудь из платформ, компилятор выделит, что отсутствует реализация метода интерфейса.
-
-:::warning
-
-В `dispatchEvent` нельзя передавать лямбду из общего кода, например, для установки действия по кнопке в [AlertDialog](https://developer.android.com/reference/android/app/AlertDialog). Нельзя этого делать потому, что на Android мы не сможем ее никуда сохранить, поэтому при пересоздании экрана она пропадет.  
-Если вам нужно установить чему-либо на платформе действие - делайте соответствующий метод во `ViewModel`.
-
-:::
 
 #### Flow c moko-kswift
 Мы уже рассмотрели, с какими проблемами мы столкнулись бы, если бы использовали `Flow` в общем коде.  
@@ -367,7 +325,7 @@ extension EventsViewController: EventsViewModelEventsListener {
 
 ## Удобное public api общего кода
 
-Благодаря переносу всей логики приложения в общий код мы получаем более удобное и простое API библиотеки для интеграции на платформы. Мы знаем что есть, например, ряд `ViewModel`-ей, в которых есть `LiveData` на которые нужно подписаться и `EventsDispatcher` события от которого нужно обрабатывать. Все передаваемые на UI данные уже подготовлены к отображению и не требуют дополнительной обработки.
+Благодаря переносу всей логики приложения в общий код мы получаем более удобное и простое API библиотеки для интеграции на платформы. Мы знаем что есть, например, ряд `ViewModel`-ей, в которых есть `StateFlow` на которые нужно подписаться и события, которые нужно обрабатывать. Все передаваемые на UI данные уже подготовлены к отображению и не требуют дополнительной обработки.
 
 Вот некоторый список преимуществ, которые мы получаем за счет использования `ViewModel`-ей в общем коде:
 

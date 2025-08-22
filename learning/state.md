@@ -361,4 +361,85 @@ _actions.trySend(State.Empty)
 - `trySend` же возвращает `Boolean`: `true` - если добавить новое значение удалось, `false` - если не удается добавить из-за превышения объема буфера значений. Это значит что если в очереди уже есть какие-то события, которые не успел получить UI, то новое просто будет утерено. Поэтому всегда следует использовать `send`.
 
 ## Дополнительно
-Для работы с событиями и состояниями у нас в компании используются возможности библиотеки [moko-mvvm](https://github.com/icerockdev/moko-mvvm). С ее помощью происходят привязки, как односторонняя, так и двусторонняя. Событиями занимается класс EventsDispatcher.
+Для работы с событиями и состояниями у нас в компании используются возможности библиотеки [moko-mvvm](https://github.com/icerockdev/moko-mvvm). С ее помощью происходят привязки, как односторонняя, так и двусторонняя.
+
+Ранее событиями занимался класс EventsDispatcher. Подход с использованием EventsDispatcher считается устаревшим и в новых проектах мы его не используем. Ниже справочная информация на случай, если встретитесь с ним.
+
+`EventDispatcher` - это класс с одной единственной задачей - гарантировать доставку события и вызов его обработчика на UI, после сигнала от `ViewModel`.
+
+Во `ViewModel` объявляется интерфейс с методами, реализация которых ей нужна на платформе, например, метод для перехода на какой-нибудь экран:
+
+```kotlin 
+interface EventsListener {
+    fun routeToMainPage()
+}
+```
+
+Далее, все что остается сделать, чтобы вызвать событие на `UI` - это получить во `ViewModel` объект `eventsDispatcher` и, когда пора переходить на главный экран, послать платформе это событие простым вызовом метода:
+```kotlin
+class EventsViewModel(
+    val eventsDispatcher: EventsDispatcher<EventsListener>
+) : ViewModel() {
+
+    fun onButtonPressed() {
+        eventsDispatcher.dispatchEvent { routeToMainPage() }
+    }
+
+    interface EventsListener {
+        fun routeToMainPage()
+    }
+}
+```
+
+На платформах `Fragment` и `UIViewController` реализуют этот интерфейс.
+Пример реализации на Android:
+
+```kotlin
+class EventsFragment: Fragment(R.layout.fragment_simple), EventsViewModel.EventsListener {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val viewModel: EventsViewModel = getViewModel { 
+            EventsViewModel(eventsDispatcherOnMain()) 
+        }
+
+        viewModel.eventsDispatcher.bind(lifecycleOwner = this, listener = this)
+    }
+
+    override fun routeToMainPage() {
+        TODO("some routing")
+    }
+}
+```
+
+Пример на iOS:
+
+```swift
+class EventsViewController: UIViewController {
+    private var viewModel: EventsViewModel!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        viewModel = EventsViewModel(
+            eventsDispatcher: EventsDispatcher(listener: self)
+        )
+    }
+}
+
+extension EventsViewController: EventsViewModelEventsListener {
+    func routeToMainPage() {
+        fatalError("some routing")
+    }
+}
+```
+
+За счет интерфейса обе платформы знают, какой набор действий должны поддерживать.  
+Если во `ViewModel` нужно будет добавить еще одно событие, и мы забудем реализовать его на какой-нибудь из платформ, компилятор выделит, что отсутствует реализация метода интерфейса.
+
+:::warning
+
+В `dispatchEvent` нельзя передавать лямбду из общего кода, например, для установки действия по кнопке в [AlertDialog](https://developer.android.com/reference/android/app/AlertDialog). Нельзя этого делать потому, что на Android мы не сможем ее никуда сохранить, поэтому при пересоздании экрана она пропадет.  
+Если вам нужно установить чему-либо на платформе действие - делайте соответствующий метод во `ViewModel`.
+
+:::

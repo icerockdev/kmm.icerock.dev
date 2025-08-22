@@ -20,10 +20,6 @@ sidebar_position: 2
 4.  Разница extensions - [раз](../kotlin-native/swift-extensions), [два](https://medium.com/mobile-app-development-publication/kotlin-vs-swift-the-extension-5462b531260b);
 5.  [Абстрактные классы](https://medium.com/mobile-app-development-publication/kotlin-vs-swift-the-abstract-class-f8817e5e54f).
 
-## Kotlin + Swift IDE
-
-AppCode позволяет разрабатывать и Kotlin и Swift код одновременно. [Видео с демонстрацией](https://www.youtube.com/watch?v=ELfcPdWP_CY)
-
 ## Конфликты имен на iOS
 
 - В iOS у всех объектов есть поле `description` (работает также как Kotlin `toString`) и поэтому при использовании в Kotlin свойств с таким названием будет появляться в iOS дополнительное поле `_description` - которое и будет свойством от Kotlin
