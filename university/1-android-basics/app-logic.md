@@ -44,4 +44,4 @@ CodeLab [Get data from the internet](https://developer.android.com/codelabs/basi
 
 Разные классы приложения должны между собой связываться. Чтобы связанность классов не стала слишком жесткой, что усложнит поддержку кода, используют паттерн Dependency Injection.
 
-Подробнее позволит разобраться статья [Dependency Injection](https://developer.android.com/training/dependency-injection) и CodeLab [Using Hilt in your Android app](https://developer.android.com/codelabs/android-hilt).
+Подробнее позволит разобраться статья [Dependency Injection](https://developer.android.com/training/dependency-injection) и [Koin in Android app tutorial](https://insert-koin.io/docs/quickstart/android/).
