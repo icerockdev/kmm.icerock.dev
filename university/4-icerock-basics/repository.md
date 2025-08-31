@@ -64,7 +64,7 @@ class KeyValueStorage(private val settings: ObservableSettings) {
 `Repository.kt`:
 ```kotlin
 class Repository(observableSettings: ObservableSettings) {
-  private val keyValueStorage = KeyValueStorage()
+  private val keyValueStorage = KeyValueStorage(observableSettings)
 
   fun getMessage(): Flow<String?> {
     return keyValueStorage.messageFlow
