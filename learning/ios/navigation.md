@@ -1,157 +1,178 @@
-# Навигация
+# Навигация для SwiftUI
 
-В основе навигации лежат координаторы. Каждый координатор покрывает логически связанный блок
-функционала, который чаще всего состоит из нескольких экранов. При этом между собой они независимы и
-отвечают только за цепочку переходов внутри себя. Также имеют возможность получать настройку
-действия, которое должно быть выполнено после завершения блока ответственности координатора.
+В стандартном `NavigationStack` есть ограничения: нельзя просто очистить стек экранов, неудобно обрабатывать logout, сложно управлять переходами между флоу.
+Чтобы это решить, мы используем кастомный навигационный слой, построенный на базе:
+- **AppRouter<T: Hashable>** — управляет навигационными событиями (`push`, `pop`, `replace`, `replaceStack`, `popUntil` и др.) через Combine.
+- **AppRouterHost<T: Hashable>** — хост для `NavigationStack`, слушает команды роутера и обновляет стек экранов.
+- **AppRoute** — перечисление маршрутов приложения (`signIn`, `main`, `detail`).
 
-## Пример
+Главное преимущество такого подхода — полный контроль над стеком навигации, анимациями и маршрутизацией.
 
-Предположим, что у нас есть приложение с авторизацией и списком новостей, с которого
-можно перейти к детальному просмотру каждой новости и в раздел настроек для конфигурации отображения новостей.
+## AppRoute
 
-Это разобьётся на 4 координатора:
-
-```mermaid
-graph TD
-  AppCoordinator --> AuthCoordinator
-  AppCoordinator --> NewsCoordinator
-  NewsCoordinator --> SettingsCoordinator
-```
-
-- AppCoordinator
-  - Стартовый координатор. Всегда является первой входной точкой, определяет, куда должен выполниться дальнейший переход при запуске приложения
-  - Если юзер не авторизован - запустит координатор авторизации и в качестве completionHandler-а укажет ему переход на список новостей в случае успешной авторизации
-  - Если юзер уже авторизован - запустит координатор просмотра списка новостей
-- AuthCoordinator
-  - Запустит процесс авторизации
-  - Будет совершать переходы по всем требуемым шагам - например ввод логина/пароля, смс-кода, установки никнейма и т.п.
-  - По итогу успешной авторизации вызовет переданный ему на вход completionHandler.
-- NewsCoordinator
-  - Отвечает за показ списка новостей
-  - Реализовывает переход в детали конкретной новости внутри этого же координатора
-  - При переходе в настройки создаёт координатор настроек, в качестве completionHandler-а может передать ему логику обновления своего списка новостей. Если в настройках изменились параметры - обновляет список
-- SettingsCoordinator
-  - Отвечает за работу с экраном настроек
-  - При завершении работы и применении настроек вызывает completion, чтобы новости обновились
-
-# BaseCoordinator
-
-Чтобы работать с координаторами было проще, используется базовый класс, от которого наследуются
-остальные. В директории `Common/Coordinator` вы найдете файлы `CoordinatorProtocol.swift` и `BaseCoordinator.swift`. Первый несет в себе протокол, под который подписан `BaseCoordinator` и описывает обязательные методы и поля:
+`AppRoute` - это основа навигации. Каждый экран, на который вы хотите перейти, должен быть кейсом этого `enum`.
 
 ```swift
-protocol Coordinator: AnyObject {
-    var completionHandler: (()->())? { get }
-    func start()
-    func clear()
-}
-```
+import SwiftUI
 
-По сути он должен иметь ровно три вещи - completionHandler, который вызовется при завершении его логической зоны ответственности. Функцию start, при вызове которой он начинает запускать свой флоу таким образом, каким считает нужным, и функцию clear, которая чистит сам координатор и все дочерние.
-
-Ну а второй несет сам класс базового координатора, который реализует этот протокол:
-
-```swift
-class BaseCoordinator: NSObject, Coordinator, UINavigationControllerDelegate {
-    var childCoordinators: [Coordinator] = []
-    var completionHandler: (() -> ())?
-    
-    let window: UIWindow
-    let factory: SharedFactory
-    
-    var navigationController: UINavigationController?
-    
-    init(window: UIWindow, factory: SharedFactory) { ... }
-    
-    func addDependency<Child>(_ coordinator: Child, completion: (() -> Void)? = nil) -> Child where Child : BaseCoordinator { ... }
-    
-    func clear() { ... }
-    
-    //Cases
-    //1. Initial with window - create NV, etc..
-    //2. Exists navcontroller,
-    
-    func start() {
-        //
-    }
-    
-    func beginInNewNavigation(_ controller: UIViewController) -> UINavigationController { ... }
-    
-    func beginInExistNavigation(_ controller: UIViewController) { ... }
-    
-    func currentViewController() -> UIViewController { ... }
+enum AppRoute: Hashable {
+    case signIn
+    case main
+    case detail(id: Int)
 }
 
 ```
+- Enum обязательно должен реализовывать `Hashable`, чтобы `NavigationStack` мог работать с этим enum'ом.
+- Параметры экранов передаются через associated values `(.detail(id: Int))`.
+- В сложных проектах можно заводить несколько Route, например AuthRoute для авторизации и AppRoute для основного функционала приложения.
 
-Для инициализации необходим window и factory. Также можно указать NavigationController с предыдущего
-координатора, для сохранения общей навигации.
+## AppRouter
 
-:::note
-
-Координаторам нужен factory для доступа к фабрикам фичей из общей библиотеки.
-
-:::
-
-Добавление и удаление зависимостей нужны для корректной очистки связей и памяти при построении
-цепочек координаторов.
-
-Также есть вспомогательные методы, которые позволяют получить текущий контроллер -
-currentViewController и совершить переход назад - popBack.
-
-:::caution
-От проекта к проекту базовый координатор может изменяться, обеспечивая дополнительные нужды проекта.
-:::
-
-## AppСoordinator
-
-Теперь когда мы поняли принцип работы координаторов, посмотрим на класс `AppCoordinator`:
+AppRouter — это "пульт управления" навигацией. Он сам не переключает экраны, а только отправляет команды.
 
 ```swift
-class AppCoordinator: BaseCoordinator {
-    override func start() {
-        let vc = UIViewController()
-        vc.view.backgroundColor = .green
-        self.window.rootViewController = vc
+class AppRouter<T: Hashable>: ObservableObject {
+    // Приватные сабджекты для управления событиями
+    private let commandSubject = PassthroughSubject<RouterCommand<T>, Never>()
+
+    // Публичные паблишеры
+    var commandPublisher: AnyPublisher<RouterCommand<T>, Never> {
+        commandSubject.eraseToAnyPublisher()
+    }
+
+    /// Добавить экран следующим в стеке навигации
+    func push(_ route: T) {
+        commandSubject.send(.push(route: route))
+    }
+
+    /// Заменить весь стек навигации на новый роут
+    func replace(_ route: T) {
+        commandSubject.send(.replace(route: route))
+    }
+
+    /// Заменить весь стек навигации на другой стек
+    func replaceStack(_ stack: [T]) {
+        commandSubject.send(.replaceStack(stack: stack))
+    }
+
+    func popUntil(popIf: @escaping (T) -> Bool) {
+        commandSubject.send(.popUntil(popIf: popIf))
+    }
+
+    /// Убрать из стека навигации роуты удовлетворяющие условию и добавить новый
+    func popUntilAndPush(popIf: @escaping (T) -> Bool, pushRoute: T) {
+        commandSubject.send(.popUntilAndPush(popIf: popIf, pushRoutes: [pushRoute]))
+    }
+
+    /// Убрать из стека навигации роуты удовлетворяющие условию и добавить несколько новых
+    func popUntilAndPush(popIf: @escaping (T) -> Bool, pushRoutes: [T]) {
+        commandSubject.send(.popUntilAndPush(popIf: popIf, pushRoutes: pushRoutes))
+    }
+
+    /// Убрать из стека навигации один экран
+    func pop() {
+        commandSubject.send(.pop)
+    }
+}
+
+enum RouterCommand<T: Hashable> {
+    case push(route: T)
+    case popUntil(popIf: (T) -> Bool)
+    case popUntilAndPush(popIf: (T) -> Bool, pushRoutes: [T])
+    case pop
+    case replace(route: T)
+    case replaceStack(stack: [T])
+}
+
+```
+
+Пример использования:
+
+```swift
+@EnvironmentObject var router: AppRouter<AppRoute> 
+
+router.push(.main)        // перейти на главный экран
+router.pop()              // вернуться назад
+router.replace(.signIn)   // очистить стек и перейти на авторизацию
+
+```
+Роутер удобно получать через @EnvironmentObject, так его не нужно передавать вручную во все экраны.
+
+```swift
+struct AuthScreen: View {
+    @EnvironmentObject var router: AppRouter<AppRoute>
+
+    var body: some View {
+        Button("Войти") {
+            router.replace(.main)
+        }
+    }
+}
+
+```
+
+## AppRouterHost
+
+`AppRouterHost` связывает `AppRouter` с `NavigationStack`. Он слушает команды роутера и обновляет, какие экраны должны быть показаны.
+
+Основные свойства:
+- `rootRoute` — корневой экран (с которого начинается навигация).
+- `navigationPath` — стек экранов, которые уже открыты.
+- `routeView` - билдер конкретного экрана. В аргумент приходит роут. Когда используем enum для роута - делаем просто switch по вариантам этого enum и возвращаем нужные экраны.
+
+Пример: 
+
+```swift
+AppRouterHost<AppRoute>(initialRoute: .signIn) { router, route in
+    switch route {
+    case .signIn:
+        AuthScreen()
+    case .main:
+        MainScreen()
+    case let .detail(id):
+        DetailScreen(id: id)
+    }
+}
+```
+- При старте открывается signIn. 
+- Если вызвать router.push(.main) → перейдем на экран main. 
+- Если вызвать router.pop() → вернемся обратно на signIn.
+
+В итоге у нас получается такая последовательность: 
+
+Экран → AppRouter (отправил команду) → AppRouterHost (выполнил) → NavigationStack (обновился)
+
+
+## RootScreenView
+
+Как видно из названия, это корневой экран приложения, именно он решает какой экран показать в данный момент. Если в приложении несколько роутов, то именно здесь будет происходить переключение между ними 
+
+```swift
+struct RootScreenView: View {
+    @State private var root: RootScreen = .splash
+
+    var body: some View {
+        LogoutNavigationHookView(onLogout: {
+            root = .mainFlow(route: .signIn)
+        }) {
+            switch root {
+            case .splash:
+                SplashScreen(root: $root)
+            case let .mainFlow(route):
+                MainNavigationView(initialRoute: route)
+            }
+        }
     }
 }
 ```
 
-В данном случае, главный координатор совсем простой - создает контроллер зелёного цвета и делает его главным экраном window.
+При запуске приложения `root = .splash`, соответсвенно показываться будет SplashScreen. 
+После этого сплешскрин определяет, авторизован юзер или нет. 
+Если не авторизван то меняет значение `root` на `.mainFlow(.signIn)`.
+Если авторизован, то меняет значение `root` на `.mainFlow(.main)`.
+В этот момент RootScreenView переключает показ на `MainNavigationView`.
+Если пользователь нажимает "Выйти", то срабатывает `LogoutNavigationHookView`, и всё сбрасывается на SignIn.
 
-Теперь посмотрим где происходит создание главного координатора. Идём в `AppDelegate.swift`: 
 
-```swift    
-    // ....
 
-    // переменная координатора
-    private (set) var coordinator: AppCoordinator!
-
-    func application(_ application: UIApplication, 
-        didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-
-        //...
-
-        // его инициализация
-        coordinator = AppCoordinator.init(
-            window: self.window!,
-            factory: AppComponent.factory
-        )
-        // запуск координатора
-        coordinator.start()
-
-        // ....
-    }
-```
-
-Теперь дальнейшая логика переходов зависит от текущего контроллера и действий юзера на нём.
-
-После данного разбора у вас должно сформироваться представление о том, какие подходы мы используем
-для реализации навигации в iOS-приложении.
-
-## Материалы
-
-- [Статья - How to use the coordinator pattern in iOS apps](https://www.hackingwithswift.com/articles/71/how-to-use-the-coordinator-pattern-in-ios-apps)
-- [Статья - Coordinator Tutorial for iOS: Getting Started](https://www.raywenderlich.com/158-coordinator-tutorial-for-ios-getting-started)
-- [Видео-разбор](https://www.youtube.com/watch?v=Pt9TGFzLVzc) использования `ApplicationCoordinator` для навигации между экранами
+- [Навигяция для UIKit через координаторы (Архив)](./navigation-old.md)
