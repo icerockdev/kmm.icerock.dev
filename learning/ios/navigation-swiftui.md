@@ -96,8 +96,30 @@ router.pop()              // вернуться назад
 router.replace(.signIn)   // очистить стек и перейти на авторизацию
 
 ```
-Роутер удобно получать через @EnvironmentObject, так его не нужно передавать вручную во все экраны.
+Как router передается между экранами:
+Роутер удобно получать через `@EnvironmentObject`, так его не нужно вручную передавать во все экраны.
+- AppRouterHost создаёт и хранит объект `AppRouter`.
+- Все экраны внутри этого хоста получают роутер через `environmentObject(router)`.
+- SwiftUI автоматически вкладывает объект в иерархию view, так что любой экран, который находится внутри `AppRouterHost`, может использовать его через @`EnvironmentObject`.
 
+В AppRouterHost:
+
+```swift
+@ObservedObject private var router = AppRouter<T>()
+
+var body: some View {
+    NavigationStack(path: $navigationPath) {
+        routeView(router, rootRoute)
+        .navigationDestination(
+            or: T.self,
+            destination: { routeView(router, $0) }
+        )
+    }.environmentObject(router) // роутер передается всем дочерним экранам
+}
+
+```
+
+В любом дочернем экране:
 ```swift
 struct AuthScreen: View {
     @EnvironmentObject var router: AppRouter<AppRoute>
@@ -108,7 +130,6 @@ struct AuthScreen: View {
         }
     }
 }
-
 ```
 
 ## AppRouterHost
@@ -173,6 +194,68 @@ struct RootScreenView: View {
 В этот момент RootScreenView переключает показ на `MainNavigationView`.
 Если пользователь нажимает "Выйти", то срабатывает `LogoutNavigationHookView`, и всё сбрасывается на SignIn.
 
+## LogoutNavigationHookView
 
+В приложениях часто нужно сбросить навигацию при выходе пользователя. Для этого используется LogoutNavigationHookView.
+Он оборачивает контент и отслеживает события логаута через logoutHandler. Когда происходит событие логаута, вызывается onLogout(), и можно, например, сбросить стек навигации на экран авторизации.
 
-- [Навигяция для UIKit через координаторы (Архив)](./navigation-old.md)
+```swift 
+import Combine
+import MultiPlatformLibrary
+import SwiftUI
+
+struct LogoutNavigationHookView<Content: View>: View {
+
+    // LogoutNavigationHookView слушает события логаута через logoutHandler.
+    private var logoutHandler: LogoutHandler = Koin.instance.getLogoutHandler()
+
+    let onLogout: () -> Void
+    let content: () -> Content
+
+    init(onLogout: @escaping () -> Void, @ViewBuilder content: @escaping () -> Content) {
+        self.onLogout = onLogout
+        self.content = content
+    }
+
+    var body: some View {
+        content()
+            .onReceive(
+                logoutHandler.logoutEvents.toPublisher()
+                    .catch { _ in Empty<KotlinUnit, Never>() }
+                    .assertNoFailure()
+            ) { _ in
+
+                // При логауте вызывается onLogout(), которое сбрасывает root.
+                onLogout()
+            }
+    }
+}
+
+```
+
+В этом примере вызов `onLogout` приводит к сбросу значения root на .mainFlow(.signIn).
+`RootScreenView` реагирует на изменение root и показывает экран авторизации.
+
+```swift
+struct RootScreenView: View {
+    @State private var root: RootScreen = .splash
+
+    var body: some View {
+        LogoutNavigationHookView(onLogout: {
+
+            // Сбрасываем стек навигации на экран авторизации
+            root = .mainFlow(route: .signIn)
+        }) {
+            switch root {
+            case .splash:
+                SplashScreen(root: $root)
+            case let .mainFlow(route):
+                MainNavigationView(initialRoute: route)
+            }
+        }
+    }
+}
+```
+Если мы получаем событие logout на любом экране, весь стек навигации автоматически сбрасывается.
+
+- [Навигация для UIKit через координаторы (Архив)](./navigation-uikit.md)

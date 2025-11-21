@@ -21,6 +21,15 @@ LoggerKt.log("Hello from iOS")
 ```
 То есть доступ к функции осуществляется не напрямую, а через сгенерированный класс LoggerKt.
 
+Однако при использовании [SKIE](https://skie.touchlab.co/intro) всё работает так, как ожидается - глобальные функции становятся настоящими глобальными функциями в Swift.
+
+И тогда на swift мы сможем писать так:
+```swift
+log("Hello from iOS")
+```
+
+Подробнее: https://skie.touchlab.co/features/global-functions
+
 ## Полезные ссылки:
 
 - [Interoperability with Swift/Objective-C](https://kotlinlang.org/docs/native-objc-interop.html)
