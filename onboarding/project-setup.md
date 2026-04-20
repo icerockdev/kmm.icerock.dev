@@ -900,6 +900,81 @@ touch gradle.properties
 
 ![properties](project-setup/project-setup-properties.png)
 
+### 2.11. Настройка Detekt
+
+Detekt — линтер для Kotlin-кода. На проектах используется конфигурация в `config/detekt.yml`.
+
+#### Что отключено
+
+```yaml
+formatting:
+  CommentSpacing: false      # Отступы в комментариях
+  ArgumentListWrapping: false # Перенос аргументов
+  NoEmptyFirstLineInMethodBlock: false
+  Filename: false           # Имя файла snake_case
+  SpacingBetweenDeclarationsWithAnnotations: false
+```
+
+Эти правила отключены, так как они конфликтуют с форматированием IDE и создают много шума.
+
+#### Активные правила
+
+```yaml
+style:
+  ForbiddenComment:
+    active: true
+    comments:
+      - 'FIXME:'
+      - 'STOPSHIP:'
+    allowedPatterns: 'TODO:'
+
+exceptions:
+  TooGenericExceptionCaught:
+    active: true
+```
+
+Запрещены комментарии `FIXME:` и `STOPSHIP:`, но `TODO:` разрешены. Запрещено ловить общие исключения (`Error`, `RuntimeException`, `Throwable`).
+
+#### Импорты
+
+Правила работы с импортами:
+
+- Используйте **явные импорты** (`import some.package.Class`)
+- **Не используйте wildcard** импорты (`import some.package.*`)
+- Импорты должны быть **отсортированы по алфавиту**
+
+```kotlin
+// Правильно
+import android.os.Bundle
+import androidx.lifecycle.ViewModel
+import com.example.feature.auth.AuthViewModel
+
+// Неправильно
+import com.example.feature.auth.*  // Wildcard
+import androidx.lifecycle.*        // Wildcard
+```
+
+### 2.12. Fastcheck — проверка перед коммитом
+
+`fastcheck.sh` — скрипт, который обязательно нужно запускать перед пушем коммитов в репозиторий.
+
+#### Что делает fastcheck.sh
+
+- Запускает **detekt** (линтер Kotlin-кода) без тестов
+- Собирает **Android dev debug** и запускает unit-тесты
+- Запускает **iOS KMP тесты** для iosX64 и iosSimulatorArm64
+- Собирает **iOS pod framework** (debug)
+- Устанавливает pods и запускает **SwiftFormat lint**
+- Собирает **iOS app scheme** ios-app-dev
+
+#### Запуск
+
+```bash
+./fastcheck.sh
+```
+
+Если все проверки прошли успешно — можно пушить коммит. Если есть ошибки — исправьте их и запустите снова.
+
 ## 3. Создаем проект
 
 В качестве отправной точки мы будем использовать наш шаблонный проект — ` mobile-moko-boilerplate `. Он используется на всех новых проектах для быстрого развёртывания и старта разработки. В нём уже подключены все минимально необходимые зависимости, имеется нужная структура папок и базовая настройка проекта.
