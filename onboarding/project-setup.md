@@ -24,29 +24,12 @@ sidebar_position: 2
 
 Все нижеописанные инструкции будут выполнены на операционной системе macOS.
 
-### Git (Android, iOS)
+### 2.1. Git
 
 Для всех разработчиков в компании Git требуется по умолчанию. Если он не установлен — нужно установить (описывать это подробно не будем).
 
-### Xcode (iOS)
+### 2.2. JDK
 
-Для компиляции iOS-приложения, а также Kotlin-библиотеки для iOS, потребуется Xcode. Его можно установить из AppStore - [Xcode](https://apps.apple.com/ru/app/xcode/id497799835?mt=12).
-
-Для установки потребуется Apple ID. Если у вас уже есть собственный аккаунт — можете использовать его. Если нет — можно зарегистрировать его на корпоративную почту. При регистрации может потребоваться привязка банковской карты — это обойти нельзя. Привяжите любую карту (хоть зарплатную): если не выполнять покупок в AppStore, никаких списаний не будет (Xcode бесплатный).
-
-После установки Xcode важно также установить ` Xcode Command Line Tools ` — они потребуются для компиляции Kotlin/Native.
-
-```bash
-xcode-select --install
-```
-
-Убедиться, что все успешно установлено, вы можете, запустив Xcode и зайдя в Settings -> Locations (в старых версиях — Preferences).
-
-![xcode-locations](project-setup/project-setup-xcode-locations.png)
-
-В выпадающем списке Command Line Tools должна быть указана версия инструментов (если установка не выполнена — поле будет пустым).
-
-### Java Development Kit (Android, iOS)
 Для работы с Kotlin Multiplatform потребуется установка Java Development Kit (JDK). Это требуется, так как компилятор Kotlin и билд-система Gradle работают на базе Java Virtual Machine.
 
 Рекомендуется использовать JDK 17. Это актуальный стандарт для современных версий Android Studio и Gradle.
@@ -95,7 +78,7 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-VERSION.jdk/Contents/Home
 
 Если вы пользуетесь оболочкой bash, то вам нужно редактировать файл ` ~/.bash_profile `.
 
-### Android Studio (Android, iOS)
+### 2.3. Android Studio
 
 Для работы с Kotlin-кодом требуется IDE от JetBrains — IntelliJ IDEA или Android Studio. Команда Kotlin Multiplatform Mobile на данный момент [позиционирует Android Studio](https://kotlinlang.org/multiplatform/) как основную IDE, поэтому требуется установить её.
 
@@ -127,7 +110,25 @@ export ANDROID_SDK_ROOT=~/Library/Android/sdk
 
 Примечание : При указании путей в Android Studio не используйте символ ` ~ ` (тильда). С ней путь иногда определяется некорректно, и сборка падает. Используйте полные пути или переменные окружения.
 
-### CocoaPods (iOS)
+### 2.4. Xcode
+
+Для компиляции iOS-приложения, а также Kotlin-библиотеки для iOS, потребуется Xcode. Его можно установить из AppStore - [Xcode](https://apps.apple.com/ru/app/xcode/id497799835?mt=12).
+
+Для установки потребуется Apple ID. Если у вас уже есть собственный аккаунт — можете использовать его. Если нет — можно зарегистрировать его на корпоративную почту. При регистрации может потребоваться привязка банковской карты — это обойти нельзя. Привяжите любую карту (хоть зарплатную): если не выполнять покупок в AppStore, никаких списаний не будет (Xcode бесплатный).
+
+После установки Xcode важно также установить ` Xcode Command Line Tools ` — они потребуются для компиляции Kotlin/Native.
+
+```bash
+xcode-select --install
+```
+
+Убедиться, что все успешно установлено, вы можете, запустив Xcode и зайдя в Settings -> Locations (в старых версиях — Preferences).
+
+![xcode-locations](project-setup/project-setup-xcode-locations.png)
+
+В выпадающем списке Command Line Tools должна быть указана версия инструментов (если установка не выполнена — поле будет пустым).
+
+### 2.5. CocoaPods
 
 Для работы с зависимостями на iOS мы используем CocoaPods, а также Kotlin-модуль подключается в Xcode-проект через CocoaPods-интеграцию. Поэтому требуется установить актуальную версию CocoaPods.
 
@@ -145,7 +146,7 @@ sudo gem install cocoapods
 brew install cocoapods
 ```
 
-### Kotlin Multiplatform Mobile plugin (iOS)
+### 2.6. Kotlin Multiplatform Mobile plugin
 
 JetBrains предоставляет для Android Studio специальный [плагин Kotlin Multiplatform Mobile](https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform). Его возможности:
 
@@ -163,7 +164,7 @@ JetBrains предоставляет для Android Studio специальны�
 
 При обновлениях Kotlin могут происходить ситуации, когда данный плагин ломает работу IDE (например, Gradle Sync не завершается). В таких случаях приходится вынужденно выключать плагин.
 
-### Xcode Kotlin plugin (iOS)
+### 2.7. Xcode Kotlin plugin
 
 Как альтернативу плагину для Android Studio, можно использовать Xcode Kotlin plugin для Xcode. Он предоставляет возможность ставить брейкпоинты в Kotlin-коде прямо из Xcode.
 
@@ -177,7 +178,7 @@ JetBrains предоставляет для Android Studio специальны�
 
 После этого в проектах, где через folder-reference добавлены директории с Kotlin-кодом, можно открывать .kt файлы и ставить брейкпоинты, а дебаггер Xcode будет успешно на них останавливаться.
 
-### Проверка
+### 2.8. Проверка
 
 Чтобы убедиться, что вы все правильно настроили, можете воспользоваться [утилитой kdoctor](https://github.com/Kotlin/kdoctor).
 
@@ -187,7 +188,7 @@ JetBrains предоставляет для Android Studio специальны�
 
 Новые переменные окружения появятся только после перезапуска сессии терминала.
 
-### Gradle Build Environment
+### 2.9. Gradle Build Environment
 
 Открыв файл ` gradle.properties `, расположенный в корневой папке проекта, можно увидеть параметры сборки.
 
