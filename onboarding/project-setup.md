@@ -158,7 +158,19 @@ sudo gem install cocoapods
 brew install cocoapods
 ```
 
-### 2.6. Kotlin Multiplatform Mobile plugin
+### 2.6. xcpretty
+
+Для удобного чтения вывода сборки в терминале рекомендуем установить [xcpretty](https://github.com/xcpretty/xcpretty) — инструмент для форматирования вывода Xcode build.
+
+Установка через Ruby gem:
+
+```bash
+sudo gem install xcpretty
+```
+
+xcpretty автоматически используется в наших проектах при сборке через CocoaPods. Он делает вывод сборки читаемым и компактным.
+
+### 2.7. Kotlin Multiplatform Mobile plugin
 
 JetBrains предоставляет для Android Studio специальный [плагин Kotlin Multiplatform Mobile](https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform). Его возможности:
 
@@ -176,7 +188,7 @@ JetBrains предоставляет для Android Studio специальны�
 
 При обновлениях Kotlin могут происходить ситуации, когда данный плагин ломает работу IDE (например, Gradle Sync не завершается). В таких случаях приходится вынужденно выключать плагин.
 
-### 2.7. Xcode Kotlin plugin
+### 2.8. Xcode Kotlin plugin
 
 Как альтернативу плагину для Android Studio, можно использовать Xcode Kotlin plugin для Xcode. Он предоставляет возможность ставить брейкпоинты в Kotlin-коде прямо из Xcode.
 
@@ -190,7 +202,7 @@ JetBrains предоставляет для Android Studio специальны�
 
 После этого в проектах, где через folder-reference добавлены директории с Kotlin-кодом, можно открывать .kt файлы и ставить брейкпоинты, а дебаггер Xcode будет успешно на них останавливаться.
 
-### 2.8. Проверка
+### 2.9. Проверка
 
 Чтобы убедиться, что вы все правильно настроили, можете воспользоваться [утилитой kdoctor](https://github.com/Kotlin/kdoctor).
 
@@ -200,7 +212,7 @@ JetBrains предоставляет для Android Studio специальны�
 
 Новые переменные окружения появятся только после перезапуска сессии терминала.
 
-### 2.9. Gradle Build Environment
+### 2.10. Gradle Build Environment
 
 Открыв файл ` gradle.properties `, расположенный в корневой папке проекта, можно увидеть параметры сборки.
 
