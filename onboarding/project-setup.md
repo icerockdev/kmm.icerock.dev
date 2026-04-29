@@ -106,9 +106,9 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-VERSION.jdk/Contents/Home
 export ANDROID_SDK_ROOT=~/Library/Android/sdk
 ```
 
-В старых версиях Android Studio (начиная с 4.2) иногда требовалось отключить флаг Preferences -> Experimental -> Do not build Gradle task during Gradle sync, чтобы задачи на сборку модулей появились во вкладке Gradle. В актуальных версиях эта проблема встречается реже, но имейте в виду.
+В старых версиях Android Studio (начиная с 4.2) иногда требовалось отключить флаг Preferences -> Experimental -> Do not build Gradle task during Gradle sync, чтобы задачи на сборку модулей появились во вкладке Gradle. В актуальных версиях эта проблема встречается реже, но все павно имейте это в виду.
 
-Примечание : При указании путей в Android Studio не используйте символ ` ~ ` (тильда). С ней путь иногда определяется некорректно, и сборка падает. Используйте полные пути или переменные окружения.
+Примечание: При указании путей в Android Studio не используйте символ ` ~ ` (тильда). С ней путь иногда определяется некорректно, и сборка падает. Используйте полные пути или переменные окружения.
 
 #### Рекомендуемые плагины
 
@@ -153,7 +153,7 @@ xcode-select --install
 
 ### 2.5. CocoaPods
 
-Для работы с зависимостями на iOS мы используем CocoaPods, а также Kotlin-модуль подключается в Xcode-проект через CocoaPods-интеграцию. Поэтому требуется установить актуальную версию CocoaPods.
+Для работы с зависимостями на iOS мы используем CocoaPods, также Kotlin-модуль подключается в Xcode-проект через CocoaPods-интеграцию. Поэтому требуется установить актуальную версию CocoaPods.
 
 Подробная документация об установке [доступна на официальном сайте](https://cocoapods.org/#install).
 
@@ -257,10 +257,10 @@ Detekt — линтер для Kotlin-кода. На проектах испол
 
 ```yaml
 formatting:
-  CommentSpacing: false      # Отступы в комментариях
-  ArgumentListWrapping: false # Перенос аргументов
+  CommentSpacing: false                               # Отступы в комментариях
+  ArgumentListWrapping: false                         # Перенос аргументов
   NoEmptyFirstLineInMethodBlock: false
-  Filename: false           # Имя файла snake_case
+  Filename: false                                     # Имя файла snake_case
   SpacingBetweenDeclarationsWithAnnotations: false
 ```
 
@@ -332,7 +332,7 @@ import androidx.lifecycle.*        // Wildcard
 
 После клонирования открываем проект в Android Studio. Для этого запускаем IDE, выбираем ` File -> Open ` и указываем папку, в которую склонировали репозиторий. При первом открытии должно появиться следующее окно:
 
-![ndroid-studio-start](project-setup/project-setup-android-studio-start.png)
+![android-studio-start](project-setup/project-setup-android-studio-start.png)
 
 Также должен запуститься Gradle Sync. Если же этого не произошло, запустите его вручную.
 
@@ -342,11 +342,11 @@ Gradle Sync — это задача Gradle, которая просматрив�
 
 По умолчанию студия парсит каталоги и строит отображение как для Android-проекта. Но мы здесь будем работать не только с Android, но и с мультиплатформой. Поэтому переключаем отображение. Для этого слева нажимаем на выпадающий список (где написано Android) и выбираем вместо него Project:
 
-![ndroid-studio-project](project-setup/project-setup-android-studio-project.png)
+![android-studio-project](project-setup/project-setup-android-studio-project.png)
 
 После этого структура папок немного изменится:
 
-![android-studio-structure](project-setup/project-setup-android-studio-structure.png)
+![aandroid-studio-structure](project-setup/project-setup-android-studio-structure.png)
 
 Дожидаемся успешного выполнения Gradle Sync, чтобы в нашем проекте появились нужные Tasks. Если же Gradle Sync завершился с ошибкой, читаем сообщение об ошибке и исправляем проблему.
 
@@ -485,12 +485,9 @@ pod install
 
 ![multiplatformlibrary](project-setup/project-setup-multiplatformlibrary.png)
 
-Если в директории ` Pods/Development Pods/MultiPlatformLibrary/Frameworks ` виден фреймворк — интеграция настроена
-верно. Если фреймворк отсутствует, убедитесь, что вы запустили pod install после компиляции задачи
-syncMultiPlatformLibrary....
+Если в директории ` Pods/Development Pods/MultiPlatformLibrary/Frameworks ` виден фреймворк — интеграция настроена верно. Если фреймворк отсутствует, убедитесь, что вы запустили pod install после компиляции задачи syncMultiPlatformLibrary.
 
-Если возникают ошибки компиляции iOS-приложения, связанные с отсутствием MultiPlatformLibrary, проверьте интеграцию (
-наличие фреймворка по скриншоту выше), а также наличие самого файла фреймворка по пути
+Если возникают ошибки компиляции iOS-приложения, связанные с отсутствием MultiPlatformLibrary, проверьте интеграцию (наличие фреймворка по скриншоту выше), а также наличие самого файла фреймворка по пути
 ` mpp-library/build/cocoapods/framework/MultiPlatformLibrary.framework `.
 
 ### Запуск iOS-приложения
@@ -604,7 +601,7 @@ folder-reference (ссылка на папку). В нашем проекте у
 все мультиплатформенные модули.
 
 Для примера откроем в Xcode файл ` mpp-library/src/commonMain/kotlin/org/example/library/SharedFactory.kt ` и поставим
-брейкпоинт (кликнув на номер строки) на строке в конструкторе класса с инициализацией логгера ` Napier `:
+брейкпоинт (кликнув на номер строки) в конструкторе класса на строке с инициализацией логгера ` Napier `:
 
 ```kotlin
 Napier.base(CrashReportingAntilog(CrashlyticsLogger()))
