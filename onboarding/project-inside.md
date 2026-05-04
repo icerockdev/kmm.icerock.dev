@@ -40,7 +40,7 @@ sidebar_position: 3
 
 ### Сборка iOS приложения
 
-Для сборки iOS приложения используются обе системы - Xcode и Gradle, что, разумеется, увеличивает время сборки.. Xcode проект имеет зависимость на CocoaPod `MultiPlatformLibrary`, поэтому при компиляции приложения происходит компиляция Kotlin-библиотеки через Gradle, а затем сборка iOS-приложения через Xcode.
+Для сборки iOS приложения используются обе системы - Xcode и Gradle, что, разумеется, увеличивает время сборки. Xcode проект имеет зависимость на pod `MultiPlatformLibrary`, поэтому при компиляции приложения происходит компиляция Kotlin-библиотеки через Gradle, а затем сборка iOS-приложения через Xcode.
 
 Узнать подробнее о том, как происходит компиляция этой зависимости и подключение сторонних подов, вы можете в [разделе обучения](../learning/ios/pods).
 
@@ -73,16 +73,16 @@ master.sh
 - `gradle/libs.versions.toml` - Version Catalog для управления зависимостями
 - `build.gradle.kts` - файл конфигурации сборки корневого gradle проекта
 - `gradle.properties` - файл с опциями, которые передаются в Gradle проект при запуске
-- `gradlew` и `gradlew.bat` - скрипты для Unix и Windows соответственно, которые запускают Gradle используя Gradle Wrapper
+- `gradlew` и `gradlew.bat` - скрипты для Unix и Windows соответственно, которые запускают Gradle, используя Gradle Wrapper
 - `settings.gradle.kts` - файл настроек Gradle проекта
-- `README.md` - краткое описание содержимого репозитория и инструкция как собирать проект.
+- `README.md` - краткое описание содержимого репозитория и инструкция, как собирать проект.
 - `master.sh` - вспомогательный скрипт
 
 Далее разберем все блоки более детально.
 
 ## Root Gradle project
 
-Корневая директория нашего проекта по сути и является корневым gradle проектом. `android-app` и `mpp-library` подключаются к этому коревому проекту как подпроекты.
+Корневая директория нашего проекта по сути и является корневым gradle проектом. `android-app` и `mpp-library` подключаются к этому корневому проекту как подпроекты.
 
 Корневой Gradle-проект содержит:
 - `build-logic` - [композитно](../learning/gradle/composite-build) подключенный проект, несущий в себе логику сборки остальных подпроектов
@@ -91,7 +91,7 @@ master.sh
 - `build.gradle.kts` - конфигурация сборки
 - `gradle` - директория [Gradle Wrapper'а](../learning/gradle/gradle-wrapper) - специального скрипта, который автоматизирует процесс установки нужной версии gradle
   
-О том как обновить версию Gradle в проекте вы можете прочитать в [специальном разделе обучения](../learning/gradle/updating-versions).
+О том, как обновить версию Gradle в проекте, вы можете прочитать в [специальном разделе обучения](../learning/gradle/updating-versions).
 
 ### [buildSrc](../learning/gradle/buildSrc) (устарело, но бывает на проектах)
 
@@ -129,9 +129,9 @@ enableFeaturePreview("VERSION_CATALOGS")
 
 ### build-logic
 
-`build-logic` - [композитный](../learning/gradle/composite-build) проект. Он предназначен для реализации логики сборки, не привязанной к конкретному gradle модулю и .
+`build-logic` - [композитный](../learning/gradle/composite-build) проект. Он предназначен для реализации логики сборки, не привязанной к конкретному gradle модулю.
 
-В этой директории можно увидеть собственный `build.gradle.kts` и исходный код библиотеки. `build.gradle.kts` определяет как будет собираться данная библиотека и какие зависимости ей требуются.
+В этой директории можно увидеть собственный `build.gradle.kts` и исходный код библиотеки. `build.gradle.kts` определяет, как будет собираться данная библиотека и какие зависимости ей требуются.
 Исходный код библиотеки в нашем композитном билде содержит [convention plugins](../learning/gradle/convention-plugins), нужные для сборки основного Gradle проекта.
 
 - `android-app-convention` - для Android-приложений
@@ -169,11 +169,11 @@ VERSION_CODE=1
 xcodeproj=ios-app/ios-app.xcworkspace
 ```
 
-Более подробней о параметрах Gradle вы можете прочитать в [разделе обучения](../learning/gradle/build-environment).
+Более подробно о параметрах Gradle вы можете прочитать в [разделе обучения](../learning/gradle/build-environment).
 
 ### settings.gradle.kts
 
-Здесь мы можем подключать под-проекты (вызовом include) и подключать другие gradle проекты, настраивая composite build (вызовом includeBuild)"
+Здесь мы можем подключать под-проекты (вызовом include) и другие gradle проекты, настраивая composite build (вызовом includeBuild)"
 
 В нашем случае это `build-logic` (composite build), `android-app`, `mpp-library` и `mpp-library:feature:auth` (sub-projects).
 
@@ -223,8 +223,8 @@ buildscript {
 }
 
 tasks.register("clean", Delete::class).configure {
-  group = "build"
-  delete(rootProject.layout.buildDirectory)
+    group = "build"
+    delete(rootProject.layout.buildDirectory)
 }
 ```
 Подробнее о конфигурациях зависимостей вы можете прочитать в [разделе обучения](../learning/gradle/configuration).
@@ -248,7 +248,7 @@ mpp-library/
 
 ### build.gradle.kts mpp-library
 
-Тут объявляются все зависимости и конфигурации нашей общей библиотеки. Давайте посмотрим что внутри.
+Тут объявляются все зависимости и конфигурации нашей общей библиотеки. Давайте посмотрим, что внутри.
 
 ```kotlin
 // подключение плагинов
@@ -338,7 +338,7 @@ mokoNetwork {
 ### Структура mpp-library
 
 - `feature/example` - пример фичи с di, model, presentation
-- 'src' -
+- 'src' - исходный код общей библиотеки
 - `utils` - общие утилиты (fields, paging, state, dateFormatting, logout)
 - `test-utils` - утилиты для тестирования
 
@@ -353,14 +353,14 @@ mokoNetwork {
  - `commonTest` - директория, в которой находится исходный код тестов для общей библиотеки
 
 ### feature's mpp-library
-Как мы видим mpp-library содержит в себе подпроект feature. 
+Как мы видим, mpp-library содержит в себе подпроект feature. 
 Каждая фича в котором является Gradle-библиоткой, несущей в себе набор соответствующих моделей, view-моделей, фабрик и интерфейсов, которые ожидаются от родительского модуля. 
 
 ![mpp-library-one-feature](project-inside/project-inside-mpp-lib-feature.png)
 
 Каждая фича имеет однотипную структуру. Внутри `commonMain/kotlin/…` обычно находятся директории:
 - `di` - директория, содержащая Koin-модули для создания View-моделей и всего, что связано с инъекцией зависимостей
-- `model` - директория, содержащая все сущности (в основном data-классы и enum’ы) нужные в рамках данной view-модели, а также в которой определяются репозитории для хранения и взаимодействия с данными
+- `model` - директория, содержащая все сущности (в основном data-классы и enum’ы), нужные в рамках данной view-модели, в которой также определяются репозитории для хранения и взаимодействия с данными
 - `presentation` - директория, содержащая сами view-model'и
 
 Пример фичей:
@@ -414,7 +414,6 @@ android {
   namespace = "org.example.app"
 
   defaultConfig {
-    // TODO: replace with correct production applicationId
     applicationId = "dev.icerock.boilerplate"
 
     versionCode = Integer.parseInt(project.property("VERSION_CODE") as String)
@@ -467,20 +466,20 @@ android/app/
 
 ### Навигация в Android
 
-Для того, чтобы понять как устроена навигация в Android приложении можете ознакомиться с соответствующей статьей в [разделе обучения](../learning/android/navigation).
+Для того чтобы понять, как устроена навигация в Android приложении, можете ознакомиться с соответствующей статьей в [разделе обучения](../learning/android/navigation).
 
 ## ios
 
 ### Корневой уровень
 
-| Директория/Файл | Назначение |
-|---|---|
-| `ios.xcworkspace/` | Xcode workspace (CocoaPods интеграция) |
+| Директория/Файл | Назначение                                                                   |
+|---|------------------------------------------------------------------------------|
+| `ios.xcworkspace/` | Xcode workspace (CocoaPods интеграция)                                       |
 | `Podfile` | Зависимости CocoaPods (Firebase, MultiPlatformLibrary, R.swift, SwiftFormat) |
-| `Podfile.lock` | Lock-файл зависимостей |
-| `Pods/` | Локальные копиы CocoaPods зависимостей |
-| `icerock.swiftformat` | Конфигурация SwiftFormat |
-| `BuildConfigurations/` | Общие xcconfig файлы для debug/release сборок |
+| `Podfile.lock` | Lock-файл зависимостей                                                       |
+| `Pods/` | Локальные копии CocoaPods зависимостей                                       |
+| `icerock.swiftformat` | Конфигурация SwiftFormat                                                     |
+| `BuildConfigurations/` | Общие xcconfig файлы для debug/release сборок                                |
 
 
 ### ios/App/ — Основное iOS приложение
@@ -504,7 +503,7 @@ android/app/
 - `Views/` — основные экраны
 - `Utils/` — утилиты
 - `Preview Content/` — превью компонентов
-- `Resources/` — ресурсы (картинки, локализации)
+- `Resources/` — ресурсы (картинки, локализация)
 
 
 ### ios/DesignSystem/ — Дизайн-система (UIKit/SwiftUI библиотека)
@@ -599,5 +598,5 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
 В настоящее время на наших проектах с KMP для Dependency injection мы используем [Koin](https://github.com/InsertKoinIO/koin).
 [Документация Koin](https://insert-koin.io).
-Как именно он используется, можно посмотреть в [этой статье ](https://kmm.icerock.dev/university/icerock-basics/di).
+Как именно он используется, можно посмотреть в [этой статье](https://kmm.icerock.dev/university/icerock-basics/di).
 
