@@ -17,12 +17,14 @@ sidebar_position: 0
     - `ContentProvider`
 - Верстка UI используя Compose
 - Библиотеки AndroidX и Jetpack от Google
-- Kotlin flows, `StateFlow`, `SharedFlow`
+- Kotlin flows, `StateFlow`, `SharedFlow`, Kotlin Coroutines
+- kotlinx.serialization
 - `ViewModel`
 - Жизненный цикл `Application`, `Activity`, `ViewModel`
 - Библиотека Android Navigation Component от Google
-- Библиотека Retrofit от Square
+- Библиотека Ktor Client
 - Библиотека Koin
+- База данных SQLDelight
 
 :::info
 Для тех кому всё перечисленное уже знакомо, использовано на практике и есть уверенное понимание о чем речь - можно пропустить ознакомление с теоретическим блоком и сразу перейти к [практической задаче](practice).

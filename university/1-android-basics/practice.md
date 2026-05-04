@@ -25,28 +25,25 @@ sidebar_position: 6
 ## Технические требования
 
 1. Реализация на Kotlin
-1. Использовать XML Layouts для UI
+1. Использовать Jetpack Compose для UI
 1. Использовать Kotlin Gradle DSL
-1. Использовать Retrofit для работы с REST API
-1. Использовать RecyclerView для отображения списка
-1. Использовать ConstraintLayout для экрана детальной информации
-1. Использовать Android Navigation Component для переходов между экранами
-1. Использовать View Binding для связывания верстки с кодом
-1. Экраны делать с помощью Fragment (подход Single Activity)
+1. Использовать Ktor Client для работы с REST API
+1. Использовать LazyColumn для отображения списка
+1. Использовать Jetpack Navigation для переходов между экранами
 1. Использовать Coroutines для асинхронности и многопоточности
 1. Использовать [Kotlinx.Serialization](https://github.com/Kotlin/kotlinx.serialization) для парсинга json
 1. Использовать ViewModel для реализации логики экранов
-1. Использовать LiveData / StateFlow для обновления данных на UI
-1. Использовать Dagger Hilt для внедрения зависимостей
+1. Использовать StateFlow для обновления данных на UI
+1. Использовать Koin для внедрения зависимостей
 1. Сохранять токен авторизации в хранилище устройства - SharedPreferences
 1. Корректно обрабатывать ситуации "загрузка данных", "ошибка загрузки", "пустой список"
 1. Корректно обрабатывать смену конфигурации
 1. При перезапуске приложения авторизация должна сохраняться
 1. Использовать локализацию для всех строк, показываемых пользователю
 1. Использовать векторную графику везде, где это возможно
-1. Обеспечить поддержку Android API 21
+1. Обеспечить поддержку Android API 26
 
-## Классы Android-приложения
+## Файлы Android-приложения
 
 ```kotlin
     
@@ -54,21 +51,24 @@ sidebar_position: 6
         // TODO:
     }
 
-    class AuthFragment: Fragment {
+    @Composable
+    fun AuthScreen() {
         // TODO:
     }
 
-    class RepositoriesListFragment: Fragment {
+    @Composable
+    fun RepositoriesListScreen() {
        // TODO:
     }
 
-    class DetailInfoFragment: Fragment {
+    @Composable
+    fun DetailInfoScreen() {
        // TODO:
     }
 
    class AuthViewModel {
-      val token: MutableLiveData<String>
-      val state: LiveData<State>
+      val token: MutableStateFlow<String>
+      val state: StateFlow<State>
       val actions: Flow<Action>
 
       fun onSignButtonPressed() {
@@ -90,7 +90,7 @@ sidebar_position: 6
    }
 
    class RepositoryInfoViewModel {
-      val state: LiveData<State>
+      val state: StateFlow<State>
 
       sealed interface State {
          object Loading : State
@@ -113,7 +113,7 @@ sidebar_position: 6
    }
    
    class RepositoriesListViewModel {
-      val state: LiveData<State>
+      val state: StateFlow<State>
       
       sealed interface State {
          object Loading : State
@@ -158,9 +158,9 @@ sidebar_position: 6
    classDiagram
 
    class MainActivity:::android
-   class AuthFragment:::android
-   class RepositoriesListFragment:::android
-   class DetailInfoFragment:::android
+   fun AuthScreen:::android
+   fun RepositoriesListScreen:::android
+   fun DetailInfoScreen:::android
    
    class AuthViewModel:::android
    
@@ -171,13 +171,13 @@ sidebar_position: 6
    class AppRepository:::android
    class KeyValueStorage:::android
    
-   MainActivity --> AuthFragment
-   MainActivity --> RepositoriesListFragment
-   MainActivity --> DetailInfoFragment
+   MainActivity --> AuthScreen
+   MainActivity --> RepositoriesListScreen
+   MainActivity --> DetailInfoScreen
    
-   AuthFragment --> AuthViewModel
-   RepositoriesListFragment --> RepositoriesListViewModel
-   DetailInfoFragment --> RepositoryInfoViewModel
+   AuthScreen --> AuthViewModel
+   RepositoriesListScreen --> RepositoriesListViewModel
+   DetailInfoScreen --> RepositoryInfoViewModel
    
    RepositoryInfoViewModel --> AppRepository
    AuthViewModel --> AppRepository
@@ -192,5 +192,5 @@ sidebar_position: 6
 1. [GitHub Basic Authorization](https://docs.github.com/en/rest/overview/other-authentication-methods#basic-authentication)
 1. [GitHub user repositories](https://docs.github.com/en/rest/reference/repos#list-repositories-for-a-user)
 1. [Kotlinx.Serialization guide](https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/basic-serialization.md#json-decoding)
-1. [Интеграция Kotlinx.Serialization и Retrofit](https://github.com/JakeWharton/retrofit2-kotlinx-serialization-converter)
+1. [Интеграция Kotlinx.Serialization и Ktor](https://ktor.io/docs/client-serialization.html)
 1. [Дизайн](https://www.figma.com/file/Mh3ga5XAzyJNCY87NBp01G)

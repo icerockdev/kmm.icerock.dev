@@ -4,21 +4,20 @@ sidebar_position: 1
 
 # Первые шаги
 
-## Build your first app
+## Your first Android app
 
-Первые шаги в разработке Android приложений рекомендуем начать с выполнения инструкций на [developer.android.com](https://developer.android.com) в блоке [Build your first app](https://developer.android.com/training/basics/firstapp).
+Первые шаги в разработке Android приложений рекомендуем начать с выполнения инструкций на [developer.android.com](https://developer.android.com) в блоке [Your first Android app](https://developer.android.com/courses/android-basics-compose/unit-1).
 
 Блок "Создание вашего первого приложения" научит:
 - Как развернуть среду разработки Android приложений `Android Studio`
 - Как создать простейший проект
 - Как собрать Android приложение и запустить на эмуляторе/устройстве
-- Как построить UI используя `ConstraintLayout`
-- Как использовать строки локализации из ресурсов
-- Как делать переходы между `Activity`
+- Как построить простой UI используя `Jetpack Compose`
+- Как менять цвет фона и отступы у UI элементов
 
 ## App fundamentals
 
-После первого созданного приложения (молодец!) нужно глубже погрузиться в теорию об устройстве Android приложений. В этом нам поможет все та же официальная документация [developer.android.com](https://developer.android.com) - идем читать [App fundamentals](https://developer.android.com/guide/components/fundamentals).
+После первого созданного приложения (молодец!) нужно глубже погрузиться в теорию об устройстве Android приложений. В этом нам поможет все та же официальная документация [developer.android.com](https://developer.android.com) - идем читать [App fundamentals](https://developer.android.com/guide/components/fundamentals?hl=ru).
 
 Документация расскажет:
 - Что является компонентами Android приложения
@@ -29,7 +28,10 @@ sidebar_position: 1
 - Чем полезен `ContentProvider`
 - Как запустить каждый из компонентов Android приложения
 - Для чего нужен `ContentResolver`
-- Состав и предназначение `AndroidManifest.xml` 
+- Состав и предназначение `AndroidManifest.xml`
+- О жизненном цикле компонентов.
+- Как Android управляет процессами и потоками.
+- О разрешениях (permissions) и безопасности приложения.
 - Как управлять требованиями приложения к версии Android
 - Что такое ресурсы Android приложения
 

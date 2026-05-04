@@ -4,95 +4,95 @@ sidebar_position: 4
 
 # User Interface
 
-Со всеми приложениями пользователь взаимодействует через интерфейс - User Interface (UI). Ранее мы уже задели создание интерфейса, а в данном блоке рассмотрим эту тему детальнее.
+Со всеми приложениями пользователь взаимодействует через интерфейс - User Interface (UI). Ранее мы уже затрагивали тему создание интерфейса, а в данном блоке рассмотрим эту тему детальнее.
 
 ## Основы
 
-Для начала нужно ознакомиться с главными UI классами:
+Для дальнейшей практики можно пройти уроки из официального Android курса - [Building app UI](https://developer.android.com/courses/android-basics-compose/unit-2).
+Вы сможете:
+- Начать создавать более интерактивные приложения.
+- Понять, как работают композиция и перекомпозиция.
+- Создать приложение, которое работает с данными, введенными пользователем.
+- Узнать, как использовать состояние для отображения данных и автоматического отражения изменений при обновлении данных.
 
-- [Activity](https://developer.android.com/reference/android/app/Activity) - окно приложения, единственное что показывает UI в Android пользователю
-- [Fragment](https://developer.android.com/guide/fragments) - часть UI (может быть отдельным экраном приложения, может частью экрана)
-- [View](https://developer.android.com/reference/android/view/View) - небольшой блок пользовательского интерфейса, например текст, кнопка, поле ввода и т.д.
+Как продолжение темы знакомства с UI хорошо подойдет CodeLab [Display lists and use Material Design](https://developer.android.com/courses/android-basics-compose/unit-3)
+Вы сможете:
+- Создать в приложении прокручиваемый список, отображающий как текст, так и изображения.
+- Добавить обработчики кликов для взаимодействия с элементами списка.
+- Добавить в приложение панель инструментов и измените тему оформления.
+- Использовать Material Design для создания современных и интуитивно понятных пользовательских интерфейсов, применяя цвета, формы и типографику.
 
-Для ознакомления на практике пройти уроки из официального Android курса - [Android Basics - Layouts](https://developer.android.com/courses/android-basics-kotlin/unit-2). 
+## Навигация и верстка экрана
 
-Про `Fragment` полезно пройти CodeLab - [Advanced Android 01.1: Fragments](https://developer.android.com/codelabs/advanced-android-training-fragments) (в CodeLab используется Java, но при выполнении можно использовать Kotlin).
+Современные Android‑приложения по‑прежнему строятся по подходу Single Activity, где качестве экранов используются Composable‑функции, а навигация между ними осуществляется с помощью Jetpack Navigation для Compose.
 
-Также, для изучения жизненного цикла `Activity` и `Fragment`, хорошо подойдет CodeLab [Android Kotlin Fundamentals: Lifecycles and logging](https://developer.android.com/codelabs/kotlin-android-training-lifecycles-logging) и её продолжение - [Android Kotlin Fundamentals: Complex Lifecycle Situations](https://developer.android.com/codelabs/kotlin-android-training-complex-lifecycle)
+Для построения навигации Google рекомендует использовать [Navigation Compose](https://developer.android.com/jetpack/compose/navigation) — это часть Jetpack Navigation, адаптированная для работы с Compose. Она позволяет описывать навигационный граф декларативно, так же как и UI.
 
-Вопросы для самопроверки:
+Простейшая схема выглядит так:
+- одно `Activity`
+- внутри неё — `setContent { }`
+- корневой `NavHost`
+- отдельные Composable‑экраны, зарегистрированные в навигационном графе
 
-- Чем отличаются `Activity` и `Fragment`?
-- Какой жизненный цикл `Activity`?
-- Какой жизненный цикл `Fragment`?
-- Что произойдет с введенным в `EditText` текстом, если произойдет изменение конфигурации (например поворот экрана)?
-- Как сохранить положение скролла в `RecyclerView` или `ScrollView` при повороте экрана?
+Более подробно изучить работу с навигацией и попрактиковаться можно в кодлабе [Navigation in Compose](https://developer.android.com/courses/pathways/android-basics-compose-unit-4-pathway-2)
 
-## Экраны и навигация
+Обязательно прочитайте про [передачу данных между компонентами](../../learning/android/data-sharing). В контексте Compose это означает:
 
-Современные android приложения строятся по подходу Single Activity, о котором рассказано в следующем видео.
+- как правильно передавать аргументы между composable‑экранами через `NavController`
+- почему следует передавать идентификаторы данных (id), а не сами объекты
+- как реализовать строгое и типобезопасное API маршрутов (например, через sealed class или отдельные объекты маршрутов)
+- как использовать `ViewModel` для хранения и разделения состояния между экранами
 
-<iframe src="//www.youtube.com/embed/2k8x8V77CrU" frameborder="0" allowfullscreen width="675" height="380"></iframe>
-<br/>
-<br/>
+Важно помнить: Composable‑функции не должны хранить бизнес‑логику или состояние, переживающее конфигурационные изменения. Для этого используются `ViewModel` и архитектурные компоненты.
 
-В дополнение можно прочитать [статью](https://habr.com/ru/company/redmadrobot/blog/426617/) на русском языке.
+Верстка UI в Android на данный момент возможна двумя способами:
+1. Jetpack Compose - новый, современный подход, declarative UI
+1. XML layouts - устаревший подход
 
-Для построения навигации между экранами Google рекомендует использовать [Android Navigation Component](https://developer.android.com/guide/navigation), который наиболее полнофункционален именно с подходом Single Activity, когда мы в пределах одного Activity переходим между разными Fragment'ами.
+Для знакомсттва с Jetpack Compose подойдет набор уроков от Google - [Jetpack Compose](https://developer.android.com/courses/pathways/compose)
 
-Более подробно изучить работу с навигацией и попрактиковаться можно по следующим урокам:
+### Layout в Jetpack Compose
 
-- [Navigate between screens](https://developer.android.com/courses/pathways/android-basics-kotlin-unit-3-pathway-1)
-- [Introduction to the Navigation component](https://developer.android.com/courses/pathways/android-basics-kotlin-unit-3-pathway-2)
-  
-Обязательно прочитайте про [передачу данных между компонентами](../../learning/android/data-sharing). Из этой статьи вы узнаете:
-- как правильно передавать данные между `Fragment`-ами и `Activity`
-- почему следует передавать идентефикаторы данных, а не сами данные
-- как реализовать строгое API передачи данных
+В Jetpack Compose больше нет XML‑разметки и привычных ViewGroup (`ConstraintLayout`, `LinearLayout` и т.д.). Интерфейс описывается декларативно с помощью Composable‑функций.
 
-## Верстка экрана
+Основные инструменты для построения UI:
 
-Верстка UI в Android на данный момент возможна несколькими способами:
-1. Jetpack Compose - новый, современный подход, declarative UI 
-1. XML layouts - все еще наиболее популярный, но начинающий устаревать
+- `Column` — вертикальное расположение элементов
+- `Row` — горизонтальное расположение
+- `Box` — наложение элементов друг на друга
+- `Spacer`, `Modifier.padding()`, `Modifier.fillMaxSize()` и другие модификаторы для управления отступами, размерами и позиционированием
 
-Мы будем рассматривать верстку через xml, так как она все ещё наиболее распространена и эти навыки точно потребуются на проектах ближайшие годы. 
+В большинстве случаев комбинации `Row`, `Column`, `Box` и `Modifier` достаточно для описания сложного интерфейса без глубокой вложенности.
 
-:::info
-Тем кто заинтересован посмотреть что такое Jetpack Compose подойдет набор уроков от Google - [Jetpack Compose](https://developer.android.com/courses/pathways/compose)
-:::
+Прочитайте дополнительно [Thinking in Compose](https://developer.android.com/jetpack/compose/mental-model)
 
-С версткой через xml можно познакомиться через CodeLab - [Android Kotlin Fundamentals: LinearLayout using the Layout Editor](https://developer.android.com/codelabs/kotlin-android-training-linear-layout)
+### Списки (LazyColumn и LazyRow)
 
-Многое в практиках от Google показывается через Layout Editor, но важно также смотреть и понимать что получается в результирующем xml. Чтобы понимать, к чему приводят действия в Layout Editor, читайте xml после действий в редакторе.
+Важный элемент практически всех мобильных приложений — список элементов.  
+В Jetpack Compose вместо `RecyclerView` используются `LazyColumn` и `LazyRow`.
 
-Также, общепринятой практикой при верстке через xml является использование [tools](https://developer.android.com/studio/write/tool-attributes) для всех UI элементов. 
+Они:
+- отображают только видимые элементы (ленивая подгрузка)
+- автоматически переиспользуют composable‑элементы
+- не требуют создания Adapter и ViewHolder
 
-### ConstraintLayout
+Для более сложных случаев доступны:
+- `itemsIndexed`
+- `key` для стабильной идентификации элементов
+- `LazyVerticalGrid` для сеток
 
-`ConstraintLayout` - это универсальный и многофункциональный лейаут. Его основное преимущество - без множественной вложенности описать сложное расположение элементов на экране. Он используется очень часто, потому что его возможности сильно упрощают реализацию сложных задач.
+Подробнее можно прочитать здесь: [Lists in Compose](https://developer.android.com/develop/ui/compose/lists?hl=ru)
 
-Подробно про `ConstraintLayout` - [Build a Responsive UI with ConstraintLayout](https://developer.android.com/training/constraint-layout/index.html). И практика для закрепления [Use ConstraintLayout to design your Android views](https://developer.android.com/codelabs/constraint-layout).
+### Связь UI и кода
 
-### RecyclerView
+UI и логика описываются в одном языке (Kotlin), а состояние передаётся в composable‑функции через параметры.
 
-Важный элемент практически всех мобильных приложений - список элементов. На Android он реализуется с помощью [RecyclerView](https://developer.android.com/guide/topics/ui/layout/recyclerview). Подробно ознакомиться с концептом этого элемента и попрактиковаться можно в CodeLab - [Android Kotlin Fundamentals: RecyclerView fundamentals](https://developer.android.com/codelabs/kotlin-android-training-recyclerview-fundamentals).  
-Чтобы лучше разобраться с требованиями к `RecyclerView.Adapter` рекомендуем прочитать [статью](../../learning/android/adapter).  
+Основной принцип — **state hoisting**:
+- состояние хранится вне composable (например, в `ViewModel`)
+- composable получает состояние через параметры
+- изменения состояния передаются наружу через события (callback)
 
-Вопросы для самопроверки:
-
-- Что такое `RecyclerView`?
-- В каких случаях нужен `RecyclerView`, а в каких достаточно `LinearLayout`?
-
-### Связь верстки и кода
-
-Для обращения к UI элементам из кода мы используем инструмент [View Binding](https://developer.android.com/topic/libraries/view-binding). Он из xml layout'ов автоматически генерирует классы, которые мы можем использовать в коде и обращаться к разным view как к полям этого сгенерированного класса.
-
-Также можно посмотреть следующее видео:
-
-<iframe src="//www.youtube.com/embed/W7uujFrljW0" frameborder="0" allowfullscreen width="675" height="380"></iframe>
-<br/>
-<br/>
+Для хранения состояния, переживающего конфигурационные изменения, используется `ViewModel`.
 
 ## AndroidX & Jetpack
 
@@ -106,13 +106,11 @@ sidebar_position: 4
 
 Разработчики приложений должны стремиться к удобному и понятному пользовательскому опыту. Важно помнить, что мы пишем код не для себя, а чтобы пользователи могли получить приложение которое решает их задачи. Приложение может приносить боль при использовании, а может быть приятным, быстрым и удобным. Ставьте себя на место пользователя, когда делаете какой либо функционал, и спрашивайте "а пользовался бы я сам таким решением?".
 
-В CodeLab Google подготовили набор советов, как сделать приложение удобнее и понятнее - [Create a more polished user experience](https://developer.android.com/codelabs/basic-android-kotlin-training-polished-user-experience).
-
-А также многое про удобство можно прочитать на сайте [material.io](https://material.io/design) - разделы Interaction и Communication очень детально и наглядно объясняют как можно создавать комфортное использование приложения. Многие принципы применимы не только на android, но и на любой системе с UI.
+Как сделать приложение удобнее и понятнее - можно прочитать на сайте [material.io](https://material.io/design) - разделы Interaction и Communication очень детально и наглядно объясняют как можно создавать комфортное использование приложения. Многие принципы применимы не только на android, но и на любой системе с UI.
 
 ## Изменения конфигурации
 
-Некоторые конфигурации мобильных устройств могут измениться во время работы приложения. Это могут быть, например, ориентация экрана при повороте устройства пользователем, увеличение пользователем размера шрифта, смена локализации, смена темного режима на светлый и наоборот. В процессе создания приложения нужно помнить о необходимости обработки изменений конфигурации. Прочитайте [документацию Google](https://developer.android.com/guide/topics/resources/runtime-changes) про обработку смены конфигурации.
+Некоторые конфигурации мобильных устройств могут измениться во время работы приложения. Это могут быть, например, ориентация экрана при повороте устройства пользователем, увеличение пользователем размера шрифта, смена локализации, смена темного режима на светлый и наоборот. В процессе создания приложения нужно помнить о необходимости обработки изменений конфигурации. Прочитайте [документацию Google](https://developer.android.com/guide/topics/resources/runtime-changes?hl=ru) про обработку смены конфигурации.
 
 ## Practice time
 
@@ -123,8 +121,8 @@ sidebar_position: 4
 1. Создать приложение с шаблона `Empty Activity`
 1. Создать `data class Contact(val firstName: String, val lastName: String, val avatarResourceId: Int)`
 1. Объявить глобальное свойство `contacts: List<Contact>` в котором написать 5 или больше разных контактов - это будут данные нашего приложения
-1. Добавить 2 фрагмента - `ContactsFragment` и `ContactFragment`
-1. На фрагменте `ContactsFragment` расположить `RecyclerView` отрисовывающий множество элементов - разные контакты
-1. На фрагменте `ContactFragment` с помощью `ConstraintLayout` сверстать UI экрана просмотра контакта
-1. С помощью Android Navigation Component сделать переходы между списком и просмотром контакта
+1. Добавить 2 Composable экрана - `ContactsScteen` и `ContactScreen`
+1. На экране `ContactsScteen` расположить `LazyColumn` отрисовывающий множество элементов - разные контакты
+1. На экране `ContactScreen` с помощью `Column` и `Row` сверстать UI экрана просмотра контакта
+1. С помощью Jetpack Navigation сделать переходы между списком и просмотром контакта
 1. Удостовериться в том, что приложение корректно обрабатывает смену конфигурации: локализации, темы, ориентации экрана, увеличение шрифта
