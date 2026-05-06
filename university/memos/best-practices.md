@@ -20,35 +20,30 @@ sidebar_position: 0
 1. Если приложение поддерживает не только портретную ориентацию, проверяйте все экраны на соответствие дизайну перед отправкой на ревью
 1. Не должно быть никакого хардкода текста, который показывается пользователю, надо использовать строки локализации
 1. Проверяйте, что не добавили в `git` ничего лишнего, [настройте](https://kmm.icerock.dev/university/memos/gitignore) `.gitignore`
-1. Код не должен содержать никаких дебажных `print` и закомменченных строк, которые не несут никакой смысловой нагрузки
+1. Код не должен содержать никаких дебажных `print` и закомментированных строк, которые не несут никакой смысловой нагрузки
 1. (iOS) Все `@IBOutlet` должны быть приватными
-1. (iOS) `Extensions` для каждого класса должны находиться строго в отдельных файлах, с соответствующим названием файла - `ClassName+Extensions`
-1. (Android) Не использовать без реальной необходимости `bias` для расположения элемента на экране
+1. (iOS) `Extensions` для каждого класса должны находиться строго в отдельных файлах, с соответствующим названием файла — `ClassName+Extensions`
 
 ## Общее
 1.
 <details>
   <summary>Следите за неймингом</summary>
     <p>У вас не должно быть переменных и методов, которые не несут в названии никакой информации о том, для чего они предназначены.</p>
-    Например: <code>binding.button.setOnCLickListener &#123; buttonClickAction() &#125;</code> - ни кнопка, ни метод не несут абсолютно никакой информации о том, к чему они относятся
+    Например: <code>binding.button.setOnCLickListener &#123; buttonClickAction() &#125;</code> — ни кнопка, ни метод не несут абсолютно никакой информации о том, к чему они относятся
 </details>
 1.
 <details>
-  <summary> Кликабельные элементы UI не должны сами решать, какой метод вьюмодели им вызывать </summary>
+  <summary>Кликабельные элементы UI не должны сами решать, какой метод вьюмодели им вызывать</summary>
     <ul>
-        <li> <code>exitButton.setOnClickListener  &#123; viewModel.clearUserData() &#125;</code> - UI не должен говорить вьюмодели - чисти данные пользователя </li>
-        <li> <code>exitButton.setOnClickListener &#123; viewModel.onExitButtonPressed() &#125;</code> - UI должен говорить вьюмодели - нажата кнопка <code>exitButton</code></li>
+        <li> <code>exitButton.setOnClickListener  &#123; viewModel.clearUserData() &#125;</code> — UI не должен говорить вьюмодели — чисти данные пользователя </li>
+        <li> <code>exitButton.setOnClickListener &#123; viewModel.onExitButtonPressed() &#125;</code> — UI должен говорить вьюмодели — нажата кнопка <code>exitButton</code></li>
         <li> Публичное API вьюмодели должно быть таким, чтобы по нему явно было понятно, когда его использовать </li>
     </ul>
 </details>
-1. 
-Максимально настраивайте UI элемент в `.xml` или `.xib`, чтобы не заниматься его настройкой в коде
 1.
 Используйте аннотации [@Throws](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-throws/) только в случае, если это попадает в Swift код
 1.
-Используйте [weakLambda](../../learning/libraries/moko/moko-units#можно-ли-передавать-лямбду-в-unititem), чтобы сохранять `receiver` слабой ссылкой
-1.
-Не создавайте общий класс констант - рано или поздно получится свалка.  
+Не создавайте общий класс констант — рано или поздно получится свалка.  
 Константы должны создаваться именно там, где они имеют смысл
 1.
 <details>
@@ -61,16 +56,16 @@ sidebar_position: 0
 1.
 <details>
   <summary>Не реализуйте то, что уже есть в системе</summary>
-    <p>Если что-то в дизайне немного отличается от системного варианта <code>Alert</code>, <code>Toolbar</code>, кнопка "назад" - спросите у руководителя, действительно ли должно быть 1 в 1 как в дизайне.</p>
+    <p>Если что-то в дизайне немного отличается от системного варианта <code>Alert</code>, <code>Toolbar</code>, кнопка "назад" — спросите у руководителя, действительно ли должно быть 1 в 1 как в дизайне.</p>
     В большинстве случаев системная реализация подходит.
 </details>
 1.
 <details>
   <summary>Не работайте с сетевыми сущностями в приложении</summary>
     <ul>
-        <li>Преобразуйте сетевые сущности в свои - доменные и используйте их во всем приложении</li>
+        <li>Преобразуйте сетевые сущности в свои — доменные и используйте их во всем приложении</li>
         <li>Если в приложении вы работаете с сетевыми сущностями, то в случае, если на сервере что-то изменят, например изменят имя какого-то поля или поменяют вложенность полей, то вам придется исправлять все места, где используется эта сущность. <p>А если при получении сетевой сущности вы сразу преобразуете(маппите) ее в доменную, то при изменении сетевой вам нужно будет просто изменить функцию-маппер.</p></li>
-        <li>Если от сервера где-то приходит <code>null</code> вы можете как-то заменить на <code>not-null</code> значение, чтобы удобнее работать в приложении. Например, если приходит поле <code>description = null</code> - в маппере можно заменить на пустую строку</li>
+        <li>Если от сервера где-то приходит <code>null</code> вы можете как-то заменить на <code>not-null</code> значение, чтобы удобнее работать в приложении. Например, если приходит поле <code>description = null</code> — в маппере можно заменить на пустую строку</li>
         <li>Доменная сущность пишется независимо от серверной, она включает только то, что реально будет использоваться приложением, а не хранит абсолютно все данные, полученные от сервера</li>
     </ul>
 </details>
@@ -85,7 +80,7 @@ sidebar_position: 0
 1.
 <details>
   <summary>Нейминг переменных для <code>State</code> и <code>Action</code></summary>
-        Если вы используете <code>State</code> и <code>Actions</code>, то либо просто называйте переменные вьюмодели <code>state</code> и <code>actions</code>, либо называйте так, чтобы в их имени обязательно фигурировало, что это <code>state</code> или <code>actions</code>.
+Если вы используете <code>State</code> и <code>Actions</code>, то либо просто называйте переменные вьюмодели <code>state</code> и <code>actions</code>, либо называйте так, чтобы в их имени обязательно фигурировало, что это <code>state</code> или <code>actions</code>.
 </details>
 1.
 <details>
@@ -102,7 +97,6 @@ sidebar_position: 0
     <ul>
         <li> Используйте <a href="../../learning/code-style/early-return">early return</a></li>
         <li> Избегайте callback hell</li>
-        <li> <code>somethingButton.setOnClickListener &#123; somethingButtonPressed() &#125;</code> - устанавливайте действие на клик одной функцией, не пишите логику сразу в <code>setOnClickListener</code> </li>
     </ul>
 </details>
 1.
@@ -132,11 +126,6 @@ sidebar_position: 0
 </details>
 1. 
 <details>
-  <summary> Связь UI с <code>viewModel</code> должна полностью находиться в функции <code>bindToViewModel</code> </summary>
-    Функция <code>bindToViewModel</code> должна быть легко читаема, поэтому должна вызывать другие функции, которые связывают конкретный UI элемент с <code>viewModel</code>
-</details>
-1. 
-<details>
   <summary> Константы должны иметь такое название, чтобы по нему было понятно, для чего они нужны</summary>
     <ul>
         <li> Плохое название константы: <code>const val REPO_NAME = "repo_name"</code></li>
@@ -146,13 +135,13 @@ sidebar_position: 0
 1.
 <details>
   <summary> Не надо выдавать никакие данные из элемента списка (например по клику)</summary>
-    По клику на элемент списка он должен просто информировать наружу - "на меня нажали"
+    По клику на элемент списка он должен просто информировать наружу — "на меня нажали"
 </details>
 1.
 <details>
   <summary>Никогда не обрабатывайте <code>Error</code>-ы в <code>catch</code></summary>
     <ul>
-        <li>У <code>Throwable</code> два наследника - <code>Exception</code> и <code>Error</code>. <code>Exception</code> нужно обрабатывать, они исправимы, а <code>Error</code>-ы - неисправимы, их обрабатывать не надо. Приложение должно упасть с информацией о том что пошло не так (в <code>Error</code> эта информация)</li>
+        <li>У <code>Throwable</code> два наследника — <code>Exception</code> и <code>Error</code>. <code>Exception</code> нужно обрабатывать, они исправимы, а <code>Error</code>-ы — неисправимы, их обрабатывать не надо. Приложение должно упасть с информацией о том, что пошло не так (в <code>Error</code> эта информация)</li>
         <li> изучите <a href="https://rollbar.com/blog/java-exceptions-hierarchy-explained/">документацию</a></li>
     </ul>
 </details>
@@ -165,13 +154,13 @@ sidebar_position: 0
   <summary> Устанавливайте версии подов в <code>Podfile</code></summary>
     <ul>
         <li> Версии установленных подов можно посмотреть после установки подов в файле <code>Podfile.lock</code></li>
-        <li> Если версии подов не будут явно обозначены - то у нового разработчика, или у тебя (на другом компе) при установке подов могут подтянуться более новые версии. Есть вероятность, что в этих новых подах что-то будет изменено и проект не скомпилируется. Либо, как сейчас популярно, в библиотеку всунут зловредный код в новой версии он тоже скачается :) </li>
+        <li> Если версии подов не будут явно обозначены - то у нового разработчика, или у тебя (на другом компе) при установке подов могут подтянуться более новые версии. Есть вероятность, что в этих новых подах что-то будет изменено и проект не скомпилируется. Либо, как сейчас популярно, в библиотеку всунут зловредный код в новой версии, он тоже скачается :) </li>
     </ul>
 </details>
 1. 
 <details>
   <summary> Называйте <code>ViewController</code>-ы правильно</summary>
-        Все <code>ViewController</code>-ы должны называться с окончанием <code>ViewController</code>, а не <code>Screen</code>, потому что <code>Screen</code>- это экран девайса. <code>ViewController</code> не обязательно занимает весь экран, их на экране сразу несколько: твой собственный, <code>UINavigationController</code>, <code>UITabBarController</code>, модалки
+        Все <code>ViewController</code>-ы должны называться с окончанием <code>ViewController</code>, а не <code>Screen</code>, потому что <code>Screen</code> — это экран девайса. <code>ViewController</code> не обязательно занимает весь экран, их на экране сразу несколько: твой собственный, <code>UINavigationController</code>, <code>UITabBarController</code>, модалки
 </details>
 1.
 <details>
@@ -179,8 +168,8 @@ sidebar_position: 0
     <ul>
         <li>Все аутлеты должны содержать в название тех данных приложения, которые будут в нем отображаться</li>
         <li>По названию каждого аутлета должно быть однозначно понятно, к какому классу <code>View</code> он относится</li>
-        <li>Пример плохого нейминга для поля с описанием чего-либо - <code>@IBOutlet private var label: UILabel!</code></li>
-        <li>Хороший нейминг - <code>@IBOutlet private var descriptionLabel: UITextView!</code></li>
+        <li>Пример плохого нейминга для поля с описанием чего-либо — <code>@IBOutlet private var label: UILabel!</code></li>
+        <li>Хороший нейминг — <code>@IBOutlet private var descriptionLabel: UITextView!</code></li>
     </ul>
 </details>
 1. 
@@ -204,21 +193,21 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
 <details>
   <summary> Убирайте текст кнопки "Назад" правильно</summary>
     <ul>
-        <li> Чтобы у кнопки "Назад" не было текста - нужно у предыдущего экрана выставить в <code> navigationItem.backButtonTitle = "" </code></li>
+        <li> Чтобы у кнопки "Назад" не было текста — нужно у предыдущего экрана выставить в <code> navigationItem.backButtonTitle = "" </code></li>
         <li> <code>navController</code> берет название для кнопки "Назад" от того экрана, на который будет производиться переход назад </li>
     </ul>
 </details>
 1. 
 <details>
   <summary> Ключи в классах всегда <code>private static let</code></summary>
-    Ключи не уникальные для конкретного экземпляра класса, поэтому их нужно делать статическими
+    Ключи не являются уникальными для конкретного экземпляра класса, поэтому их нужно делать статическими
 </details>
 1. 
 <details>
   <summary>Работа с ресурсами из <code>R.swift</code></summary>
     <ul>
         <li>Когда вы добавили картинки, цвета и другие ресурсы в Assets, вы можете получить к ним доступ через <code>R.swift</code>, например: <code>R.image.somethingImage()</code></li>
-        <li>Некоторые ресурсы, такие как цвета, <code>R.swift</code> возвращает <code>nullable</code>. В этом случае <code>guard</code> обработку делать не нужно, потому что раз <code>R.swift</code> предоставил доступ к переменной, значит смог ее сгенерировать на основе цвета. <p>Поэтому, чтобы узнать о том, что при наличии переменной ресурса самого ресурса нет - можно использовать форскаст. Таким образом, если все таки произойдет ошибка - мы будем разбираться в причине, а если бы мы обработали <code>null</code> - то не узнали бы, что такая ошибка может произойти</p></li>
+        <li>Некоторые ресурсы, такие как цвета, <code>R.swift</code> возвращает <code>nullable</code>. В этом случае <code>guard</code> обработку делать не нужно, потому что раз <code>R.swift</code> предоставил доступ к переменной, значит смог ее сгенерировать на основе цвета. <p>Поэтому, чтобы узнать о том, что при наличии переменной ресурса самого ресурса нет — можно использовать форскаст. Таким образом, если все таки произойдет ошибка — мы будем разбираться в причине, а если бы мы обработали <code>null</code> — то не узнали бы, что такая ошибка может произойти</p></li>
     </ul>
 </details>
 
@@ -235,7 +224,7 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
 <details>
   <summary> Используйте кастомные <code>View</code></summary>
     <ul>
-        <li> Если какой-то одинаковый набор элементов используется сразу на нескольких экранах - выносите его в отдельную кастомную <code>UIView</code> и используйте на нужных экранах </li>
+        <li> Если какой-то одинаковый набор элементов используется сразу на нескольких экранах — выносите его в отдельную кастомную <code>UIView</code> и используйте на нужных экранах </li>
         <li> добавление кастомных вьюх должно быть не через код, а через <code>Interface builder</code></li>
     </ul>
 </details>
@@ -249,9 +238,9 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
 </details>
 1.
 <details>
-  <summary> Если фон во всем приложении одинаковый - устанавливайте его правильно</summary>
+  <summary>Если фон во всем приложении одинаковый — устанавливайте его правильно</summary>
     <ul>
-        <li> Вариант 1: установить в <code>AppDelegate</code>, <code>navigationController?.navigationBar.barStyle = .black</code> - сразу после создания контроллера устанавливаем цвет </li>
+        <li> Вариант 1: установить в <code>AppDelegate</code>, <code>navigationController?.navigationBar.barStyle = .black</code> — сразу после создания контроллера устанавливаем цвет </li>
         <li> Вариант 2: в <code>.plist</code> установите <code>UIViewControllerBasedStatusBarAppearance = NO</code> и <code>Status bar is initially hidden = NO</code>, тогда вообще не придется устанавливать <code>navigationBar.barStyle = .black</code></li>
     </ul>
 </details>
@@ -259,62 +248,15 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
 ## Android
 ### Logic
 1.
-Во `Fragment`-ах аккуратно выбирайте скоуп запуска корутины - если нужно работать только пока есть view - используйте `viewLifecycleScope`, а не `lifecycleScope`.
+Compose не используйте `lifecycleScope` для задач, связанных с UI. Для корутин, живущих только пока composable в композиции, используйте `LaunchedEffect` или `rememberCoroutineScope()`.
 1.
 Обрабатывайте стейты на Android [правильно](../../learning/state#обработка-на-android)
 1.
-Подписка вью на вьюмодель должна создаваться сразу, как только мы их создали, в методе `onViewCreated`.
+Подписка composable на `ViewModel` должна происходить прямо внутри composable, через state‑обёртки (`collectAsState`, `observeAsState`), а не вручную через `launch/collect`.
 1.
-Тема приложения должна выставляться в `AndroidManifest`, а не в `Activity` и `Fragment`-ах.
+Тема приложения должна задаваться на уровне `Activity` (или в `Application` / `Manifest`), а не внутри отдельных composable.
 1.
-***На чистом `Android`*** при работе со списками не забывайте смотреть [сюда](../../learning/android/adapter)
-1.
-Константы класса должны находиться в `сompanion object`, а в свойствах должно быть все то, что уникально для каждого экземпляра класса
-1. 
-<details>
-  <summary>Используйте конструкцию `with(binding...)` для `XML` элементов правильно. Не стоит ей злоупотреблять, иначе она будет только ухудшать читаемость</summary>
-  <ul>
-    <li>
-      не стоит использовать
-      <code>
-      {`private fun setToolBar() {
-    with(binding.toolbar) {
-        navigationIcon = AppCompatResources.getDrawable(
-            requireContext(),
-            R.drawable.arrow_back
-        )
-        setNavigationOnClickListener {
-            findNavController().navigateUp()
-        }
-        setOnMenuItemClickListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.action_logout -> {
-                    viewModel.onLogoutPressed()
-                    true
-                }
-                else -> {
-                    false
-                }
-            }
-        }
-    }
-}`}
-      </code>
-    </li>
-    <li>
-      стоит использовать
-      <code>
-      {`with(binding.view1.subview1.subsubview1) {
-    label1.text = TODO()
-    button1.setOnClickListener { TODO() }
-    image1.imageAlpha = TODO()
-    view11.subview1.button1.setOnClickListener { TODO() }
-    view11.subview2.button2.setOnClickListener { TODO() }
-}`}
-      </code>
-    </li>
-  </ul>
-</details>
+Константы класса должны находиться в `сompanion object`, а в свойствах должно быть все то, что уникально для каждого экземпляра класса.
 1. 
 <details>
   <summary>Не запутайтесь с удалением `Observer`</summary>
@@ -345,95 +287,50 @@ request.removeObserver(requestObserver)
 </details>
 1.
 <details>
-  <summary> Если в вашем приложении есть логика по выбору стартовой навигации</summary>
-    <ul>
-        <li> Не забывайте использовать <code>savedInstanceState</code>, чтобы не создавать граф навигации заново</li>
-        <li> Убедитесь, что установили граф в <code>activity_main.xml</code></li>
-    </ul>
-</details>
-1. Если вы не используете [navigation-safe-args-gradle-plugin](https://developer.android.com/guide/navigation/navigation-pass-data)
-    - Аргументы фрагмента получайте через `requireArguments()`
-    - Если какого-то аргумента нет - кидайте кастомную ошибку, что нет конкретного аргумента
-    -
-    <details> 
-    <summary>Используйте вычисляемые свойства для работы с аргументами</summary>
-    <code>
-    {`private val something: String get() = requireArguments().getString(SOMETHING_KEY) ?: throw NoArgumentsException(lostArgument: SOMETHING_KEY)`}
-    </code>
-    </details>
-1.
-<details>
-  <summary> Используйте <code>lateinit</code> правильно</summary>
-    <code>lateinit</code> - это чисто андроидная штука, костыль, чтобы передавать компоненты во фрагменты и активити. Нужна потому что мы не можем создать кастомный класс фрагмента или активити, чтобы передавать зависимости сразу в конструктор. Мы даже не можем точно предсказать место, где будет создан объект фрагмента/активити. Поэтому <code>lateinit</code> - это костыль, которого нужно избегать, потому что <code>lateinit</code> переменную можно забыть проинитить и приложение крашнется
-</details>
-1.
-<details>
-  <summary> Настраивайте <code>Toolbar</code> правильно </summary>
-        Чтобы полностью взять на себя настройку <code>Toolbar</code> - укажите тему <code>NoActionBar</code> и, вместо <code>ActionBar</code>-а системного, используйте <code>Toolbar</code> - UI элемент который полностью тобой управляется. Также, у него есть встроенная интеграция с <code>Navigation Component</code>
+  <summary>Настраивайте <code>Toolbar</code> правильно</summary>
+        В Compose не используйте системный `ActionBar`. Верхняя панель должна реализовываться через `TopAppBar` внутри `Scaffold`, что даёт полный контроль и естественную интеграцию с Navigation Compose.
 </details>
 
 ### UI
 1.
 <details>
-  <summary><code>xml</code> называйте аналогично названию класса</summary>
+  <summary><code>Content</code> функцию экрана называйте аналогично названию экрана</summary>
     <ul>
-        <li>Плохой нейминг: <code>DetailRepoInfoFragment</code> и <code>fragment_detail_repo</code></li>
-        <li>Хороший нейминг: <code>DetailInfoFragment</code> и <code>detail_info_fragment</code></li>
+        <li>Плохой нейминг: <code>DetailRepoInfoScreen</code> и <code>RepoInfoContent</code></li>
+        <li>Хороший нейминг: <code>DetailInfoScreen</code> и <code>DetailInfoContent</code></li>
     </ul>
 </details>
-1. Отступы всегда должны быть кратны ***4*** (8, 16, 24, 32), если в дизайне по-другому, задавайте вопросы
-1. Если какой-то набор элементов используется на нескольких экранах - выносите его в отдельный `.xml` и подключайте с помощью [include](https://developer.android.com/training/improving-layouts/reusing-layouts)
-1.
+1. Отступы всегда должны быть кратны ***4*** (4, 8, 16, 24, 32), если в дизайне по-другому, задавайте вопросы
+1. Если какой-то набор элементов используется на нескольких экранах — выносите его в отдельную `Composable` функцию и переиспользуйте
+1. Не передавай ViewModel глубоко в дерево функций, UI должен зависеть от данных, а не от ViewModel.
+1. 
 <details>
-  <summary> Используйте константы для отступов в приложении правильно: </summary>
+  <summary>State hoisting — выноси состояние наверх</summary>
     <ul>
-        <li>Если дизайнер обозначил, что есть общие значения для некоторых отступов и т.д. - используйте константы</li>
-        <li>Если обозначения общих размеров и отступов нет - использование констант на свой страх и риск (не рекомендуется)</li>
-        <li>Констант не должно быть слишком много, иначе они будут только путать</li>
-        <li>Именоваться константы должны относительно контекста использования - <code>background_color</code>, <code>status_bar_color</code>, <code>button_color_default</code>, <code>default_top_margin</code> и т.д.</li>
-    </ul>
-</details>
-1.
-<details>
-  <summary>Используйте <a href="https://developer.android.com/studio/write/tool-attributes">tools</a></summary>
-        Во всех UI элементах, которые содержат поле <code>text</code>, устанавливайте текст используя <code>tools:text</code>, чтобы было легче ориентироваться в дизайне экрана
-</details>
-1.
-<details>
-  <summary>Избегайте вложенности при использовании <code>ConstraintLayout</code></summary>
-        Главная цель <code>ConstraintLayout</code> в том, чтобы не использовать вложение в <code>LinearLayout</code> для расположения элементов на экране. Нужно это, во-первых, для улучшения производительности, потому что при большой вложенности <code>layout</code> друг в друга она сильно падает. Во-вторых, для более удобной верстки и улучшения читаемости <code>xml</code>
-</details>
-1.
-<details>
-  <summary>Верстайте экран сверху вниз, констрейнты вьюхам устанавливайте относительно друг друга, а не привязывайте каждую к корневому <code>Layout</code></summary>
-    <ul>
-        <li>Если элемент всегда расположен внизу экрана - не надо цеплять его к верхнему элементу</li>
-        <li>Чтобы убедиться, что ваши правила верстки правильные - проверяйте на экранах разного размера - большой, средний, маленький, для этого просто переключайте превью</li>
-    </ul>
-</details>
-
-1.
-<details>
-  <summary>Используя свои стили, всегда наследуйтесь от дефолтного, чтобы не потерять его настройки</summary>
-        Не указывайте размеры <code>width</code> и <code>height</code> в стилях
-</details>
-1.
-<details>
-  <summary>Устанавливайте размеры вьюх правильно</summary>
-    <ul>
-        <li>Размеры вьюх на Android не хардкодятся, как на iOS</li>
-        <li>Фиксированные размеры устанавливаются только у картинок</li>
-        <li>У всех остальных элементов высота - <code>wrap_content</code>, ширина - <code>0dp</code> - чтобы элемент растягивался по констрейнтам</li>
+      <li>Composable должны быть максимально «тупыми».
+          Плохо:
+          <code>
+          @Composable
+          fun Counter() {
+              var count by remember { mutableStateOf(0) }
+          }
+          </code>
+      </li>
+      <li>Лучше:
+        <code>
+        @Composable
+        fun Counter(count: Int, onIncrement: () -> Unit)
+        </code>
+      </li>
     </ul>
 </details>
 
 ## Перед отправкой на ревью
-- Проверяйте, чтобы у MR не было конфликтов
-  - если конфликты есть, вам нужно смержить ветку, в которую вы собираетесь мержить в ту, которую вы собираетесь мержить, и исправить конфликты
+- Проверяйте, чтобы у MR не было конфликтов. Если конфликты есть, вам нужно смержить ветку, в которую вы собираетесь мержить в ту, которую вы собираетесь мержить, и исправить конфликты
 - При повторной отправке на ревью пройдитесь по всем предыдущим комментариям и убедитесь, что все исправили, отвечайте на каждый коммент, чтобы ничего не пропустить и ревьювер сразу понимал, что вы это исправили
 - После каждого коммита выделяйте немного времени, чтобы отсмотреть все изменения, на наличие ошибок, перечисленных на этой странице.
 - Обязательно обращайте внимание на [критичные для ревью пункты](#критичные-пункты-для-ревью). Ошибки в этих пунктах будут ***прерывать*** ревью.
 - После создания итогового merge request, отсмотрите все сделанные в нем изменения. Благодаря тому, что вы проверяли их после каждого коммита, это не займет у вас слишком много времени.
-- Чем чаще вы будете перепроверять себя, тем больше ошибок будите видеть и сможете не допускать их в будущем 
+- Чем чаще вы будете перепроверять себя, тем больше ошибок будете видеть и сможете не допускать их в будущем 
 
 Такая самопроверка не только позволит вам не допускать перечисленных ошибок в будущем, но и ускорит ревью вашего merge request, потому что в нем уже не будет части ошибок.
