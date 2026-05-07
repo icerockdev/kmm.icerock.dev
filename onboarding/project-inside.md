@@ -95,7 +95,7 @@ master.sh
 
 ### [buildSrc](../learning/gradle/buildSrc) (устарело, но бывает на проектах)
 
-Подробнее о legacy подходах в [нашей базе знаний](../learning/legacy)
+Подробнее о legacy подходах в [нашей базе знаний](/learning/legacy/data-sharing)
 
 ### Version Catalogs
 
@@ -389,7 +389,7 @@ dependencies {
 
 ### Shared & Domain Factory (устарело)
 
-Подробнее о legacy подходах в [нашей базе знаний](../learning/legacy)
+Подробнее о legacy подходах в [нашей базе знаний](/learning/legacy/data-sharing)
 
 
 ## android-app

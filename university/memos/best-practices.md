@@ -267,7 +267,7 @@ SplashScreen делать в `LaunchScreen.storyboard`, а не в `SplashViewCo
 1.
 Тема приложения должна выставляться в `AndroidManifest`, а не в `Activity` и `Fragment`-ах.
 1.
-***На чистом `Android`*** при работе со списками не забывайте смотреть [сюда](../../learning/android/adapter)
+***На чистом `Android`*** при работе со списками не забывайте смотреть [сюда](/learning/legacy/adapter)
 1.
 Константы класса должны находиться в `сompanion object`, а в свойствах должно быть все то, что уникально для каждого экземпляра класса
 1. 
