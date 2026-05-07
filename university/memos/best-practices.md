@@ -311,9 +311,9 @@ request.removeObserver(requestObserver)
           Плохо:
           <code>
           @Composable
-          fun Counter() {
-              var count by remember { mutableStateOf(0) }
-          }
+          fun Counter() &#123;
+              var count by remember &#123; mutableStateOf(0) &#125;
+          &#125;
           </code>
       </li>
       <li>Лучше:
