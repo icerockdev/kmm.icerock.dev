@@ -1,7 +1,7 @@
 # coroutines
 
 Для реализации асинхронной логики и выделения работы на отдельные потоки на наших проектах
-используется [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines) версии native-mt.
+используется [kotlinx.coroutines](https://github.com/Kotlin/kotlinx.coroutines).
 
 ## Материалы
 
@@ -28,14 +28,13 @@
     - Beginner
       - `async`, `Deferred`, `Job`, `await`, `start`
       - примеры последовательного и асинхронного запуска
-     
       - отложенный запуск корутины, отличия между запуском start и await (Lazy started async)
       - корутина, возвращающая значение - async, Deferred
       - хороший стиль объявления async-функции (Async-style functions)
       - пример возникновения ошибок в coroutineScope (Structured concurrency with async)
     - Intermediate
       - `awaitAll`
-       - [Пример с параллельным запуском множества запросов и работа с их результатами](https://proandroiddev.com/awaiting-multiple-coroutines-the-clean-way-75469f8df160)
+      - [Пример с параллельным запуском множества запросов и работа с их результатами](https://proandroiddev.com/awaiting-multiple-coroutines-the-clean-way-75469f8df160)
   - [Coroutine context and dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)  
     - Beginner
       - `CoroutineContext`, `CoroutineScope`, `Dispatcher`, `Unconfined`, `newSingleThreadContext`, `Job`, `join`, `asContextElement`
@@ -81,8 +80,8 @@
       - Intermediate
         - что такое mutex (Mutual exclusion) 
       - Advanced
-        - `volatile`, `Threadsafe`, `mutex`, `actor`
-        - Actors
+        - `volatile`, `Threadsafe`, `mutex`
+        - Actors (устаревший подход, `actor` deprecated с kotlinx.coroutines 1.5.2, рекомендуется использовать Channel напрямую)
   - [Debug coroutines using IntelliJ IDEA – tutorial](https://kotlinlang.org/docs/debug-coroutines-with-idea.html) - как дебажить корутины в IDEA
   - [Debug Kotlin Flow using IntelliJ IDEA – tutorial](https://kotlinlang.org/docs/debug-flow-with-idea.html) - как дебажить flow в IDEA
 
@@ -203,22 +202,16 @@
     - `UI`, `dispatcher`, `context`, `Dispatchers.Main`, `Dispatchers.JavaFx`, `Dispatchers.Swing`, `UI coroutine`, `cancel UI coroutine`, `actor`, `RendezvousChannel`, `capacity`, `ConflatedChannel`, `Channel.UNLIMITED`, `UI freeze`, `Structured concurrency`, `lifecycle`, `parent-child hierarchy`
 
 - 📄 [Best practices for coroutines](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
-    - `Dispatcher`, `suspend`, `ViewModel`, `mutable`, `Flow`, `test`, `TestCoroutineDispatcher`, `GlobalScope`, `cancel`, `cancellable`, `ensureActive`
+    - `Dispatcher`, `suspend`, `ViewModel`, `mutable`, `Flow`, `test`, `TestDispatcher`, `GlobalScope`, `cancel`, `cancellable`, `ensureActive`
     - Intermediate
       - почему не нужно хардкодить Dispatcher
       - suspend функции должны быть безопасны для основного потока, т.е. классы, вызывающие suspend функции не должны беспокоиться о том, какой Dispatcher использовать, эта ответственность лежит на классе, который выполняет эту работу 
       - ViewModel должен создавать корутины, а не suspend-функции
       - предоставляйте неизменяемые типы другим классам
       - для классов данных и бизнес-уровня необходимы должны предоставлять suspend функции для одноразовых вызовов и Flow для изменяемых данных
-      - используйте TestCoroutineDispatcher в тестах
+      - используйте `StandardTestDispatcher` или `UnconfinedTestDispatcher` в тестах (`TestCoroutineDispatcher` deprecated с kotlinx.coroutines 1.6)
       - избегайте GlobalScope (это неконтролируемая область, очень усложняет тестирование, нет обзего CoroutineContext)
       - suspend функции должны быть cancellable 
-  
-- 📄 [Ограничения native-mt версии для iOS таргета](https://github.com/Kotlin/kotlinx.coroutines/blob/native-mt/kotlin-native-sharing.md).
-    - single, thread, dispatcher, context, worker, GlobalScope, withContext, freeze, Flow, Channel, Deferred, mutable, Mutex, Semaphore,  DetachedObjectGraph
-    - Intermediate
-      - все основные объекты связи (Job, Deferred, Channel, BroadcastChannel, Mutex) могут быть замороженны
-      - любой объект, который передается через Channel или Flow автоматически замораживается
   
 - 🎦 [Roman Elizarov — Structured concurrency](https://www.youtube.com/watch?v=Mj5P47F6nJg)
 - [CodeLab от JetBrains с основами применения механизмов корутин и каналов](https://kotlinlang.org/docs/coroutines-and-channels.html)
@@ -243,7 +236,7 @@
 > 
 > Более детально о том, как работают сопрограммы, можно узнать в этом проектном документе. Похожие описания async / await в других языках (таких как C# или ECMAScript 2016) актуальны и здесь, хотя особенности их языковых реализаций могут существенно отличаться от сопрограмм Kotlin.
 
-[Source](https://kotlinlang.ru/docs/reference/coroutines.html).
+[Source](https://kotlinlang.ru/docs/reference/coroutines.html) (архивная статья).
 
 Пример преобразования кода на этапе компиляции:
 
@@ -282,7 +275,7 @@ when (this.label) {
 }
 ```
 
-Более подробно можно прочитать в [документе](https://github.com/JetBrains/kotlin/blob/document-coroutines-codegen/compiler/backend/src/org/jetbrains/kotlin/codegen/coroutines/coroutines-codegen.md#state-machine)
+Более подробно можно прочитать в [документе](https://github.com/JetBrains/kotlin/blob/master/compiler/backend/src/org/jetbrains/kotlin/codegen/coroutines/coroutines-codegen.md#state-machine)
 
 Также можно прочитать [статью или посмотреть видео](https://manuelvivo.dev/suspend-modifier).
 
@@ -394,7 +387,8 @@ suspend fun main() {
 ### Dispatcher
 
 Dispatcher определяет, какой поток или потоки использует корутина для выполнения.
-Может ограничить выполнение корутины одним потоком, отправить корутину в пулл потоков или никак ее не ограничивать (None, Dispatchers.Unconfined, Dispatchers.Default, newSingleThreadContext)
+Может ограничить выполнение корутины одним потоком, отправить корутину в пулл потоков или никак ее не ограничивать.
+Основные диспетчеры: `Dispatchers.Default` (пул потоков для CPU-интенсивных задач), `Dispatchers.IO` (пул потоков для I/O операций), `Dispatchers.Main` (главный/UI поток), `Dispatchers.Unconfined` (без привязки к потоку)
 
 ### Механика delay
 
@@ -462,6 +456,37 @@ Supervision scope распространяет отмену только в от
 - [Conflation](https://kotlinlang.org/docs/flow.html#conflation) - emitter не приостановится из-за медленного коллектора, а удерживает свои элементы, пока коллектор их не запросит, а когда запросит, отправит самый новый элемент из тех, которые накопиились, потом заново начнет копить
 - [Processing the latest value](https://kotlinlang.org/docs/flow.html#processing-the-latest-value) - когда flow выдает новое значениеЮ блок действий для старого значения отменяется
 
-## Check Yourself
+### SharedFlow и StateFlow
 
-TODO
+`SharedFlow` — горячий поток, который может иметь несколько коллекторов. Значения emit'ятся во все активные коллекции.
+`StateFlow` — специализированный `SharedFlow`, хранящий последнее значение и эмитящий только изменения. Является заменой `LiveData` в Kotlin Multiplatform.
+
+- [StateFlow and SharedFlow](https://kotlinlang.org/docs/stateflow-and-sharedflow.html) — официальная документация
+- `shareIn` — превращает холодный `Flow` в горячий `SharedFlow`
+- `stateIn` — превращает холодный `Flow` в `StateFlow`
+- `SharingStarted.WhileSubscribed` — стартует при появлении подписчика, останавливается когда пропадает последний подписчик
+- `SharingStarted.Eagerly` — стартует немедленно
+- `SharingStarted.Lazily` — стартует при первом подписчике, никогда не останавливается
+
+### Тестирование корутин
+
+Начиная с kotlinx.coroutines 1.6, `TestCoroutineDispatcher` и `TestCoroutineScope` deprecated. Используйте новый API:
+
+- `runTest` — замена `runBlockingTest`, автоматически продвигает виртуальное время
+- `TestScope` — тестовый скоуп с контролем виртуального времени
+- `StandardTestDispatcher` — диспетчер, который ставит задачи в очередь и выполняет их через `advanceUntilIdle`
+- `UnconfinedTestDispatcher` — диспетчер, который выполняет задачи немедленно (как `Dispatchers.Unconfined`)
+- [Testing coroutines guide](https://kotlinlang.org/docs/coroutine-test-and-debug.html)
+
+### runInterruptible
+
+Функция `runInterruptible` позволяет прерывать блокирующие вызовы (например `Thread.sleep`, `BlockingQueue.take`) при отмене корутины. Без неё отмена корутины не прервёт блокирующий вызов на JVM.
+
+```kotlin
+suspend fun readBlocking() = withContext(Dispatchers.IO) {
+    runInterruptible {
+        Thread.sleep(10000)
+    }
+}
+```
+

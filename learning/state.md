@@ -2,444 +2,512 @@
 sidebar_position: 21
 ---
 
-
 # Единый стейт экрана
 
-## Состояние
+Во всех экранах используется общий подход: ViewModel из `shared`-модулей хранит состояние в `StateFlow`/`MutableStateFlow` (Kotlin), а для iOS они оборачиваются в `CStateFlow`/`CMutableStateFlow` через библиотеку MOKO MVVM.
 
-Когда мы в любой момент можем узнать текущее значение какой-нибудь переменной, то это называется ***состояние***.
-Примеры: значение текстового поля, включена кнопка или нет, заголовок на экране и тд.
+## Типы стейта
 
-Состояния бывают двух видов: изменяемые [MutableLiveData](https://developer.android.com/reference/android/arch/lifecycle/MutableLiveData) / [MutableStateFlow](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-mutable-state-flow/index.html) и неизменяемые [LiveData](https://developer.android.com/reference/android/arch/lifecycle/LiveData) / [StateFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+В проекте используются два основных подхода к организации стейта:
 
-Изменяемые состояния - это те значения, которые могут изменяться как на стороне вьюмодели, так и на стороне юзера. Например - значение текстового поля: со стороны юзера происходит ввод, а со стороны вьюмодели - валидация + автоисправление.  
-Изменяемые состояния необходимо привязывать двусторонней привязкой, т.е. при изменении на UI данные меняются и во `ViewModel`, а при изменении во `ViewModel` должны измениться на `UI`.
+**1. Отдельные `CStateFlow`-свойства** — для простых экранов, где каждое свойство UI независимо:
 
-Описывать `viewModel` нужно так, будто бы юзер будет взаимодействовать напрямую с ней. Разберем, как мы будем описывать состояния вьюмодели на примере экрана авторизации.
-На UI должны быть:
-- поле ввода номера телефона
-- поле ввода смс-кода
-- кнопка повторной отправки смс-кода
-- кнопка "Зарегистрироваться"
-- текстовое поле с таймером до следующей возможности отправить смс-код
-- активити-индикатор
-
-Разобьем эти элементы на две группы, в зависимости от того, с каким типом состояния они будут работать - изменяемым или неизменяемым.
-
-**Изменяемые состояния:**
-- поле ввода номера телефона `val phoneNumber: MutableLiveData(String)`
-- поле ввода смс-кода `val smsCode MutableLiveData(String)`
-
-Со стороны UI `phoneNumber` и `smsCode` будут представлены как EditText. Как со стороны юзера, так и со стороны вьюмодели значения полей могут изменяться, следовательно эти состояния будут изменяемыми.
-
-**Неизменяемые состояния:**
-- кнопка повторной отправки смс-кода `val isResendButtonEnabled LiveData(Boolean)`
-- кнопка "Зарегистрироваться" `lav isRegisterButtonEnabled LiveData(Boolean)`
-- текстовое поле с таймером до следующей возможности отправить смс-код `val smsCodeTimer LiveData(String)`
-- активити-индикатор `val isIndicatorVisible LiveData(Boolean)`
-
-Все эти элементы работают с неизменяемыми состояниями, т.к. они изменяется только со стороны вьюмодели, юзер изменить его никак не сможет. Если значение неизменяемого состояния будет меняться после инициализации, то для изменения внутри вьюмодели создается `private MutableLiveData`, а для привязки к фрагменту используется `LiveData`, которая геттером берет изменяемую. На неизменяемые состояния нужно просто подписаться из `UI`.
-
-Теперь, рассмотрим как делаются двусторонняя и односторонняя привязки:  
-**Совет**: используйте [Extensions](https://kotlinlang.org/docs/extensions.html) для распространенных функций привязки, чтобы использовать их во всем проекте, а не делать каждый раз вручную.
-
-## Двусторонняя привязка
-Сделаем двустороннюю привязку для связи `EditText` и `MutableLiveData(String)`
-
-**Вариант с самостоятельным созданием `TextWatcher`**:
 ```kotlin
-fun EditText.bindTextTwoWay(liveData: MutableLiveData<String>, lifecycleOwner: LifecycleOwner){
-    val textWatcher = object : TextWatcher {
-      override fun afterTextChanged(s: Editable?) = Unit
-      override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
-        
-      override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-          liveData.value = s.toString()
-      }
-    }
-    
-    this.addTextChangedListener(textWatcher)
-    
-    liveData.observe(lifecycleOwner) { text ->
-        //  проверка делается для того, чтобы не провоцировать рекурсию при изменении значения editText на точно такое же
-        if (this.text.toString() == text) return@observe
-        
-        this.setText(text)
-    }
+class AuthViewModel : ViewModel() {
+    val isLoading: CStateFlow<Boolean> = _isLoading.cStateFlow()
+    val showPasswordField: CStateFlow<Boolean> = _showPasswordField.cStateFlow()
+    val isLoginButtonEnabled: CStateFlow<Boolean> = combine(...).cStateIn(viewModelScope, ...)
+    val authType: CMutableStateFlow<ContactMethodType> = CMutableStateFlow(ContactMethodType.PHONE)
 }
 ```
 
-**Более компактный вариант, в `doOnTextChanged` создастся `TextWatcher` и привяжется автоматически**:
-```kotlin
-fun EditText.bindTextTwoWay(liveData: MutableLiveData<String>, lifecycleOwner: LifecycleOwner) {
-    this.doOnTextChanged { s, start, count, after ->
-        liveData.value = s.toString()
-    }
-
-    liveData.observe(lifecycleOwner) { text ->
-        //  проверка делается для того, чтобы не провоцировать рекурсию при изменении значения editText на точно такое же
-        if (this.text.toString() == text) return@observe
-
-        this.setText(text)
-    }
-}
-```
-Во фргаменте нужно будет просто вызвать метод:
-```kotlin
-phoneNunberEditText.bindTextTwoWay(liveData = viewModel.phoneNumber, lifecycleOwner = viewLifecycleOwner)
-```
-
-## Одностороння привязка
-Разберем, как делается односторонняя привязка на примере текстового поля с таймером повторной отправки смс-кода:
+**2. Единый `State` data class** — для сложных экранов, где состояние описывается одним объектом:
 
 ```kotlin
-private val _smsCodeTimer: MutableLiveData<String> = MutableLiveData("")
-val smsCodeTimer: LiveData<String> get() = _smsCodeTimer
-```
-Создадим `extension-функцию` к `TextView`
-```kotlin
-fun LiveData<String>.bindToTextViewText(textView: TextView, lifecycleOwner: LifecycleOwner) {
-    this.observe(lifecycleOwner) { text ->
-      textView.text = text
-    }
+class OrdersBoardViewModel : ViewModel() {
+    data class State(
+        val orders: BoardRemoteState = BoardRemoteState.Loading,
+        val sortedType: StringDesc = MR.strings.sort_by_start_date.desc(),
+        val dateFilter: DateFilterItem = DateFilterItem.AnyDay,
+        val showNewOrdersButton: Boolean = false,
+    )
+
+    val state: CStateFlow<RemoteStateUi<State>> = combine(...)
+        .cStateIn(viewModelScope, SharingStarted.Eagerly, RemoteState.Loading)
 }
 ```
 
-Во фрагменте просто вызываем метод:
-```kotlin
-viewModel.smsCodeTimer.bindToTextViewText(textView = timerTextView, lifecycleOwner = viewLifecycleOwner)
-```
+## Обёртки для iOS-интеропа
 
-## Единый стейт экрана
+Kotlin `StateFlow` напрямую недоступен в Swift. Библиотека MOKO MVVM предоставляет обёртки:
 
-Еще один подход, который помогает избегать противоречивого состояния экрана представляет из себя привязку нескольких UI компонентов к одному объекту-состоянию всего экрана.
+| Kotlin тип         | Обёртка для iOS         | Расширение          |
+|--------------------|------------------------|---------------------|
+| `StateFlow<T>`     | `CStateFlow<T>`        | `.cStateFlow()`     |
+| `MutableStateFlow<T>` | `CMutableStateFlow<T>` | `.cMutableStateFlow()` |
+| `Flow<T>`          | `CFlow<T>`             | `.cFlow()`          |
 
-Для начала, представим что у нас есть `viewModel`, в которой есть следующие лайвдаты которые относятся к загрузке какой-нибудь страницы из интернета:
-- `val loading: LiveData(Boolean)`
-- `val loaded: LiveData(NewsObject)`
-- `val errorText: LiveData(String)`
-- `val isDataEmpty: LiveData(Boolean)`
-
-Как нам отображать экран, если, например из-за ошибки, мы получили такие значения лайвдат:
-- `loading = true`
-- `loaded = {объект новости}`
-- `errorText = "Какая-нибудь ошибка"`
-- `isDataEmpty = true`
-
-Значения лайвдат противоречат друг другу, потому что по нашей задуманной логике не может быть одновременно `loaded = {объект новости}` и `isDataEmpty = true`, но у нас это случилось, и придется долго искать ошибку.
-
-Чтобы не допускать такого, переделать это можно следующим образом:
-Создать `data class State`, а во вьюмодели переменную `val state: LiveData(State)`.
+Утилиты из `shared/utils`:
 
 ```kotlin
-data class State(
-  val loading: Boolean,
-  val loaded: NewsObject,
-  val errorText: String,
-  val isDataEmpty: Boolean
-)
+// Быстрое создание CMutableStateFlow
+val authType: CMutableStateFlow<ContactMethodType> = CMutableStateFlow(ContactMethodType.PHONE)
+
+// Flow -> CStateFlow (stateIn + cStateFlow в одном вызове)
+val isLoginButtonEnabled: CStateFlow<Boolean> = combine(...)
+    .cStateIn(viewModelScope, SharingStarted.Eagerly, true)
 ```
 
-Однако, мы опять не застраховались от того, что где-то случайно будет создан следующий объект:
-```kotlin
-State(
-    loading = true,
-    loaded = NewsObject(),
-    errorText = "some_error_message",
-    isDataEmpty = true
-)
-```
+---
 
-Наконец, правильный подход для решения этой задачи - использовать [sealed interface](https://kotlinlang.org/docs/sealed-classes.html) с вложенными `data class-ами`.
-Каждый класс несет в себе те данные, которые необходимы `UI` для отображения именно этого состояния. Это обезопасит от рассинхрона, потому что данные в этот момент точно будут.
+## Базовый пример с подпиской
 
-Используя такой подход, у нас никогда не будет противоречащих данных в лайвдате `state`.
+### ViewModel (shared)
 
 ```kotlin
-val state: LiveData<State>
-      
-sealed interface State {
-    object Loading : State
-    data class Loaded(val news: NewsObject) : State
-    data class Error(val error: String) : State
-    object Empty : State
-}
-```
-
-### Обработка на Android
-Общий стейт не стоит обрабатывать в `when`, потому что, из-за того, что, каждый элемент UI должен реагировать на каждое изменение стейта, придется при каждом значении стейта обновлять абсолютно все элементы. Для каждого элемента придется писать логику, в зависимости от стейта для всех возможных вариантов. При таком варианте обработки запутаться будет очень легко, когда потребуется внести изменения или найти ошибку.
-
-#### Пример ненадежной обработки
-```kotlin
-viewModel.state.observe(viewLifecycleOwner) { state ->
-    when (state) {
-        MyTestViewModel.State.Loading -> {
-            binding.progressBar.visibility = View.VISIBLE
-            binding.recyclerView.visibility = View.GONE
-            binding.errorView.visibility = View.GONE
-        }
-        is MyTestViewModel.State.Error -> {
-            binding.recyclerView.visibility = View.GONE
-            binding.progressBar.visibility = View.GONE
-            binding.errorView.visibility = View.VISIBLE
-            binding.errorMessage.text = state.error.getString(requireContext())
-        }
-        is MyTestViewModel.State.Loaded, MyTestViewModel.State.Empty -> {
-            binding.progressBar.visibility = View.GONE
-            binding.errorView.visibility = View.GONE
-            myAdapter.dataset = state.elementsList
-            binding.recyclerView.visibility = View.VISIBLE
-        }
-    }
-}
-```
-Для каждого значения стейта мы обрабатываем одни и те же элементы. Для двух из трех значений стейта, например, скрываем `errorView`, а значений стейта может быть гораздо больше.  
-В добавок, при переходе от стейта к стейту, мы могли бы забыть изменить или скрыть какой-нибудь элемент, после чего бы долго и внимательно отсматривали бы каждый кейс `when`-а в поисках ошибки.
-
-Вместо этого, лучше устанавливать каждому элементу UI значение по отдельности, в зависимости от значения стейта.
-
-#### Пример надежной обработки
-```kotlin
-viewModel.state.observe(viewLifecycleOwner) { state ->
-    binding.progressBar.visibility = if (state == State.Loading) View.VISIBLE else View.GONE
-    binding.recyclerView.visibility = if (state == State.Loaded) View.VISIBLE else View.GONE
-    binding.errorView.visibility = if (state is MyViewModel.State.Error) View.VISIBLE else View.GONE
-
-    binding.errorMessage.text = if (state is MyViewModel.State.Error) {
-        state.error.getString(requireContext())
-    } else {
-        null
-    }
-
-    myAdapter.dataset = if (state is MyViewModel.State.Loaded) {
-        state.elementsList
-    } else {
-        emptyList()
-    }
-}
-```
-
-Теперь, для каждого элемента на основе значения стейта мы устанавливаем значение всего один раз, в одном единственном месте. Отлаживать и изменять такой код будет гораздо легче.
-
-### Обработка на iOS
-#### moko-kswift
-
-Используя [moko-kswift](libraries/moko/moko-kswift) у нас есть возможность использовать `sealed interface` для `State` и `Actions` из общего кода в виде `enum` в Swift, чтобы можно было обрабатывать объекты в `switch` без ветки `default`.
-
-Это очень полезно для обработки `Actions`, потому что при появлении нового `Action` в общем коде, iOS приложение не скомпилируется из-за того, что не все объекты `enum` будут обработаны.
-
-Однако, вариант обработки в `switch case` не подходит для объектов `State`, потому что на основе `State` устанавливается состояние экрана - а это множество вьюх, которым нужно выставить: текст, видимость, цвет и так далее.  
-Получается, при обработке стейта в `switch case` нам пришлось бы в каждом `case` устанавливать значения всем этим вьюхам. В таком случае у нас бы не было абсолютно никакой гарантии, что мы не забыли настроить какую-нибудь вьюху.
-
-#### Пример ненадежной обработки
-```swift
-private func bindState(
-    _ state: SomeStateKs<SomeObject>
-) {
-    switch(state) {
-    case .empty(_):
-        titleLabel.isHidden = false
-        titleLabel.text = "empty_title"
-        descriptionLabel.isHidden = false
-        button.isHidden = false
-        button.setTitle("refresh button", for: .normal)
-    case .failed(let error):
-        titleLabel.isHidden = false
-        titleLabel.text = "error title"
-        descriptionLabel.isHidden = false
-        descriptionLabel.text = error.error?.localized() ?? ""
-        button.setTitle("retry button", for: .normal)
-    case .success(let data):
-        titleLabel.isHidden = true
-        descriptionLabel.isHidden = true
-        descriptionLabel.text = data
-        button.setTitle("", for: .normal)
-        button.isHidden = true
-    }
-}
-```
-
-#### Пример надежной обработки
-```swift
-private func bindState(
-    _ state: SomeStateKs<SomeObject>
-) {
-    let title: String?
-    let description: String?
-    let buttonTitle: String?
-    
-    switch(state) {
-    case .empty(_):
-        title = "empty_title"
-        description = "description is empty"
-        buttonTitle = "refresh button"
-    case .failed(let error):
-        title = "error_title"
-        description = error.error?.localized() ?? ""
-        buttonTitle = "retry button"
-    case .success(let data):
-        title = nil
-        description = data
-        buttonTitle = nil
-    }
-    
-    titleLabel.isHidden = title == nil
-    titleLabel.text = title ?? ""
-    descriptionLabel.isHidden = description == nil
-    descriptionLabel.text = description ?? ""
-    button.isHidden = buttonTitle == nil
-    button.setTitle(buttonTitle ?? "", for: .normal)
-}
-```
-Мы используем особенность Swift - `let` переменные не обязательно инициализировать сразу при создании, главное - проинициализировать их до первого к ним обращения, и за этим следит компилятор.
-
-Это позволяет нам создать `let` переменные, проинициализировать их в `switch case` в зависимости от стейта и присвоить вьюхам их значения.    
-Если мы забудем проинициализировать какую либо из переменных в одном из `case` и присвоим ее вьюхе - то приложение не скомпилируется.  
-Тем самым, при любом состоянии стейта все вьюхи гарантированно будут проинициализорованы значениями относительно конкретного стейта.
-
-#### Extensions к State
-Также, можно создать свои `extensions` к классу `StateKs`, где на основе стейта вьюхе присваивается конкретное значение. Пример [extensions](https://github.com/Alex009/moko-paging-sample/blob/e0d64280ca956773b6578d645a410f32fc6bfa8f/iosApp/iosApp/ResourceStateExt.swift) и [использования](https://github.com/Alex009/moko-paging-sample/blob/e0d64280ca956773b6578d645a410f32fc6bfa8f/iosApp/iosApp/NewsViewController.swift#L45).
-
-## Событие (действие)
-
-Чаще всего, `viewModel` не информирует `UI` обо всем подряд, а только тогда, когда необходимо выполнить какое-то действие, например: перейти на другой экран, показать `alert` или `toast`.
-Для реализации такого механизма, чтобы `UI` сразу же получил информацию о том, что пора что-то сделать, используется механизм [Channel](https://kotlinlang.org/docs/channels.html) и [Flow](https://developer.android.com/kotlin/flow).
-
-Разберем пример. Со стороны вьюмодели у нас будет `Channel`, который на публично будет виден как `Flow`. Со стороны `UI` мы подпишемся к нему и будем обрабатывать события.
-
-```kotlin
-private val _actions: Channel<Action> = Channel(Channel.BUFFERED)
-val actions: Flow<Action> = _actions.receiveAsFlow()
-```
-
-Подписка из `activity` в `onCreate`:
-```kotlin
-this.lifecycleScope.launch {
-    lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-        viewModel.actions.collect {
-            handleAction(it)
-        }
-    }
-}
-```
-
-Подписка из `fragment` в `onViewCreated`:
-```kotlin
-lifecycleScope.launch {
-    viewModel.actions.collect { handleAction(it) }
-}
-```
-
-интерфейс `viewModel`:
-```kotlin
-sealed interface Action {
-    data class ShowToastAction(val message: String) : Action
-    object RouteSuccessAction : Action
-}
-```
-
-метод `MainActivity`:
-```kotlin
-private fun handleAction(action: Action) {
-    when (action) {
-        Action.RouteSuccessAction -> routeSuccess()
-        is Action.ShowToastAction -> showToast(action.message)
-    }
-}
-```
-Действия, в отличие от состояний, как раз нужно обрабатывать в `when`, потому что они никак не связаны друг с другом и просто запускают вызов нужного метода, в отличие от состояния, ориентируясь на которое элементы `UI` изменяются все вместе, при каждом новом состоянии.
-Для отправки событий в `Channel` служат две функции [send](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/index.html#-1166499008%2FFunctions%2F1975948010) и [trySend](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-send-channel/index.html#-1976436467%2FFunctions%2F1975948010).
-```kotlin
-viewModelScope.launch {
-    _actions.send(State.Empty)
-}
-
-_actions.trySend(State.Empty)
-```
-Их отличия заключается в следующем:
-- `send` засаспендится в случае невозможности добавления значения в `Channel` из-за превышения размера буфера значений. Будет висеть, пока место не освободится.
-- `trySend` же возвращает `Boolean`: `true` - если добавить новое значение удалось, `false` - если не удается добавить из-за превышения объема буфера значений. Это значит что если в очереди уже есть какие-то события, которые не успел получить UI, то новое просто будет утерено. Поэтому всегда следует использовать `send`.
-
-## Дополнительно
-Для работы с событиями и состояниями у нас в компании используются возможности библиотеки [moko-mvvm](https://github.com/icerockdev/moko-mvvm). С ее помощью происходят привязки, как односторонняя, так и двусторонняя.
-
-Ранее событиями занимался класс EventsDispatcher. Подход с использованием EventsDispatcher считается устаревшим и в новых проектах мы его не используем. Ниже справочная информация на случай, если встретитесь с ним.
-
-`EventDispatcher` - это класс с одной единственной задачей - гарантировать доставку события и вызов его обработчика на UI, после сигнала от `ViewModel`.
-
-Во `ViewModel` объявляется интерфейс с методами, реализация которых ей нужна на платформе, например, метод для перехода на какой-нибудь экран:
-
-```kotlin 
-interface EventsListener {
-    fun routeToMainPage()
-}
-```
-
-Далее, все что остается сделать, чтобы вызвать событие на `UI` - это получить во `ViewModel` объект `eventsDispatcher` и, когда пора переходить на главный экран, послать платформе это событие простым вызовом метода:
-```kotlin
-class EventsViewModel(
-    val eventsDispatcher: EventsDispatcher<EventsListener>
+class ProfileViewModel(
+    private val loadProfileUseCase: LoadProfileUseCase,
 ) : ViewModel() {
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: CStateFlow<Boolean> = _isLoading.cStateFlow()
 
-    fun onButtonPressed() {
-        eventsDispatcher.dispatchEvent { routeToMainPage() }
+    private val _userName = MutableStateFlow("")
+    val userName: CStateFlow<String> = _userName.cStateFlow()
+
+    private val _actions: Channel<Actions> = Channel()
+    val actions: CFlow<Actions> = _actions.receiveAsFlow().cFlow()
+
+    sealed interface Actions {
+        data class ShowError(val error: StringDesc) : Actions
+        data object RouteToEdit : Actions
     }
 
-    interface EventsListener {
-        fun routeToMainPage()
+    fun onStart() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val profile = loadProfileUseCase()
+                _userName.value = profile.fullName
+            } catch (exception: Exception) {
+                sendAction(_actions, Actions.ShowError(exception.mapThrowable()))
+            } finally {
+                _isLoading.value = false
+            }
+        }
     }
 }
 ```
 
-На платформах `Fragment` и `UIViewController` реализуют этот интерфейс.
-Пример реализации на Android:
+### Android (Compose)
 
 ```kotlin
-class EventsFragment: Fragment(R.layout.fragment_simple), EventsViewModel.EventsListener {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+@Composable
+fun ProfileScreen(
+    navController: NavController,
+    viewModel: ProfileViewModel = getViewModel { getProfileViewModel().apply(::onStart) }
+) {
+    val isLoading by viewModel.isLoading.collectAsState()
+    val userName by viewModel.userName.collectAsState()
 
-        val viewModel: EventsViewModel = getViewModel { 
-            EventsViewModel(eventsDispatcherOnMain()) 
+    viewModel.actions.observeAsActions { action ->
+        when (action) {
+            is ProfileViewModel.Actions.ShowError -> { /* показать ошибку */ }
+            is ProfileViewModel.Actions.RouteToEdit -> navController.navigate("edit")
         }
-
-        viewModel.eventsDispatcher.bind(lifecycleOwner = this, listener = this)
     }
 
-    override fun routeToMainPage() {
-        TODO("some routing")
+    if (isLoading) {
+        LoadingView()
+    } else {
+        Text(text = userName)
     }
 }
 ```
 
-Пример на iOS:
+### iOS (SwiftUI)
 
 ```swift
-class EventsViewController: UIViewController {
-    private var viewModel: EventsViewModel!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        viewModel = EventsViewModel(
-            eventsDispatcher: EventsDispatcher(listener: self)
+struct ProfileScreen: View {
+    @ViewModelWrapper private var viewModel: ProfileViewModel = Koin.shared.getProfileViewModel()
+
+    init() {
+        // onStart вызывается ровно один раз
+        _viewModel = .init(wrappedValue: {
+            let vm = Koin.shared.getProfileViewModel()
+            vm.onStart()
+            return vm
+        }())
+    }
+
+    var body: some View {
+        content
+            .onReceive(createPublisher(viewModel.actions), perform: handleAction)
+    }
+
+    private var content: some View {
+        if viewModel.state(\.isLoading) {
+            LoadingView()
+        } else {
+            Text(viewModel.state(\.userName))
+        }
+    }
+
+    private func handleAction(_ action: ProfileViewModelActions) {
+        switch onEnum(of: action) {
+        case .showError(let obj):
+            showErrorAlert(message: obj.error.localized())
+        case .routeToEdit:
+            router.push(.profileEdit)
+        }
+    }
+}
+```
+
+:::tip Ключевые моменты
+- На Android используем `getViewModel { getVm().apply(::onStart) }` — `onStart()` вызывается внутри фабрики.
+- На iOS `onStart()` вызывается в `init` closure `@ViewModelWrapper` — это гарантирует ровно один вызов.
+- `@ViewModelWrapper` автоматически вызывает `onCleared()` при уничтожении экрана.
+- На iOS для чтения стейта используем `viewModel.state(\.property)` — он подписывается на `CStateFlow` и триггерит `objectWillChange` при изменении.
+  :::
+
+---
+
+## Надежная обработка стейта
+
+Для экранов с загрузкой данных из сети используется `RemoteState<T, E>` — запечатанный класс с тремя состояниями: `Loading`, `Success`, `Error`.
+
+```kotlin
+sealed class RemoteState<out T : Any, out E : Any> {
+    data object Loading : RemoteState<Nothing, Nothing>()
+    data class Success<T : Any>(val data: T) : RemoteState<T, Nothing>()
+    data class Error<E : Any>(val error: E) : RemoteState<Nothing, E>()
+}
+
+typealias RemoteStateUi<T> = RemoteState<T, ErrorBundle>
+```
+
+### ViewModel (shared)
+
+```kotlin
+class OrdersBoardViewModel : ViewModel() {
+    data class State(
+        val orders: List<OrderItem> = emptyList(),
+        val isRefreshing: Boolean = false,
+    )
+
+    private val _state = MutableStateFlow<RemoteStateUi<State>>(RemoteState.Loading)
+    val state: CStateFlow<RemoteStateUi<State>> = _state.cStateFlow()
+
+    fun onStart() {
+        viewModelScope.launch {
+            loadOrders()
+        }
+    }
+
+    private suspend fun loadOrders() {
+        _state.value = RemoteState.Loading
+        try {
+            val orders = loadOrdersUseCase()
+            _state.value = RemoteState.Success(State(orders = orders))
+        } catch (exception: Exception) {
+            _state.value = RemoteState.Error(exception.mapThrowable())
+        }
+    }
+}
+```
+
+Для запуска асинхронной работы с автоматической обработкой ошибок и лоадингом используется утилита `launchGuard`:
+
+```kotlin
+launchGuard(
+    loading = _isLoading,
+    actions = _actions,
+    errorToAction = Actions::ShowError
+) {
+    val result = doSomething()
+    sendAction(_actions, Actions.RouteToNext(result))
+}
+```
+
+### Android (Compose)
+
+```kotlin
+@Composable
+fun OrdersBoardScreen(
+    viewModel: OrdersBoardViewModel = getViewModel {
+        getOrdersBoardViewModel().apply { onStart() }
+    }
+) {
+    val state by viewModel.state.collectAsState()
+
+    when (state) {
+        is RemoteState.Loading -> LoadingView()
+        is RemoteState.Success -> OrdersList(state.data.orders)
+        is RemoteState.Error -> ErrorView(state.error)
+    }
+}
+```
+
+### iOS (SwiftUI)
+
+```swift
+struct OrdersBoardScreen: View {
+    @ViewModelWrapper private var viewModel: OrdersBoardViewModel
+
+    init() {
+        _viewModel = .init(wrappedValue: {
+            let vm = Koin.shared.getOrdersBoardViewModel()
+            vm.onStart()
+            return vm
+        }())
+    }
+
+    var body: some View {
+        let state: RemoteStateUiState = viewModel.state(\.state)
+
+        switch state {
+        case .loading:
+            LoadingView()
+        case let .success(data):
+            OrdersList(orders: data.orders)
+        case let .error(errorBundle):
+            ErrorView(error: errorBundle)
+        default:
+            EmptyView()
+        }
+    }
+}
+```
+
+:::warning
+`RemoteState` — `sealed class`, а не `sealed interface`. Это сделано специально для iOS — `class` позволяет реализовать `Hashable` и корректно работать с `isEqual` в Objective-C.
+:::
+
+---
+
+## Экран с полем ввода
+
+Для полей ввода с валидацией используется `FormField<String, StringDesc>` из MOKO Fields. Он предоставляет `data: MutableStateFlow<String>` и `error: StateFlow<StringDesc?>`.
+
+### ViewModel (shared)
+
+```kotlin
+class AuthViewModel : ViewModel() {
+    val phoneField: FormField<String, StringDesc> = FormField(
+        scope = viewModelScope,
+        initialValue = "",
+        validation = fieldValidation {
+            matchRegex(
+                MR.strings.auth_error_incorrect_phone.desc(),
+                Validations.PHONE_REGEX
+            )
+        }
+    )
+
+    val passwordField: FormField<String, StringDesc> = FormField(
+        scope = viewModelScope,
+        initialValue = "",
+        validation = fieldValidation {
+            notBlank(MR.strings.auth_error_blank_password.desc())
+        }
+    )
+
+    val isLoginButtonEnabled: CStateFlow<Boolean> = combine(
+        phoneField.error,
+        passwordField.error,
+    ) { phoneError, passwordError ->
+        phoneError == null && passwordError == null
+    }.cStateIn(viewModelScope, SharingStarted.Eagerly, true)
+
+    fun onLoginClick() {
+        if (!phoneField.validate()) return
+        if (!passwordField.validate()) return
+        // ... логика
+    }
+}
+```
+
+:::tip Валидация
+`validate()` возвращает `false` и записывает ошибку в `error: StateFlow<StringDesc?>`. Если ошибка уже `null` — `validate()` не перевалидирует (оптимизация).
+`fieldValidation { }` позволяет chaining правил: `notBlank(...)` затем `matchRegex(...)`.
+:::
+
+### Android (Compose)
+
+На Android для FormField есть утилита `asFieldState()`:
+
+```kotlin
+@Composable
+fun AuthScreen(
+    viewModel: AuthViewModel = getViewModel { getAuthViewModel() }
+) {
+    val phoneState = viewModel.phoneField.asFieldState()
+    val passwordState = viewModel.passwordField.asFieldState()
+    val isLoginEnabled by viewModel.isLoginButtonEnabled.collectAsState()
+
+    Column {
+        InputField(
+            text = phoneState.text,
+            error = phoneState.error.value,
+            placeholder = "Телефон"
+        )
+
+        InputField(
+            text = passwordState.text,
+            error = passwordState.error.value,
+            placeholder = "Пароль"
+        )
+
+        Button(
+            enabled = isLoginEnabled,
+            onClick = viewModel::onLoginClick
         )
     }
 }
+```
 
-extension EventsViewController: EventsViewModelEventsListener {
-    func routeToMainPage() {
-        fatalError("some routing")
+Утилита `asFieldState()` создаёт `FieldState` с `MutableState<String>` для текста и `State<StringDesc?>` для ошибки — оба работают через `collectAsState`/`collectAsMutableState`.
+
+### iOS (SwiftUI)
+
+На iOS FormField доступен через `binding` (для записи) и `stateNullable` (для чтения ошибки):
+
+```swift
+struct SignInScreen: View {
+    @ViewModelWrapper private var viewModel: AuthViewModel = Koin.shared.getAuthViewModel()
+
+    var body: some View {
+        VStack {
+            InputView(
+                text: viewModel.binding(\.phoneField.data),
+                labelText: "Телефон",
+                errorText: viewModel.stateNullable(\.phoneField.error)
+            )
+
+            InputView(
+                text: viewModel.binding(\.passwordField.data),
+                labelText: "Пароль",
+                errorText: viewModel.stateNullable(\.passwordField.error)
+            )
+
+            ButtonView(
+                title: "Войти",
+                isDisabled: !viewModel.state(\.isLoginButtonEnabled),
+                action: viewModel.onLoginClick
+            )
+        }
     }
 }
 ```
 
-За счет интерфейса обе платформы знают, какой набор действий должны поддерживать.  
-Если во `ViewModel` нужно будет добавить еще одно событие, и мы забудем реализовать его на какой-нибудь из платформ, компилятор выделит, что отсутствует реализация метода интерфейса.
+:::info Методы доступа к стейту на iOS
+
+| Метод | Назначение | Пример |
+|---|---|---|
+| `viewModel.state(\.prop)` | Чтение `CStateFlow<T>` | `viewModel.state(\.isLoading)` → `Bool` |
+| `viewModel.stateNullable(\.prop)` | Чтение nullable `CStateFlow<T>` | `viewModel.stateNullable(\.phoneField.error)` → `String?` |
+| `viewModel.binding(\.prop)` | Двусторонний `Binding` из `CMutableStateFlow` | `viewModel.binding(\.phoneField.data)` → `Binding<String>` |
+
+Для кастомных типов с маппингом:
+
+```swift
+let selectedSort: Binding<OrdersSorting> = viewModel.binding(
+    \.ordersSorting,
+    equals: { $0 == $1 },
+    getMapper: { $0.toSwiftEnum() },
+    setMapper: { $0.toKotlinEnum() }
+)
+```
+:::
+
+---
+
+## События (Actions)
+
+ViewModel не только отображает данные, но и информирует UI о разовых действиях: переход на другой экран, показ alert/toast, закрытие экрана.
+
+Для этого используется [Channel](https://kotlinlang.org/docs/channels.html) + `Flow`:
+
+```kotlin
+class LoginViewModel : ViewModel() {
+    private val _actions: Channel<Action> = Channel(Channel.BUFFERED)
+    val actions: CFlow<Action> = _actions.receiveAsFlow().cFlow()
+
+    sealed interface Action {
+        data class ShowToast(val message: String) : Action
+        data object RouteToMain : Action
+        data class ShowError(val error: StringDesc) : Action
+    }
+
+    fun onLoginClicked() {
+        viewModelScope.launch {
+            // ... логика логина ...
+            _actions.send(Action.RouteToMain)
+        }
+    }
+}
+```
+
+Для отправки действий используется утилита `sendAction` из `shared/utils`:
+
+```kotlin
+// Вместо viewModelScope.launch { _actions.send(action) } пишем:
+sendAction(_actions, Action.RouteToMain)
+```
+
+### Обработка Actions на Android (Compose)
+
+```kotlin
+@Composable
+fun LoginScreen(viewModel: LoginViewModel = viewModel()) {
+    val context = LocalContext.current
+
+    viewModel.actions.observeAsActions { action ->
+        when (action) {
+            is LoginViewModel.Action.ShowToast -> {
+                Toast.makeText(context, action.message, Toast.LENGTH_SHORT).show()
+            }
+            is LoginViewModel.Action.RouteToMain -> {
+                // навигация на главный экран
+            }
+            is LoginViewModel.Action.ShowError -> {
+                // показ ошибки
+            }
+        }
+    }
+}
+```
+
+`observeAsActions` из MOKO MVVM автоматически подписывается на `CFlow` и отписывается при уходе с экрана.
+
+### Обработка Actions на iOS (SwiftUI)
+
+```swift
+struct LoginScreen: View {
+    @ViewModelWrapper private var viewModel: LoginViewModel = Koin.shared.getLoginViewModel()
+
+    var body: some View {
+        content
+            .onReceive(createPublisher(viewModel.actions), perform: handleAction)
+    }
+
+    private func handleAction(_ action: LoginViewModelAction) {
+        switch onEnum(of: action) {
+        case .showToast(let obj):
+            showToast(message: obj.message)
+        case .routeToMain:
+            navigateToMain()
+        case .showError(let obj):
+            showErrorAlert(message: obj.error.localized())
+        }
+    }
+}
+```
+
+`createPublisher()` конвертирует `CFlow` в Combine `AnyPublisher`, а `.onReceive()` подписывается на него в жизненном цикле SwiftUI-вью.
 
 :::warning
-
-В `dispatchEvent` нельзя передавать лямбду из общего кода, например, для установки действия по кнопке в [AlertDialog](https://developer.android.com/reference/android/app/AlertDialog). Нельзя этого делать потому, что на Android мы не сможем ее никуда сохранить, поэтому при пересоздании экрана она пропадет.  
-Если вам нужно установить чему-либо на платформе действие - делайте соответствующий метод во `ViewModel`.
-
-:::
+`send` vs `trySend`:
+- `send` — suspend-функция, приостанавливается если буфер Channel полон. **Рекомендуется** для гарантии доставки.
+- `trySend` — неблокирующая, возвращает результат. Если буфер полон — событие теряется.
+  :::

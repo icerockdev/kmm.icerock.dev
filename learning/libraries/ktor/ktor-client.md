@@ -1,104 +1,47 @@
 # ktor-client
 
-Библиотека работы с сетью. Основная документация
-доступна [на сайте](https://ktor.io/docs/getting-started-ktor-client.html).  
-В проектах IceRock библиотека используется в паре
-с [moko-network](https://github.com/icerockdev/moko-network), которая генерирует из OpenAPI
-спецификации весь сетевой код и сетевые сущности (с сериализацией
-через [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization)).
+Библиотека работы с сетью. Основная документация доступна [на сайте](https://ktor.io/docs/client-create-and-configure.html).  
+В проектах IceRock библиотека используется в паре с [moko-network](https://github.com/icerockdev/moko-network), которая генерирует из OpenAPI
+спецификации весь сетевой код и сетевые сущности (с сериализацией через [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization)).
 
-Начиная с ktor 1.4.0 на iOS библиотека требует использования native-mt версии корутин (внутри ktor
-реализована полноценная многопоточность с обработкой всего pipeline на фоновом потоке).
+В версиях ktor до 2.0 на iOS библиотека требовала использования native-mt версии корутин
+(внутри ktor реализована полноценная многопоточность с обработкой всего pipeline на фоновом потоке).
+С переходом Kotlin на новый memory model (по умолчанию с Kotlin 1.7.20) необходимость в
+native-mt версиях корутин отпала.
 
-## Особенности инициализации
-
-Начиная с ktor 1.4.1 все блоки настроек features замораживаются на iOS. Поэтому требуется подходить
-к инициализации HttpClient'а аккуратно.
-
-Важно не подавать в лямбды настроек ничего, что нельзя заморозить. Например передавать `this`
-объекта (то есть нельзя работать с полями класса, надо сохранить их в локальные переменные в стеке,
-а потом уже эти переменные использовать в лямбде).
-
-Например:
-
-```kotlin
-// обертка над https://github.com/russhwolf/multiplatform-settings с свойствами для доступа к хранилищу
-private val keyValueStorage: KeyValueStorage by lazy {
-    KeyValueStorage(settings)
-}
-
-// парсер json от https://github.com/Kotlin/kotlinx.serialization
-private val json: Json by lazy {
-    Json {
-        // чтобы если в api появятся новые ключи то у нас приложение их будет игнорировать, а не крашиться
-        ignoreUnknownKeys = true
-    }
-}
-
-private val httpClient: HttpClient by lazy {
-    // Ссылки на инстансы зависимостей для фичей клиента, чтобы не замораживать для KN объект
-    // SharedFactory через ссылки на this (httpClient в некоторый момент может заморозиться -
-    // что приведет к заморозке фичей и всех зависимостей фичей).
-    // https://kotlinlang.org/docs/native-immutability.html
-    // https://kotlinlang.org/docs/native-concurrency.html
-    val json = this.json
-    val keyValueStorage = this.keyValueStorage
-
-    HttpClient {
-        // включаем ExceptionFeature из moko-network для обработки ошибок
-        install(ExceptionFeature) {
-            exceptionFactory = HttpExceptionFactory(
-                defaultParser = ErrorExceptionParser(json),
-                customParsers = mapOf(
-                    HttpStatusCode.UnprocessableEntity.value to ValidationExceptionParser(json)
-                )
-            )
-        }
-        // выключаем стандартный BadResponseStatus чтобы работала ExceptionFeature
-        expectSuccess = false
-
-        // включаем логирование запросов
-        install(Logging) {
-            logger = Logger.DEFAULT // TODO сменить на Napier с шарингом между потоками
-            level = LogLevel.INFO
-        }
-    }
-}
-```
+В версиях ktor до 2.0 все блоки настроек plugins замораживались на iOS, поэтому требовалось подходить
+к инициализации HttpClient'а аккуратно — не подавать в лямбды настроек ничего, что нельзя заморозить
+(например `this` объекта). С новым Kotlin Native memory model (по умолчанию с Kotlin 1.7.20)
+заморозка объектов больше не требуется.
 
 ## Получение HttpResponse
 
 При выполнении запроса мы можем указать тип ответа, который мы хотим получить. И ktor-client
-автоматически
-постарается [привести полученный от сервера ответ в нужный нам тип](https://ktor.io/docs/response.html)
-. За это отвечает `responsePipeline`, который обрабатывается при выполнении `receive` у
-класса `HttpResponse`. На данном пайплайне находится и логика `ExceptionFeature` и
-логика `JsonFeature` и многие другие.
+автоматически постарается [привести полученный от сервера ответ в нужный нам тип](https://ktor.io/docs/client-responses.html). За это отвечает `responsePipeline`, который обрабатывается при выполнении `body()` у
+класса `HttpResponse`. На данном пайплайне находится и логика `ExceptionFeature` и логика `ContentNegotiation` и многие другие.
 
-В случае если хочется выполнить запрос с полностью кастомной логикой обработки ответа, которая не
-будет проходить через `responsePipeline`, можно сделать так:
+В случае если хочется выполнить запрос с полностью кастомной логикой обработки ответа, которая не будет проходить через `responsePipeline`, можно сделать так:
 
 ```kotlin
-val response = httpClient.get<HttpResponse>(requestUrl)
+val response: HttpResponse = httpClient.get(requestUrl)
 
 if (response.status.isSuccess()) {
     // success handle
 } else {
     val statusCode: HttpStatusCode = response.status
-    // read text without call responsePipeline in ktor
-    val body: String = String(response.content.toByteArray())
+    // read raw bytes without triggering responsePipeline
+    val body: ByteArray = response.body()
 }
 ```
 
-В примере мы не обращаемся к `response.receive` чтобы не происходила обработка `responsePipeline`.
-Вместо этого мы работаем напрямую с `response.content`, который является чистым видом пришедших от
-сервера данных.
+В примере мы не вызываем `response.body<T>()` для типизированного ответа, чтобы не происходила
+обработка `responsePipeline`. Вместо этого мы получаем raw-ответ через `response.body()`,
+который возвращает чистые байты пришедшие от сервера.
 
 ## Добавление логики в обработку каждого запроса/ответа
 
-Для этого используются Ktor Features, которые позволяют поставить дополнительные блоки на pipeline.
-Примеры использования стандартных фич можно посмотреть в
-статье [Kotlin Multiplatform Mobile: Intercepting Network Request and Response](https://yusufabd.medium.com/kotlin-multiplatform-mobile-intercepting-network-request-and-response-6805a79b4699)
+Для этого используются Ktor Plugins (в версиях до 2.0 назывались Features), которые позволяют поставить дополнительные блоки на pipeline.
+Примеры использования стандартных плагинов можно посмотреть в статье [Kotlin Multiplatform Mobile: Intercepting Network Request and Response](https://yusufabd.medium.com/kotlin-multiplatform-mobile-intercepting-network-request-and-response-6805a79b4699)
 
 ## Отправка файлов
 Для отправки файлов используются составные запросы со следующими типами содержимого:
@@ -136,8 +79,9 @@ Content file
 
 ### Передача файла как ByteArray
 
-Данный подход хорошо описан в документации ktor ([ссылка на документацию](https://ktor.io/docs/request.html#upload_file)).
+Данный подход хорошо описан в документации ktor ([ссылка на документацию](https://ktor.io/docs/client-requests.html#upload-file)).
 Важной деталью в данной ссылке является добавление заголовка с файлом, который представлен в виде `byteArray`:
+
 ```kotlin
 ...
 append("image", File("ktor_logo.png").readBytes(), Headers.build {
@@ -153,9 +97,7 @@ append("image", File("ktor_logo.png").readBytes(), Headers.build {
 
 Для использования этого метода необходимо заранее сформировать `formData`. Код с таким методом выглядит следующим образом:
 ```kotlin
-val result = httpClient.submitFormWithBinaryData<String>(formData = data) {
-    ...
-}
+val response: HttpResponse = httpClient.submitFormWithBinaryData(url = requestUrl, formData = data)
 ```
 Здесь `data` - сформированная *multipart formData*. В теле httpClient возможны настройки самого клиента, в том числе url, хедеры, тип метода (**важный поинт - multipart/form-data запросы должны быть только POST запросами!**)
 
@@ -163,9 +105,9 @@ val result = httpClient.submitFormWithBinaryData<String>(formData = data) {
 
 Здесь для ktor клиента в качестве *body* присваивается `MultiPartFormDataContent()`, параметром является список `PartData`, формируемый `formData`. Пример кода:
 ```kotlin
-val result = httpClient.post<Unit> {
+val response: HttpResponse = httpClient.post {
     ...
-    body = MultiPartFormDataContent(parts = data)
+    setBody(MultiPartFormDataContent(parts = data))
 }
 ```
 
@@ -312,7 +254,8 @@ interface UploadApi {
 
 ### application/octet-stream
 
-Данный подход используется довольно редко, но все же используется. Для данного типа запроса нет возможности передать несколько параметров или файлов, можно отправлять файл, притом только один. Для реализации подхода необходимо создать класс, унаследованный от `WriteChannelContent` ([ссылка на класс](https://www.mvndoc.com/c/io.ktor/ktor-http-iosarm64/io/ktor/http/content/OutgoingContent.WriteChannelContent.html)). Пример кода:
+Данный подход используется довольно редко, но все же используется. Для данного типа запроса нет возможности передать несколько параметров или файлов, можно отправлять файл, притом только один. Для реализации подхода необходимо создать класс, унаследованный от `WriteChannelContent` ([ссылка на API](https://api.ktor.io/ktor-http/io.ktor.http.content/-outgoing-content/-write-channel-content/index.html)). Пример кода:
+
 ```kotlin
 private class PhotoChannelContentStream(
     private val photo: ByteArray
@@ -327,10 +270,11 @@ private class PhotoChannelContentStream(
 ```
 При реализации такого подхода возможно только использование `MultiPartFormDataContent` в качестве *body*.
 Пример использования *ktor client*:
+
 ```kotlin
-httpClient.put<String> {
+httpClient.put {
     ...
-    body = PhotoChannelContentStream(image)
+    setBody(PhotoChannelContentStream(image))
     ...
 }
 ```
@@ -338,13 +282,17 @@ httpClient.put<String> {
 Про разницу типов содержимого более подробно можно прочитать по этой [ссылке](https://russianblogs.com/article/2287567080/)
 
 ## Загрузка файлов 
-Ознакомьтесь с [документацией](https://ktor.io/docs/response.html#streaming) Ktor и [статьей](https://blog.kotlin-academy.com/download-files-with-ktor-and-coroutines-e96b1cc8b657) про загрузку файлов, используя Ktor.
+
+Ознакомьтесь с [документацией](https://ktor.io/docs/client-responses.html#streaming-data) Ktor и [статьей](https://blog.kotlin-academy.com/download-files-with-ktor-and-coroutines-e96b1cc8b657) про загрузку файлов, используя Ktor.
 
 ### Загрузка файлов в кеш
+
 Если в приложении есть работа с какими-то файлами, то имеет смысл загрузить их в кэш приложения, чтобы обеспечить к ним более быстрый доступ и, тем самым, ускорить работу приложения.   
 
 Разберем кэширование на примере работы с картинками - юзер выбирает картинку с устройства, прикрепляет ее к сообщению - картинка из памяти устройства сохраняется в кэш, в сообщении сохраняется путь до этой картинки. Когда он просмотрит это сообщение, например, после повторного открытия приложения - картинка уже будет загружаться из кэша, что значительно ускорит процесс ее загрузки.
+
 #### на Android
+
 Для начала - у нас есть кнопка, нажимая на которую мы запускаем [неявный Intent](https://developer.android.com/guide/components/intents-filters#ExampleSend) `ACTION_PICK`.
 ```kotlin
 binding.attachImgButton.setOnClickListener {
