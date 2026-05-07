@@ -45,4 +45,4 @@ sidebar_position: 3
 - Официальная документация Gradle - [docs.gradle.org](https://docs.gradle.org/current/userguide/userguide.html)
 - Текущие версии Gradle - [gradle.org](https://gradle.org/releases/)
 - Текущие версии Android Gradle Plugin - [developer.android.com](https://developer.android.com/reference/tools/gradle-api)
-- Официальная документация Android Gradle Plugin - [developer.android.com](https://developer.android.com/studio/build)
+- Официальная документация Android Gradle Plugin - [developer.android.com](https://developer.android.com/build)

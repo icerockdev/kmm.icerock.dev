@@ -6,7 +6,7 @@ sidebar_position: 2
 
 ## Examples
 
-Для знакомства с языком разработки Kotlin воспользуемся разделом [Examples](https://play.kotlinlang.org/byExample) на официальном сайте (группу Kotlin/JS смотреть не нужно).
+Для знакомства с языком разработки Kotlin воспользуемся разделом [kotlin-tour](https://kotlinlang.org/docs/kotlin-tour-welcome.html) на официальном сайте.
 Данный раздел показывает наглядно, на интерактивных примерах, весь синтаксис языка и наиболее популярные возможности стандартной библиотеки Kotlin.
 
 ## Koans
@@ -16,7 +16,7 @@ sidebar_position: 2
 
 ## Документация
 
-Официальная документация Kotlin расположена по адресу [kotlinlang.org/docs](https://kotlinlang.org/docs/). К ней стоит обращаться во всех случаях, когда что-то не понятно про язык разработки и его инструментарий.
+Официальная документация Kotlin расположена по адресу [kotlinlang.org/docs](https://kotlinlang.org/docs/home.html). К ней стоит обращаться во всех случаях, когда что-то не понятно про язык разработки и его инструментарий.
 
 Сразу знакомиться со всей документацией не стоит (все равно забудется без практики), но нужно прочитать несколько базовых разделов:
 - [Basic Syntax](https://kotlinlang.org/docs/basic-syntax.html)
@@ -29,5 +29,5 @@ sidebar_position: 2
 
 ## Вспомнить главное
 
-- Официальная документация Kotlin - [kotlinlang.org/docs](https://kotlinlang.org/docs)
+- Официальная документация Kotlin - [kotlinlang.org/docs](https://kotlinlang.org/docs/home.html)
 - Песочница для выполнения Kotlin кода - [play.kotlinlang.org](http://play.kotlinlang.org/)

@@ -26,11 +26,12 @@ sidebar_position: 5
 - [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 - [Android Basics Compose: 5. ViewModel and State in Compose](https://developer.android.com/codelabs/basic-android-kotlin-compose-viewmodel-and-state) - для закрепления связей жизненного цикла android компонентов и ViewModel, StateFlow. Не пропуская Conclusion и ссылки в нем
 
-## Retrofit
+## Network client
 
-Практически все приложения выполняют работу с сетью. Основной способ выполнения сетевых запросов в Android это библиотека [Retrofit](https://square.github.io/retrofit/).
+Практически все приложения выполняют работу с сетью. Классический способ выполнения сетевых запросов в Android это библиотека [Retrofit](https://square.github.io/retrofit/).
+Альтернативный современный клиент - [Ktor](https://ktor.io/docs/client-create-new-application.html)
 
-CodeLab [Get data from the internet](https://developer.android.com/codelabs/basic-android-kotlin-training-getting-data-internet) даст более детальное представление о библиотеке и как её использовать.
+CodeLab [Get data from the internet](https://developer.android.com/codelabs/basic-android-kotlin-training-getting-data-internet) даст более детальное представление о библиотеке Retrofit и как её использовать.
 
 ## Coroutines
 
