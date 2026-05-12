@@ -11,7 +11,8 @@
 - Все lifecycle-методы вызываются на **main thread**
 - Долгую работу нужно выполнять в отдельном потоке (Coroutine, Executor и т.д.)
 
-Сервис является точкой входа в приложение.  
+Сервис является точкой входа в приложение.
+
 При нехватке памяти система в первую очередь избавляется от процессов с более низким приоритетом. Подробнее про приоритеты процессов:  
 [Who lives and who dies — process priorities on Android](https://medium.com/androiddevelopers/who-lives-and-who-dies-process-priorities-on-android-cb151f39044f)
 
@@ -22,7 +23,7 @@
 ### Foreground Service
 [Foreground services](https://developer.android.com/guide/components/foreground-services)
 
-Foreground — сервис выполняет функционал, заметный пользователю, и может продолжать работу даже если приложение свернуто.
+Foreground — сервис выполняет функционал, заметный пользователю, и может продолжать работу, даже если приложение свернуто.
 
 Примеры:
 - проигрывание музыки
@@ -30,7 +31,7 @@ Foreground — сервис выполняет функционал, замет�
 - трекинг геолокации
 - VoIP-звонки
 - запись аудио/видео
-- плавающее видео-окно
+- плавающее окно с видео
 
 Обязательные требования:
 
@@ -85,7 +86,7 @@ Background Service в современных приложениях исполь
 
 ## Потоки
 
-И Foreground и Background сервисы запускаются на main потоке.
+И Foreground, и Background сервисы запускаются на main потоке.
 
 ❗ Если выполнять долгую операцию внутри `onStartCommand()`, можно получить ANR.
 
@@ -161,7 +162,7 @@ bindService(...)
 При запуске через bindService() сервис будет жить, пока у него есть хотя бы один клиент.  
 Когда все клиенты отпишутся — сервис будет уничтожен.
 
-Lifecycle bound service:
+Жизненный цикл у bound service:
 
 - onCreate()
 - onBind()
@@ -173,7 +174,7 @@ Lifecycle bound service:
 [Bound services](https://developer.android.com/guide/components/bound-services)
 
 Сервис может быть одновременно started и bound.  
-Он уничтожится только когда:
+Он уничтожится только, когда:
 - вызван stopSelf()
 - и нет активных bind-подключений
 
@@ -205,7 +206,7 @@ Lifecycle bound service:
 - Service не создаёт поток
 - IntentService устарел
 - Background Service сильно ограничены с Android 8+
-- Foreground Service строго регулируется Android 12–14+
+- Foreground Service строго регулируется на Android 12+
 - В большинстве случаев для фоновой работы лучше использовать WorkManager
 
 ### Примеры использования сервисов
@@ -214,7 +215,7 @@ Lifecycle bound service:
 Сервис в своем потоке скачивает файлы, может сообщать процент скачивания для отображения прогресса в активити
 
 [Стартовый сервис helga](https://gitlab.icerockdev.com/helga/helga-client/-/blob/dev/client-service/src/main/java/com/icerockdev/helga/client/service/HelgaService.kt)
-Сервис проверяет авторизацию пользователя, запускает остальные сервисы приложения(ожидание звонков, сервис для нотификаций календаря и др.)
+Сервис проверяет авторизацию пользователя, запускает остальные сервисы приложения (ожидание звонков, сервис для нотификаций календаря и др.)
 
 [Сервис для приема входящих звонков](https://gitlab.icerockdev.com/helga/helga-client/-/blob/dev/client-contacts/src/main/java/com/icerockdev/helga/client/contacts/feature/invitation/CallInvitationService.kt)
 При входящем звонке показывает плавающее окно-уведомление

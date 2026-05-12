@@ -29,7 +29,7 @@ companion object {
 }
 ```
 
-Когда нужно будет перейти c `FirstFragment` на `SecondFragment` вызовем следующий метод:
+Когда нужно будет перейти c `FirstFragment` на `SecondFragment`, вызовем следующий метод:
 
 ```kotlin
 fun routeToSecondFragment(userIdKey: String) {
@@ -46,9 +46,11 @@ private val userId: String
     get() = requireArguments().getString(USER_ID_KEY).let { requireNotNull(it) }
 ```
 В случае отсутствия аргумента на инициализации фрагмента, произойдет ошибка:
-`E/AndroidRuntime: FATAL EXCEPTION: main
+```
+E/AndroidRuntime: FATAL EXCEPTION: main
         Process: com.example.testsharingdata, PID: 26781
-java.lang.IllegalArgumentException: Required value was null.`
+java.lang.IllegalArgumentException: Required value was null.
+```
 
 
 Также, можно добавить сообщение, которое отобразится при ошибке:
@@ -59,9 +61,11 @@ private val userId: String
 ```
 
 В случае ошибки, увидим сообщение:
-`E/AndroidRuntime: FATAL EXCEPTION: main
+```
+E/AndroidRuntime: FATAL EXCEPTION: main
 Process: com.example.testsharingdata, PID: 26906
-java.lang.IllegalArgumentException: argument userIdKey should be not null`
+java.lang.IllegalArgumentException: argument userIdKey should be not null
+```
 
 ## Передача данных между активити
 
@@ -119,9 +123,9 @@ private val userId: String
 
 ## Выводы
 
-Используя подход передачи идентификаторов данных и группировкой всей логики передачи в получателе позволяет: 
+Подход с передачей идентификаторов данных и группировка всей логики передачи в получателе позволяют: 
 - не усложнять модели данных поддержкой `Parcellable`
-- не вылезем за пределы размера `Bundle`
+- не вылезать за пределы размера `Bundle`
 - скрыть детали перехода на экран от других классов
 - избавиться от дублирования. Теперь для перехода на фрагмент/активити со значениями не нужно самостоятельно создавать объект `Bundle` и заполнять его
 - строгое API. Перейти на фрагмент/активити и передать туда данные, не используя дублирование и прочие костыли, можно только используя специальную функцию из компаньон-объекта
