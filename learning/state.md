@@ -329,7 +329,7 @@ class AuthViewModel : ViewModel() {
 
 :::tip Валидация
 `validate()` возвращает `false` и записывает ошибку в `error: StateFlow<StringDesc?>`. Если ошибка уже `null` — `validate()` не перевалидирует (оптимизация).
-`fieldValidation { }` позволяет chaining правил: `notBlank(...)` затем `matchRegex(...)`.
+`fieldValidation { }` позволяет перечисление правил списком/цепочкой: `notBlank(...)` затем `matchRegex(...)`.
 :::
 
 ### Android (Compose)
@@ -478,7 +478,7 @@ fun LoginScreen(viewModel: LoginViewModel = viewModel()) {
 }
 ```
 
-`observeAsActions` из MOKO MVVM автоматически подписывается на `CFlow` и отписывается при уходе с экрана.
+`observeAsActions` из moko-mvvm автоматически подписывается на `CFlow` и отписывается при уходе с экрана.
 
 ### Обработка Actions на iOS (SwiftUI)
 
@@ -508,6 +508,6 @@ struct LoginScreen: View {
 
 :::warning
 `send` vs `trySend`:
-- `send` — suspend-функция, приостанавливается если буфер Channel полон. **Рекомендуется** для гарантии доставки.
+- `send` — suspend-функция, приостанавливается, если буфер Channel полон. **Рекомендуется** для гарантии доставки.
 - `trySend` — неблокирующая, возвращает результат. Если буфер полон — событие теряется.
   :::

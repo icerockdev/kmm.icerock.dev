@@ -464,7 +464,7 @@ Supervision scope распространяет отмену только в от
 - [StateFlow and SharedFlow](https://kotlinlang.org/docs/stateflow-and-sharedflow.html) — официальная документация
 - `shareIn` — превращает холодный `Flow` в горячий `SharedFlow`
 - `stateIn` — превращает холодный `Flow` в `StateFlow`
-- `SharingStarted.WhileSubscribed` — стартует при появлении подписчика, останавливается когда пропадает последний подписчик
+- `SharingStarted.WhileSubscribed` — стартует при появлении подписчика, останавливается, когда пропадает последний подписчик
 - `SharingStarted.Eagerly` — стартует немедленно
 - `SharingStarted.Lazily` — стартует при первом подписчике, никогда не останавливается
 

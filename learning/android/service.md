@@ -174,7 +174,7 @@ bindService(...)
 [Bound services](https://developer.android.com/guide/components/bound-services)
 
 Сервис может быть одновременно started и bound.  
-Он уничтожится только, когда:
+Он уничтожится, только когда:
 - вызван stopSelf()
 - и нет активных bind-подключений
 

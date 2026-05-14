@@ -391,7 +391,6 @@ dependencies {
 
 Подробнее о legacy подходах в [нашей базе знаний](/learning/legacy/data-sharing)
 
-
 ## android-app
 
 `android-app` - Gradle проект с Android-приложением.
@@ -599,4 +598,3 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 В настоящее время на наших проектах с KMP для Dependency injection мы используем [Koin](https://github.com/InsertKoinIO/koin).
 [Документация Koin](https://insert-koin.io).
 Как именно он используется, можно посмотреть в [этой статье](https://kmm.icerock.dev/university/icerock-basics/di).
-
