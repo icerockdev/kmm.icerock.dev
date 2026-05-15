@@ -36,7 +36,7 @@ sidebar_position: 4
 
 Более подробно изучить работу с навигацией и попрактиковаться можно в кодлабе [Navigation in Compose](https://developer.android.com/courses/pathways/android-basics-compose-unit-4-pathway-2)
 
-Обязательно прочитайте про [передачу данных между компонентами](../../learning/android/data-sharing). В контексте Compose это означает:
+Обязательно прочитайте про [передачу данных между компонентами](/learning/legacy/data-sharing). В контексте Compose это означает:
 
 - как правильно передавать аргументы между composable‑экранами через `NavController`
 - почему следует передавать идентификаторы данных (id), а не сами объекты

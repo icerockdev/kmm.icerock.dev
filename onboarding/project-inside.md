@@ -95,7 +95,7 @@ master.sh
 
 ### [buildSrc](../learning/gradle/buildSrc) (устарело, но бывает на проектах)
 
-Подробнее о legacy подходах в [нашей базе знаний](../learning/legacy)
+Подробнее о legacy подходах в [нашей базе знаний](/learning/legacy/data-sharing)
 
 ### Version Catalogs
 
@@ -389,8 +389,7 @@ dependencies {
 
 ### Shared & Domain Factory (устарело)
 
-Подробнее о legacy подходах в [нашей базе знаний](../learning/legacy)
-
+Подробнее о legacy подходах в [нашей базе знаний](/learning/legacy/data-sharing)
 
 ## android-app
 
@@ -599,4 +598,3 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 В настоящее время на наших проектах с KMP для Dependency injection мы используем [Koin](https://github.com/InsertKoinIO/koin).
 [Документация Koin](https://insert-koin.io).
 Как именно он используется, можно посмотреть в [этой статье](https://kmm.icerock.dev/university/icerock-basics/di).
-

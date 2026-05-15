@@ -1,3 +1,7 @@
+---
+sidebar_position: 3
+---
+
 # Adapter and listeners
 
 ## Требования к Adapter
@@ -34,7 +38,7 @@
     tools:listitem="@layout/text_row_item" />
 ```
 
-Создадим `CustomAdapter`, который при создании будет принимать `onClick-лямбду`. Значения будут устанавливаться не в конструкторе, а просто в переменную, как только установятся - вызовется [notifyDataSetChanged()](https://developer.android.com/reference/android/widget/BaseAdapter#notifyDataSetChanged())  
+Создадим `CustomAdapter`, который при создании будет принимать `onClick-лямбду`. Значения будут устанавливаться не в конструкторе, а просто в переменную, как только установятся - вызовется [notifyDataSetChanged()](https://developer.android.com/reference/android/widget/BaseAdapter#notifyDataSetChanged())
 ```kotlin
 class CustomAdapter(private val onItemClick: (Int) -> Unit) :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
@@ -95,10 +99,3 @@ class MainActivity : AppCompatActivity() {
     }
 }
 ```
-
-## Заключение
-
-- передача элементов в адаптер должна быть не через конструктор, а через изменяемую переменную
-- в адаптере не должно содержаться никакой логики, только реализация привязки данных
-- задача `viewHolder-а` - держать ссылки на вьюхи элемента списка
-- установка onClick-лямбды должна быть в `onBindViewHolder`

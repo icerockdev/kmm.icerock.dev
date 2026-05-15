@@ -2,6 +2,7 @@
 
 ## Режим редактора по умолчанию
 
-[Source](https://twitter.com/theapache64/status/1463880529594314758?s=12)
+Если вас раздражает стандартный режим редактирования "Split" для Compose c Preview, вы можете изменить его поведение.
+Перейдите Settings → Editor → UI Tools и снимите галочку в пункте "Show split mode if file contains preview annotation"
 
-![image](https://pbs.twimg.com/media/FFC-iqZUcA8hgn-?format=jpg)
+![image](media/split_mode.png)
