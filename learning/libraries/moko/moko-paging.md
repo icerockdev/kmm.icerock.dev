@@ -59,6 +59,19 @@ val pagination = Pagination(
 comparator = { a, b -> a.id.compareTo(b.id) }
 ```
 
+Для удобства в библиотеке есть готовая реализация — `IdEntity` и `IdComparator`.
+Достаточно наследовать класс данных от `IdEntity` и использовать `IdComparator`:
+
+```kotlin
+data class Data(override val id: Long, ...) : IdEntity
+
+val pagination = Pagination(
+    ...
+    comparator = IdComparator(),
+    ...
+)
+```
+
 Лямбды `nextPageListener` и `refreshListener` удобно использовать для показа ошибок при дозагрузке/обновлении данных:
 
 ```kotlin
@@ -83,6 +96,7 @@ pagination.refresh()
 val isEmpty: LiveData<Boolean> = pagination.state.isEmptyState()
 val isLoading: LiveData<Boolean> = pagination.state.isLoadingState()
 val isRefreshing: LiveData<Boolean> = pagination.refreshLoading
+val isNextPageLoading: LiveData<Boolean> = pagination.nextPageLoading
 
 val isErrorVisible: LiveData<Boolean> = pagination.state.isErrorState()
 val error: LiveData<StringDesc?> = pagination.state.error().map { errorMapper(it) }
@@ -113,6 +127,7 @@ private val pagination = Pagination(
 val isEmpty: LiveData<Boolean> = pagination.state.isEmptyState()
 val isLoading: LiveData<Boolean> = pagination.state.isLoadingState()
 val isRefreshing: LiveData<Boolean> = pagination.refreshLoading
+val isNextPageLoading: LiveData<Boolean> = pagination.nextPageLoading
 
 val isErrorVisible: LiveData<Boolean> = pagination.state.isErrorState()
 val error: LiveData<StringDesc?> = pagination.state.error().map { errorMapper(it) }
