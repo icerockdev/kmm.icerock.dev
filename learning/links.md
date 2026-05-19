@@ -11,7 +11,7 @@ sidebar_position: 23
 - [KSP: работаем с аннотациями в мультиплатформенном приложении](https://www.youtube.com/watch?v=NarGt5fh8dk)
 - [A KMM Story. From first feature to Mobile mono-repo at Sphere](https://youtu.be/WD7dif28wxs?t=256)
 - [Build multiplatform projects in Kotlin and learn more about server-driven UI](https://www.youtube.com/watch?v=TqgnogQG-cc)
-- [KOTLIN MULTIPLATFORM MOBILE IN PRODUCTION: Key takeaways from developing two cross-platform apps](https://www.droidcon.com/2021/11/10/kotlin-multiplatform-mobile-in-production-key-takeaways-from-developing-two-cross-platform-apps/)
+- [And that, folks, is how we shared code between Android, iOS and the Backend](https://www.marcogomiero.com/talks/2020/shared-code-kmp-droidcon-emea/) - доклад Marco Gomiero про внедрение KMP в продакшн
 - [Introduction to Kotlin Multiplatform Mobile and D-KMP](https://youtu.be/QqR1FNM2M7k)
 - [Kotlin For Everything](https://youtu.be/WMRFMPwwUuo?t=4548)
 - [Is Kotlin Multiplatform Mobile Ready for Production?](https://youtu.be/L8Xq15NTuCc)
@@ -21,9 +21,9 @@ sidebar_position: 23
 - [Александр Верещагин (Devexperts) — Как мы внедряли Kotlin Multiplatform](https://www.youtube.com/watch?v=D3X5TJpbiaY)
 - [Александр Нозик | Визуализация данных на Kotlin-Multiplatform](https://www.youtube.com/watch?v=8F0e_JaoUBU)
 - [Kotlin Multiplatform Mobile: Real World Lessons Learned](https://youtu.be/qcwFizHMV4Y)
-- [NATIVE UI WITH MULTIPLATFORM COMPOSE](https://www.droidcon.com/2022/09/29/native-ui-with-multiplatform-compose/) - про проект Redwood, который рисует нативный для Android, iOS, Web UI, под управлением Jetpack Compose
-- [SIMPLIFIED SWIFT MULTIPLATFORM INTEGRATION](https://www.droidcon.com/2022/09/29/simplified-swift-multiplatform-integration/) - как подключить Swift код внутрь Kotlin кода
-- [KOTLIN MULTIPLATFORM AT FIVE YEARS](https://www.droidcon.com/2022/09/29/kotlin-multiplatform-at-five-years/)
+- [Native UI and multiplatform Compose with Redwood](https://code.cash.app/native-ui-and-multiplatform-compose-with-redwood) — статья Jake Wharton про проект Redwood, который рисует нативный для Android, iOS, Web UI под управлением Jetpack Compose
+- [swift-klib-plugin](https://github.com/ttypic/swift-klib-plugin) — Gradle plugin для подключения Swift кода внутри KMP модуля через cinterop
+- [Kotlin Multiplatform at Stable and Beyond](https://www.youtube.com/watch?v=il32V2MNdPc) — обзор состояния KMP от Martin Brown (JetBrains)
 - [Денис Супрун — KMP на ОС Аврора: проблемы и пути их решения](https://www.youtube.com/watch?v=PEiJIw023XM)
 
 ## Posts
