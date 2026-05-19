@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# Особенности KMM
+# Особенности KMP
 
 Что следует учитывать при разработке с использованием Kotlin Multiplatform:
 - `inline`/`value` классы в iOS попадают в виде тех типов, которые оборачивают. то есть `inline class DateTime(val date: String)` в iOS будет просто `String`
@@ -11,16 +11,16 @@ sidebar_position: 2
 
 ## Kotlin vs Swift — в чем разница
 
-1. В котлине есть [анонимные](https://kotlinlang.org/docs/nested-classes.html#anonymous-inner-classes) классы, которые позволяют без создания отдельного именованного класса реализовать интерфейс например;
+1. В котлине есть [анонимные](https://kotlinlang.org/docs/nested-classes.html#anonymous-inner-classes) классы, которые позволяют без создания отдельного именованного класса реализовать интерфейс или абстрактный класс;
 2. [Kotlin for Swift developers](https://kotlinlang.org/docs/swift-overview.html) — официальное руководство по различиям в типах, конструкторах, extension, протоколах и т.д.;
 3. Разница extensions — [раз](../kotlin-native/swift-extensions), [два](https://kotlinlang.org/docs/swift-overview.html#extensions);
 4. [Sealed class vs Swift enum](https://kotlinlang.org/docs/swift-overview.html#sealed-classes).
 
 ## Конфликты имен на iOS
 
-- В iOS у всех объектов есть поле `description` (работает также как Kotlin `toString`) и поэтому при использовании в Kotlin свойств с таким названием будет появляться в iOS дополнительное поле `_description` - которое и будет свойством от Kotlin
+- В iOS у всех объектов есть поле `description` (работает как Kotlin `toString`) и поэтому при использовании в Kotlin свойств с таким названием в iOS будет появляться дополнительное поле `_description` - которое и будет свойством от Kotlin
 
-Следующий набор имен на iOS будет конфликтовать либо между собой либо с iOS сигнатурами:
+Следующий набор имен на iOS будет конфликтовать либо между собой, либо с iOS сигнатурами:
 - State (в SwiftUI используется)
 - ключевые слова swift'а
 
@@ -50,11 +50,11 @@ plugins {
 
 [Compose Multiplatform](https://github.com/JetBrains/compose-multiplatform) — UI-фреймворк от JetBrains на основе Jetpack Compose:
 
-- **iOS — Stable** с версии 1.8.0 (май 2025). Текущая версия — 1.10.0 (январь 2026)
+- **iOS — Stable** с версии 1.8.0 (май 2025). Текущая версия — 1.11.0 (май 2026)
 - Поддержка всех платформ: Android, iOS, Desktop (macOS/Windows/Linux), Web (Wasm, Beta)
 - **Compose Hot Reload** — мгновенное обновление UI при изменении кода без потери состояния (стабильно с 1.10.0)
 - Навигация, Material 3, lifecycle, saved state — всё доступно в commonMain
-- Размер приложения для iOS: +~9 МБ относительно чистого SwiftUI
+- Размер приложения для iOS: + ~9 МБ относительно чистого SwiftUI
 
 ## K2 компилятор
 
@@ -86,10 +86,10 @@ Kotlin 2.0 (май 2024) представил новый [K2 компилято�
 
 ## Текущие ограничения
 
-Несмотря на зрелость, у KMP остаются проблемы, которые сообщество ждёт решения:
+Несмотря на зрелость, у KMP остаются проблемы, которые ещё не решены:
 
 - **Swift Export** (экспериментальный) — сейчас Kotlin экспортируется в Swift через Objective-C, что теряет многие возможности языка (enum как class, нет async/await из коробки, нет поддержки Swift-only API). Прямой экспорт в Swift решит эти проблемы, но пока не стабилен. Ожидание: стабильный релиз в Kotlin 2.2+
-- **Скорость сборки iOS** — Kotlin/Native компилируется медленнее JVM. JetBrains активно оптимизирует, но для больших проектов сборка iOS-таргета остаётся узким местом
+- **Скорость сборки iOS** — Kotlin/Native компилируется медленнее JVM. JetBrains активно оптимизирует это, но для больших проектов сборка iOS-таргета остаётся узким местом
 - **Отладка shared code на iOS** — брейкпоинты в общем коде не работают из Xcode. iOS-разработчикам приходится открывать IntelliJ IDEA для отладки shared-модуля
 - **Только ObjC interop** — из Kotlin нельзя вызвать Swift-only API (SwiftUI, protocol extensions, замыкания). Приходится писать ObjC-прослойки вручную
 - **Один framework на приложение** — Kotlin/Native генерирует единый framework для iOS, что мешает модульной архитектуре. Решение — в Swift Export и кастомной конфигурации
