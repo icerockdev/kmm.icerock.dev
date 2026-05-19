@@ -6,11 +6,11 @@ sidebar_position: 0
 
 Работая с Kotlin Multiplatform Mobile для iOS разработчика главным испытанием становится не изучение
 Kotlin, а изучение билд системы Gradle, которая собирает мультиплатформенную библиотеку. В данном
-разделе разобрано что есть Gradle с перспективы iOS разработчиков.
+разделе разобрано, что из себя представляет Gradle с точки зрения iOS разработчиков.
 
 ## Gradle
 
-[Gradle](https://gradle.org/) это система сборки, имеющая гибкую систему конфигурации через плагины
+[Gradle](https://gradle.org/) — это система сборки, имеющая гибкую систему конфигурации через плагины
 и позволяющая описывать конфигурацию сборки в виде kotlin файлов.
 
 Задача Gradle, как и любой системы сборки, скомпилировать исходный код в исполняемое приложение,
@@ -23,11 +23,11 @@ Kotlin, а изучение билд системы Gradle, которая со�
 является билдсистемой, но Gradle использует от него только репозитории, на которых хранятся
 скомпилированные опубликованные зависимости).
 
-Gradle написан на java и является JVM (Java Virtual Machine) приложением, то есть для его
+Gradle написан на Java и является JVM (Java Virtual Machine) приложением, то есть для его
 использования требуется установленная на исполняемой машине JDK (Java Development Kit). Наиболее
-стабильная версия JDK - Oracle JDK (рекомендуется к
-скачиванию [Oracle JDK 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html) для
-работы с KMM).
+стабильная версия JDK — JDK 17 или новее (минимальная версия
+для Gradle 8.x). JDK можно скачать
+на сайте [Adoptium](https://adoptium.net/) (Temurin) или использовать версию, встроенную в Android Studio.
 
 Gradle имеет обширную, подробную документацию,
 доступную [тут](https://docs.gradle.org/current/userguide/userguide.html).
@@ -50,7 +50,7 @@ Gradle имеет обширную, подробную документацию,
 1. `settings.gradle.kts` - настройки проекта, например подключение модулей
    проекта;
 2. `build.gradle.kts` - конфигурация конкретного gradle модуля;
-3. `gradle.properties` - файл содержащий набор ключ+значение передаваемыми в gradle.
+3. `gradle.properties` - файл, содержащий набор ключ+значение, передаваемых в Gradle.
 
 ### settings.gradle
 
@@ -59,8 +59,8 @@ Gradle имеет обширную, подробную документацию,
 Подробная информация
 в [документации](https://docs.gradle.org/current/userguide/build_lifecycle.html#sec:settings_file)
 .  
-Код в данном файле выполняется в момент инициализации проекта (при каждом запуске градл происходит
-по стадиям инициализация, конфигурация, выполнение).
+Код в данном файле выполняется в момент инициализации проекта (при каждом запуске Gradle происходит
+по стадиям: инициализация, конфигурация, выполнение).
 
 Пример содержимого с пояснениями:
 
@@ -84,7 +84,7 @@ dependencyResolutionManagement {
     }
 }
 
-// подключение composite build - является темой для продвинутого погружения, обычно на проектах это не встретить
+// подключение composite build - является темой для продвинутого погружения, обычно на проектах это не встречается
 // если кратко - это подключение другого самостоятельного gradle проекта к сборке нашего проекта, с возможностью подключать модули подключенного проекта как внешние зависимости в нашем проекте
 // https://docs.gradle.org/current/userguide/composite_builds.html
 includeBuild("network-generator")
@@ -98,7 +98,7 @@ include(":sample:mpp-library")
 _Является упрощенным вариантом
 с [moko-network](https://github.com/icerockdev/moko-network/blob/master/settings.gradle.kts)_.
 
-(!) Основной сценарий когда iOS разработчику нужно работать с файлом `settings.gradle.kts` - разработчик
+(!) Основной сценарий, когда iOS разработчику нужно работать с файлом `settings.gradle.kts` - разработчик
 сам создает новый gradle модуль и нужно подключить его к билдсистеме. То есть
 добавляет `include(":mymodule")`.
 
@@ -119,7 +119,7 @@ plugins {
     // подробнее - https://developer.android.com/studio/build/index.html
     id("com.android.library")
     // плагин мультиплатформы. дает возможность собирать kotlin код разными компиляторами - Kotlin/JVM, Kotlin/JS, Kotlin/Native.
-    // подробнее - https://kotlinlang.org/docs/mpp-dsl-reference.html
+    // подробнее - https://kotlinlang.org/docs/multiplatform-dsl-reference.html
     id("org.jetbrains.kotlin.multiplatform")
     // наш плагин мобильной мультиплатформы, упрощает настройку градл проектов для mobile использования (android, ios)
     // подробнее - https://github.com/icerockdev/mobile-multiplatform-gradle-plugin
@@ -133,35 +133,35 @@ plugins {
 // зависимости ищутся в репозиториях, которые могут быть указаны как в самом build.gradle, так и в settings.gradle централизованно
 dependencies {
     // подключение зависимости к common коду, в виде реализации (implementation). Это означает что классы данной зависимости не будут видны вне данного модуля, без явного ее подключения.
-    commonMainImplementation(Deps.Libs.MultiPlatform.coroutines)
+    commonMainImplementation(libs.coroutines)
 
     // подключение зависимости к common коду, транзитивно (api). Это означает что классы данной зависимости будут видны вне данного модуля при подключении нашего модуля.
-    commonMainApi(Deps.Libs.MultiPlatform.kotlinSerialization)
-    commonMainApi(Deps.Libs.MultiPlatform.ktorClient)
+    commonMainApi(libs.kotlinSerialization)
+    commonMainApi(libs.ktorClient)
 
     // подключение зависимости к андроид таргету, транзитивно. Классы данной зависимости видны только в androidMain сорссете.
-    androidMainApi(Deps.Libs.Android.ktorClientOkHttp)
+    androidMainApi(libs.ktorClient.okHttp)
 
     // подключение зависимости к ios таргету, транзитивно. Классы данной зависимости видны только в iosMain сорссете.
-    iosMainApi(Deps.Libs.Ios.ktorClientIos)
+    iosMainApi(libs.ktorClient.ios)
 
     // подключение другого модуля нашего проекта, в виде реализации
     commonMainImplementation(project(":network"))
 
     // подключение зависимостей к общему коду тестов, в виде реализации.
-    commonTestImplementation(Deps.Libs.MultiPlatform.ktorClientMock)
-    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTest)
-    commonTestImplementation(Deps.Libs.MultiPlatform.Tests.kotlinTestAnnotations)
+    commonTestImplementation(libs.ktorClient.mock)
+    commonTestImplementation(libs.kotlinTest)
+    commonTestImplementation(libs.kotlinTestAnnotations)
 
     // подключение зависимостей к андроид таргету тестов, в виде реализации.
-    androidTestImplementation(Deps.Libs.Android.Tests.kotlinTestJUnit)
+    androidTestImplementation(libs.kotlinTestJUnit)
 }
 ```
 
 _Является упрощенным вариантом
 с [moko-network](https://github.com/icerockdev/moko-network/blob/master/network/build.gradle.kts)_.
 
-Основные сценарий когда iOS разработчику нужно работать с файлом `build.gradle`:
+Основные сценарии, когда iOS разработчику нужно работать с файлом `build.gradle`:
 
 1. Подключение новой зависимости к модулю
 2. Подключение плагина с дополнительным функционалом (
@@ -183,23 +183,25 @@ org.gradle.configureondemand=false
 # включение параллельной сборки - разные gradle модули могут выполнять свои задачи параллельно
 org.gradle.parallel=true
 
-# какой вариант кодстайла котлина используеся в проекте - используется IDE для включения верного кодстайла
+# какой вариант кодстайла kotlin используется в проекте — используется IDE для включения верного кодстайла
 kotlin.code.style=official
 
-# специальные флаги для активации Commonizer чтобы в iosMain видно было методы ios, а не только в iosArm64 и iosX64
-# подробнее тут - https://www.youtube.com/watch?v=Q99HvynwjtY 
-# https://kotlinlang.org/docs/migrating-multiplatform-project-to-14.html#try-the-hierarchical-project-structure
-kotlin.native.enableDependencyPropagation=false
-kotlin.mpp.enableGranularSourceSetsMetadata=true
-kotlin.mpp.enableCompatibilityMetadataVariant=true
 
 # использование androidX библиотек для андроида, нужно android gradle plugin
 android.useAndroidX=true
 
-# отключение предупреждения о том что используется ios шорткат для настройки таргетов ios
+# формат директорий android source set (version=2 значит src/androidMain/kotlin, а не src/main/kotlin)
+kotlin.mpp.androidSourceSetLayoutVersion=2
+# отключение предупреждений о нестабильности мультиплатформы (KMP стабилен с 2023 года)
+kotlin.mpp.stability.nowarn=true
+
+# отключение статического framework warning moko-resources
+moko.resources.disableStaticFrameworkWarning=true
+
+# отключение предупреждения о том, что используется iOS-шорткат для настройки таргетов iOS
 mobile.multiplatform.iosTargetWarning=false
 
-# путь до xcode проекта или воркспейса, используется Kotlin Multiplatform Mobile плагином для Android Studio чтобы запускать ios приложение с отладчиком
+# путь до Xcode проекта или workspace, используется Kotlin Multiplatform Mobile плагином для Android Studio, чтобы запускать iOS приложение с отладчиком
 # Подробнее https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform-mobile
 xcodeproj=./sample/ios-app
 ```
@@ -209,7 +211,7 @@ _Является упрощенным вариантом
 
 # Gradle Sync
 
-Система сборки Gradle не связана напрямую с IDE и расчитана в первую очередь на работу без UI, через
+Система сборки Gradle не связана напрямую с IDE и рассчитана в первую очередь на работу без UI, через
 консоль. Но в IDEA и Android Studio реализована полная интеграция с Gradle, позволяющая запускать
 команды Gradle, видеть модули Gradle и прочее. Чтобы IDE могла считать конфигурацию проекта
 используется импорт проекта, называется действие Gradle Sync.
@@ -224,26 +226,53 @@ _Является упрощенным вариантом
 ![project panel](/assets/idea-gradle-project-modules.png)
 
 Также после импорта проекта в IDE доступна панель работы с Gradle - в ней можно посмотреть все
-Gradle модули и все задачи, которые доступны в каждом модуле:
+Gradle-модули и все задачи, которые доступны в каждом модуле:
 
 ![gradle tasks panel](/assets/idea-gradle-tasks.png)
 
-Самая полезная, и часто используемая для iOS разработчиков задача - скомпилировать iOS фреймворк и
+Самая полезная и часто используемая для iOS разработчиков задача - скомпилировать iOS фреймворк и
 перенести в директорию для Cocoapods.
 
-Зовется она `syncMultiPlatformLibraryDebugFrameworkIosX64` (добавляется
-плагином [mobile-multiplatform](https://github.com/icerockdev/mobile-multiplatform-gradle-plugin)).
-Где:
+Если используется плагин [mobile-multiplatform](https://github.com/icerockdev/mobile-multiplatform-gradle-plugin),
+таска называется `syncMultiPlatformLibraryDebugFrameworkIosX64`. Где:
 
-- MultiPlatformLibrary - имя фреймворка, который будет получен на выходе
-- Debug - конфигурация сборки (для разработки собираем дебаг с отладочной инфой, Release делает CI)
-- IosX64 - таргет, который должен быть собран (то есть iOS для запуска в симуляторе на x64 машине)
+- MultiPlatformLibrary - имя фреймворка
+- Debug - конфигурация сборки
+- IosX64 - таргет (симулятор на Intel Mac)
 
-Для разработки используем именно Debug + IosX64, так как этот вариант имеет оптимизацию на уровне
-Kotlin/Native компилятора с множеством кешей. Работает быстрее всех остальных вариантов сборки
-фреймворка.
+Если используется официальный CocoaPods плагин (`org.jetbrains.kotlin.native.cocoapods`), фреймворк
+собирается и подключается через CocoaPods автоматически. Xcode вызывает задачу
+`embedAndSignAppleFrameworkForXcode` перед сборкой — отдельно запускать её не нужно.
+
+Для отладки на Apple Silicon (M1/M2/M3) используйте таргет `iosSimulatorArm64` вместо `iosX64`.
 
 ![gradle cocoapods task](/assets/idea-gradle-cocoapods.png)
+
+# Convention plugins (build-logic)
+
+Когда в проекте несколько модулей с повторяющейся Gradle-конфигурацией, дублировать её в каждом
+`build.gradle.kts` неудобно. Решение — вынести общую логику в convention plugins, которые
+подключаются как includeBuild в `settings.gradle.kts`:
+
+```
+// settings.gradle.kts
+includeBuild("build-logic")
+```
+
+Внутри `build-logic` лежат precompiled script plugins — обычные `.gradle.kts` файлы в
+`src/main/kotlin`, которые подключаются по имени:
+
+```kotlin
+// mpp-library/build.gradle.kts
+plugins {
+    id("multiplatform-library-convention")
+    id("detekt-convention")
+}
+```
+
+Plugin'ы могут настраивать таргеты, зависимости, компилятор — всё что обычно пишется в
+`build.gradle.kts`. Подробнее
+в [документации](https://docs.gradle.org/current/userguide/custom_plugins.html).
 
 # Внесение изменений в конфигурацию
 
@@ -253,11 +282,12 @@ Kotlin/Native компилятора с множеством кешей. Раб�
 Например, плагин `org.jetbrains.kotlin.multiplatform` добавляет блок `kotlin` и множество задач
 типа `compileKotlinIosX64` (если в блоке `kotlin` включен таргет `iosX64`).
 
-Детальная информация о том какие настройки доступны в блоке `kotlin` доступна
-на [сайте документации](https://kotlinlang.org/docs/mpp-dsl-reference.html).
+Детальная информация о том, какие настройки доступны в блоке `kotlin`, доступна
+на [сайте документации](https://kotlinlang.org/docs/multiplatform-dsl-reference.html).
+Начиная с Kotlin 2.0 опции компилятора задаются через блок `compilerOptions { }` внутри `kotlin { }`.
 
-Помимо документации узнать досутпный функционал предоставляемый плагином можно используя подсказки
-IDEA, когда используется Gradle Kotlin DSL, вместо Groovy. В таком случае, при успешно завершенной
+Помимо документации узнать доступный функционал, предоставляемый плагином, можно используя подсказки
+IDEA, когда используется Gradle Kotlin DSL, а не Groovy. В таком случае, при успешно завершенной
 индексации (после клика на Gradle Sync) можно использовать автозавершение кода и переход к
 объявлению.
 
