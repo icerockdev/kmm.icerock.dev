@@ -8,7 +8,7 @@ expect/actual - это механизм, позволяющий использо
 Изучите [раздел](https://kotlinlang.org/docs/mpp-connect-to-apis.html) на официальном сайте.  
 
 В качестве практического задания, предлагаем вам:
-1. Создать новый KMM проект по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html)
+1. Создать новый KMP проект по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html)
    - используйте `CocoaPods dependency manager` в качестве iOS Framework distribution
    - прочитайте о [CocoaPods dependency manager](https://kotlinlang.org/docs/native-cocoapods.html#use-a-kotlin-gradle-project-as-a-cocoapods-dependency) и [Regular framework](https://kotlinlang.org/docs/multiplatform-mobile-understand-project-structure.html#ios-application)
 2. Добавить в общий код `expect` функцию `log()`
@@ -18,7 +18,7 @@ expect/actual - это механизм, позволяющий использо
 
 ## Добавление зависимостей
 
-Как вы уже знаете из раздела [Основы Kotlin Multiplatform Mobile](kmm), подключить библиотеку можно напрямую к таргету, а с помощью `expect` и `actual` использовать ее в общем коде.
+Как вы уже знаете из раздела [Основы Kotlin Multiplatform](kmm), подключить библиотеку можно напрямую к таргету, а с помощью `expect` и `actual` использовать ее в общем коде.
 
 Для практики, выполните следующее задание. Используйте проект, который вы изменяли ранее:
 - Подключите [moshi](https://github.com/square/moshi) к Android таргету
@@ -48,7 +48,7 @@ expect/actual - это механизм, позволяющий использо
     
 ## typealias 
 
-Чтобы узнать, как можно упросить использование механизма expect/actual, [прочитайте](https://kotlinlang.org/docs/mpp-connect-to-apis.html#rules-for-expected-and-actual-declarations) о возможностях `typealias` и выполните следующие действия, используя проект, который вы изменяли ранее: 
+Чтобы узнать, как можно упростить использование механизма expect/actual, [прочитайте](https://kotlinlang.org/docs/mpp-connect-to-apis.html#rules-for-expected-and-actual-declarations) о возможностях `typealias` и выполните следующие действия, используя проект, который вы изменяли ранее: 
 
 - Создайте `expect class AtomicRef`
 - Добавьте `actual` реализацию используя `typealias` и класс `java.util.concurrent.atomic.AtomicReference`
