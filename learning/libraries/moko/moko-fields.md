@@ -10,7 +10,7 @@ sidebar_position: 6
 <br/>
 
 <iframe src="//www.youtube.com/embed/WXBbbF5pKho?list=PL6yFiPOVXVUi90sQ66dtmuXP-1-TeHwl5" frameborder="0" allowfullscreen width="675" height="380"></iframe>
-<br/>
+
 
 ## Состав библиотеки
 
@@ -46,7 +46,9 @@ AuthCodeContent(
     ...
 )
 ```
+
 В контенте экрана:
+
 ```kotlin
 @Composable
 fun AuthCodeContent(
@@ -66,17 +68,17 @@ fun AuthCodeContent(
     )
     ...
 }
-
 ```
 
 ## Валидация
+
 Разберем, как добавлять валидацию в `FormField`:
 - можно использовать [встроенные валидаторы](https://github.com/icerockdev/moko-fields/tree/master/fields-core/src/commonMain/kotlin/dev/icerock/moko/fields/core/validations)
 - можно создать полностью свою валидацию
 
 Как можно настроить валидацию:
-- валидацию можно вызвать в любой момент. Зачем это?
-    - при первом вводе юзера - валидация не должна проверяться, пока он не закончит ввод до конца, и не нажмет кнопку, к которой будет привязана валидация, чтобы, пока он еще не ввел все, что задумал, у него не светились ошибки.
+- валидацию можно вызвать в любой момент
+    - Зачем? Чтобы поведение было таким: при первом вводе юзера - валидация не должна проверяться, пока он не закончит ввод до конца, и не нажмет кнопку, к которой будет привязана валидация, чтобы, пока он еще не ввел все, что задумал, у него не светились ошибки.
 - поля можно объединить в список и валидировать их одновременно:
   ```kotlin
   private val fields = listOf(emailField, passwordField)
@@ -92,6 +94,7 @@ fun AuthCodeContent(
 ## Использование с Flow
 
 Для работы с корутинами используйте модуль `fields-flow`.
+
 `FormField` создаётся с указанием `CoroutineScope`:
 
 ```kotlin
@@ -116,7 +119,9 @@ ValidationResult.of(value)
     .validate()
 ```
 
-Или через DSL, как в примере выше. В UI данные доступны через `StateFlow`:
+Или через DSL, как в примере выше.
+
+В UI данные доступны через `StateFlow`:
 
 ```kotlin
 val email: String by viewModel.emailField.data.collectAsState()
