@@ -9,7 +9,7 @@ expect/actual - это механизм, позволяющий использо
 
 В качестве практического задания, предлагаем вам:
 1. Создать новый KMP проект по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html)
-   - используйте `CocoaPods dependency manager` в качестве iOS Framework distribution
+   - выберите `Regular framework` в качестве iOS Framework distribution (по умолчанию)
    - прочитайте о [CocoaPods dependency manager](https://kotlinlang.org/docs/native-cocoapods.html#use-a-kotlin-gradle-project-as-a-cocoapods-dependency) и [Regular framework](https://kotlinlang.org/docs/multiplatform-mobile-understand-project-structure.html#ios-application)
 2. Добавить в общий код `expect` функцию `log()`
 3. Добавить `actual` реализацию функции `log` для Android, используя функцию `Log.d(String tag, String msg)` из пакета `android.util`
@@ -18,7 +18,7 @@ expect/actual - это механизм, позволяющий использо
 
 ## Добавление зависимостей
 
-Как вы уже знаете из раздела [Основы Kotlin Multiplatform](kmm), подключить библиотеку можно напрямую к таргету, а с помощью `expect` и `actual` использовать ее в общем коде.
+Как вы уже знаете из раздела [Основы Kotlin Multiplatform](kmp), подключить библиотеку можно напрямую к таргету, а с помощью `expect` и `actual` использовать ее в общем коде.
 
 Для практики, выполните следующее задание. Используйте проект, который вы изменяли ранее:
 - Подключите [moshi](https://github.com/square/moshi) к Android таргету
