@@ -11,7 +11,7 @@ sidebar_position: 20
 - [kotlinlang docs - Coroutines guide](https://kotlinlang.org/docs/coroutines-guide.html)
 - [kotlinlang docs - Immutability in Kotlin/Native](https://kotlinlang.org/docs/native-immutability.html)
 - [kotlinlang docs - Concurrency in Kotlin/Native](https://kotlinlang.org/docs/native-concurrency.html)
-- [kotlinlang docs - Concurrent mutability](https://kotlinlang.org/docs/mobile/concurrent-mutability.html)
+- [kotlinlang docs - Concurrent mutability](https://kotlinlang.org/docs/multiplatform-mobile-concurrent-mutability.html)
 - [kotlinlang docs - Shared mutable state and concurrency](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html)
 - [kotlinlang docs - Native memory manager](https://kotlinlang.org/docs/native-memory-manager.html)
 - [Многопоточность и Kotlin в Яндекс.Картах: как не допустить падения новых фич на iOS](https://habr.com/ru/company/yandex/blog/575846/)

@@ -5,12 +5,12 @@ sidebar_position: 2
 # expect/actual
 
 expect/actual - это механизм, позволяющий использовать в общем коде платформенную реализацию класса, функции или переменной. 
-Изучите [раздел](https://kotlinlang.org/docs/mpp-connect-to-apis.html) на официальном сайте.  
+Изучите [раздел](https://kotlinlang.org/docs/multiplatform/multiplatform-connect-to-apis.html) на официальном сайте.  
 
 В качестве практического задания, предлагаем вам:
-1. Создать новый KMP проект по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html)
+1. Создать новый KMP проект по [инструкции](https://kotlinlang.org/docs/multiplatform/get-started.html)
    - выберите `Regular framework` в качестве iOS Framework distribution (по умолчанию)
-   - прочитайте о [CocoaPods dependency manager](https://kotlinlang.org/docs/native-cocoapods.html#use-a-kotlin-gradle-project-as-a-cocoapods-dependency) и [Regular framework](https://kotlinlang.org/docs/multiplatform-mobile-understand-project-structure.html#ios-application)
+   - прочитайте о [CocoaPods dependency manager](https://kotlinlang.org/docs/native-cocoapods.html#use-a-kotlin-gradle-project-as-a-cocoapods-dependency) и [Regular framework](https://kotlinlang.org/docs/multiplatform/multiplatform-discover-project.html#ios-application)
 2. Добавить в общий код `expect` функцию `log()`
 3. Добавить `actual` реализацию функции `log` для Android, используя функцию `Log.d(String tag, String msg)` из пакета `android.util`
 4. Добавить `actual` реализацию функции `log` для iOS, используя `NSLog()`
@@ -24,7 +24,7 @@ expect/actual - это механизм, позволяющий использо
 - Подключите [moshi](https://github.com/square/moshi) к Android таргету
 - Подключите pod [NSTEasyJSON](https://github.com/bernikovich/NSTEasyJSON) к shared блоку
     - Добавьте в Podfile строку `pod 'NSTEasyJSON'` 
-    - В gradle этого блока в разделе `cocoapods` добавить эту библиотеку: pod("NSTEasyJSON"). [Инструкция](https://kotlinlang.org/docs/native-cocoapods.html).  
+    - В gradle этого блока в разделе `cocoapods` добавить эту библиотеку: pod("NSTEasyJSON"). [Инструкция](https://kotlinlang.org/docs/native-cocoapods.html#use-a-kotlin-gradle-project-as-a-cocoapods-dependency).  
     ```kotlin
     cocoapods {
       summary = "Some description for the Shared Module"
@@ -48,7 +48,7 @@ expect/actual - это механизм, позволяющий использо
     
 ## typealias 
 
-Чтобы узнать, как можно упростить использование механизма expect/actual, [прочитайте](https://kotlinlang.org/docs/mpp-connect-to-apis.html#rules-for-expected-and-actual-declarations) о возможностях `typealias` и выполните следующие действия, используя проект, который вы изменяли ранее: 
+Чтобы узнать, как можно упростить использование механизма expect/actual, [прочитайте](https://kotlinlang.org/docs/multiplatform/multiplatform-connect-to-apis.html#rules-for-expected-and-actual-declarations) о возможностях `typealias` и выполните следующие действия, используя проект, который вы изменяли ранее: 
 
 - Создайте `expect class AtomicRef`
 - Добавьте `actual` реализацию используя `typealias` и класс `java.util.concurrent.atomic.AtomicReference`

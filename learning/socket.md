@@ -35,7 +35,7 @@ Web Socket. Что это такое? Как с этим жить? - [видео
 [Статья](https://apptractor.ru/info/articles/websockets-ios.html) о том, как использовать WebSocket на iOS 13.
 [Статья](https://ssaurel.medium.com/learn-to-use-websockets-on-android-with-okhttp-ba5f00aea988) про WebSocket на Android с OKHttp
 [WebSocket](https://ktor.io/docs/websocket-client.html) в Ktor.  
-[Гайд](https://ktor.io/docs/getting-started-ktor-client-chat.html) от Ktor, как сделать чат используя WebSocket и KMP.
+[Гайд](https://ktor.io/docs/server-create-websocket-application.html) от Ktor, как создать WebSocket приложение, используя KMP.
 
 ## SocketIO
 

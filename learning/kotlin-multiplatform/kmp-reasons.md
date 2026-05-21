@@ -35,4 +35,4 @@ sidebar_position: 1
 > * [Slack moves away from C++](https://slack.engineering/client-consistency-at-slack-beyond-libslack/)
 > * [Dropbox moves away from C++](https://dropbox.tech/mobile/the-not-so-hidden-cost-of-sharing-code-between-ios-and-android)
 
-А также на сайте [Kotlin Multiplatform](https://kotlinlang.org/lp/mobile/) в разделе [Case Studies](https://kotlinlang.org/lp/mobile/case-studies/) можно прочитать детально о опыте использованя технологии в разных компаниях. Уже сейчас там есть компании VMWare, Autodesk, Yandex, Square, Philips, Netflix и другие, включая и нас, IceRock.
+А также на сайте [Kotlin Multiplatform](https://kotlinlang.org/multiplatform/) в разделе [Case Studies](https://kotlinlang.org/case-studies/?type=multiplatform) можно прочитать детально о опыте использованя технологии в разных компаниях. Уже сейчас там есть компании VMWare, Autodesk, Yandex, Square, Philips, Netflix и другие, включая и нас, IceRock.

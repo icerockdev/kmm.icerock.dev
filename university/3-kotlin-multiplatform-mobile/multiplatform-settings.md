@@ -91,7 +91,7 @@ class KeyValueStorage(settings: Settings) {
 ```
 
 ## Практическое задание
-1. Откройте проект, который вы изменяли в разделе [expect/actual](expect-actual) или создайте новый по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html)
+1. Откройте проект, который вы изменяли в разделе [expect/actual](expect-actual) или создайте новый по [инструкции](https://kotlinlang.org/docs/multiplatform/get-started.html)
 1. Подключите multiplatform-settings, используя no-arg модуль библиотеки, убедитесь, что все работает
 1. Подключите multiplatform-settings напрямую к платформам, убедитесь, что все работает
 1. Подключите multiplatform-settings, используя expect/actual, убедитесь, что все работает

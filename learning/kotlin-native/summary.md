@@ -22,7 +22,7 @@ sidebar_position: 1
     1.  <https://www.youtube.com/watch?v=nw6YTfEyfO0> - выступление Иготти о том как устроена многопоточность и иммутабельность в K/N
     2.  <https://www.youtube.com/watch?v=oxQ6e1VeH4M> - выступление Галлигана с разжевыванием темы многопоточнсоти
     3.  <https://dev.to/touchlab/practical-kotlin-native-concurrency-ac7> - три статьи от Галлигана с хорошим разобором темы
-    4.  <https://kotlinlang.org/docs/mobile/concurrent-mutability.html> - раздел Working with concurrency в документации KMP тоже с хорошим разобром от Галлигана
+    4.  <https://kotlinlang.org/docs/multiplatform-mobile-concurrent-mutability.html> - раздел Working with concurrency в документации KMP тоже с хорошим разобром от Галлигана
     5.  Колдовская штука-хак <https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.native.concurrent/-worker-bound-reference/> которая позволяет шарить что-либо без заморозки.
     6.  Touchlab гайд по многопоточности + видео - <https://touchlab.co/kotlin-native-concurrency/>
 5.  Отладка K/N - <https://kotlinlang.org/docs/native-debugging.html>

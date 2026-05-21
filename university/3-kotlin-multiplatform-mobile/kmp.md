@@ -7,20 +7,20 @@ sidebar_position: 1
 Для начала, чтобы разобраться, что из себя представляет технология Kotlin Multiplatform, советуем изучить [официальный сайт](https://kotlinlang.org/lp/mobile/).
 Также, для лучшего понимания, как Kotlin Multiplatform помогает сократить время разработки, советуем прочитать две статьи: [от JetBrains](https://blog.jetbrains.com/ru/kotlin/2020/08/kotlin-multiplatform-mobile-goes-alpha/) и [от IceRock](https://vc.ru/services/167078-kak-kotlin-multiplatform-pomogaet-sokratit-vremya-razrabotki-prilozheniy)
 
-Далее, можете переходить к изучению технологии в [документации](https://kotlinlang.org/docs/mpp-intro.html)
+Далее, можете переходить к изучению технологии в [документации](https://kotlinlang.org/docs/multiplatform/)
 
 1. Знакомство с KMP начните с официальных [видео](https://www.youtube.com/playlist?list=PLlFc5cFwUnmy_oVc9YQzjasSNoAk4hk_C) для начинающих 
-2. Создайте свое первое мультиплатформенное приложение по [инструкции](https://kotlinlang.org/docs/kmm-create-first-app.html)
+2. Создайте свое первое мультиплатформенное приложение по [инструкции](https://kotlinlang.org/docs/multiplatform/get-started.html)
    - используйте утилиту [kdoctor](https://github.com/Kotlin/kdoctor), чтобы проверить, что локальное окружение настроено для работы с KMP
    - для iOS автоматически будет создано приложение на SwiftUI, [памятка](../memos/swiftui-to-uikit) по переходу на UIKit
-3. Разберитесь со структурой KMP приложения по [ссылке](https://kotlinlang.org/docs/kmm-understand-project-structure.html)
-4. [Кодлаба](https://kotlinlang.org/docs/kmm-integrate-in-existing-app.html) про изменение готового Android-приложения для работы с iOS
-5. [Инструкция](https://kotlinlang.org/docs/kmm-add-dependencies.html) по добавлению зависимостей к KMP модулю
+3. Разберитесь со структурой KMP приложения по [ссылке](https://kotlinlang.org/docs/multiplatform/multiplatform-discover-project.html)
+4. [Кодлаба](https://kotlinlang.org/docs/multiplatform/multiplatform-integrate-in-existing-app.html) про изменение готового Android-приложения для работы с iOS
+5. [Инструкция](https://kotlinlang.org/docs/multiplatform/multiplatform-add-dependencies.html) по добавлению зависимостей к KMP модулю
 
 ## Мультиплатформенные библиотеки
  
 Мультиплатформенная библиотека - это библиотека, адаптированная для использования на разных платформах. Функционал такой библиотеки можно использовать в общем коде, он будет работать для всех таргетов, которые поддерживает библиотека.
-Таргеты мультиплатформенной библиотеки - целевая платформа, на которой будет выполняться скомпилированная библиотека. Со списком всех таргетов, поддерживаемых Kotlin Multiplatform можете ознакомиться по [ссылке](https://kotlinlang.org/docs/mpp-supported-platforms.html)  
+Таргеты мультиплатформенной библиотеки - целевая платформа, на которой будет выполняться скомпилированная библиотека. Со списком всех таргетов, поддерживаемых Kotlin Multiplatform можете ознакомиться по [ссылке](https://kotlinlang.org/docs/multiplatform/supported-platforms.html)  
 В работе нас будут интересовать библиотеки поддерживающие следующие таргеты:
 - `jvm` - для работы приложений на Java Virtual Machine (jvm библиотеки поддерживаются на android)
 - `androidJvm` - для работы приложения на Android устройствах
@@ -43,7 +43,7 @@ kotlin {
 }
 ```
 
-Также, определить таргеты мулитиплатформенной библиотеки можно изучив ее артефакты на [Maven Central](https://central.sonatype.com/)
+Также определить таргеты мулитиплатформенной библиотеки можно, изучив ее артефакты на [Maven Central](https://central.sonatype.com/)
 
 Например, рассмотрим библиотеку [moko-fields](https://central.sonatype.com/search?q=g:dev.icerock.moko%20fields)
 
@@ -64,9 +64,9 @@ kotlin {
 
 ## Настройка gradle
 
-[Официальная документация](https://kotlinlang.org/docs/mpp-dsl-reference.html) по настройке gradle для работы с KMP. 
+[Официальная документация](https://kotlinlang.org/docs/multiplatform/multiplatform-dsl-reference.html) по настройке gradle для работы с KMP. 
 Из [видео](https://youtu.be/23BJW4w0gkY) вы узнаете, как создать и настроить gradle-проект до состояния, с которого стартует разработка нового проекта в IceRock  
-[Документация](https://kotlinlang.org/docs/multiplatform-hierarchy.html) про иерархическую структуру мультиплатформенных проектов
+[Документация](https://kotlinlang.org/docs/multiplatform/multiplatform-hierarchy.html) про иерархическую структуру мультиплатформенных проектов
 
 ## Совместимость со Swift/Objective-C
 

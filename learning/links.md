@@ -6,7 +6,7 @@ sidebar_position: 23
 
 ## Videos
 
-- [A Byte From The Apple: KMP as an iOS Developer](https://www.youtube.com/watch?v=gDfgMjTeEj0)
+- [A Byte From The Apple: KMM as an iOS Developer](https://www.youtube.com/watch?v=gDfgMjTeEj0)
 - [Russell Wolf - The Kotlin/Swift boundary](https://vimeo.com/625847664)
 - [KSP: работаем с аннотациями в мультиплатформенном приложении](https://www.youtube.com/watch?v=NarGt5fh8dk)
 - [A KMP Story. From first feature to Mobile mono-repo at Sphere](https://youtu.be/WD7dif28wxs?t=256)

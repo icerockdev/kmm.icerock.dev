@@ -9,8 +9,8 @@ sidebar_position: 5
 
 Рекомендуем обязательно ознакомиться со следующими разделами:
 1. [Раздел Setting up Client](https://ktor.io/docs/client-dependencies.html) (все страницы)
-1. [Раздел Making Requests](https://ktor.io/docs/request.html) (все страницы)
-1. [Раздел Handling Responses](https://ktor.io/docs/response.html) (все страницы)
+1. [Раздел Making Requests](https://ktor.io/docs/client-requests.html) (все страницы)
+1. [Раздел Handling Responses](https://ktor.io/docs/client-responses.html) (все страницы)
 
 ## Практическое задание
 Выполните действия по [статье](https://ktor.io/docs/client-create-multiplatform-application.html).
