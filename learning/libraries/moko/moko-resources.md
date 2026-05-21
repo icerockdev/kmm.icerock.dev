@@ -153,7 +153,7 @@ multiplatformResources {
 
 ## Почему StringDesc не Parcelable
 
-StringDesc не может быть Parcelable так как у нас есть ResourceFormattedStringDesc:
+StringDesc не может быть Parcelable, так как у нас есть ResourceFormattedStringDesc:
 
 ```kotlin
 actual data class ResourceFormattedStringDesc actual constructor(

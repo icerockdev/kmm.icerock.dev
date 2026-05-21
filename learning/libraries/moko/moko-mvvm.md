@@ -8,7 +8,7 @@ sidebar_position: 3
 
 ## Возможности
 
-- **ViewModel** — хранение и управление UI-данными с `viewModelScope` (CoroutineScope, отменяемый в `onCleared`)
+- **ViewModel** — хранение и управление UI и данными с `viewModelScope` (CoroutineScope, отменяемый в `onCleared`)
 - **LiveData / Flow** — реактивные обёртки с операторами (`map`, `merge`, `combine`, `all`)
 - **EventsDispatcher** — отправка одноразовых событий из ViewModel во View с контролем lifecycle (устаревший подход)
 - **CFlow / CStateFlow / CMutableStateFlow** — обёртки над корутинными Flow, совместимые со Swift
