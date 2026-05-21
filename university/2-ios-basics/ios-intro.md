@@ -4,7 +4,7 @@ sidebar_position: 0
 
 # Основы iOS
 
-Любому разработчику, использующему Kotlin Multiplatform Mobile, необходимы уверенные базовые знания разработки под iOS,
+Любому разработчику, использующему Kotlin Multiplatform, необходимы уверенные базовые знания разработки под iOS,
 чтобы лучше писать общий код, и понимать логику и структуру iOS части приложения  
 Основные учебники для этого раздела - две официальные интерактивные
 книги [Develop in Swift Fundamentals](https://books.apple.com/ru/book/develop-in-swift-fundamentals/id1581182804?l=en)

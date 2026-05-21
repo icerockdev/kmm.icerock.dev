@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Знакомство с KMM
+# Знакомство с KMP
 
 Ознакомься с материалами про Kotlin Multiplatform:
 
@@ -31,7 +31,7 @@ sidebar_position: 1
 - [Видео - Опыт работы с Kotlin Multiplatform. Взгляд со стороны бизнеса](https://www.youtube.com/watch?v=w546bAHoh3c)
 - [Видео - Опыт работы с Kotlin Multiplatform. Взгляд со стороны iOS-программиста](https://www.youtube.com/watch?v=h9ioWnSlUJc)
 - [Видео - Мобильная разработка на Kotlin MultiPlatform](https://www.youtube.com/watch?v=kO8RDq6OoV4)
-- [Видео - Kotlin Multiplatform Mobile в production использовании](https://www.youtube.com/watch?v=jJWDlsETb3A)
-- [Видео - Состояние Kotlin Multiplatform Mobile](https://youtu.be/fjzfz9y9yko)
+- [Видео - Kotlin Multiplatform в production использовании](https://www.youtube.com/watch?v=jJWDlsETb3A)
+- [Видео - Состояние Kotlin Multiplatform](https://youtu.be/fjzfz9y9yko)
 
 - [Материалы из базы знаний](../learning/kotlin-multiplatform/how-to-start)

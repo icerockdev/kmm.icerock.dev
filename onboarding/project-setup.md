@@ -20,7 +20,7 @@ sidebar_position: 2
 
 ## 2. Настройка рабочего окружения
 
-Для полноценной работы с KMM потребуется macOS, так как iOS-приложение (и iOS-версию Kotlin-библиотеки) можно скомпилировать только на macOS — это ограничение Apple (требуется Xcode, доступный только на macOS). На других платформах будет доступна только компиляция под Android. Код common-части писать и отлаживать можно, но без возможности проверить его работу под iOS.
+Для полноценной работы с KMP потребуется macOS, так как iOS-приложение (и iOS-версию Kotlin-библиотеки) можно скомпилировать только на macOS — это ограничение Apple (требуется Xcode, доступный только на macOS). На других платформах будет доступна только компиляция под Android. Код common-части писать и отлаживать можно, но без возможности проверить его работу под iOS.
 
 Все нижеописанные инструкции будут выполнены на операционной системе macOS.
 
@@ -80,7 +80,7 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-VERSION.jdk/Contents/Home
 
 ### 2.3. Android Studio
 
-Для работы с Kotlin-кодом требуется IDE от JetBrains — IntelliJ IDEA или Android Studio. Команда Kotlin Multiplatform Mobile на данный момент [позиционирует Android Studio](https://kotlinlang.org/multiplatform/) как основную IDE, поэтому требуется установить её.
+Для работы с Kotlin-кодом требуется IDE от JetBrains — IntelliJ IDEA или Android Studio. Команда Kotlin Multiplatform на данный момент [позиционирует Android Studio](https://kotlinlang.org/multiplatform/) как основную IDE, поэтому требуется установить её.
 
 Для этого рекомендуем использовать [JetBrains Toolbox](https://www.jetbrains.com/toolbox-app/) — это приложение будет самостоятельно следить за актуальностью используемой версии IDE и позволяет легко устанавливать/обновлять все продукты JetBrains.
 
@@ -112,7 +112,7 @@ export ANDROID_SDK_ROOT=~/Library/Android/sdk
 
 #### Рекомендуемые плагины
 
-Для комфортной работы с KMM-проектами рекомендуем установить следующие плагины:
+Для комфортной работы с KMP-проектами рекомендуем установить следующие плагины:
 
 - **Swift Support** — поддержка Swift-файлов в Android Studio
 - **YAML** — подсветка и работа с YAML-конфигурациями
@@ -181,21 +181,21 @@ sudo gem install xcpretty
 
 xcpretty автоматически используется в наших проектах при сборке через CocoaPods. Он делает вывод сборки читаемым и компактным.
 
-### 2.7. Kotlin Multiplatform Mobile plugin
+### 2.7. Kotlin Multiplatform plugin
 
-JetBrains предоставляет для Android Studio специальный [плагин Kotlin Multiplatform Mobile](https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform). Его возможности:
+JetBrains предоставляет для Android Studio специальный [плагин Kotlin Multiplatform](https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform). Его возможности:
 
-- Шаблоны для создания KMM-проекта / KMM-модуля.
+- Шаблоны для создания KMP-проекта / KMP-модуля.
 - Запуск iOS-приложения из Android Studio.
 - Отладка iOS-приложения из Android Studio (можно поставить брейкпоинты в common-коде на Kotlin, и при выполнении iOS-приложение остановится в этом месте).
 
 Данный плагин доступен только на macOS (так как запуск и отладка iOS-приложения возможны только там).
 
-Для установки нужно перейти в ` Settings -> Plugins -> Marketplace `, найти Kotlin Multiplatform Mobile, нажать ` Install ` и дождаться окончания загрузки.
+Для установки нужно перейти в ` Settings -> Plugins -> Marketplace `, найти Kotlin Multiplatform, нажать ` Install ` и дождаться окончания загрузки.
 
 ![plugins](project-setup/project-setup-plugins.png)
 
-Важно понимать, что данный плагин не является обязательным требованием для работы с KMM. Вы можете разрабатывать приложения и без него, он нужен только для удобства отладки iOS-части.
+Важно понимать, что данный плагин не является обязательным требованием для работы с KMP. Вы можете разрабатывать приложения и без него, он нужен только для удобства отладки iOS-части.
 
 При обновлениях Kotlin могут происходить ситуации, когда данный плагин ломает работу IDE (например, Gradle Sync не завершается). В таких случаях приходится вынужденно выключать плагин.
 
@@ -524,7 +524,7 @@ open ios-app/ios-app.xcworkspace
 
 ### Сборка напрямую из Android Studio
 
-При использовании плагина ` Kotlin Multiplatform Mobile ` доступна возможность запускать iOS-приложение прямо из Android
+При использовании плагина ` Kotlin Multiplatform ` доступна возможность запускать iOS-приложение прямо из Android
 Studio.
 
 Данный способ не отменяет работы с CocoaPods, но может быть удобной альтернативой запуску через Xcode.
@@ -630,7 +630,7 @@ Napier.base(CrashReportingAntilog(CrashlyticsLogger()))
 
 ### Отладка с использованием Android Studio
 
-При использовании плагина Kotlin Multiplatform Mobile можно проводить отладку Kotlin-кода в iOS-приложении прямо из
+При использовании плагина Kotlin Multiplatform можно проводить отладку Kotlin-кода в iOS-приложении прямо из
 Android Studio.
 
 Для этого устанавливаем брейкпоинт (кликом справа от номера строки) на нужной строке:

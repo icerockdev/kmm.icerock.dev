@@ -41,7 +41,7 @@ if (response.status.isSuccess()) {
 ## Добавление логики в обработку каждого запроса/ответа
 
 Для этого используются Ktor Plugins (в версиях до 2.0 назывались Features), которые позволяют поставить дополнительные блоки на pipeline.
-Примеры использования стандартных плагинов можно посмотреть в статье [Kotlin Multiplatform Mobile: Intercepting Network Request and Response](https://yusufabd.medium.com/kotlin-multiplatform-mobile-intercepting-network-request-and-response-6805a79b4699)
+Примеры использования стандартных плагинов можно посмотреть в статье [Kotlin Multiplatform: Intercepting Network Request and Response](https://yusufabd.medium.com/kotlin-multiplatform-mobile-intercepting-network-request-and-response-6805a79b4699)
 
 ## Отправка файлов
 Для отправки файлов используются составные запросы со следующими типами содержимого:

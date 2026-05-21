@@ -4,7 +4,7 @@ sidebar_position: 0
 
 # Введение в Gradle
 
-Работая с Kotlin Multiplatform Mobile для iOS разработчика главным испытанием становится не изучение
+Работая с Kotlin Multiplatform для iOS разработчика главным испытанием становится не изучение
 Kotlin, а изучение билд системы Gradle, которая собирает мультиплатформенную библиотеку. В данном
 разделе разобрано что есть Gradle с перспективы iOS разработчиков.
 
@@ -27,7 +27,7 @@ Gradle написан на java и является JVM (Java Virtual Machine) �
 использования требуется установленная на исполняемой машине JDK (Java Development Kit). Наиболее
 стабильная версия JDK - Oracle JDK (рекомендуется к
 скачиванию [Oracle JDK 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html) для
-работы с KMM).
+работы с KMP).
 
 Gradle имеет обширную, подробную документацию,
 доступную [тут](https://docs.gradle.org/current/userguide/userguide.html).
@@ -199,7 +199,7 @@ android.useAndroidX=true
 # отключение предупреждения о том что используется ios шорткат для настройки таргетов ios
 mobile.multiplatform.iosTargetWarning=false
 
-# путь до xcode проекта или воркспейса, используется Kotlin Multiplatform Mobile плагином для Android Studio чтобы запускать ios приложение с отладчиком
+# путь до xcode проекта или воркспейса, используется Kotlin Multiplatform плагином для Android Studio чтобы запускать ios приложение с отладчиком
 # Подробнее https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform-mobile
 xcodeproj=./sample/ios-app
 ```

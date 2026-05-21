@@ -6,7 +6,7 @@ sidebar_position: 3
 
 ## Вводная
 
-В данной статье разобран типовой KMM проект на базе [mobile-moko-boilerplate](https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate). Внимание уделено каждому файлу и директории в проекте, дано пояснение ко всему - для чего используется, в каких случаях нужно вносить изменения, как работает.
+В данной статье разобран типовой KMP проект на базе [mobile-moko-boilerplate](https://gitlab.icerockdev.com/scl/boilerplate/mobile-moko-boilerplate). Внимание уделено каждому файлу и директории в проекте, дано пояснение ко всему - для чего используется, в каких случаях нужно вносить изменения, как работает.
 
 После ознакомления с материалом вы узнаете:
 
@@ -68,7 +68,7 @@ master.sh
 - `android/` - директория с Android-приложением и связанными модулями (app, uikit, utils)
 - `ios-app/` - директория с исходным кодом iOS приложения
 - `build-logic/` - директория с композитной сборкой для логики Gradle
-- `mpp-library/` - директория с исходным кодом общей библиотеки на KMM
+- `mpp-library/` - директория с исходным кодом общей библиотеки на KMP
 - `gradle/` - специальная директория системы сборки Gradle, в которой лежит Gradle Wrapper
 - `gradle/libs.versions.toml` - Version Catalog для управления зависимостями
 - `build.gradle.kts` - файл конфигурации сборки корневого gradle проекта
@@ -136,7 +136,7 @@ enableFeaturePreview("VERSION_CATALOGS")
 
 - `android-app-convention` - для Android-приложений
 - `android-compose-convention` - для Android с Compose
-- `multiplatform-library-convention` - для KMM-библиотек
+- `multiplatform-library-convention` - для KMP-библиотек
 - `detekt-convention` - для линтинга
 - `skie-convention` - для iOS
 
