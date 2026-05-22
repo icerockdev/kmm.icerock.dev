@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Знакомство с KMM
+# Знакомство с KMP
 
 Ознакомься с материалами про Kotlin Multiplatform:
 

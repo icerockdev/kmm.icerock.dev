@@ -29,8 +29,8 @@ sidebar_position: 7
 1. При перезапуске приложения авторизация должна сохраняться
 1. Использовать локализацию для всех строк, показываемых пользователю
 1. Использовать векторную графику везде, где это возможно
-1. Обеспечить поддержку Android API 21
-1. Обеспечить поддержку iOS 13.0
+1. Обеспечить поддержку Android API 24
+1. Обеспечить поддержку iOS 15.0
 
 ## Классы приложения 
 
@@ -168,7 +168,7 @@ class AuthViewController: UIViewController {
 
 ## Диаграмма классов
 
-На графе отображена зависимость компонентов KMM приложения друг от друга, цветами выделены подграфы:  
+На графе отображена зависимость компонентов KMP приложения друг от друга, цветами выделены подграфы:  
 Фиолетовый - Common, Зеленый - Android, Синий - iOS
 
 ```mermaid
@@ -216,8 +216,8 @@ class AuthViewController: UIViewController {
 1. [GitHub Basic Authorization](https://docs.github.com/en/rest/overview/other-authentication-methods#basic-authentication)
 1. [GitHub user repositories](https://docs.github.com/en/rest/reference/repos#list-repositories-for-a-user)
 1. [Kotlinx.Serialization guide](https://github.com/Kotlin/kotlinx.serialization/blob/master/docs/basic-serialization.md#json-decoding)
-1. [Подключение Ktor Client](https://ktor.io/docs/old/getting-started-ktor-client.html#add-dependencies)
-1. [Настройке запросов в Ktor Client](https://ktor.io/docs/old/request.html)
+1. [Подключение Ktor Client](https://ktor.io/docs/client-dependencies.html)
+1. [Настройка запросов в Ktor Client](https://ktor.io/docs/request.html)
 1. [multiplatform-settings](https://github.com/russhwolf/multiplatform-settings)
 1. [Android Дизайн](https://www.figma.com/file/Mh3ga5XAzyJNCY87NBp01G/Git_test)
 1. [iOS Дизайн](https://www.figma.com/file/XmpoCqkdWTGb2NGdR2bgiQ/Git_test-iOS)

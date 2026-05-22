@@ -2,7 +2,7 @@ const isProd = process.env.NODE_ENV === 'production';
 
 /** @type {import('@docusaurus/types').DocusaurusConfig} */
 module.exports = {
-  title: 'Kotlin Multiplatform Mobile',
+  title: 'Kotlin Multiplatform',
   tagline: 'Материалы для изучения от IceRock Development',
   url: process.env.CONFIG_URL || 'https://kmm.icerock.dev',
   baseUrl: process.env.CONFIG_BASE_URL || '/',
@@ -113,7 +113,7 @@ module.exports = {
           title: 'More',
           items: [
             {
-              label: 'Kotlin Multiplatform Mobile',
+              label: 'Kotlin Multiplatform',
               href: 'https://kotlinlang.org/lp/mobile',
             },
             {
