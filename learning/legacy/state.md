@@ -222,9 +222,16 @@ viewModel.state.observe(viewLifecycleOwner) { state ->
 Теперь, для каждого элемента на основе значения стейта мы устанавливаем значение всего один раз, в одном единственном месте. Отлаживать и изменять такой код будет гораздо легче.
 
 ### Обработка на iOS
+
+:::caution
+
+Раздел описывает устаревший подход с **moko-kswift** и UIKit. В актуальных проектах используется **SKIE** для Swift-friendly API и SwiftUI для UI. Подробнее — в [статье про SKIE](../../learning/kotlin-multiplatform/mobile-highlights#skie--swift-friendly-api-из-коробки).
+
+:::
+
 #### moko-kswift
 
-За счет [moko-kswift](/learning/libraries/moko/moko-kswift) у нас есть возможность использовать `sealed interface` для `State` и `Actions` из общего кода в виде `enum` в Swift, чтобы можно было обрабатывать объекты в `switch` без ветки `default`.
+За счет [moko-kswift](/learning/legacy/moko-kswift) у нас есть возможность использовать `sealed interface` для `State` и `Actions` из общего кода в виде `enum` в Swift, чтобы можно было обрабатывать объекты в `switch` без ветки `default`.
 
 Это очень полезно для обработки `Actions`, потому что при появлении нового `Action` в общем коде iOS приложение не скомпилируется из-за того, что не все объекты `enum` будут обработаны.
 
