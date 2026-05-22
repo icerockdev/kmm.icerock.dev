@@ -1,5 +1,5 @@
 ---
-sidebar_position: 10
+sidebar_position: 7
 ---
 
 # moko-kswift (legacy)
@@ -9,6 +9,8 @@ sidebar_position: 10
 Плагин **moko-kswift** больше не используется в новых проектах. Вместо него применяется **SKIE** — см. [статью про SKIE](../../learning/kotlin-multiplatform/mobile-highlights#skie--swift-friendly-api-из-коробки).
 
 :::
+
+Плагин устарел, используйте [https://skie.touchlab.co](https://skie.touchlab.co)
 
 ## moko-kswift
 
