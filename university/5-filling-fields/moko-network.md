@@ -11,11 +11,11 @@ sidebar_position: 4
 
 ## ExceptionFactory
 
-Для создания объекта [ExceptionFactory](https://github.com/icerockdev/moko-network/blob/26fd7bbf10da6b09f1a543f316155c6c3880023e/network/src/commonMain/kotlin/dev/icerock/moko/network/exceptionfactory/HttpExceptionFactory.kt) нам необходимо указать два параметра, а именно `defaultParser` и `customParsers`.  
+Для создания объекта [ExceptionFactory](https://github.com/icerockdev/moko-network/blob/master/network/src/commonMain/kotlin/dev/icerock/moko/network/exceptionfactory/HttpExceptionFactory.kt) нам необходимо указать два параметра, а именно `defaultParser` и `customParsers`.  
  - `defaultParser` - парсер для всех ошибок от сервера, за исключением тех, обработку которых мы захотим сделать самостоятельно.  
  - `customParsers` - набор парсеров, привязанных к конкретному коду ошибки.  
 
-Например, для ошибки валидации и конкретного JSON объекта от сервера в библиотеке уже реализован [ValidationExceptionParser](https://github.com/icerockdev/moko-network/blob/0f8459ff2d51c6b7cade0cadd6d11066b7a55d60/network/src/commonMain/kotlin/dev/icerock/moko/network/exceptionfactory/parser/ValidationExceptionParser.kt).  
+Например, для ошибки валидации и конкретного JSON объекта от сервера в библиотеке уже реализован [ValidationExceptionParser](https://github.com/icerockdev/moko-network/blob/master/network/src/commonMain/kotlin/dev/icerock/moko/network/exceptionfactory/parser/ValidationExceptionParser.kt).  
 
 Из его кода видно, что парсер подходит для JSON объектов, выглядящих следующим образом:
 ```json
