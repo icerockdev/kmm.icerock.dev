@@ -1,15 +1,15 @@
 # Плагины компилятора
 
-Компилятор Kotlin позволяет делать модификацию логики компиляции за счет подключения компиляторных
-плагинов. На данный момент Kotlin/JVM и Kotlin/JS используют один вариант компиляторных плагинов, а
-Kotlin/Native другой. Для подключения используется специальный gradle плагин, который сообщает
-компилятору откуда и какие плагины компилятора нужно взять.
+Компилятор Kotlin позволяет модифицировать логику компиляции за счёт подключения компиляторных
+плагинов. Начиная с Kotlin 1.9+ / 2.0 JVM, JS и Native используют единую IR-инфраструктуру
+для плагинов. Для подключения используется специальный Gradle-плагин, который сообщает
+компилятору, откуда и какие плагины компилятора нужно взять.
 
 ## Примеры
 
 - https://github.com/Foso/KotlinCompilerPluginExample
-- https://github.com/Foso/MpApt
-- https://github.com/icerockdev/moko-widgets/tree/master/plugin
+- https://github.com/Foso/MpApt (архивирован, вместо него рекомендуется KSP)
+- https://github.com/icerockdev/moko-widgets/tree/master/plugin (архивирован)
 - https://github.com/AhmedMourad0/no-copy
 - https://kotlinlang.org/docs/all-open-plugin.html
 
@@ -33,7 +33,7 @@ kotlin.daemon.jvm.options=-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,
 
 ## Ссылки
 
-- https://bnorm.medium.com/writing-your-second-kotlin-compiler-plugin-part-1-project-setup-7b05c7d93f6c (6 частей у статьи)
+- https://blog.bnorm.dev/writing-your-second-compiler-plugin-part-1 (статья из 6 частей)
 - https://medium.com/@heyitsmohit/writing-kotlin-compiler-plugin-with-arrow-meta-cf7b3689aa3e
-- https://www.youtube.com/watch?v=w-GMlaziIyo
+- https://www.youtube.com/watch?v=w-GMlaziIyo — KotlinConf 2018, Kevin Most «Writing Your First Kotlin Compiler Plugin»
 - https://github.com/ShikaSD/kotlin-compiler-notes

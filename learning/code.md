@@ -6,7 +6,7 @@ sidebar_position: 24
 
 ## Приложения
 * [JetBrains/kotlinconf-app](https://github.com/JetBrains/kotlinconf-app) - official KotlinConf application - backend, android, ios with shared code;
-* [Kotlin/mpp-example](https://github.com/Kotlin/mpp-example) - official Multiplatform (android + ios) sample from JetBrains;
+* [Kotlin/kmp-basic-sample](https://github.com/Kotlin/kmp-basic-sample) - official Multiplatform (android + ios) sample from JetBrains;
 * [JetBrains/KotlinFinder](https://github.com/JetBrains/KotlinFinder) - official KotlinFinder application from JetBrains and IceRock for KotlinConf 2019 (android + ios)
 * [touchlab/DroidconKotlin](https://github.com/touchlab/DroidconKotlin) - DroidCon conference application from TouchLab (android + ios);
 * [SimonSchubert/Newsout](https://github.com/SimonSchubert/Newsout) - News application sample (android + ios) using database;
@@ -34,5 +34,5 @@ sidebar_position: 24
 
 ## Библиотеки
 * <https://libs.kmp.icerock.dev>
-* <https://www.kamp.ml>
+* <https://klibs.io> — каталог KMP библиотек от JetBrains
 * [AAkira/Kotlin-Multiplatform-Libraries](https://github.com/AAkira/Kotlin-Multiplatform-Libraries)
