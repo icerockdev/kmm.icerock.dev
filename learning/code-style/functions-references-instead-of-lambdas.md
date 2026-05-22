@@ -12,21 +12,21 @@ sidebar_position: 6
       println(it)
    }
    
-   val upperCaseNames = nameList.map {
-      it.toUpperCase()
-   }
-   
-   objectsList.asSequence()
-      .filter { it.isOnline() }
-      .map { handleAndTransform(it) }
-      .toList()
-   ```
+    val upperCaseNames = nameList.map {
+       it.uppercase()
+    }
+    
+    objectsList.asSequence()
+       .filter { it.isOnline() }
+       .map { handleAndTransform(it) }
+       .toList()
+    ```
 
    **Как лучше сделать:**
    ```kotlin
-   nameList.forEach(::println)
-   
-   val upperCaseNames = nameList.map(String::toUpperCase)
+    nameList.forEach(::println)
+    
+    val upperCaseNames = nameList.map(String::uppercase)
    
    objectsList.asSequence()
       .filter(Any::isOnline)
@@ -46,20 +46,16 @@ sidebar_position: 6
             chatController.loadPage(offset, pageSize)
          },
          comparator = MessageComparator(),
-         nextPageListener = { result ->
-            if (result.isFailure) {
-               eventsDispatcher.dispatchEvent {
-                  showToastMessage(errorsMapper(result.exceptionOrNull()))
-               }
-            }
-         },
-         refreshListener = { result ->
-            if (result.isFailure) {
-               eventsDispatcher.dispatchEvent {
-                  showToastMessage(errorsMapper(result.exceptionOrNull()))
-               }
-            }
-         },
+          nextPageListener = { result ->
+             if (result.isFailure) {
+                showToastMessage(errorsMapper(result.exceptionOrNull()))
+             }
+          },
+          refreshListener = { result ->
+             if (result.isFailure) {
+                showToastMessage(errorsMapper(result.exceptionOrNull()))
+             }
+          },
          initValue = listOf()
       )
       ```
@@ -79,18 +75,14 @@ sidebar_position: 6
       )
       
       private fun onListNextPageLoadFinished(result: Result<List<ChatMessage>>) {
-         if (result.isFailure) {
-            eventsDispatcher.dispatchEvent {
-               showToastMessage(errorsMapper(result.exceptionOrNull()))
-            }
-         }
-      }
-      
-      private fun onListRefreshFinished(result: Result<List<ChatMessage>>) {
-         if (result.isFailure) {
-            eventsDispatcher.dispatchEvent {
-               showToastMessage(errorsMapper(result.exceptionOrNull()))
-            }
-         }
-      }
+          if (result.isFailure) {
+             showToastMessage(errorsMapper(result.exceptionOrNull()))
+          }
+       }
+       
+       private fun onListRefreshFinished(result: Result<List<ChatMessage>>) {
+          if (result.isFailure) {
+             showToastMessage(errorsMapper(result.exceptionOrNull()))
+          }
+       }
       ```
