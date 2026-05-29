@@ -4,18 +4,18 @@ sidebar_position: 3
 
 # Gradle Wrapper
 
-[Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) (или короче говоря, просто "Wrapper") -
+[Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) (или короче говоря, просто "Wrapper") —
 это специальный скрипт (а также несколько дополнительных файлов), который вызывает объявленную версию Gradle,
 при необходимости загружая ее заранее.
 :::important
-Рекомендуемый способ выполнения любой сборки Gradle - это с помощью Gradle Wrapper'а.
+Рекомендуемый способ выполнения любой сборки Gradle - с помощью Gradle Wrapper'а.
 :::
 
 ## Содержимое
 
 К его файлам относятся:
 
-- `gradlew` и `gradlew.bat` - сами скрипты для запуска gradle через wrapper;
+- `gradlew` и `gradlew.bat` — сами скрипты для запуска gradle через wrapper;
 - `gradle/wrapper/gradle-wrapper.jar` - сам wrapper, небольшая java программа;
 - `gradle/wrapper/gradle-wrapper.properties` - настройки gradle wrapper'а, в которых указывается версия gradle для всего проекта.
 
@@ -42,7 +42,7 @@ gradlew.bat <props>
 2. Считывается конфигурация из `gradle-wrapper.properties`, а именно - `distributionUrl`, в котором определено,
    какую версию gradle нам нужно скачать.
 3. Если данная версия gradle уже скачивалась, то она доступна в кешах в директории `~/.gradle` и будет использоваться.
-   Иначе же Gradle Wrapper скачает gradle нужной версии и сохранит в указанную выше кеш директорию.
+   Иначе же Gradle Wrapper скачает gradle нужной версии и сохранит в указанную выше кеш-директорию.
 4. Запускает gradle нужной версии, передавая ему все опции запуска, которые были переданы в Gradle Wrapper.
 
 Таким образом, несколько небольших файлов, лежащих в git репозитории, позволяют разработчику не вспоминать о
@@ -65,8 +65,7 @@ Gradle Wrapper автоматически сохраняет скачиваем�
 ```bash
 #   PROJECT_DIR/gradle/gradle-wrapper.properties
 
-# определяет, следует ли хранить распакованный дистрибутив-оболочку в проекте 
-# или в домашнем каталоге пользователя gradle.
+# определяет базовый каталог для хранения дистрибутивов Gradle
 distributionBase=GRADLE_USER_HOME
 
 # путь, по которому распаковываются дистрибутивы gradle, необходимые для оболочки
@@ -74,7 +73,7 @@ distributionBase=GRADLE_USER_HOME
 distributionPath=wrapper/dists
 
 # URL-адрес для загрузки дистрибутива gradle
-distributionUrl=https\://services.gradle.org/distributions/gradle-7.2-bin.zip
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.12-bin.zip
 
 # указание путей для распаковки
 zipStoreBase=GRADLE_USER_HOME

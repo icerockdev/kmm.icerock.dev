@@ -27,7 +27,7 @@ Gradle представляет область зависимости с пом�
 
 ![test-project-struct](configuration/gradle-deps-conf-test-project-struct.png)
 
-Создадим два подпроекта: `LibA` и `LibB`. В директории каждого из этих подпроекта создадим собственный
+Создадим два подпроекта: `LibA` и `LibB`. В директории каждого из этих подпроектов создадим собственный
 `build.gradle.kts` файл для настройки сборки. А в рутовом `build.gradle.kts` подключим плагин `kotlin-jvm`:
 
 ```kotlin
@@ -37,11 +37,10 @@ Gradle представляет область зависимости с пом�
 
 // подключение плагина
 plugins {
-    kotlin("jvm") version ("1.5.21")
+    kotlin("jvm") version ("2.1.10")
 }
 
-// указывает в каких репозиториях
-// искать нужные зависимости
+// указывает, в каких репозиториях искать нужные зависимости
 allprojects {
     repositories {
         mavenCentral()
@@ -101,6 +100,7 @@ dependencies {
 ```
 
 В корне нашего проекта заведем директорию `src/main/kotlin` с файлом `Main.kt`, которая и будет входной точкой нашего приложения:
+
 ```kotlin
 /*
 *   project/src/main/kotlin/Main.kt
@@ -173,7 +173,7 @@ dependencies {
 к классам в самом сценарии сборки. В корневом `build.gradle.kts` как раз используется блок `buildscript`.
 Объявить путь к классам сценария сборки вы можете, использовав метод `classpath`. 
 
-Для мультипроектной сборки, зависимости, объявленные с помощью метода `buildscript()`, доступны для сценариев сборки всех его подпроектов.
+Для мультипроектной сборки зависимости, объявленные с помощью метода `buildscript()`, доступны для сценариев сборки всех его подпроектов.
 
 Рассмотрим небольшой пример, в котором мы подключим уже знакомый нам плагин `kotlin-jvm`, но не через метод `plugins()`.
 
@@ -187,7 +187,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm:gradle.plugin:1.5.20")
+        classpath("org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm:gradle.plugin:2.1.10")
     }
 }
 ```
@@ -201,86 +201,7 @@ buildscript {
 gradle buildEnvironment
 ```
 
-Вы увидите такую архитектуру зависимостей:
-
-```bash
-------------------------------------------------------------
-Root project 'testProject'
-------------------------------------------------------------
-classpath
-+--- org.jetbrains.kotlin.jvm:org.jetbrains.kotlin.jvm.gradle.plugin:1.5.21
-|    \--- org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21
-|         +--- org.jetbrains.kotlin:kotlin-gradle-plugin-api:1.5.21
-|         |    +--- org.jetbrains.kotlin:kotlin-native-utils:1.5.21
-|         |    |    \--- org.jetbrains.kotlin:kotlin-util-io:1.5.21
-|         |    |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.21 -> 1.4.31
-|         |    |              +--- org.jetbrains.kotlin:kotlin-stdlib-common:1.4.31
-|         |    |              \--- org.jetbrains:annotations:13.0
-|         |    \--- org.jetbrains.kotlin:kotlin-project-model:1.5.21
-|         |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.21 -> 1.4.31 (*)
-|         +--- org.jetbrains.kotlin:kotlin-gradle-plugin-model:1.5.21
-|         +--- org.jetbrains.kotlin:kotlin-util-klib:1.5.21
-|         |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.21 -> 1.4.31 (*)
-|         |    \--- org.jetbrains.kotlin:kotlin-util-io:1.5.21 (*)
-|         +--- org.jetbrains.kotlin:kotlin-klib-commonizer-api:1.5.21
-|         |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.21 -> 1.4.31 (*)
-|         |    \--- org.jetbrains.kotlin:kotlin-native-utils:1.5.21 (*)
-|         +--- org.jetbrains.kotlin:kotlin-tooling-metadata:1.5.21
-|         |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.21 -> 1.4.31 (*)
-|         |    \--- com.google.code.gson:gson:2.8.6
-|         +--- org.jetbrains.kotlin:kotlin-project-model:1.5.21 (*)
-|         +--- com.google.code.gson:gson:2.8.6
-|         +--- com.google.guava:guava:29.0-jre
-|         |    +--- com.google.guava:failureaccess:1.0.1
-|         |    +--- com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
-|         |    +--- com.google.code.findbugs:jsr305:3.0.2
-|         |    +--- org.checkerframework:checker-qual:2.11.1
-|         |    +--- com.google.errorprone:error_prone_annotations:2.3.4
-|         |    \--- com.google.j2objc:j2objc-annotations:1.3
-|         +--- de.undercouch:gradle-download-task:4.1.1
-|         +--- com.github.gundy:semver4j:0.16.4
-|         +--- org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.21
-|         |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.21 -> 1.4.31 (*)
-|         |    +--- org.jetbrains.kotlin:kotlin-script-runtime:1.5.21
-|         |    +--- org.jetbrains.kotlin:kotlin-reflect:1.5.21 -> 1.4.31
-|         |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.4.31 (*)
-|         |    +--- org.jetbrains.kotlin:kotlin-daemon-embeddable:1.5.21
-|         |    \--- org.jetbrains.intellij.deps:trove4j:1.0.20181211
-|         +--- org.jetbrains.kotlin:kotlin-annotation-processing-gradle:1.5.21
-|         |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.21 -> 1.4.31 (*)
-|         |    \--- org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.21 (*)
-|         +--- org.jetbrains.kotlin:kotlin-android-extensions:1.5.21
-|         |    \--- org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.21 (*)
-|         +--- org.jetbrains.kotlin:kotlin-compiler-runner:1.5.21
-|         |    +--- org.jetbrains.kotlin:kotlin-build-common:1.5.21
-|         |    +--- org.jetbrains.kotlin:kotlin-daemon-client:1.5.21
-|         |    |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8
-|         |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.3.71 -> 1.4.31 (*)
-|         |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib-common:1.3.71 -> 1.4.31
-|         |    |    \--- org.jetbrains.kotlin:kotlin-reflect:1.5.21 -> 1.4.31 (*)
-|         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8 (*)
-|         |    \--- org.jetbrains.kotlin:kotlin-compiler-embeddable:1.5.21 (*)
-|         +--- org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.5.21
-|         |    +--- org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:1.5.21
-|         |    |    +--- org.jetbrains.kotlin:kotlin-scripting-common:1.5.21
-|         |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.21 -> 1.4.31 (*)
-|         |    |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8 (*)
-|         |    |    +--- org.jetbrains.kotlin:kotlin-scripting-jvm:1.5.21
-|         |    |    |    +--- org.jetbrains.kotlin:kotlin-script-runtime:1.5.21
-|         |    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.21 -> 1.4.31 (*)
-|         |    |    |    \--- org.jetbrains.kotlin:kotlin-scripting-common:1.5.21 (*)
-|         |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.5.21 -> 1.4.31 (*)
-|         |    |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.8 (*)
-|         |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.5.21 -> 1.4.31 (*)
-|         \--- org.jetbrains.kotlin:kotlin-scripting-compiler-impl-embeddable:1.5.21 (*)
-+--- org.jetbrains.kotlin:kotlin-stdlib:{strictly 1.4.31} -> 1.4.31 (c)
-+--- org.jetbrains.kotlin:kotlin-reflect:{strictly 1.4.31} -> 1.4.31 (c)
-+--- org.jetbrains.kotlin:kotlin-stdlib-common:{strictly 1.4.31} -> 1.4.31 (c)
-\--- org.jetbrains:annotations:{strictly 13.0} -> 13.0 (c)
-```
-
-Проверим, появились ли таски, которые предоставляет подключенный нами плагин. Для этого выполним задачу
-`tasks` из терминала или IDE:
+Вы увидите список зависимостей в classpath. А чтобы проверить, какие задачи появились у плагина, — выполните `tasks` из терминала или IDE:
 
 ```bash
 gradle tasks
@@ -312,12 +233,12 @@ tasks - Displays the tasks runnable from root project 'testProject' (some of the
 ```
 
 Таски не появились, т.к. плагин, подключенный при помощи `classpath`, сразу не применяется. 
-Чтобы заюзать этот плагин в нашем рутовом `build.gradle.kts`, необходимо использовать метод `apply()`.
+Чтобы применить этот плагин в нашем рутовом `build.gradle.kts`, необходимо использовать метод `apply()`.
 В подпроектах же вы можете подключить этот плагин, используя привычный метод `plugins()`.
-Это происходит из-за того, что сборщик gradle не может проиндексировать id плагина,
+Это происходит из-за того, что сборщик Gradle не может проиндексировать ID плагина,
 подключенного в том же build-файле, в котором тот добавляется в classpath.
 
- ```kotlin
+```kotlin
 /*
 *   project/build.gradle.kts
 */
@@ -389,45 +310,24 @@ buildscript {
         mavenCentral()
         google()
         gradlePluginPortal()
-
-        jcenter {
-            content {
-                includeGroup("org.jetbrains.trove4j")
-            }
-        }
+        maven(url = "https://jitpack.io")
     }
     // добавление зависимостей в выполнение gradle скриптов
-    // как мы уже выяснили они действительны для любых подпроектов
     dependencies {
-        classpath("dev.icerock.moko:resources-generator:0.16.1")
-        classpath("dev.icerock.moko:network-generator:0.16.0")
-        classpath("dev.icerock.moko:units-generator:0.6.1")
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.5.20")
-        classpath("com.google.firebase:firebase-crashlytics-gradle:2.7.1")
-        classpath("com.google.gms:google-services:4.3.8")
-        classpath("com.google.dagger:hilt-android-gradle-plugin:2.35")
+        classpath(libs.moko.resourcesGeneratorGradle)
+        classpath(libs.moko.networkGeneratorGradle)
+        classpath(libs.kotlinSerializationGradle)
+        classpath(libs.firebaseCrashlyticsGradle)
+        classpath(libs.googleServicesGradle)
+        classpath(libs.navigationPlugin)
         classpath(":build-logic")
-    }
-}
-
-allprojects {
-    // принудительное использование coroutines-native-mt
-    configurations.configureEach {
-        resolutionStrategy {
-            val coroutines: MinimalExternalModuleDependency = rootProject.libs.coroutines.get()
-            val forcedCoroutines: ModuleVersionSelector = DefaultModuleVersionSelector.newSelector(
-                coroutines.module,
-                coroutines.versionConstraint.requiredVersion
-            )
-            force(forcedCoroutines)
-        }
     }
 }
 
 // таска на очистку билдов проекта
 tasks.register("clean", Delete::class).configure {
     group = "build"
-    delete(rootProject.buildDir)
+    delete(rootProject.layout.buildDirectory)
 }
 ```
 
@@ -446,22 +346,25 @@ plugins {
 repositories {
     mavenCentral()
     google()
-
     gradlePluginPortal()
+
+    maven { url = uri("https://jitpack.io") }
 }
 
-// подключение зависимостей к композитному проекту
-// предоставляющий функционал внутренних библиотек
+// подключение зависимостей к композитному проекту,
+// предоставляющему функционал внутренних библиотек
 dependencies {
-    api("dev.icerock:mobile-multiplatform:0.12.0")
-    api("org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.21")
-    api("com.android.tools.build:gradle:4.2.1")
-    api("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.15.0")
+    api(libs.moko.multiplatformPlugin)
+    api(libs.kotlinGradlePlugin)
+    api(libs.androidGradlePlugin)
+    api(libs.detektGradlePlugin)
+    api(libs.skieGradle)
+    api(libs.composeGradlePlugin)
 }
 ```
 
 Для дальнейшего изучения нужно понимать, что такое sourceset'ы, о них вы можете прочитать
-[тут](https://kotlinlang.org/docs/mpp-dsl-reference.html#source-sets).
+[тут](https://kotlinlang.org/docs/multiplatform-dsl-reference.html#source-sets).
 
 Если мы хотим использовать зависимости для конкретного sourceset'а, мы можем воспользоваться следующим шаблоном:
 
@@ -476,47 +379,49 @@ dependencies {
 *   mobile-moko-boilerplate/mpp-library/build.gradle.kts
 */
 
+plugins {
+    id("multiplatform-library-convention")
+    id("org.jetbrains.kotlin.native.cocoapods")
+    id("kotlinx-serialization")
+}
+
+kotlin {
+    cocoapods {
+        framework {
+            baseName = "MultiPlatformLibrary"
+            export(libs.multiplatformSettings)
+            export(libs.napier)
+            export(libs.moko.resources)
+        }
+    }
+}
+
 dependencies {
-    // зависимости, нужные для внутренней логики модуля
-    // подключаются к sourceset'у commonMain
     commonMainImplementation(libs.coroutines)
     commonMainImplementation(libs.kotlinSerialization)
     commonMainImplementation(libs.ktorClient)
     commonMainImplementation(libs.ktorClientLogging)
+    commonMainImplementation(libs.ktorClientAuth)
+    commonMainImplementation(libs.moko.network)
 
-    // зависимости, нужные для внутренней логики модуля, в android sourceset'е
+    // зависимости, нужные для androidMain sourceset'а
     androidMainImplementation(libs.lifecycleViewModel)
 
-    // зависимости, нужные для sourceset'а commonMain самого модуля 
-    // и для пользователей библиотеки
-    commonMainApi(projects.mppLibrary.feature.auth)
+    // зависимости, которые видны пользователям библиотеки (commonMainApi)
     commonMainApi(libs.multiplatformSettings)
     commonMainApi(libs.napier)
-    commonMainApi(libs.mokoParcelize)
-    commonMainApi(libs.mokoResources)
-    commonMainApi(libs.mokoMvvmCore)
-    commonMainApi(libs.mokoMvvmLiveData)
-    commonMainApi(libs.mokoMvvmState)
-    commonMainApi(libs.mokoUnits)
-    commonMainApi(libs.mokoFields)
-    commonMainApi(libs.mokoNetwork)
-    commonMainApi(libs.mokoErrors)
-    commonMainApi(libs.mokoNetworkErrors)
-    commonMainApi(libs.mokoCrashReportingCore)
-    commonMainApi(libs.mokoCrashReportingCrashlytics)
-    commonMainApi(libs.mokoCrashReportingNapier)
+    commonMainApi(libs.moko.resources)
 
-    // зависимости, нужные для внутренней логики модуля, в тестовом sourceset'е
-    commonTestImplementation(libs.mokoTestCore)
-    commonTestImplementation(libs.mokoMvvmTest)
-    commonTestImplementation(libs.mokoUnitsTest)
-    commonTestImplementation(libs.multiplatformSettingsTest)
-    commonTestImplementation(libs.ktorClientMock)
+    // модули проекта
+    commonMainApi(projects.mppLibrary.utils)
+
+    // тесты
+    commonTestImplementation(projects.mppLibrary.testUtils)
 }
 ```
 
 ## Материалы
 
-- [Документация - Multiplatform Gradle DSL reference](https://kotlinlang.org/docs/mpp-dsl-reference.html)
+- [Документация - Multiplatform Gradle DSL reference](https://kotlinlang.org/docs/multiplatform-dsl-reference.html)
 - [Документация - Gradle declaring dependencies](https://docs.gradle.org/current/userguide/declaring_dependencies.html)
-- [Документация - MPP Dependencies](https://kotlinlang.org/docs/mpp-add-dependencies.html)
+- [Документация - MPP Dependencies](https://kotlinlang.org/docs/multiplatform-add-dependencies.html)
