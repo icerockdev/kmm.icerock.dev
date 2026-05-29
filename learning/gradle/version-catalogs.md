@@ -59,8 +59,8 @@ dependencies {
 }
 ```
 
-Accessors учитывают регистр и точки: `moko-resources` становится `libs.bundles.moko.resources`,
-`ktorClientOkHttp` — `libs.ktorClient.okHttp`.
+Accessors сохраняют регистр и меняют `-` на точки: `moko-resources` становится `libs.bundles.moko.resources`,
+`ktorClientOkHttp` — `libs.ktorClientOkHttp`.
 
 ## Project accessors
 
