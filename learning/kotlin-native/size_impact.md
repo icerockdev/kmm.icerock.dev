@@ -12,7 +12,7 @@ sidebar_position: 2
 > My .framework is around ~15 mb. For a pretty small sdk with a couple of standard dependencies like ktor.   
 > I am fine with that, but you know...customers complains. So I must check if there are anything to do with binary sizes.   
 > I tried "internalizing" all I could. And there were a pretty nice effect. I actually saw a reduction of ~500 kb after doing that on a bunch of data classes. Wonder if there are anything else that can help to downsize.   
-> @kpgalligan I remember you were talking about KMM team working on K\N - Swift interoperability which should reduce the size. Wondering if there are any progress on that. I read somewhere that this work was frozen.
+> @kpgalligan I remember you were talking about KMP team working on K\N - Swift interoperability which should reduce the size. Wondering if there are any progress on that. I read somewhere that this work was frozen.
 >
 > Kevin Galligan  
 > Well, again, to measure the actual size, you need to either push it to the app store and let apples servers crunch numbers, or run local size estimates with Xcode. The size on your dev disk is not wha the actual app size will be. I don't remember how I presented it in that talk (and I have a talk today that I'm really not prepared for, so I don't have a lot of time to reply here...), but raw numbers on disk don't really tell the story. For KaMP Kit, which has ktor, sqldelight, and a few others, our sizes were ~1.5m as a final size increase on real devices. I assume local disk size was much larger, but it's been a while.   

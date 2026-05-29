@@ -1,8 +1,10 @@
 ---
-sidebar_position: 10
+sidebar_position: 7
 ---
 
 # moko-kswift
+
+Плагин устарел, используйте [https://skie.touchlab.co](https://skie.touchlab.co)
 
 ## moko-kswift
 

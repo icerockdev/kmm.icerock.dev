@@ -10,7 +10,15 @@ sidebar_position: 6
 <br/>
 
 <iframe src="//www.youtube.com/embed/WXBbbF5pKho?list=PL6yFiPOVXVUi90sQ66dtmuXP-1-TeHwl5" frameborder="0" allowfullscreen width="675" height="380"></iframe>
-<br/>
+
+
+## Состав библиотеки
+
+Библиотека состоит из нескольких модулей:
+- `fields-core` — базовые классы и логика валидации
+- `fields-livedata` — интеграция с `LiveData` из moko-mvvm
+- `fields-flow` — интеграция с `Flow` из kotlinx.coroutines
+- `fields-material` — Android View компоненты с Material Design
 
 ## FormField
 
@@ -38,7 +46,9 @@ AuthCodeContent(
     ...
 )
 ```
+
 В контенте экрана:
+
 ```kotlin
 @Composable
 fun AuthCodeContent(
@@ -58,18 +68,66 @@ fun AuthCodeContent(
     )
     ...
 }
-
 ```
 
 ## Валидация
+
 Разберем, как добавлять валидацию в `FormField`:
-- можно использовать [встроенные валидаторы](https://github.com/icerockdev/moko-fields/tree/c9c09069da717d4995ee6c96f8ec6ef7446af503/fields/src/commonMain/kotlin/dev/icerock/moko/validations)
+- можно использовать [встроенные валидаторы](https://github.com/icerockdev/moko-fields/tree/master/fields-core/src/commonMain/kotlin/dev/icerock/moko/fields/core/validations)
 - можно создать полностью свою валидацию
 
 Как можно настроить валидацию:
-- валидацию можно вызвать в любой момент. Зачем это?
-    - при первом вводе юзера - валидация не должна проверяться, пока он не закончит ввод до конца, и не нажмет кнопку, к которой будет привязана валидация, чтобы, пока он еще не ввел все, что задумал, у него не светились ошибки.
-- поля можно объединить в список и валидировать их одновременно
+- валидацию можно вызвать в любой момент
+    - Зачем? Чтобы поведение было таким: при первом вводе юзера - валидация не должна проверяться, пока он не закончит ввод до конца и не нажмет кнопку, к которой будет привязана валидация, чтобы, пока он еще не ввел все, что задумал, у него не светились ошибки.
+- поля можно объединить в список и валидировать их одновременно:
+  ```kotlin
+  private val fields = listOf(emailField, passwordField)
+  
+  fun onSubmit() {
+      if (!fields.validate()) return
+      // данные валидны
+  }
+  ```
 - валидация полей может быть завязана на других полях (пароль + повторите пароль)
 - у FormField есть поле `isValid` и `validationError`
 
+## Использование с Flow
+
+Для работы с корутинами используйте модуль `fields-flow`.
+
+`FormField` создаётся с указанием `CoroutineScope`:
+
+```kotlin
+val emailField: FormField<String, StringDesc> = FormField(
+    scope = viewModelScope,
+    initialValue = "",
+    validation = flowBlock { email ->
+        ValidationResult.of(email) {
+            notBlank("Email не может быть пустым".desc())
+            matchRegex("Неверный формат".desc(), EMAIL_REGEX)
+        }
+    }
+)
+```
+
+Валидация строится через `ValidationResult` — цепочкой:
+
+```kotlin
+ValidationResult.of(value)
+    .notBlank("Поле не может быть пустым".desc())
+    .matchRegex("Неверный формат".desc(), SOME_REGEX)
+    .validate()
+```
+
+Или через DSL, как в примере выше.
+
+В UI данные доступны через `StateFlow`:
+
+```kotlin
+val email: String by viewModel.emailField.data.collectAsState()
+
+TextField(
+    value = email,
+    onValueChange = { viewModel.emailField.data.value = it }
+)
+```

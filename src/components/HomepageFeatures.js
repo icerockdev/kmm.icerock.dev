@@ -8,7 +8,7 @@ const FeatureList = [
     Svg: require('../../static/img/feature-3.svg').default,
     description: (
       <>
-        Инструкция по погружению в разработку с использованием Kotlin Multiplatform Mobile 
+        Инструкция по погружению в разработку с использованием Kotlin Multiplatform 
           специально для новых сотрудников IceRock Development.
         Предназначен для опытных разработчиков под Android или iOS.
       </>
@@ -19,9 +19,9 @@ const FeatureList = [
     Svg: require('../../static/img/feature-1.svg').default,
     description: (
       <>
-      Коллекция материалов для изучения Kotlin Multiplatform Mobile. 
+      Коллекция материалов для изучения Kotlin Multiplatform. 
       Статьи, видео записи, презентации и примеры кода.
-      Собраны различные кейсы и полезные материалы из опыта работы с KMM начиная с 2018 года.
+      Собраны различные кейсы и полезные материалы из опыта работы с KMP начиная с 2018 года.
       </>
     ),
     className: "knowledgeFeature"
@@ -31,7 +31,7 @@ const FeatureList = [
     Svg: require('../../static/img/feature-2.svg').default,
     description: (
       <>
-        Курс обучения разработке под Android и iOS с использованием Kotlin Multiplatform Mobile. 
+        Курс обучения разработке под Android и iOS с использованием Kotlin Multiplatform. 
         Данный курс преподается в корпоративном университете IceRock и предназначен для начинающих разработчиков.
       </>
     ),

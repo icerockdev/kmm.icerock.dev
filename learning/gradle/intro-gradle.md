@@ -4,7 +4,7 @@ sidebar_position: 0
 
 # Введение в Gradle
 
-Работая с Kotlin Multiplatform Mobile, для iOS разработчика главным испытанием становится не изучение
+Работая с Kotlin Multiplatform, для iOS разработчика главным испытанием становится не изучение
 Kotlin, а изучение билд-системы Gradle, которая собирает мультиплатформенную библиотеку. В данном
 разделе разобрано, что из себя представляет Gradle с точки зрения iOS разработчиков.
 
@@ -201,7 +201,7 @@ moko.resources.disableStaticFrameworkWarning=true
 mobile.multiplatform.iosTargetWarning=false
 
 # путь до Xcode проекта или workspace,
-# используется Kotlin Multiplatform Mobile плагином для Android Studio, чтобы запускать iOS приложение с отладчиком
+# используется Kotlin Multiplatform плагином для Android Studio, чтобы запускать iOS приложение с отладчиком
 # Подробнее https://plugins.jetbrains.com/plugin/14936-kotlin-multiplatform-mobile
 xcodeproj=./sample/ios-app
 ```
