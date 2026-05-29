@@ -20,8 +20,8 @@ sidebar_position: 1
     var threadsCounter = 0
     ```
 
-1. Для названий свойств с булевым типом (или для **LiveData(Boolean)**) имеет смысл добавлять префикс **is**:
+1. Для названий свойств с булевым типом (или для **StateFlow(Boolean)**) имеет смысл добавлять префикс **is**:
    ```kotlin
-   val isLoading: LiveData<Boolean> = _isLoading.readOnly()
+   val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
    val isButtonEnabled = false
    ```

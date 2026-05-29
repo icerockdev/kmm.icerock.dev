@@ -13,7 +13,8 @@ sidebar_position: 3
     
     **Как лучше сделать:**
     ```kotlin
-    val isFollowed: LiveData<Boolean> = followRepository.isFollow(participantOrTeamId)
+    val isFollowed: StateFlow<Boolean> = followRepository.isFollow(participantOrTeamId)
+        .stateIn(viewModelScope, SharingStarted.Eagerly, false)
     ```
 
 1. Имеет смысл явно указывать тип при объявлении переменной внутри функций и методов, которой присваивается результат крупного выражения:
