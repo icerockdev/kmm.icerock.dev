@@ -15,7 +15,7 @@ MOKO — это наши мультиплатформенные open-source би
 Изучите библиотеку [MOKO resources](https://kmm.icerock.dev/university/icerock-basics/resources-in-common#библиотека-moko-resources), [дополнение](../learning/libraries/moko/moko-resources).
 
 Также ознакомьтесь с:
-- использованием классов-оберток [CFlow и CStateFlow](https://kmm.icerock.dev/university/icerock-basics/mvvm#flow-c-moko-kswift) из [MOKO MVVM](../learning/libraries/moko/moko-mvvm)
+- использованием классов-оберток [CFlow и CStateFlow](https://kmm.icerock.dev/university/icerock-basics/mvvm) из [MOKO MVVM](../learning/libraries/moko/moko-mvvm)
 - использованием [mvvm-state](https://kmm.icerock.dev/university/lists/moko-paging#moko-mvvm-state) из MOKO MVVM
 - зачем нужна библиотека [МОКО Network](https://kmm.icerock.dev/learning/libraries/moko/moko-network)
 - видео [о MOKO paging](https://kmm.icerock.dev/learning/libraries/moko/moko-paging), конкретные примеры текущего применения стоит смотреть в текущих проектах.

@@ -44,6 +44,7 @@ sidebar_position: 15
 21. Локализовать проект используя `sheets-localizations-generator`
     - обеспечьте поддержку русского и английского языков
 22. Обеспечить поддержку iOS 13.0
+23. UI на Android реализовать на Jetpack Compose, на iOS — на SwiftUI
 
 ## Классы приложения
 
@@ -85,24 +86,28 @@ class KeyValueStorage {
 
 ### mpp-library-feature-auth
 ```kotlin
-class AuthViewModel {
-   val token: MutableStateFlow<String>
-   val state: StateFlow<State>
-   val actions: Flow<Action>
+class AuthViewModel(
+    private val repository: AppRepository,
+) : ViewModel() {
+   val token: CMutableStateFlow<String> = MutableStateFlow("").cMutableStateFlow()
+   val state: CStateFlow<State> // TODO: инициализация с начальным состоянием
+
+   private val _actions: Channel<Actions> = Channel()
+   val actions: CFlow<Actions> = _actions.receiveAsFlow().cFlow()
 
    fun onSignButtonPressed() {
          // TODO:
    }
    
    sealed interface State {
-      object Idle : State
-      object Loading : State
-      data class InvalidInput(val reason: String) : State
+      data object Idle : State
+      data object Loading : State
+      data class InvalidInput(val reason: StringDesc) : State
    }
    
-   sealed interface Action {
-      data class ShowError(val message: String) : Action
-      object RouteToMain : Action
+   sealed interface Actions {
+      data class ShowError(val message: StringDesc) : Actions
+      data object RouteToMain : Actions
    }
 
    // TODO:
@@ -111,12 +116,14 @@ class AuthViewModel {
 
 ### mpp-library-feature-repo
 ```kotlin
-class RepositoryInfoViewModel {
-   val state: StateFlow<State>
+class RepositoryInfoViewModel(
+    private val repository: AppRepository,
+) : ViewModel() {
+   val state: CStateFlow<State> // TODO: инициализация
 
    sealed interface State {
-      object Loading : State
-      data class Error(val error: String) : State
+      data object Loading : State
+      data class Error(val error: StringDesc) : State
 
       data class Loaded(
          val githubRepo: Repo,
@@ -125,23 +132,25 @@ class RepositoryInfoViewModel {
    }
 
    sealed interface ReadmeState {
-      object Loading : ReadmeState
-      object Empty : ReadmeState
-      data class Error(val error: String) : ReadmeState
+      data object Loading : ReadmeState
+      data object Empty : ReadmeState
+      data class Error(val error: StringDesc) : ReadmeState
       data class Loaded(val markdown: String) : ReadmeState
    }
 
    // TODO:
 }
 
-class RepositoriesListViewModel {
-   val state: StateFlow<State>
+class RepositoriesListViewModel(
+    private val repository: AppRepository,
+) : ViewModel() {
+   val state: CStateFlow<State> // TODO: инициализация
    
    sealed interface State {
-      object Loading : State
+      data object Loading : State
       data class Loaded(val repos: List<Repo>) : State
-      data class Error(val error: String) : State
-      object Empty : State
+      data class Error(val error: StringDesc) : State
+      data object Empty : State
    }
 
    // TODO:
@@ -150,35 +159,71 @@ class RepositoriesListViewModel {
 
 ### android-app
 ```kotlin
-class MainActivity: AppCompatActivity {
-   // TODO:
+@AndroidEntryPoint
+class MainActivity : FragmentActivity() {
+   override fun onCreate(savedInstanceState: Bundle?) {
+      super.onCreate(savedInstanceState)
+      setContent {
+         AppNavHost()
+      }
+   }
 }
 
-class AuthFragment: Fragment {
-   // TODO:
+@Composable
+fun AuthScreen(
+   viewModel: AuthViewModel = koinViewModel()
+) {
+   // TODO: экран авторизации
 }
 
-class RepositoriesListFragment: Fragment {
-   // TODO:
+@Composable
+fun RepositoriesListScreen(
+   viewModel: RepositoriesListViewModel = koinViewModel()
+) {
+   // TODO: список репозиториев
 }
 
-class DetailInfoFragment: Fragment {
-   // TODO:
+@Composable
+fun DetailInfoScreen(
+   viewModel: RepositoryInfoViewModel = koinViewModel()
+) {
+   // TODO: детальная информация о репозитории
 }
 ```
 
 ### ios-app
 ```swift
-class RepositoriesListViewController: UIViewController {
-   // TODO:
+@main
+struct MobileApp: App {
+   var body: some Scene {
+      WindowGroup {
+         AuthView()
+      }
+   }
 }
 
-class RepositoryDetailInfoViewController: UIViewController {
-   // TODO:
+struct AuthView: View {
+   @ViewModelWrapper private var viewModel: AuthViewModel = Koin.instance.getAuthViewModel(params: ...)
+
+   var body: some View {
+      // TODO: экран авторизации
+   }
 }
 
-class AuthViewController: UIViewController {
-   // TODO:
+struct RepositoriesListView: View {
+   @ViewModelWrapper private var viewModel: RepositoriesListViewModel = Koin.instance.getRepositoriesListViewModel()
+
+   var body: some View {
+      // TODO: список репозиториев
+   }
+}
+
+struct DetailInfoView: View {
+   @ViewModelWrapper private var viewModel: RepositoryInfoViewModel = Koin.instance.getRepositoryInfoViewModel(params: ...)
+
+   var body: some View {
+      // TODO: детальная информация о репозитории
+   }
 }
 ```
 
@@ -199,27 +244,27 @@ class GitHubRepoRepository:::common
 class KeyValueStorage:::common
 
 class MainActivity:::android
-class RepositoriesListFragment:::android
-class DetailInfoFragment:::android
-class AuthFragment:::android
-class RepositoriesListViewController:::ios
-class RepositoryDetailInfoViewController:::ios
-class AuthViewController:::ios
+class AuthScreen:::android
+class RepositoriesListScreen:::android
+class DetailInfoScreen:::android
+class AuthView:::ios
+class RepositoriesListView:::ios
+class DetailInfoView:::ios
 
-MainActivity --> AuthFragment
-MainActivity --> RepositoriesListFragment
-MainActivity --> DetailInfoFragment
-RepositoriesListFragment --> RepositoriesListViewModel
-DetailInfoFragment --> RepositoryInfoViewModel
-AuthFragment --> AuthViewModel
+MainActivity --> AuthScreen
+MainActivity --> RepositoriesListScreen
+MainActivity --> DetailInfoScreen
+AuthScreen --> AuthViewModel
+RepositoriesListScreen --> RepositoriesListViewModel
+DetailInfoScreen --> RepositoryInfoViewModel
    
 RepositoriesListViewModel --> GitHubRepoRepository
 AuthViewModel --> GitHubRepoRepository
 RepositoryInfoViewModel --> GitHubRepoRepository
        
-RepositoriesListViewController --> RepositoriesListViewModel
-RepositoryDetailInfoViewController --> RepositoryInfoViewModel
-AuthViewController --> AuthViewModel
+AuthView --> AuthViewModel
+RepositoriesListView --> RepositoriesListViewModel
+DetailInfoView --> RepositoryInfoViewModel
 GitHubRepoRepository --> KeyValueStorage
 ```
 
