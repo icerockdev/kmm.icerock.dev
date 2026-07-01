@@ -155,36 +155,37 @@ sidebar_position: 6
 При реализации нужно придерживаться следующей диаграммы:
 
 ```mermaid
-   classDiagram
+    classDiagram
 
-   class MainActivity:::android
-   fun AuthScreen:::android
-   fun RepositoriesListScreen:::android
-   fun DetailInfoScreen:::android
-   
-   class AuthViewModel:::android
-   
-   class RepositoryInfoViewModel:::android
+    class MainActivity:::android
+    class AuthScreen:::android
+    class RepositoriesListScreen:::android
+    class DetailInfoScreen:::android
+    
+    class AuthViewModel:::android
 
-   class RepositoriesListViewModel:::android
+    class RepositoryInfoViewModel:::android
 
-   class AppRepository:::android
-   class KeyValueStorage:::android
-   
-   MainActivity --> AuthScreen
-   MainActivity --> RepositoriesListScreen
-   MainActivity --> DetailInfoScreen
-   
-   AuthScreen --> AuthViewModel
-   RepositoriesListScreen --> RepositoriesListViewModel
-   DetailInfoScreen --> RepositoryInfoViewModel
-   
-   RepositoryInfoViewModel --> AppRepository
-   AuthViewModel --> AppRepository
-   RepositoriesListViewModel --> AppRepository
-   
-   AppRepository --> KeyValueStorage
+    class RepositoriesListViewModel:::android
+
+    class AppRepository:::android
+    class KeyValueStorage:::android
+    
+    MainActivity --> AuthScreen
+    MainActivity --> RepositoriesListScreen
+    MainActivity --> DetailInfoScreen
+    
+    AuthScreen --> AuthViewModel
+    RepositoriesListScreen --> RepositoriesListViewModel
+    DetailInfoScreen --> RepositoryInfoViewModel
+    
+    RepositoryInfoViewModel --> AppRepository
+    AuthViewModel --> AppRepository
+    RepositoriesListViewModel --> AppRepository
+    
+    AppRepository --> KeyValueStorage
 ```
+
 
 ## Материалы
 
